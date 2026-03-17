@@ -112,8 +112,7 @@ export const metadata: Metadata = {
   },
   category: "technology",
   verification: {
-    // Add your Google Search Console verification code here
-    // google: "your-google-verification-code",
+    google: "B5nixBEKZFroU",
   },
 };
 
