@@ -978,9 +978,9 @@ export default function HomePage() {
                   Company
                 </h4>
                 <ul className="list-none p-0 m-0 space-y-2.5">
-                  <li><span className="text-sm" style={{ color: "var(--color-text-muted)" }}>About</span></li>
-                  <li><span className="text-sm" style={{ color: "var(--color-text-muted)" }}>Blog</span></li>
-                  <li><span className="text-sm" style={{ color: "var(--color-text-muted)" }}>Contact</span></li>
+                  <li><Link href="/about" className="text-sm no-underline hover:opacity-80 transition-colors" style={{ color: "var(--color-text-muted)" }}>About</Link></li>
+                  <li><Link href="/blog" className="text-sm no-underline hover:opacity-80 transition-colors" style={{ color: "var(--color-text-muted)" }}>Blog</Link></li>
+                  <li><Link href="/contact" className="text-sm no-underline hover:opacity-80 transition-colors" style={{ color: "var(--color-text-muted)" }}>Contact</Link></li>
                 </ul>
               </div>
 
@@ -1002,7 +1002,7 @@ export default function HomePage() {
 
             <div className="flex flex-col md:flex-row items-center justify-between gap-4">
               <p className="text-xs m-0" style={{ color: "var(--color-text-muted)" }}>
-                2025 Tonvo. All rights reserved.
+                2026 Tonvo. All rights reserved.
               </p>
               <div className="flex gap-4">
                 {/* X / Twitter */}
