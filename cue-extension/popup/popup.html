@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tonvo</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="popup">
+    <!-- Header -->
+    <div class="popup-header">
+      <div class="logo">
+        <div class="logo-dot"></div>
+        <span class="logo-text">Tonvo</span>
+      </div>
+      <div class="status-dot" id="statusDot"></div>
+    </div>
+
+    <!-- Session info -->
+    <div class="session-info" id="sessionInfo" style="display:none">
+      <div class="session-row">
+        <span class="session-label">Duration</span>
+        <span class="session-value" id="elapsed">00:00</span>
+      </div>
+      <div class="session-row">
+        <span class="session-label">Segments</span>
+        <span class="session-value" id="segmentCount">0</span>
+      </div>
+      <div class="session-row">
+        <span class="session-label">Tone</span>
+        <span class="tone-pill" id="currentTone">neutral</span>
+      </div>
+      <div class="session-row">
+        <span class="session-label">Quality</span>
+        <span class="session-value" id="qualityScore">--</span>
+      </div>
+    </div>
+
+    <!-- Idle state -->
+    <div class="idle-msg" id="idleMsg">
+      <p>Capture tab audio and get real-time conversation coaching.</p>
+    </div>
+
+    <!-- Main button -->
+    <button class="btn-main" id="mainBtn">Start Session</button>
+
+    <!-- Settings -->
+    <div class="settings-section">
+      <button class="settings-toggle" id="settingsToggle">Settings</button>
+      <div class="settings-panel" id="settingsPanel" style="display:none">
+        <label class="setting-label">
+          API URL
+          <input type="text" class="setting-input" id="apiUrl" placeholder="http://localhost:3000">
+        </label>
+        <button class="btn-save" id="saveSettings">Save</button>
+      </div>
+    </div>
+  </div>
+  <script src="../dist/popup.js" type="module"></script>
+</body>
+</html>

@@ -1,0 +1,974 @@
+"use client";
+
+import { useState, useEffect, useRef, useCallback } from "react";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { useAuth } from "@/lib/auth-context";
+import CurtainIntro from "@/components/CurtainIntro";
+import AnimatedTitle from "@/components/AnimatedTitle";
+import TonvoLogo from "@/components/Logo";
+
+/* ------------------------------------------------------------------ */
+/*  Inline SVG icons (no external dependency)                         */
+/* ------------------------------------------------------------------ */
+function IconMic({ className }: { className?: string }) {
+  return (
+    <svg className={className} width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z" />
+      <path d="M19 10v2a7 7 0 0 1-14 0v-2" />
+      <line x1="12" x2="12" y1="19" y2="22" />
+    </svg>
+  );
+}
+
+function IconBrain({ className }: { className?: string }) {
+  return (
+    <svg className={className} width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M12 5a3 3 0 1 0-5.997.125 4 4 0 0 0-2.526 5.77 4 4 0 0 0 .556 6.588A4 4 0 1 0 12 18Z" />
+      <path d="M12 5a3 3 0 1 1 5.997.125 4 4 0 0 1 2.526 5.77 4 4 0 0 1-.556 6.588A4 4 0 1 1 12 18Z" />
+      <path d="M15 13a4.5 4.5 0 0 1-3-4 4.5 4.5 0 0 1-3 4" />
+      <path d="M17.599 6.5a3 3 0 0 0 .399-1.375" />
+      <path d="M6.003 5.125A3 3 0 0 0 6.401 6.5" />
+      <path d="M3.477 10.896a4 4 0 0 1 .585-.396" />
+      <path d="M19.938 10.5a4 4 0 0 1 .585.396" />
+      <path d="M6 18a4 4 0 0 1-1.967-.516" />
+      <path d="M19.967 17.484A4 4 0 0 1 18 18" />
+    </svg>
+  );
+}
+
+function IconChart({ className }: { className?: string }) {
+  return (
+    <svg className={className} width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M3 3v18h18" />
+      <path d="m19 9-5 5-4-4-3 3" />
+    </svg>
+  );
+}
+
+function IconMessageCircle({ className }: { className?: string }) {
+  return (
+    <svg className={className} width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z" />
+    </svg>
+  );
+}
+
+function IconShield({ className }: { className?: string }) {
+  return (
+    <svg className={className} width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z" />
+      <path d="m9 12 2 2 4-4" />
+    </svg>
+  );
+}
+
+function IconZap({ className }: { className?: string }) {
+  return (
+    <svg className={className} width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z" />
+    </svg>
+  );
+}
+
+function IconUsers({ className }: { className?: string }) {
+  return (
+    <svg className={className} width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+      <circle cx="9" cy="7" r="4" />
+      <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
+      <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+    </svg>
+  );
+}
+
+function IconArrowRight({ className }: { className?: string }) {
+  return (
+    <svg className={className} width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M5 12h14" />
+      <path d="m12 5 7 7-7 7" />
+    </svg>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/*  Mock UI component for the product demo section                    */
+/* ------------------------------------------------------------------ */
+function ProductMockup() {
+  const segments = [
+    { text: "I think the quarterly results look promising, we should discuss the next steps.", tone: "positive" as const, time: "00:32" },
+    { text: "I'm not sure about the timeline though, it feels a bit aggressive.", tone: "hesitant" as const, time: "01:15" },
+    { text: "That's a fair point. Let me adjust the roadmap and share an update.", tone: "positive" as const, time: "01:48" },
+  ];
+
+  const toneColors = {
+    positive: "var(--color-positive)",
+    neutral: "var(--color-neutral)",
+    negative: "var(--color-negative)",
+    hesitant: "var(--color-neutral)",
+  };
+
+  return (
+    <div
+      className="rounded-2xl overflow-hidden"
+      style={{ background: "rgba(17, 17, 20, 0.7)", backdropFilter: "blur(24px)", WebkitBackdropFilter: "blur(24px)", border: "1px solid rgba(255, 255, 255, 0.06)" }}
+    >
+      {/* Title bar */}
+      <div
+        className="flex items-center gap-2 px-5 py-3 border-b"
+        style={{ borderColor: "var(--color-border)", backgroundColor: "var(--color-surface-2)" }}
+      >
+        <div className="flex gap-1.5">
+          <div className="w-3 h-3 rounded-full" style={{ backgroundColor: "var(--color-negative)" }} />
+          <div className="w-3 h-3 rounded-full" style={{ backgroundColor: "var(--color-neutral)" }} />
+          <div className="w-3 h-3 rounded-full" style={{ backgroundColor: "var(--color-positive)" }} />
+        </div>
+        <span className="text-xs ml-2" style={{ color: "var(--color-text-muted)" }}>Tonvo - Live Session</span>
+      </div>
+
+      {/* Status bar */}
+      <div
+        className="flex items-center justify-between px-5 py-3 border-b"
+        style={{ borderColor: "var(--color-border)" }}
+      >
+        <div className="flex items-center gap-3">
+          <div className="shrink-0 w-2.5 h-2.5 rounded-full pulse-positive" style={{ backgroundColor: "var(--color-positive)" }} />
+          <span className="text-sm font-medium shrink-0" style={{ color: "var(--color-positive)" }}>Positive</span>
+        </div>
+        <div className="flex items-center gap-4">
+          <span className="text-xs" style={{ color: "var(--color-text-muted)" }}>02:34</span>
+          <div className="flex items-end gap-1" style={{ height: 24 }}>
+            {[1, 2, 3, 4, 5].map((i) => (
+              <div
+                key={i}
+                className="audio-wave-bar"
+                style={{ animationDelay: `${i * 0.15}s` }}
+              />
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Suggestion */}
+      <div className="px-5 py-3 border-b" style={{ borderColor: "var(--color-border)" }}>
+        <div className="text-xs font-medium uppercase tracking-wider mb-1.5" style={{ color: "var(--color-accent-light)" }}>
+          Suggestion
+        </div>
+        <p className="text-sm m-0" style={{ color: "var(--color-text-silver)" }}>
+          Good momentum. Build on their openness by proposing a concrete next step.
+        </p>
+      </div>
+
+      {/* Transcript */}
+      <div>
+        {segments.map((seg, i) => (
+          <div
+            key={i}
+            className="flex items-start gap-3 px-5 py-3 border-b last:border-b-0"
+            style={{ borderColor: "var(--color-border)" }}
+          >
+            <div
+              className="w-2 h-2 rounded-full mt-1.5 shrink-0"
+              style={{ backgroundColor: toneColors[seg.tone] }}
+            />
+            <div className="flex-1 min-w-0">
+              <p className="text-sm m-0 leading-relaxed" style={{ color: "var(--color-text)" }}>{seg.text}</p>
+              <span className="text-xs mt-1 block" style={{ color: "var(--color-text-muted)" }}>{seg.time}</span>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/*  Landing page                                                      */
+/* ------------------------------------------------------------------ */
+export default function HomePage() {
+  const { user, loading } = useAuth();
+  const router = useRouter();
+  const [annual, setAnnual] = useState(false);
+
+  // --- Smart navbar scroll behavior ---
+  const [navVisible, setNavVisible] = useState(true);
+  const lastScrollY = useRef(0);
+  const ticking = useRef(false);
+
+  const handleScroll = useCallback(() => {
+    if (ticking.current) return;
+    ticking.current = true;
+
+    requestAnimationFrame(() => {
+      const currentY = window.scrollY;
+      const heroThreshold = window.innerHeight * 0.4;
+
+      if (currentY <= heroThreshold) {
+        // Always show in hero section
+        setNavVisible(true);
+      } else if (currentY < lastScrollY.current) {
+        // Scrolling up -> show
+        setNavVisible(true);
+      } else if (currentY > lastScrollY.current + 5) {
+        // Scrolling down (with 5px dead zone to prevent flicker) -> hide
+        setNavVisible(false);
+      }
+
+      lastScrollY.current = currentY;
+      ticking.current = false;
+    });
+  }, []);
+
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [handleScroll]);
+  // --- End smart navbar ---
+
+  useEffect(() => {
+    if (!loading && user) {
+      router.replace("/dashboard");
+    }
+  }, [user, loading, router]);
+
+  // While checking auth or redirecting, show nothing
+  if (loading || user) return null;
+
+  const ctaHref = "/login";
+  const ctaLabel = "Get Started";
+
+  const features = [
+    {
+      icon: <IconMic className="w-5 h-5" />,
+      title: "Live Tone Detection",
+      desc: "Captures audio from your calls or mic and detects whether the conversation is trending positive, neutral, or tense -- in real time.",
+      color: "var(--color-positive)",
+    },
+    {
+      icon: <IconBrain className="w-5 h-5" />,
+      title: "Smart Suggestions",
+      desc: "Based on what's being said and how it's being said, Tonvo suggests what to say next to keep the conversation on track.",
+      color: "var(--color-accent-light)",
+    },
+    {
+      icon: <IconChart className="w-5 h-5" />,
+      title: "Conversation Insights",
+      desc: "After every session, get a breakdown of tone shifts, key moments, and a summary with actionable takeaways.",
+      color: "var(--color-neutral)",
+    },
+    {
+      icon: <IconMessageCircle className="w-5 h-5" />,
+      title: "Text Analysis",
+      desc: "Paste any message or conversation snippet to instantly understand the underlying tone and get improvement suggestions.",
+      color: "var(--color-text-silver)",
+    },
+  ];
+
+  const benefits = [
+    { value: "Real-time", label: "Feedback during live conversations" },
+    { value: "3 clicks", label: "To start analyzing any conversation" },
+    { value: "Actionable", label: "Suggestions you can use immediately" },
+    { value: "Private", label: "Audio processed locally, never stored" },
+  ];
+
+  const useCases = [
+    {
+      icon: <IconUsers className="w-6 h-6" />,
+      title: "Sales Calls",
+      desc: "Know when a prospect is engaged, hesitant, or losing interest. Adjust your pitch in the moment, not after the deal is lost.",
+    },
+    {
+      icon: <IconMessageCircle className="w-6 h-6" />,
+      title: "Customer Support",
+      desc: "Detect frustration early and get suggestions to de-escalate. Turn difficult interactions into positive experiences.",
+    },
+    {
+      icon: <IconShield className="w-6 h-6" />,
+      title: "Job Interviews",
+      desc: "Whether you're the interviewer or the candidate, understand the emotional dynamics and communicate more effectively.",
+    },
+    {
+      icon: <IconZap className="w-6 h-6" />,
+      title: "Team Meetings",
+      desc: "Track engagement across long meetings. Identify when energy drops and get cues to re-engage your audience.",
+    },
+  ];
+
+  const testimonials = [
+    {
+      name: "Sarah M.",
+      role: "Account Executive",
+      text: "I used to lose deals without understanding why. Now I can see the exact moment a prospect disengages and course-correct immediately.",
+    },
+    {
+      name: "David L.",
+      role: "Engineering Manager",
+      text: "Our 1-on-1s are way more productive. I catch tension early and address it before it becomes a real issue. The post-call summaries save me hours.",
+    },
+    {
+      name: "Amira K.",
+      role: "Support Lead",
+      text: "The suggestion feature is genuinely useful. It doesn't give generic advice -- it actually understands the context of the conversation.",
+    },
+  ];
+
+  return (
+    <>
+      <CurtainIntro />
+      {/* ── Navbar ── */}
+      <nav
+        className="fixed top-0 left-0 right-0 z-50 border-b"
+        style={{
+          backgroundColor: "rgba(9, 9, 11, 0.85)",
+          backdropFilter: "blur(12px)",
+          borderColor: "var(--color-border)",
+          transform: navVisible ? "translateY(0)" : "translateY(-100%)",
+          opacity: navVisible ? 1 : 0,
+          transition: "transform 0.3s cubic-bezier(0.23, 1, 0.32, 1), opacity 0.25s ease",
+          willChange: "transform, opacity",
+        }}
+      >
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+          <Link href="/" className="flex items-center no-underline">
+            <TonvoLogo size="md" />
+          </Link>
+
+          <div className="hidden md:flex items-center gap-6 lg:gap-8">
+            <a href="#features" className="text-sm no-underline transition-colors hover:opacity-80" style={{ color: "var(--color-text-muted)" }}>Features</a>
+            <a href="#demo" className="text-sm no-underline transition-colors hover:opacity-80" style={{ color: "var(--color-text-muted)" }}>Product</a>
+            <a href="#use-cases" className="text-sm no-underline transition-colors hover:opacity-80" style={{ color: "var(--color-text-muted)" }}>Use Cases</a>
+            <a href="#pricing" className="text-sm no-underline transition-colors hover:opacity-80" style={{ color: "var(--color-text-muted)" }}>Pricing</a>
+          </div>
+
+          <div className="flex items-center gap-3">
+            {user ? (
+              <Link
+                href="/dashboard"
+                className="text-sm no-underline px-5 py-2 rounded-lg font-medium text-white transition-colors hover:opacity-90"
+                style={{ backgroundColor: "var(--color-accent)" }}
+              >
+                Dashboard
+              </Link>
+            ) : (
+              <>
+                <Link
+                  href="/login"
+                  className="text-sm no-underline px-4 py-2 rounded-lg transition-colors hover:opacity-80"
+                  style={{ color: "var(--color-text-muted)" }}
+                >
+                  Sign In
+                </Link>
+                <Link
+                  href="/login"
+                  className="text-sm no-underline px-5 py-2 rounded-lg font-medium text-white transition-colors hover:opacity-90"
+                  style={{ backgroundColor: "var(--color-accent)" }}
+                >
+                  Get Started
+                </Link>
+              </>
+            )}
+          </div>
+        </div>
+      </nav>
+
+      <main>
+        {/* ── Hero ── */}
+        <section className="relative min-h-[85vh] sm:min-h-screen flex items-center justify-center px-4 sm:px-6 pt-16 overflow-hidden grid-bg">
+          {/* Ambient glows */}
+          <div className="hero-glow" style={{ top: "-10%", left: "50%", transform: "translateX(-50%)" }} />
+          <div className="hero-glow" style={{ bottom: "-20%", left: "-10%", width: 400, height: 400, background: "radial-gradient(circle, rgba(52, 211, 153, 0.04) 0%, transparent 70%)" }} />
+          <div className="hero-glow" style={{ top: "30%", right: "-10%", width: 350, height: 350, background: "radial-gradient(circle, rgba(200, 200, 216, 0.04) 0%, transparent 70%)" }} />
+
+          <div className="relative z-10 max-w-3xl text-center">
+            {/* Status badge */}
+            <div className="animate-fade-up flex justify-center mb-8">
+              <div
+                className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-medium"
+                style={{ background: "rgba(200, 200, 216, 0.06)", border: "1px solid rgba(200, 200, 216, 0.12)", color: "var(--color-accent-light)" }}
+              >
+                <div className="w-2 h-2 rounded-full pulse-positive" style={{ backgroundColor: "var(--color-positive)" }} />
+                Conversation Intelligence, Reimagined
+              </div>
+            </div>
+
+            {/* Headline */}
+            <h1 className="animate-fade-up animate-delay-100 hero-heading text-glow mb-6">
+              Read the room.
+              <br />
+              <span className="text-shimmer">Before it reads you.</span>
+            </h1>
+
+            {/* Subtitle */}
+            <p className="animate-fade-up animate-delay-200 body-muted text-lg md:text-xl mb-10 max-w-xl mx-auto">
+              Tonvo analyzes your conversations in real time -- detecting sentiment,
+              surfacing smart suggestions, and helping you navigate every interaction with confidence.
+            </p>
+
+            {/* CTA */}
+            <div className="animate-fade-up animate-delay-300 flex flex-col sm:flex-row gap-4 justify-center items-center">
+              <Link
+                href={ctaHref}
+                className="btn-primary inline-flex items-center gap-2 px-8 py-3.5 text-base no-underline"
+              >
+                {ctaLabel}
+                <IconArrowRight />
+              </Link>
+              <a
+                href="#demo"
+                className="btn-secondary inline-flex items-center gap-2 px-8 py-3.5 text-base no-underline"
+              >
+                See How It Works
+              </a>
+            </div>
+
+            {/* Social proof */}
+            <div className="animate-fade-up animate-delay-500 flex items-center justify-center gap-5 mt-16">
+              <div className="flex -space-x-2.5">
+                {["#5c5c6e", "#34d399", "#fbbf24", "#f87171", "#c8c8d8"].map((bg, i) => (
+                  <div
+                    key={i}
+                    className="w-8 h-8 rounded-full flex items-center justify-center text-[10px] font-bold text-white"
+                    style={{ background: bg, border: "2px solid var(--color-bg)" }}
+                  >
+                    {["S", "M", "K", "L", "A"][i]}
+                  </div>
+                ))}
+              </div>
+              <div className="text-left">
+                <p className="text-sm m-0 font-medium" style={{ color: "var(--color-text-silver)" }}>
+                  2,400+ professionals
+                </p>
+                <p className="text-xs m-0" style={{ color: "var(--color-text-muted)" }}>
+                  already use Tonvo daily
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ── Divider ── */}
+        <div className="glow-line max-w-2xl mx-auto" />
+
+        {/* ── Problem ── */}
+        <section className="px-4 sm:px-6 py-16 sm:py-24 md:py-32">
+          <div className="max-w-3xl mx-auto text-center">
+            <span className="section-label">The problem</span>
+            <AnimatedTitle variant="up" className="section-heading text-glow mb-6">
+              Conversations are hard.
+              <br />
+              <span className="text-silver-gradient">Misreading them is easy.</span>
+            </AnimatedTitle>
+            <p className="body-muted max-w-2xl mx-auto">
+              You've been on that call where everything seemed fine -- until it wasn't.
+              A prospect went cold. A colleague got frustrated. A candidate shut down.
+              By the time you noticed, it was already too late to fix it.
+            </p>
+            <p className="body-muted max-w-2xl mx-auto mt-4">
+              Most people miss the subtle shifts in tone and emotion that make or break conversations.
+              Not because they don't care, but because they're focused on what to say next.
+            </p>
+          </div>
+        </section>
+
+        {/* ── Solution ── */}
+        <section className="px-4 sm:px-6 py-16 sm:py-24 md:py-32" style={{ backgroundColor: "var(--color-surface)" }}>
+          <div className="max-w-3xl mx-auto text-center">
+            <span className="section-label">The solution</span>
+            <AnimatedTitle variant="left" className="section-heading text-glow mb-6">
+              A second pair of eyes.
+              <br />
+              <span className="text-silver-gradient">For every conversation.</span>
+            </AnimatedTitle>
+            <p className="body-muted max-w-2xl mx-auto">
+              Tonvo runs alongside your calls and meetings. It captures the audio, analyzes the emotional dynamics in real time,
+              and gives you quiet, contextual suggestions -- so you always know where the conversation stands
+              and what to do next.
+            </p>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-16">
+              {[
+                { step: "01", title: "Start a session", desc: "One click. Tonvo captures audio from your screen or microphone." },
+                { step: "02", title: "Get live feedback", desc: "Tone indicators and suggestions update as the conversation flows." },
+                { step: "03", title: "Review insights", desc: "After the call, get a full breakdown with key moments and takeaways." },
+              ].map((item) => (
+                <div key={item.step} className="text-left">
+                  <div className="text-xs font-bold mb-3 text-silver-sweep" style={{ display: "inline-block" }}>
+                    {item.step}
+                  </div>
+                  <h3 className="card-title text-lg mb-2">{item.title}</h3>
+                  <p className="text-sm leading-relaxed m-0" style={{ color: "var(--color-text-muted)" }}>
+                    {item.desc}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* ── Features ── */}
+        <section id="features" className="px-4 sm:px-6 py-16 sm:py-24 md:py-32">
+          <div className="max-w-5xl mx-auto">
+            <div className="text-center mb-16">
+              <span className="section-label">Features</span>
+              <AnimatedTitle variant="right" className="section-heading">
+                Everything you need to
+                <br />
+                <span className="text-silver-sweep">understand conversations.</span>
+              </AnimatedTitle>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+              {features.map((f) => (
+                <div
+                  key={f.title}
+                  className="glass-card p-6"
+                >
+                  <div
+                    className="w-10 h-10 rounded-lg flex items-center justify-center mb-4"
+                    style={{ backgroundColor: "var(--color-surface-2)", color: f.color }}
+                  >
+                    {f.icon}
+                  </div>
+                  <h3 className="card-title mb-2">{f.title}</h3>
+                  <p className="text-sm leading-relaxed m-0" style={{ color: "var(--color-text-muted)" }}>
+                    {f.desc}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* ── Divider ── */}
+        <div className="glow-line max-w-2xl mx-auto" />
+
+        {/* ── Product Demo ── */}
+        <section id="demo" className="px-4 sm:px-6 py-16 sm:py-24 md:py-32">
+          <div className="max-w-4xl mx-auto">
+            <div className="text-center mb-12">
+              <span className="section-label">Product</span>
+              <AnimatedTitle variant="soft" className="section-heading text-glow mb-4">
+                See Tonvo in action
+              </AnimatedTitle>
+              <p className="body-muted max-w-lg mx-auto">
+                This is what a live session looks like. Tone detection, smart suggestions, and a running transcript -- all updating in real time.
+              </p>
+            </div>
+
+            <div className="mockup-container mockup-enter">
+              <div className="mockup-lift">
+                <ProductMockup />
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ── Benefits ── */}
+        <section className="px-4 sm:px-6 py-16 sm:py-24 md:py-32" style={{ backgroundColor: "var(--color-surface)" }}>
+          <div className="max-w-4xl mx-auto">
+            <div className="text-center mb-16">
+              <span className="section-label">Benefits</span>
+              <AnimatedTitle variant="soft" className="section-heading">
+                Built for people who talk to people.
+              </AnimatedTitle>
+            </div>
+
+            <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-3 sm:gap-6">
+              {benefits.map((b) => (
+                <div key={b.value} className="glass-card p-4 sm:p-6 text-center">
+                  <div className="text-xl sm:text-2xl md:text-3xl mb-2 metric-text">{b.value}</div>
+                  <p className="text-sm m-0" style={{ color: "var(--color-text-muted)" }}>{b.label}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* ── Use Cases ── */}
+        <section id="use-cases" className="px-4 sm:px-6 py-16 sm:py-24 md:py-32">
+          <div className="max-w-5xl mx-auto">
+            <div className="text-center mb-16">
+              <span className="section-label">Use Cases</span>
+              <AnimatedTitle variant="left" className="section-heading">
+                Works wherever conversations matter.
+              </AnimatedTitle>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+              {useCases.map((uc) => (
+                <div
+                  key={uc.title}
+                  className="glass-card p-6"
+                >
+                  <div
+                    className="w-12 h-12 rounded-xl flex items-center justify-center mb-4"
+                    style={{ backgroundColor: "var(--color-surface-2)", color: "var(--color-accent-light)" }}
+                  >
+                    {uc.icon}
+                  </div>
+                  <h3 className="card-title mb-2">{uc.title}</h3>
+                  <p className="text-sm leading-relaxed m-0" style={{ color: "var(--color-text-muted)" }}>
+                    {uc.desc}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* ── Divider ── */}
+        <div className="glow-line max-w-2xl mx-auto" />
+
+        {/* ── Testimonials ── */}
+        <section className="px-4 sm:px-6 py-16 sm:py-24 md:py-32">
+          <div className="max-w-5xl mx-auto">
+            <div className="text-center mb-16">
+              <span className="section-label">Testimonials</span>
+              <AnimatedTitle variant="right" className="section-heading">
+                People are already using Tonvo.
+              </AnimatedTitle>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+              {testimonials.map((t, i) => (
+                <div
+                  key={t.name}
+                  className="glass-card p-6 flex flex-col justify-between"
+                >
+                  {/* Stars */}
+                  <div className="flex gap-1 mb-4">
+                    {[...Array(5)].map((_, j) => (
+                      <svg key={j} width="14" height="14" viewBox="0 0 24 24" fill="var(--color-neutral)" stroke="none">
+                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                      </svg>
+                    ))}
+                  </div>
+                  <p className="text-sm leading-relaxed mb-6 italic" style={{ color: "var(--color-text-silver)" }}>
+                    &ldquo;{t.text}&rdquo;
+                  </p>
+                  <div className="flex items-center gap-3">
+                    <div
+                      className="w-9 h-9 rounded-full flex items-center justify-center text-sm font-bold text-white shrink-0"
+                      style={{ backgroundColor: ["#5c5c6e", "#34d399", "#fbbf24"][i] }}
+                    >
+                      {t.name[0]}
+                    </div>
+                    <div>
+                      <div className="text-sm font-medium">{t.name}</div>
+                      <div className="text-xs" style={{ color: "var(--color-text-muted)" }}>{t.role}</div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* ── Pricing ── */}
+        <section id="pricing" className="px-4 sm:px-6 py-16 sm:py-24 md:py-32" style={{ backgroundColor: "var(--color-surface)" }}>
+          <div className="max-w-5xl mx-auto">
+            <div className="text-center mb-16">
+              <span className="section-label">Pricing</span>
+              <AnimatedTitle variant="left" className="section-heading text-glow mb-4">
+                Simple, transparent pricing.
+              </AnimatedTitle>
+              <p className="body-muted max-w-lg mx-auto mb-8">
+                Start free. Upgrade when you need more power.
+              </p>
+
+              {/* Billing toggle */}
+              <div className="inline-flex items-center gap-3 px-1.5 py-1.5 rounded-full" style={{ background: "rgba(255, 255, 255, 0.04)", border: "1px solid var(--color-border)" }}>
+                <button
+                  onClick={() => setAnnual(false)}
+                  className="px-5 py-2 rounded-full text-sm font-medium border-none cursor-pointer transition-all"
+                  style={{
+                    background: !annual ? "rgba(200, 200, 216, 0.12)" : "transparent",
+                    color: !annual ? "var(--color-text)" : "var(--color-text-muted)",
+                  }}
+                >
+                  Monthly
+                </button>
+                <button
+                  onClick={() => setAnnual(true)}
+                  className="px-5 py-2 rounded-full text-sm font-medium border-none cursor-pointer transition-all flex items-center gap-2"
+                  style={{
+                    background: annual ? "rgba(200, 200, 216, 0.12)" : "transparent",
+                    color: annual ? "var(--color-text)" : "var(--color-text-muted)",
+                  }}
+                >
+                  Annual
+                  <span
+                    className="text-xs font-semibold px-2 py-0.5 rounded-full"
+                    style={{
+                      background: "rgba(52, 211, 153, 0.12)",
+                      color: "var(--color-positive)",
+                      border: "1px solid rgba(52, 211, 153, 0.2)",
+                    }}
+                  >
+                    -30%
+                  </span>
+                </button>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 items-start">
+              {/* Free */}
+              <div className="glass-card p-7 flex flex-col" style={{ minHeight: 420 }}>
+                <div className="mb-6">
+                  <h3 className="text-lg font-bold mb-1" style={{ color: "var(--color-text)" }}>Free</h3>
+                  <p className="text-xs mb-5" style={{ color: "var(--color-text-muted)" }}>Try Tonvo with basic features</p>
+                  <div className="flex items-baseline gap-1" style={{ minHeight: 48 }}>
+                    <span className="text-4xl font-bold" style={{ color: "var(--color-text)", minWidth: 56, display: "inline-block" }}>$0</span>
+                  </div>
+                </div>
+                <ul className="flex-1 space-y-3 mb-8" style={{ listStyle: "none", padding: 0, margin: 0 }}>
+                  {["3 sessions per month", "Real-time tone analysis", "Basic suggestions", "Session history (7 days)"].map((f) => (
+                    <li key={f} className="flex items-start gap-2.5 text-sm" style={{ color: "var(--color-text-silver)" }}>
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--color-accent-light)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mt-0.5 shrink-0"><polyline points="20 6 9 17 4 12" /></svg>
+                      {f}
+                    </li>
+                  ))}
+                </ul>
+                {user ? (
+                  <div
+                    className="w-full py-3 rounded-xl font-semibold text-sm text-center"
+                    style={{ background: "rgba(52, 211, 153, 0.08)", color: "var(--color-positive)", border: "1px solid rgba(52, 211, 153, 0.2)" }}
+                  >
+                    Current Plan
+                  </div>
+                ) : (
+                  <Link
+                    href="/login"
+                    className="btn-secondary w-full py-3 rounded-xl font-semibold text-sm text-center no-underline block"
+                  >
+                    Get Started Free
+                  </Link>
+                )}
+              </div>
+
+              {/* Pro — highlighted */}
+              <div
+                className="glass-card p-7 flex flex-col relative"
+                style={{
+                  minHeight: 420,
+                  borderColor: "rgba(200, 200, 216, 0.25)",
+                  boxShadow: "0 0 60px rgba(200, 200, 216, 0.05), 0 8px 32px rgba(0, 0, 0, 0.3)",
+                }}
+              >
+                <div
+                  className="absolute -top-3 left-1/2 -translate-x-1/2 text-xs font-semibold px-3.5 py-1 rounded-full"
+                  style={{ background: "linear-gradient(135deg, #5c5c6e, #6e6e82)", color: "white" }}
+                >
+                  Most Popular
+                </div>
+                <div className="mb-6">
+                  <h3 className="text-lg font-bold mb-1" style={{ color: "var(--color-text)" }}>Pro</h3>
+                  <p className="text-xs mb-5" style={{ color: "var(--color-text-muted)" }}>For professionals who want an edge</p>
+                  <div className="flex items-baseline gap-1" style={{ minHeight: 48 }}>
+                    <span
+                      className="text-lg line-through mr-1 transition-opacity duration-200"
+                      style={{ color: "var(--color-text-muted)", opacity: annual ? 1 : 0, width: annual ? "auto" : 0, overflow: "hidden" }}
+                    >
+                      $19
+                    </span>
+                    <span className="text-4xl font-bold" style={{ color: "var(--color-text)", minWidth: 56, display: "inline-block" }}>
+                      ${annual ? "13" : "19"}
+                    </span>
+                    <span className="text-sm" style={{ color: "var(--color-text-muted)" }}>/month</span>
+                  </div>
+                </div>
+                <ul className="flex-1 space-y-3 mb-8" style={{ listStyle: "none", padding: 0, margin: 0 }}>
+                  {["Unlimited sessions", "Advanced conversation intelligence", "AI coaching tips & live insights", "Full session history", "Screen analysis", "Export PDF/CSV", "Priority support"].map((f) => (
+                    <li key={f} className="flex items-start gap-2.5 text-sm" style={{ color: "var(--color-text-silver)" }}>
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--color-positive)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mt-0.5 shrink-0"><polyline points="20 6 9 17 4 12" /></svg>
+                      {f}
+                    </li>
+                  ))}
+                </ul>
+                <Link
+                  href={user ? "/pricing" : "/login"}
+                  className="btn-primary w-full py-3 rounded-xl font-semibold text-sm text-center no-underline block"
+                >
+                  {user ? "Upgrade to Pro" : "Get Started"}
+                </Link>
+              </div>
+
+              {/* Team */}
+              <div className="glass-card p-7 flex flex-col" style={{ minHeight: 420 }}>
+                <div className="mb-6">
+                  <h3 className="text-lg font-bold mb-1" style={{ color: "var(--color-text)" }}>Team</h3>
+                  <p className="text-xs mb-5" style={{ color: "var(--color-text-muted)" }}>For teams that close deals together</p>
+                  <div className="flex items-baseline gap-1" style={{ minHeight: 48 }}>
+                    <span
+                      className="text-lg line-through mr-1 transition-opacity duration-200"
+                      style={{ color: "var(--color-text-muted)", opacity: annual ? 1 : 0, width: annual ? "auto" : 0, overflow: "hidden" }}
+                    >
+                      $49
+                    </span>
+                    <span className="text-4xl font-bold" style={{ color: "var(--color-text)", minWidth: 56, display: "inline-block" }}>
+                      ${annual ? "34" : "49"}
+                    </span>
+                    <span className="text-sm" style={{ color: "var(--color-text-muted)" }}>/user/month</span>
+                  </div>
+                </div>
+                <ul className="flex-1 space-y-3 mb-8" style={{ listStyle: "none", padding: 0, margin: 0 }}>
+                  {["Everything in Pro", "Team dashboard & analytics", "Manager insights & reports", "Custom coaching profiles", "API access", "SSO integration", "Dedicated support"].map((f) => (
+                    <li key={f} className="flex items-start gap-2.5 text-sm" style={{ color: "var(--color-text-silver)" }}>
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--color-accent-light)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mt-0.5 shrink-0"><polyline points="20 6 9 17 4 12" /></svg>
+                      {f}
+                    </li>
+                  ))}
+                </ul>
+                {user ? (
+                  <a
+                    href="mailto:contact@tonvo.co?subject=Team Plan Inquiry"
+                    className="btn-secondary w-full py-3 rounded-xl font-semibold text-sm text-center no-underline block"
+                  >
+                    Contact Sales
+                  </a>
+                ) : (
+                  <Link
+                    href="/login"
+                    className="btn-secondary w-full py-3 rounded-xl font-semibold text-sm text-center no-underline block"
+                  >
+                    Get Started
+                  </Link>
+                )}
+              </div>
+            </div>
+
+            <p className="text-center text-xs mt-8" style={{ color: "var(--color-text-muted)" }}>
+              All plans include a 7-day money-back guarantee. Cancel anytime.
+            </p>
+          </div>
+        </section>
+
+        {/* ── Divider ── */}
+        <div className="glow-line max-w-2xl mx-auto" />
+
+        {/* ── Final CTA ── */}
+        <section className="px-4 sm:px-6 py-16 sm:py-24 md:py-32 relative overflow-hidden">
+          <div className="hero-glow" style={{ top: "50%", left: "50%", transform: "translate(-50%, -50%)", width: 700, height: 700 }} />
+
+          <div className="relative z-10 max-w-2xl mx-auto text-center">
+            <div className="flex justify-center gap-3 mb-8">
+              <div className="w-3 h-3 rounded-full pulse-positive" style={{ backgroundColor: "var(--color-positive)" }} />
+              <div className="w-3 h-3 rounded-full pulse-neutral" style={{ backgroundColor: "var(--color-neutral)" }} />
+              <div className="w-3 h-3 rounded-full pulse-negative" style={{ backgroundColor: "var(--color-negative)" }} />
+            </div>
+
+            <AnimatedTitle variant="lift" className="hero-heading text-glow mb-6" style={{ fontSize: "clamp(1.875rem, 5vw, 3rem)" }}>
+              Stop guessing.
+              <br />
+              <span className="text-shimmer">Start understanding.</span>
+            </AnimatedTitle>
+
+            <p className="body-muted text-lg mb-10 max-w-lg mx-auto">
+              Your next important conversation is coming.
+              Make sure you don't miss what matters. Free to start, no credit card required.
+            </p>
+
+            <Link
+              href={ctaHref}
+              className="btn-primary inline-flex items-center gap-2 px-10 py-4 text-base no-underline"
+            >
+              {ctaLabel}
+              <IconArrowRight />
+            </Link>
+
+            <p className="text-xs mt-6" style={{ color: "var(--color-text-muted)" }}>
+              Free plan available. Upgrade anytime.
+            </p>
+          </div>
+        </section>
+
+        {/* ── Footer ── */}
+        <footer
+          className="border-t px-6 py-12"
+          style={{ borderColor: "var(--color-border)", backgroundColor: "var(--color-surface)" }}
+        >
+          <div className="max-w-5xl mx-auto">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-12">
+              {/* Brand */}
+              <div className="col-span-2 md:col-span-1">
+                <div className="mb-4">
+                  <TonvoLogo size="sm" />
+                </div>
+                <p className="text-xs leading-relaxed m-0" style={{ color: "var(--color-text-muted)" }}>
+                  Real-time conversation intelligence.
+                  <br />
+                  Understand tone, emotions, and intent.
+                </p>
+              </div>
+
+              {/* Product */}
+              <div>
+                <h4 className="footer-heading">
+                  Product
+                </h4>
+                <ul className="list-none p-0 m-0 space-y-2.5">
+                  <li><a href="#features" className="text-sm no-underline hover:opacity-80 transition-colors" style={{ color: "var(--color-text-muted)" }}>Features</a></li>
+                  <li><a href="#demo" className="text-sm no-underline hover:opacity-80 transition-colors" style={{ color: "var(--color-text-muted)" }}>Demo</a></li>
+                  <li><a href="#use-cases" className="text-sm no-underline hover:opacity-80 transition-colors" style={{ color: "var(--color-text-muted)" }}>Use Cases</a></li>
+                </ul>
+              </div>
+
+              {/* Company */}
+              <div>
+                <h4 className="footer-heading">
+                  Company
+                </h4>
+                <ul className="list-none p-0 m-0 space-y-2.5">
+                  <li><span className="text-sm" style={{ color: "var(--color-text-muted)" }}>About</span></li>
+                  <li><span className="text-sm" style={{ color: "var(--color-text-muted)" }}>Blog</span></li>
+                  <li><span className="text-sm" style={{ color: "var(--color-text-muted)" }}>Contact</span></li>
+                </ul>
+              </div>
+
+              {/* Legal */}
+              <div>
+                <h4 className="footer-heading">
+                  Legal
+                </h4>
+                <ul className="list-none p-0 m-0 space-y-2.5">
+                  <li><Link href="/privacy" className="text-sm no-underline hover:opacity-80 transition-colors" style={{ color: "var(--color-text-muted)" }}>Privacy Policy</Link></li>
+                  <li><Link href="/terms" className="text-sm no-underline hover:opacity-80 transition-colors" style={{ color: "var(--color-text-muted)" }}>Terms of Service</Link></li>
+                  <li><Link href="/cookies" className="text-sm no-underline hover:opacity-80 transition-colors" style={{ color: "var(--color-text-muted)" }}>Cookie Policy</Link></li>
+                  <li><Link href="/legal" className="text-sm no-underline hover:opacity-80 transition-colors" style={{ color: "var(--color-text-muted)" }}>Legal Notice</Link></li>
+                </ul>
+              </div>
+            </div>
+
+            <div className="glow-line mb-8" />
+
+            <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+              <p className="text-xs m-0" style={{ color: "var(--color-text-muted)" }}>
+                2025 Tonvo. All rights reserved.
+              </p>
+              <div className="flex gap-4">
+                {/* X / Twitter */}
+                <a href="#" style={{ color: "var(--color-text-muted)" }} className="transition-colors hover:opacity-80">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                  </svg>
+                </a>
+                {/* LinkedIn */}
+                <a href="#" style={{ color: "var(--color-text-muted)" }} className="transition-colors hover:opacity-80">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                  </svg>
+                </a>
+                {/* GitHub */}
+                <a href="#" style={{ color: "var(--color-text-muted)" }} className="transition-colors hover:opacity-80">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/>
+                  </svg>
+                </a>
+              </div>
+            </div>
+          </div>
+        </footer>
+      </main>
+    </>
+  );
+}
