@@ -22,14 +22,14 @@ export default function TermsPage() {
           Terms of Service
         </h1>
         <p className="text-sm mb-10" style={{ color: "var(--color-text-muted)" }}>
-          Last updated: [TO COMPLETE -- DATE]
+          Last updated: March 17, 2026
         </p>
 
         <div className="space-y-8" style={{ color: "var(--color-text-silver)" }}>
           <section>
             <h2 className="text-lg font-semibold mb-3" style={{ color: "var(--color-text)" }}>1. Acceptance of Terms</h2>
             <p className="text-sm leading-relaxed m-0">
-              By accessing or using Tonvo (&quot;the Service&quot;), operated by <strong>[TO COMPLETE -- COMPANY NAME]</strong>,
+              By accessing or using Tonvo (&quot;the Service&quot;), operated by <strong>Tonvo</strong>,
               you agree to be bound by these Terms of Service. If you do not agree, you may not use the Service.
             </p>
           </section>
@@ -88,7 +88,7 @@ export default function TermsPage() {
               <li><strong>Pro Plan:</strong> $19/month. Unlimited sessions with full history retention.</li>
               <li><strong>Team Plan:</strong> $49/user/month. Includes team collaboration features.</li>
               <li>Payments are processed securely via Stripe. You may cancel your subscription at any time through the Settings page.</li>
-              <li>Refunds are handled on a case-by-case basis. Contact <strong>[TO COMPLETE -- EMAIL]</strong> for refund requests.</li>
+              <li>Refunds are handled on a case-by-case basis. Contact <strong>contact@tonvo.co</strong> for refund requests.</li>
             </ul>
           </section>
 
@@ -96,7 +96,7 @@ export default function TermsPage() {
             <h2 className="text-lg font-semibold mb-3" style={{ color: "var(--color-text)" }}>7. Intellectual Property</h2>
             <p className="text-sm leading-relaxed m-0">
               The Tonvo application, its design, code, AI models, and branding are the property of
-              <strong> [TO COMPLETE -- COMPANY NAME]</strong>. You retain ownership of your content
+              <strong> Tonvo</strong>. You retain ownership of your content
               (transcriptions, analyses). By using the Service, you grant us a limited license to process
               your content solely for the purpose of providing the Service.
             </p>
@@ -115,7 +115,7 @@ export default function TermsPage() {
           <section>
             <h2 className="text-lg font-semibold mb-3" style={{ color: "var(--color-text)" }}>9. Limitation of Liability</h2>
             <p className="text-sm leading-relaxed m-0">
-              To the maximum extent permitted by law, <strong>[TO COMPLETE -- COMPANY NAME]</strong> shall not be
+              To the maximum extent permitted by law, <strong>Tonvo</strong> shall not be
               liable for any indirect, incidental, special, consequential, or punitive damages resulting from
               your use of the Service. This includes but is not limited to: loss of data, loss of revenue,
               decisions made based on AI-generated analysis, or unauthorized access to your account.
@@ -144,8 +144,8 @@ export default function TermsPage() {
           <section>
             <h2 className="text-lg font-semibold mb-3" style={{ color: "var(--color-text)" }}>12. Governing Law</h2>
             <p className="text-sm leading-relaxed m-0">
-              These Terms are governed by the laws of <strong>[TO COMPLETE -- JURISDICTION/COUNTRY]</strong>.
-              Any disputes shall be submitted to the competent courts of <strong>[TO COMPLETE -- CITY, COUNTRY]</strong>.
+              These Terms are governed by the laws of <strong>France</strong>.
+              Any disputes shall be submitted to the competent courts of <strong>Saint-Etienne, France</strong>.
             </p>
           </section>
 
@@ -153,9 +153,9 @@ export default function TermsPage() {
             <h2 className="text-lg font-semibold mb-3" style={{ color: "var(--color-text)" }}>13. Contact</h2>
             <p className="text-sm leading-relaxed m-0">
               For questions about these Terms:<br /><br />
-              <strong>[TO COMPLETE -- COMPANY NAME]</strong><br />
-              [TO COMPLETE -- ADDRESS]<br />
-              Email: <strong>[TO COMPLETE -- EMAIL]</strong>
+              <strong>Tonvo</strong><br />
+              42170 Chambles, France<br />
+              Email: <strong>contact@tonvo.co</strong>
             </p>
           </section>
         </div>

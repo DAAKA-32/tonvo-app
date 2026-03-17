@@ -24,24 +24,30 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: "Tonvo - Real-time Conversation Intelligence | AI Tone & Emotion Analysis",
+    default: "Tonvo - AI Conversation Copilot | Real-Time Insights, Coaching & Tone Analysis",
     template: "%s | Tonvo",
   },
   description:
-    "Tonvo analyzes tone, emotions, and intent in real time during your conversations. Get AI-powered coaching tips, live insights, and smart suggestions to communicate better. Free to start.",
+    "Analyze conversations in real time with AI. Get live coaching tips, detect tone & emotions, and receive smart suggestions during calls or chats. Works with Discord, Zoom & Meet. Free to start.",
   keywords: [
+    "AI conversation copilot",
+    "real-time conversation analysis",
+    "AI sales copilot",
+    "communication AI tool",
+    "live conversation insights",
     "conversation intelligence",
     "real-time tone analysis",
-    "emotion detection",
-    "AI coaching",
-    "communication skills",
+    "emotion detection AI",
+    "AI coaching for calls",
+    "meeting intelligence",
+    "sales coaching AI",
     "conversation analytics",
     "tone analyzer",
-    "sentiment analysis",
-    "meeting intelligence",
-    "sales coaching",
-    "conversation AI",
-    "speech analysis",
+    "sentiment analysis tool",
+    "speech analysis AI",
+    "call assistant AI",
+    "Zoom AI assistant",
+    "Discord call analyzer",
     "Tonvo",
   ],
   authors: [{ name: "Tonvo", url: SITE_URL }],
@@ -59,9 +65,7 @@ export const metadata: Metadata = {
     },
   },
   icons: {
-    icon: [
-      { url: "/logo-tonvo-remove.png", type: "image/png" },
-    ],
+    icon: [{ url: "/logo-tonvo-remove.png", type: "image/png" }],
     apple: [{ url: "/logo-tonvo-remove.png" }],
   },
   openGraph: {
@@ -69,30 +73,32 @@ export const metadata: Metadata = {
     locale: "en_US",
     url: SITE_URL,
     siteName: SITE_NAME,
-    title: "Tonvo - Real-time Conversation Intelligence",
+    title: "Tonvo - AI Conversation Copilot | Real-Time Insights & Smart Suggestions",
     description:
-      "Analyze tone, emotions, and intent in real time. Get AI coaching tips and smart suggestions during your conversations.",
+      "Boost your calls with real-time AI analysis. Detect tone, get coaching tips, and improve communication instantly during Discord, Zoom, and Meet calls.",
     images: [
       {
-        url: "/logo-tonvo.png",
+        url: "/og-image.png",
         width: 1200,
         height: 630,
-        alt: "Tonvo - Real-time Conversation Intelligence",
+        alt: "Tonvo - AI Conversation Copilot for Real-Time Insights",
+        type: "image/png",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Tonvo - Real-time Conversation Intelligence",
-    description:
-      "Analyze tone, emotions, and intent in real time. AI coaching tips and smart suggestions for better conversations.",
-    images: ["/logo-tonvo.png"],
+    site: "@tonvo",
     creator: "@tonvo",
+    title: "Tonvo - AI Conversation Copilot",
+    description:
+      "Real-time AI suggestions, tone detection & coaching tips to improve your calls and conversations. Free to start.",
+    images: [{ url: "/og-image.png", alt: "Tonvo AI Copilot" }],
   },
   alternates: {
     canonical: SITE_URL,
     languages: {
-      "en": `${SITE_URL}`,
+      "en": SITE_URL,
       "fr": `${SITE_URL}?lang=fr`,
       "es": `${SITE_URL}?lang=es`,
       "de": `${SITE_URL}?lang=de`,
@@ -105,9 +111,14 @@ export const metadata: Metadata = {
     },
   },
   category: "technology",
+  verification: {
+    // Add your Google Search Console verification code here
+    // google: "your-google-verification-code",
+  },
 };
 
 /* ── JSON-LD Structured Data ── */
+
 const organizationJsonLd = {
   "@context": "https://schema.org",
   "@type": "Organization",
@@ -115,7 +126,7 @@ const organizationJsonLd = {
   url: SITE_URL,
   logo: `${SITE_URL}/logo-tonvo.png`,
   description:
-    "Tonvo provides real-time conversation intelligence powered by AI. Analyze tone, emotions, and intent during your conversations.",
+    "Tonvo provides real-time conversation intelligence powered by AI. Analyze tone, emotions, and intent during calls and chats.",
   contactPoint: {
     "@type": "ContactPoint",
     email: "contact@tonvo.co",
@@ -127,31 +138,58 @@ const organizationJsonLd = {
 const softwareJsonLd = {
   "@context": "https://schema.org",
   "@type": "SoftwareApplication",
-  name: "Tonvo",
+  name: "Tonvo - AI Conversation Copilot",
   applicationCategory: "BusinessApplication",
+  applicationSubCategory: "Communication",
   operatingSystem: "Web",
   url: SITE_URL,
   description:
-    "Real-time conversation intelligence app that analyzes tone, emotions, and provides AI-powered coaching tips.",
+    "An AI-powered copilot that analyzes conversations in real time during calls (Discord, Zoom, Meet). Provides live coaching tips, tone detection, smart suggestions, and conversation signals to improve communication.",
+  featureList: [
+    "Real-time tone & emotion analysis",
+    "AI coaching tips during calls",
+    "Live conversation suggestions",
+    "Speaker diarization (You vs Them)",
+    "Conversation signal detection (objections, opportunities)",
+    "Screen content analysis",
+    "10 language support",
+    "Quality & engagement scoring",
+    "Session history & reports",
+    "Floating copilot overlay",
+  ],
+  screenshot: `${SITE_URL}/og-image.png`,
   offers: [
     {
       "@type": "Offer",
       price: "0",
       priceCurrency: "USD",
       name: "Free Plan",
-      description: "3 sessions per month with basic tone analysis",
+      description: "3 sessions per month with real-time tone analysis and basic suggestions",
     },
     {
       "@type": "Offer",
       price: "19",
       priceCurrency: "USD",
-      name: "Pro Plan",
-      description: "Unlimited sessions with advanced AI coaching and screen analysis",
+      name: "Pro Plan - Monthly",
+      description: "Unlimited sessions with AI coaching, screen analysis, and full history",
       priceSpecification: {
         "@type": "UnitPriceSpecification",
         price: "19",
         priceCurrency: "USD",
         billingDuration: "P1M",
+      },
+    },
+    {
+      "@type": "Offer",
+      price: "182",
+      priceCurrency: "USD",
+      name: "Pro Plan - Yearly",
+      description: "Unlimited sessions billed annually (save 20%)",
+      priceSpecification: {
+        "@type": "UnitPriceSpecification",
+        price: "182",
+        priceCurrency: "USD",
+        billingDuration: "P1Y",
       },
     },
   ],
@@ -170,10 +208,18 @@ const faqJsonLd = {
   mainEntity: [
     {
       "@type": "Question",
-      name: "What is Tonvo?",
+      name: "What is an AI conversation copilot?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "Tonvo is an AI-powered conversation intelligence platform that analyzes tone, emotions, and intent in real time during your conversations. It provides live coaching tips and smart suggestions to help you communicate more effectively.",
+        text: "An AI conversation copilot is a tool that analyzes your conversations in real time and provides live coaching tips, tone detection, smart suggestions, and actionable insights. Tonvo works during calls on Discord, Zoom, Google Meet, and other platforms to help you communicate more effectively.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "Does Tonvo work during live calls?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Yes, Tonvo works in real time during live calls. It captures audio from your microphone and system audio (Discord, Zoom, Meet), transcribes the conversation, and provides instant coaching tips, tone analysis, and smart suggestions while you speak.",
       },
     },
     {
@@ -181,7 +227,7 @@ const faqJsonLd = {
       name: "How does Tonvo analyze conversations?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "Tonvo uses advanced AI to transcribe your conversations in real time, detect emotional tone (positive, neutral, negative, hesitant), and provide contextual suggestions. It analyzes both audio and screen content to give comprehensive insights.",
+        text: "Tonvo uses a multi-step AI pipeline: (1) Real-time audio transcription with speaker separation, (2) Tone and emotion detection using Claude AI, (3) Conversation signal detection (objections, opportunities, hesitation), (4) Live coaching suggestions, (5) Quality and engagement scoring. It also analyzes screen content for additional context.",
       },
     },
     {
@@ -189,7 +235,7 @@ const faqJsonLd = {
       name: "Is Tonvo free to use?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "Yes, Tonvo offers a free plan with 3 sessions per month, real-time tone analysis, and basic suggestions. For unlimited sessions and advanced features, the Pro plan is available at $19/month.",
+        text: "Yes, Tonvo offers a free plan with 3 sessions per month including real-time tone analysis and basic suggestions. The Pro plan at $19/month (or $182/year with 20% off) unlocks unlimited sessions, advanced AI coaching, screen analysis, and full session history.",
       },
     },
     {
@@ -197,7 +243,7 @@ const faqJsonLd = {
       name: "What languages does Tonvo support?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "Tonvo supports 10 languages: English, French, Spanish, German, Portuguese, Italian, Dutch, Chinese, Japanese, and Korean. The interface and analysis work across all supported languages.",
+        text: "Tonvo supports 10 languages: English, French, Spanish, German, Portuguese, Italian, Dutch, Chinese, Japanese, and Korean. Both the interface and conversation analysis work across all supported languages with automatic detection.",
       },
     },
     {
@@ -205,10 +251,78 @@ const faqJsonLd = {
       name: "Is my conversation data secure?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "Tonvo takes privacy seriously. Conversation data is encrypted in transit and at rest. We do not sell or share your data with third parties. See our Privacy Policy for full details.",
+        text: "Tonvo takes privacy seriously. All conversation data is encrypted in transit and at rest. Audio is processed in real time and not permanently stored. We never sell or share your data with third parties. See our Privacy Policy for full details.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "Can other people see the AI copilot during screen sharing?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Tonvo opens the copilot in a separate browser window. When you share a specific application window (like Discord or Zoom) instead of your entire screen, the copilot window remains invisible to other participants. This makes it perfect for sales calls and interviews.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "What is conversation signal detection?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Conversation signal detection is Tonvo's AI feature that identifies key moments during a call: objections from the other person, opportunities to close, hesitation, agreement, and important questions. Each signal is highlighted in real time so you can react immediately.",
       },
     },
   ],
+};
+
+const breadcrumbJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Home", item: SITE_URL },
+    { "@type": "ListItem", position: 2, name: "Pricing", item: `${SITE_URL}/pricing` },
+    { "@type": "ListItem", position: 3, name: "Sign In", item: `${SITE_URL}/login` },
+    { "@type": "ListItem", position: 4, name: "Privacy Policy", item: `${SITE_URL}/privacy` },
+    { "@type": "ListItem", position: 5, name: "Terms of Service", item: `${SITE_URL}/terms` },
+  ],
+};
+
+const howToJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "HowTo",
+  name: "How to use Tonvo AI Copilot during a call",
+  description: "Get real-time AI coaching and conversation insights during your calls in 3 simple steps.",
+  step: [
+    {
+      "@type": "HowToStep",
+      position: 1,
+      name: "Start a session",
+      text: "Open Tonvo, go to Live Session, enable Screen and Audio capture, then click Start Recording. Select the window or screen you want to analyze.",
+    },
+    {
+      "@type": "HowToStep",
+      position: 2,
+      name: "Get real-time insights",
+      text: "As you speak, Tonvo transcribes the conversation, detects tone and emotions, and shows live coaching tips, suggestions, and conversation signals in the copilot panel.",
+    },
+    {
+      "@type": "HowToStep",
+      position: 3,
+      name: "Review your session report",
+      text: "When you stop the session, Tonvo generates a comprehensive report with quality scores, key moments, strengths, improvements, and follow-up actions.",
+    },
+  ],
+};
+
+const webSiteJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: SITE_NAME,
+  url: SITE_URL,
+  description: "AI-powered conversation copilot for real-time insights during calls and chats.",
+  potentialAction: {
+    "@type": "SearchAction",
+    target: `${SITE_URL}/?q={search_term_string}`,
+    "query-input": "required name=search_term_string",
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -226,6 +340,18 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(howToJsonLd) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(webSiteJsonLd) }}
         />
       </head>
       <body className="antialiased">

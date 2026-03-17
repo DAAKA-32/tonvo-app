@@ -23,7 +23,7 @@ export default function PrivacyPage() {
           Privacy Policy
         </h1>
         <p className="text-sm mb-10" style={{ color: "var(--color-text-muted)" }}>
-          Last updated: [TO COMPLETE — DATE]
+          Last updated: March 17, 2026
         </p>
 
         <div className="space-y-10" style={{ color: "var(--color-text-silver)" }}>
@@ -32,10 +32,10 @@ export default function PrivacyPage() {
             <h2 className="text-lg font-semibold mb-3" style={{ color: "var(--color-text)" }}>1. Data Controller</h2>
             <p className="text-sm leading-relaxed m-0">
               The data controller for the Tonvo application is:<br />
-              <strong>[TO COMPLETE — COMPANY NAME]</strong><br />
-              [TO COMPLETE — ADDRESS]<br />
-              [TO COMPLETE — REGISTRATION NUMBER]<br />
-              Contact: <strong>[TO COMPLETE — EMAIL]</strong>
+              <strong>Tonvo</strong><br />
+              42170 Chambles, France<br />
+              SIREN 101 134 633<br />
+              Contact: <strong>contact@tonvo.co</strong>
             </p>
           </section>
 
@@ -119,11 +119,11 @@ export default function PrivacyPage() {
             <h2 className="text-lg font-semibold mb-3" style={{ color: "var(--color-text)" }}>6. Third-Party Services</h2>
             <p className="text-sm leading-relaxed mb-3">We use the following third-party services to operate Tonvo:</p>
             <ul className="text-sm leading-relaxed space-y-2 pl-5 m-0" style={{ listStyleType: "disc" }}>
-              <li><strong>Firebase</strong> (Google) — Authentication. <em>[TO COMPLETE — REGION]</em></li>
-              <li><strong>Supabase</strong> — Database and session storage. <em>[TO COMPLETE — REGION]</em></li>
+              <li><strong>Firebase</strong> (Google) — Authentication. <em>EU (europe-west1)</em></li>
+              <li><strong>Supabase</strong> — Database and session storage. <em>EU (europe-west1)</em></li>
               <li><strong>Anthropic</strong> — AI-powered conversation analysis. Data is sent for processing and not retained by Anthropic beyond the API request.</li>
               <li><strong>Stripe</strong> — Payment processing. Stripe is PCI-DSS compliant.</li>
-              <li><strong>Vercel</strong> — Application hosting. <em>[TO COMPLETE — REGION]</em></li>
+              <li><strong>Vercel</strong> — Application hosting. <em>EU (europe-west1)</em></li>
             </ul>
           </section>
 
@@ -133,7 +133,7 @@ export default function PrivacyPage() {
             <p className="text-sm leading-relaxed m-0">
               Some of our third-party providers may process data outside the European Economic Area (EEA).
               Where this occurs, we ensure appropriate safeguards are in place, including Standard Contractual Clauses (SCCs)
-              or adequacy decisions by the European Commission. [TO COMPLETE — SPECIFY TRANSFER MECHANISMS]
+              or adequacy decisions by the European Commission. All third-party providers comply with EU-US Data Privacy Framework or have signed Standard Contractual Clauses (SCCs) approved by the European Commission.
             </p>
           </section>
 
@@ -157,7 +157,7 @@ export default function PrivacyPage() {
               ))}
             </div>
             <p className="text-sm leading-relaxed mt-4 m-0">
-              To exercise any of these rights, contact us at: <strong>[TO COMPLETE — EMAIL]</strong>
+              To exercise any of these rights, contact us at: <strong>contact@tonvo.co</strong>
             </p>
           </section>
 
@@ -177,7 +177,7 @@ export default function PrivacyPage() {
             <p className="text-sm leading-relaxed m-0">
               Tonvo is not intended for use by individuals under the age of 16. We do not knowingly collect
               personal data from children. If you believe a child has provided us with personal data,
-              please contact us at <strong>[TO COMPLETE — EMAIL]</strong>.
+              please contact us at <strong>contact@tonvo.co</strong>.
             </p>
           </section>
 
@@ -196,9 +196,9 @@ export default function PrivacyPage() {
             <h2 className="text-lg font-semibold mb-3" style={{ color: "var(--color-text)" }}>12. Contact</h2>
             <p className="text-sm leading-relaxed m-0">
               For any questions regarding this Privacy Policy or your personal data:<br /><br />
-              <strong>[TO COMPLETE — COMPANY NAME]</strong><br />
-              [TO COMPLETE — ADDRESS]<br />
-              Email: <strong>[TO COMPLETE — EMAIL]</strong><br /><br />
+              <strong>Tonvo</strong><br />
+              42170 Chambles, France<br />
+              Email: <strong>contact@tonvo.co</strong><br /><br />
               You also have the right to lodge a complaint with your local data protection authority
               (e.g., CNIL in France).
             </p>

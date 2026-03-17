@@ -22,7 +22,7 @@ export default function CookiesPage() {
           Cookie Policy
         </h1>
         <p className="text-sm mb-10" style={{ color: "var(--color-text-muted)" }}>
-          Last updated: [TO COMPLETE -- DATE]
+          Last updated: March 17, 2026
         </p>
 
         <div className="space-y-8" style={{ color: "var(--color-text-silver)" }}>
@@ -54,7 +54,7 @@ export default function CookiesPage() {
                   type: "Analytics Cookies",
                   required: false,
                   desc: "Help us understand how you use the application to improve the service. All analytics data is anonymized.",
-                  examples: "[TO COMPLETE -- ANALYTICS PROVIDER IF ANY].",
+                  examples: "None currently. We do not use third-party analytics services.",
                 },
                 {
                   type: "Third-Party Cookies",
@@ -104,7 +104,7 @@ export default function CookiesPage() {
             <h2 className="text-lg font-semibold mb-3" style={{ color: "var(--color-text)" }}>5. Contact</h2>
             <p className="text-sm leading-relaxed m-0">
               For questions about our use of cookies:<br /><br />
-              Email: <strong>[TO COMPLETE -- EMAIL]</strong>
+              Email: <strong>contact@tonvo.co</strong>
             </p>
           </section>
         </div>

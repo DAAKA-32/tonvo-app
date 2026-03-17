@@ -6,6 +6,7 @@ import { useTranslation } from "react-i18next";
 import { useAuth } from "@/lib/auth-context";
 import { supabase } from "@/lib/supabase";
 import AppShell from "@/components/AppShell";
+import { usePlan } from "@/hooks/usePlan";
 import type { Conversation } from "@/types/database";
 import type { Tone } from "@/types/analysis";
 
@@ -52,6 +53,7 @@ function ScorePill({ score }: { score: number }) {
 export default function HistoryPage() {
   const { t } = useTranslation();
   const { user } = useAuth();
+  const { features } = usePlan();
   const [conversations, setConversations] = useState<Conversation[]>([]);
   const [loadingData, setLoadingData] = useState(true);
   const [filter, setFilter] = useState<"all" | Tone>("all");
@@ -60,12 +62,20 @@ export default function HistoryPage() {
     if (!user) return;
 
     async function fetchHistory() {
-      const { data } = await supabase
+      let query = supabase
         .from("conversations")
         .select("*")
         .eq("user_id", user!.uid)
         .order("created_at", { ascending: false });
 
+      // Enforce retention: free plan = last 7 days only
+      if (features.historyRetentionDays > 0) {
+        const cutoff = new Date();
+        cutoff.setDate(cutoff.getDate() - features.historyRetentionDays);
+        query = query.gte("created_at", cutoff.toISOString());
+      }
+
+      const { data } = await query;
       if (data) setConversations(data);
       setLoadingData(false);
     }

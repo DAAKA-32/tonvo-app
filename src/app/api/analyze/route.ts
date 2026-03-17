@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { checkRateLimit, RATE_LIMITS } from "@/lib/rate-limit";
 import { anthropicClient, CLAUDE_FAST } from "@/lib/anthropic";
+import { getPlanFeatures } from "@/lib/plan-features";
 
 // Domain-specific prompt templates
 const MODE_PROMPTS: Record<string, string> = {
@@ -34,7 +35,10 @@ export async function POST(req: NextRequest) {
   }
 
   const body = await req.json();
-  const { text, conversationSummary, recentSegments, speakerSegments, mode, screenContext, screenContentType, language } = body;
+  const { text, conversationSummary, recentSegments, speakerSegments, mode, screenContext, screenContentType, language, userPlan } = body;
+
+  // Plan-aware feature gating (userPlan passed from client)
+  const planFeatures = getPlanFeatures(userPlan);
 
   if (!text || typeof text !== "string") {
     return NextResponse.json({ error: "Missing text field" }, { status: 400 });
@@ -125,6 +129,12 @@ Only return valid JSON. No markdown, no explanation.${contextBlock}`,
     analysis.coachingTip = typeof analysis.coachingTip === "string" ? analysis.coachingTip : "";
     analysis.liveInsight = typeof analysis.liveInsight === "string" ? analysis.liveInsight : "";
     analysis.signalLabel = typeof analysis.signalLabel === "string" ? analysis.signalLabel : "";
+
+    // Strip Pro-only features for free users
+    if (!planFeatures.coachingTips) analysis.coachingTip = "";
+    if (!planFeatures.liveInsight) analysis.liveInsight = "";
+    if (!planFeatures.signalDetection) { analysis.signal = "none"; analysis.signalLabel = ""; }
+    if (!planFeatures.speakerBalance) delete analysis.speakerDynamics;
 
     return NextResponse.json(analysis);
   } catch (error) {

@@ -3,6 +3,8 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "@/lib/auth-context";
 import AppShell from "@/components/AppShell";
+import UpgradePrompt from "@/components/UpgradePrompt";
+import { usePlan } from "@/hooks/usePlan";
 
 interface ProgressionPoint {
   date: string;
@@ -180,9 +182,21 @@ function ScoreBar({ label, value, color }: { label: string; value: number; color
 
 export default function AnalyticsPage() {
   const { user } = useAuth();
+  const { can, loading: planLoading } = usePlan();
   const [data, setData] = useState<AnalyticsData | null>(null);
   const [loading, setLoading] = useState(true);
   const [selectedMetric, setSelectedMetric] = useState<MetricKey>("overall");
+
+  // Gate: analytics is Pro+ only
+  if (!planLoading && !can("analyticsPage")) {
+    return (
+      <AppShell>
+        <div style={{ maxWidth: 600, paddingTop: 40 }}>
+          <UpgradePrompt feature="Analytics Dashboard" plan="Pro" />
+        </div>
+      </AppShell>
+    );
+  }
 
   useEffect(() => {
     if (!user) return;

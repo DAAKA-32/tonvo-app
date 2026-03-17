@@ -36,10 +36,13 @@ export default function AdminPage() {
     }
   }
 
-  if (!user) {
+  if (!user || user.email !== "emilien.nepveu@gmail.com") {
     return (
       <AppShell>
-        <p style={{ color: "var(--color-text-muted)" }}>Please log in to access admin.</p>
+        <div style={{ maxWidth: 500, textAlign: "center", paddingTop: 80 }}>
+          <h1 className="text-4xl font-bold mb-3" style={{ color: "var(--color-text)" }}>404</h1>
+          <p className="text-sm" style={{ color: "var(--color-text-muted)" }}>This page could not be found.</p>
+        </div>
       </AppShell>
     );
   }

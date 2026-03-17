@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { getPlanFeatures } from "@/lib/plan-features";
 import { z } from "zod/v4";
 import { anthropicClient, CLAUDE_FAST } from "@/lib/anthropic";
 
@@ -24,6 +25,16 @@ export async function POST(req: NextRequest) {
   try {
     const formData = await req.formData();
     const imageFile = formData.get("image") as File | null;
+    const userPlan = formData.get("userPlan") as string | null;
+
+    // Plan gate: screen analysis is Pro+ only
+    const features = getPlanFeatures(userPlan);
+    if (!features.screenAnalysis) {
+      return NextResponse.json(
+        { error: "Screen analysis requires the Pro plan.", upgrade: true },
+        { status: 403 }
+      );
+    }
 
     if (!imageFile) {
       return NextResponse.json({ error: "No image provided" }, { status: 400 });

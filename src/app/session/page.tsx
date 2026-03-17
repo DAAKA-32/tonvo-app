@@ -15,6 +15,8 @@ import AudioWave from "@/components/AudioWave";
 import SuggestionCard from "@/components/SuggestionCard";
 import CopilotOverlay from "@/components/CopilotOverlay";
 import CopilotPiP from "@/components/CopilotPiP";
+import UpgradePrompt from "@/components/UpgradePrompt";
+import { usePlan } from "@/hooks/usePlan";
 import type {
   Tone,
   TranscriptSegment,
@@ -83,6 +85,7 @@ export default function SessionPage() {
   const router = useRouter();
   const { t, i18n } = useTranslation();
   const toast = useToast();
+  const { plan, can, features, sessionsRemaining } = usePlan();
   const audioService = useRef<AudioCaptureService | null>(null);
   const processingToastId = useRef<string | null>(null);
   const screenAnalysisTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -269,6 +272,7 @@ export default function SessionPage() {
       const lastSeg = segments[segments.length - 1];
       if (lastSeg?.text) formData.append("lastTranscript", lastSeg.text);
       formData.append("language", i18n.language);
+      formData.append("userPlan", plan);
       const res = await fetch("/api/analyze-screen", { method: "POST", body: formData });
       const data: ScreenAnalysis = await res.json();
       if (data.context) {
@@ -363,6 +367,7 @@ export default function SessionPage() {
           screenContext: screenAnalysis?.context || undefined,
           screenContentType: screenAnalysis?.contentType || undefined,
           language: i18n.language,
+          userPlan: plan,
         }),
       });
       const analysis: ToneResult = await analyzeRes.json();
@@ -811,9 +816,14 @@ export default function SessionPage() {
         )}
 
         {/* ============================================================ */}
-        {/*  COPILOT PANEL — inline real-time assistant                    */}
+        {/*  COPILOT PANEL — inline real-time assistant (Pro+ only)        */}
         {/* ============================================================ */}
-        {isRecording && audioEnabled && (
+        {isRecording && audioEnabled && !can("coachingTips") && (
+          <div className="mb-6">
+            <UpgradePrompt feature="AI Copilot — Live coaching, insights & signals" plan="Pro" />
+          </div>
+        )}
+        {isRecording && audioEnabled && can("coachingTips") && (
           <div className="copilot-inline rounded-2xl border mb-6 segment-enter" style={{ backgroundColor: "rgba(14, 14, 17, 0.6)", backdropFilter: "blur(16px)", WebkitBackdropFilter: "blur(16px)", borderColor: "rgba(255, 255, 255, 0.08)", boxShadow: "0 4px 24px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.03)" }}>
             {/* Copilot Header */}
             <div className="flex items-center justify-between px-5 py-3" style={{ borderBottom: "1px solid rgba(255, 255, 255, 0.06)" }}>
@@ -1209,10 +1219,9 @@ export default function SessionPage() {
         )}
       </div>
 
-      {/* Copilot PiP — floats above ALL windows (Discord, Zoom, etc.) */}
-      {/* Not captured by screen sharing (Chrome 116+) */}
+      {/* Copilot PiP — floats above ALL windows (Pro+ only) */}
       <CopilotPiP
-        active={isRecording}
+        active={isRecording && can("copilotPiP")}
         coachingTip={coachingTip}
         liveInsight={liveInsight}
         suggestion={currentSuggestion}
@@ -1226,8 +1235,8 @@ export default function SessionPage() {
         onStop={stopSession}
       />
 
-      {/* Copilot Overlay — fallback floating panel (if PiP not supported) */}
-      {isRecording && (
+      {/* Copilot Overlay — fallback floating panel (Pro+ only) */}
+      {isRecording && can("copilotOverlay") && (
         <CopilotOverlay
           coachingTip={coachingTip}
           liveInsight={liveInsight}

@@ -882,6 +882,64 @@ export default function HomePage() {
           </div>
         </section>
 
+        {/* ── SEO: FAQ Section (for Google Featured Snippets) ── */}
+        <section id="faq" className="py-20 px-6">
+          <div className="max-w-3xl mx-auto">
+            <h2 className="text-2xl sm:text-3xl font-bold text-center mb-3" style={{ color: "var(--color-text)" }}>
+              Frequently Asked Questions
+            </h2>
+            <p className="text-sm text-center mb-12" style={{ color: "var(--color-text-muted)" }}>
+              Everything you need to know about Tonvo, the AI conversation copilot.
+            </p>
+
+            <div className="space-y-4">
+              {[
+                {
+                  q: "What is an AI conversation copilot?",
+                  a: "An AI conversation copilot is a tool that analyzes your conversations in real time and provides live coaching tips, tone detection, smart suggestions, and actionable insights. Tonvo works during calls on Discord, Zoom, Google Meet, and other platforms to help you communicate more effectively.",
+                },
+                {
+                  q: "Does Tonvo work during live calls?",
+                  a: "Yes, Tonvo works in real time during live calls. It captures audio from your microphone and system audio (Discord, Zoom, Meet), transcribes the conversation, and provides instant coaching tips, tone analysis, and smart suggestions while you speak.",
+                },
+                {
+                  q: "How does the real-time analysis work?",
+                  a: "Tonvo uses a multi-step AI pipeline: real-time audio transcription with speaker separation, tone and emotion detection, conversation signal detection (objections, opportunities, hesitation), live coaching suggestions, and quality scoring. It also analyzes screen content for additional context.",
+                },
+                {
+                  q: "Is Tonvo free to use?",
+                  a: "Yes, Tonvo offers a free plan with 3 sessions per month including real-time tone analysis and basic suggestions. The Pro plan at $19/month (or $182/year, saving 20%) unlocks unlimited sessions, advanced AI coaching, screen analysis, and full session history.",
+                },
+                {
+                  q: "Can other people see the copilot during screen sharing?",
+                  a: "Tonvo opens the copilot in a separate browser window. When you share a specific application window (like Discord or Zoom) instead of your entire screen, the copilot window remains invisible to other participants. Perfect for sales calls and interviews.",
+                },
+                {
+                  q: "What languages does Tonvo support?",
+                  a: "Tonvo supports 10 languages: English, French, Spanish, German, Portuguese, Italian, Dutch, Chinese, Japanese, and Korean. The interface and conversation analysis work across all supported languages with automatic detection.",
+                },
+              ].map((item, i) => (
+                <details
+                  key={i}
+                  className="rounded-xl border group"
+                  style={{ backgroundColor: "var(--color-surface)", borderColor: "var(--color-border)" }}
+                >
+                  <summary
+                    className="flex items-center justify-between cursor-pointer px-6 py-4 text-sm font-semibold list-none"
+                    style={{ color: "var(--color-text)" }}
+                  >
+                    {item.q}
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="shrink-0 ml-4 transition-transform group-open:rotate-180" style={{ color: "var(--color-text-muted)" }}><path d="m6 9 6 6 6-6" /></svg>
+                  </summary>
+                  <p className="px-6 pb-4 pt-0 m-0 text-sm leading-relaxed" style={{ color: "var(--color-text-muted)" }}>
+                    {item.a}
+                  </p>
+                </details>
+              ))}
+            </div>
+          </div>
+        </section>
+
         {/* ── Footer ── */}
         <footer
           className="border-t px-6 py-12"
@@ -910,6 +968,7 @@ export default function HomePage() {
                   <li><a href="#features" className="text-sm no-underline hover:opacity-80 transition-colors" style={{ color: "var(--color-text-muted)" }}>Features</a></li>
                   <li><a href="#demo" className="text-sm no-underline hover:opacity-80 transition-colors" style={{ color: "var(--color-text-muted)" }}>Demo</a></li>
                   <li><a href="#use-cases" className="text-sm no-underline hover:opacity-80 transition-colors" style={{ color: "var(--color-text-muted)" }}>Use Cases</a></li>
+                  <li><a href="#faq" className="text-sm no-underline hover:opacity-80 transition-colors" style={{ color: "var(--color-text-muted)" }}>FAQ</a></li>
                 </ul>
               </div>
 
