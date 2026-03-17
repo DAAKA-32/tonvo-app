@@ -143,6 +143,9 @@ export default function SettingsPage() {
   const { t, i18n } = useTranslation();
   const { user } = useAuth();
   const [plan, setPlan] = useState("free");
+  const [periodEnd, setPeriodEnd] = useState<string | null>(null);
+  const [cancelAtPeriodEnd, setCancelAtPeriodEnd] = useState(false);
+  const [cancelLoading, setCancelLoading] = useState(false);
 
   // Password change
   const [showPasswordForm, setShowPasswordForm] = useState(false);
@@ -164,7 +167,11 @@ export default function SettingsPage() {
       body: JSON.stringify({ userId: user.uid }),
     })
       .then((r) => r.json())
-      .then((data) => { if (data.plan) setPlan(data.plan); })
+      .then((data) => {
+        if (data.plan) setPlan(data.plan);
+        if (data.currentPeriodEnd) setPeriodEnd(data.currentPeriodEnd);
+        if (data.cancelAtPeriodEnd != null) setCancelAtPeriodEnd(data.cancelAtPeriodEnd);
+      })
       .catch(() => {});
   }, [user]);
 
@@ -197,6 +204,26 @@ export default function SettingsPage() {
       setPasswordError(t("settings.passwordIncorrect"));
     } finally {
       setPasswordLoading(false);
+    }
+  }
+
+  async function handleCancelOrReactivate() {
+    if (!user) return;
+    setCancelLoading(true);
+    try {
+      const action = cancelAtPeriodEnd ? "reactivate" : "cancel";
+      const res = await fetch("/api/stripe/cancel", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userId: user.uid, action }),
+      });
+      const data = await res.json();
+      if (data.canceled) setCancelAtPeriodEnd(true);
+      if (data.reactivated) setCancelAtPeriodEnd(false);
+    } catch {
+      // fail silently
+    } finally {
+      setCancelLoading(false);
     }
   }
 
@@ -436,6 +463,23 @@ export default function SettingsPage() {
             </span>
           </SettingsRow>
 
+          {/* Renewal info */}
+          {plan !== "free" && periodEnd && (
+            <div className="mt-3 rounded-lg p-3" style={{ backgroundColor: cancelAtPeriodEnd ? "rgba(248, 113, 113, 0.06)" : "rgba(52, 211, 153, 0.06)", border: cancelAtPeriodEnd ? "1px solid rgba(248, 113, 113, 0.15)" : "1px solid rgba(52, 211, 153, 0.15)" }}>
+              <div className="flex items-center gap-2 mb-1">
+                <div style={{ width: 6, height: 6, borderRadius: "50%", background: cancelAtPeriodEnd ? "var(--color-negative)" : "var(--color-positive)" }} />
+                <span className="text-xs font-semibold" style={{ color: cancelAtPeriodEnd ? "var(--color-negative)" : "var(--color-positive)" }}>
+                  {cancelAtPeriodEnd ? "Cancels on" : "Auto-renews on"} {new Date(periodEnd).toLocaleDateString(i18n.language, { year: "numeric", month: "long", day: "numeric" })}
+                </span>
+              </div>
+              <p className="text-xs m-0" style={{ color: "var(--color-text-muted)" }}>
+                {cancelAtPeriodEnd
+                  ? "Your subscription will not renew. You keep access until the date above."
+                  : "Your subscription will automatically renew. You can cancel anytime."}
+              </p>
+            </div>
+          )}
+
           <div className="flex gap-3 mt-4" style={{ flexWrap: "wrap" }}>
             {plan === "free" ? (
               <a
@@ -450,13 +494,31 @@ export default function SettingsPage() {
                 {t("settings.upgradePlan")}
               </a>
             ) : (
-              <button
-                onClick={handleManageBilling}
-                disabled={portalLoading}
-                className="btn-secondary"
-                style={{ padding: "8px 20px", fontSize: 13 }}>
-                {portalLoading ? t("common.loading") : t("settings.manageSubscription")}
-              </button>
+              <>
+                <button
+                  onClick={handleManageBilling}
+                  disabled={portalLoading}
+                  className="btn-secondary"
+                  style={{ padding: "8px 20px", fontSize: 13 }}>
+                  {portalLoading ? t("common.loading") : t("settings.manageSubscription")}
+                </button>
+                <button
+                  onClick={handleCancelOrReactivate}
+                  disabled={cancelLoading}
+                  className="btn-secondary"
+                  style={{
+                    padding: "8px 20px",
+                    fontSize: 13,
+                    borderColor: cancelAtPeriodEnd ? "rgba(52, 211, 153, 0.3)" : "rgba(248, 113, 113, 0.3)",
+                    color: cancelAtPeriodEnd ? "var(--color-positive)" : "var(--color-negative)",
+                  }}>
+                  {cancelLoading
+                    ? t("common.loading")
+                    : cancelAtPeriodEnd
+                      ? "Reactivate subscription"
+                      : "Cancel subscription"}
+                </button>
+              </>
             )}
           </div>
         </SettingsSection>

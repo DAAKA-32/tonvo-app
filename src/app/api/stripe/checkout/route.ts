@@ -4,7 +4,7 @@ import { supabaseAdmin } from "@/lib/supabase-admin";
 
 export async function POST(req: NextRequest) {
   try {
-    const { planId, userId, userEmail } = await req.json();
+    const { planId, userId, userEmail, billing = "monthly" } = await req.json();
 
     if (!planId || !userId || !userEmail) {
       return NextResponse.json({ error: "Missing planId, userId, or userEmail" }, { status: 400 });
@@ -14,6 +14,11 @@ export async function POST(req: NextRequest) {
     if (!plan || !("priceId" in plan) || !plan.priceId) {
       return NextResponse.json({ error: "Invalid plan" }, { status: 400 });
     }
+
+    // Select monthly or yearly price
+    const priceId = billing === "yearly" && "yearlyPriceId" in plan && plan.yearlyPriceId
+      ? plan.yearlyPriceId
+      : plan.priceId;
 
     // Check if user already has a Stripe customer
     const { data: existingSub } = await supabaseAdmin
@@ -52,7 +57,7 @@ export async function POST(req: NextRequest) {
       customer: customerId,
       mode: "subscription",
       payment_method_types: ["card"],
-      line_items: [{ price: plan.priceId, quantity: 1 }],
+      line_items: [{ price: priceId, quantity: 1 }],
       success_url: `${origin}/dashboard?session_id={CHECKOUT_SESSION_ID}&plan=${planId}`,
       cancel_url: `${origin}/pricing`,
       metadata: {

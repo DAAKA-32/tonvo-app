@@ -48,7 +48,12 @@ export async function POST(req: NextRequest) {
       }
 
       case "customer.subscription.updated": {
-        const subObj = event.data.object as unknown as { customer: string; status: string; current_period_end: number };
+        const subObj = event.data.object as unknown as {
+          customer: string;
+          status: string;
+          current_period_end: number;
+          cancel_at_period_end: boolean;
+        };
         const customerId = subObj.customer as string;
 
         const status = subObj.status === "active" ? "active"
@@ -61,6 +66,7 @@ export async function POST(req: NextRequest) {
           .update({
             status,
             current_period_end: new Date(subObj.current_period_end * 1000).toISOString(),
+            cancel_at_period_end: subObj.cancel_at_period_end ?? false,
           })
           .eq("stripe_customer_id", customerId);
         break;

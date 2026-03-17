@@ -4,11 +4,14 @@ import { useState, useEffect } from "react";
 import { useAuth } from "@/lib/auth-context";
 import AppShell from "@/components/AppShell";
 
+type BillingCycle = "monthly" | "yearly";
+
 const PLANS = [
   {
     id: "free",
     name: "Free",
-    price: 0,
+    monthlyPrice: 0,
+    yearlyPrice: 0,
     period: "",
     description: "Try Tonvo with basic features",
     features: [
@@ -23,7 +26,8 @@ const PLANS = [
   {
     id: "pro",
     name: "Pro",
-    price: 19,
+    monthlyPrice: 19,
+    yearlyPrice: 182,
     period: "/month",
     description: "For professionals who want an edge",
     features: [
@@ -42,7 +46,8 @@ const PLANS = [
   {
     id: "team",
     name: "Team",
-    price: 49,
+    monthlyPrice: 49,
+    yearlyPrice: 470,
     period: "/user/month",
     description: "For teams that close deals together",
     features: [
@@ -52,7 +57,7 @@ const PLANS = [
       "Priority onboarding",
       "Dedicated support",
     ],
-    cta: "Contact Sales",
+    cta: "Upgrade to Team",
     popular: false,
   },
 ];
@@ -61,6 +66,7 @@ export default function PricingPage() {
   const { user } = useAuth();
   const [currentPlan, setCurrentPlan] = useState("free");
   const [loading, setLoading] = useState<string | null>(null);
+  const [billing, setBilling] = useState<BillingCycle>("monthly");
 
   useEffect(() => {
     if (!user) return;
@@ -79,11 +85,6 @@ export default function PricingPage() {
   async function handleUpgrade(planId: string) {
     if (!user || planId === "free") return;
 
-    if (planId === "team") {
-      window.open("mailto:contact@tonvo.co?subject=Team Plan Inquiry", "_blank");
-      return;
-    }
-
     setLoading(planId);
     try {
       const res = await fetch("/api/stripe/checkout", {
@@ -93,6 +94,7 @@ export default function PricingPage() {
           planId,
           userId: user.uid,
           userEmail: user.email,
+          billing,
         }),
       });
       const data = await res.json();
@@ -126,26 +128,90 @@ export default function PricingPage() {
     }
   }
 
+  function getDisplayPrice(plan: typeof PLANS[number]) {
+    if (plan.monthlyPrice === 0) return "Free";
+    if (billing === "yearly") {
+      return `$${Math.round(plan.yearlyPrice / 12)}`;
+    }
+    return `$${plan.monthlyPrice}`;
+  }
+
+  function getPeriodLabel(plan: typeof PLANS[number]) {
+    if (plan.monthlyPrice === 0) return "";
+    if (plan.id === "team") return billing === "yearly" ? "/user/month" : "/user/month";
+    return "/month";
+  }
+
+  function getSavingsLabel(plan: typeof PLANS[number]) {
+    if (plan.monthlyPrice === 0 || billing !== "yearly") return null;
+    const monthlyCost = plan.monthlyPrice * 12;
+    const saved = monthlyCost - plan.yearlyPrice;
+    return `Save $${saved}/year`;
+  }
+
   return (
     <AppShell>
       <div style={{ maxWidth: 1000 }}>
         <div className="text-center mb-12">
           <h1 className="section-heading text-glow mb-3">Choose your plan</h1>
-          <p className="text-sm" style={{ color: "var(--color-text-muted)" }}>
+          <p className="text-sm mb-6" style={{ color: "var(--color-text-muted)" }}>
             Upgrade to unlock unlimited sessions and advanced AI coaching.
           </p>
-          {currentPlan !== "free" && (
+
+          {/* Billing Toggle */}
+          <div
+            className="inline-flex items-center rounded-xl p-1 mb-2"
+            style={{ backgroundColor: "var(--color-surface)", border: "1px solid var(--color-border)" }}
+          >
             <button
-              onClick={handleManage}
-              disabled={loading === "manage"}
-              className="mt-4 text-xs px-4 py-2 rounded-lg border cursor-pointer transition-all hover:opacity-80"
+              onClick={() => setBilling("monthly")}
+              className="px-5 py-2 rounded-lg text-sm font-medium border-none cursor-pointer transition-all"
               style={{
-                background: "transparent",
-                borderColor: "var(--color-border)",
-                color: "var(--color-text-muted)",
-              }}>
-              {loading === "manage" ? "Loading..." : "Manage Subscription"}
+                background: billing === "monthly"
+                  ? "linear-gradient(135deg, #5c5c6e, #6e6e82)"
+                  : "transparent",
+                color: billing === "monthly" ? "white" : "var(--color-text-muted)",
+              }}
+            >
+              Monthly
             </button>
+            <button
+              onClick={() => setBilling("yearly")}
+              className="px-5 py-2 rounded-lg text-sm font-medium border-none cursor-pointer transition-all flex items-center gap-2"
+              style={{
+                background: billing === "yearly"
+                  ? "linear-gradient(135deg, #5c5c6e, #6e6e82)"
+                  : "transparent",
+                color: billing === "yearly" ? "white" : "var(--color-text-muted)",
+              }}
+            >
+              Yearly
+              <span
+                className="text-[10px] font-bold px-1.5 py-0.5 rounded-full"
+                style={{
+                  background: billing === "yearly" ? "rgba(52, 211, 153, 0.2)" : "rgba(52, 211, 153, 0.1)",
+                  color: "var(--color-positive)",
+                }}
+              >
+                -20%
+              </span>
+            </button>
+          </div>
+
+          {currentPlan !== "free" && (
+            <div className="mt-4">
+              <button
+                onClick={handleManage}
+                disabled={loading === "manage"}
+                className="text-xs px-4 py-2 rounded-lg border cursor-pointer transition-all hover:opacity-80"
+                style={{
+                  background: "transparent",
+                  borderColor: "var(--color-border)",
+                  color: "var(--color-text-muted)",
+                }}>
+                {loading === "manage" ? "Loading..." : "Manage Subscription"}
+              </button>
+            </div>
           )}
         </div>
 
@@ -153,6 +219,7 @@ export default function PricingPage() {
           {PLANS.map((plan) => {
             const isCurrent = currentPlan === plan.id;
             const isUpgrade = !isCurrent && plan.id !== "free";
+            const savings = getSavingsLabel(plan);
 
             return (
               <div
@@ -185,14 +252,27 @@ export default function PricingPage() {
                   </p>
                   <div className="flex items-baseline gap-1">
                     <span className="text-4xl font-bold" style={{ color: "var(--color-text)" }}>
-                      {plan.price === 0 ? "Free" : `$${plan.price}`}
+                      {getDisplayPrice(plan)}
                     </span>
-                    {plan.period && (
+                    {getPeriodLabel(plan) && (
                       <span className="text-sm" style={{ color: "var(--color-text-muted)" }}>
-                        {plan.period}
+                        {getPeriodLabel(plan)}
                       </span>
                     )}
                   </div>
+                  {savings && (
+                    <span
+                      className="inline-block mt-2 text-xs font-semibold px-2 py-1 rounded-md"
+                      style={{ backgroundColor: "rgba(52, 211, 153, 0.1)", color: "var(--color-positive)" }}
+                    >
+                      {savings}
+                    </span>
+                  )}
+                  {billing === "yearly" && plan.yearlyPrice > 0 && (
+                    <p className="text-xs mt-1" style={{ color: "var(--color-text-muted)" }}>
+                      Billed ${plan.yearlyPrice}/year
+                    </p>
+                  )}
                 </div>
 
                 <ul className="flex-1 mb-6 space-y-3">

@@ -37,7 +37,9 @@ export const PLANS = {
   pro: {
     name: "Pro",
     price: 19,
+    yearlyPrice: 182,
     priceId: process.env.STRIPE_PRO_PRICE_ID || "",
+    yearlyPriceId: process.env.STRIPE_PRO_YEARLY_PRICE_ID || "",
     sessionsPerMonth: -1, // unlimited
     features: [
       "Unlimited sessions",
@@ -52,7 +54,9 @@ export const PLANS = {
   team: {
     name: "Team",
     price: 49,
+    yearlyPrice: 470,
     priceId: process.env.STRIPE_TEAM_PRICE_ID || "",
+    yearlyPriceId: process.env.STRIPE_TEAM_YEARLY_PRICE_ID || "",
     sessionsPerMonth: -1, // unlimited
     features: [
       "Everything in Pro",

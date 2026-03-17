@@ -7,6 +7,7 @@ export interface UserSubscription {
   stripeSubscriptionId: string | null;
   status: "active" | "canceled" | "past_due" | "trialing" | "none";
   currentPeriodEnd: string | null;
+  cancelAtPeriodEnd: boolean;
   sessionsUsed: number;
   sessionsReset: string; // ISO date of last reset
 }
@@ -17,6 +18,7 @@ const DEFAULT_SUB: UserSubscription = {
   stripeSubscriptionId: null,
   status: "none",
   currentPeriodEnd: null,
+  cancelAtPeriodEnd: false,
   sessionsUsed: 0,
   sessionsReset: new Date().toISOString(),
 };
@@ -48,6 +50,7 @@ export async function getUserSubscription(userId: string): Promise<UserSubscript
     stripeSubscriptionId: data.stripe_subscription_id,
     status: data.status || "none",
     currentPeriodEnd: data.current_period_end,
+    cancelAtPeriodEnd: data.cancel_at_period_end ?? false,
     sessionsUsed: needsReset ? 0 : (data.sessions_used || 0),
     sessionsReset: needsReset ? now.toISOString() : data.sessions_reset,
   };
