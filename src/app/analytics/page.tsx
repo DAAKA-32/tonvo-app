@@ -187,19 +187,10 @@ export default function AnalyticsPage() {
   const [loading, setLoading] = useState(true);
   const [selectedMetric, setSelectedMetric] = useState<MetricKey>("overall");
 
-  // Gate: analytics is Pro+ only
-  if (!planLoading && !can("analyticsPage")) {
-    return (
-      <AppShell>
-        <div style={{ maxWidth: 600, paddingTop: 40 }}>
-          <UpgradePrompt feature="Analytics Dashboard" plan="Pro" />
-        </div>
-      </AppShell>
-    );
-  }
+  const hasAccess = planLoading || can("analyticsPage");
 
   useEffect(() => {
-    if (!user) return;
+    if (!user || !hasAccess) return;
 
     fetch("/api/analytics", {
       method: "POST",
@@ -214,7 +205,18 @@ export default function AnalyticsPage() {
         setLoading(false);
       })
       .catch(() => setLoading(false));
-  }, [user]);
+  }, [user, hasAccess]);
+
+  // Gate: analytics is Pro+ only
+  if (!hasAccess) {
+    return (
+      <AppShell>
+        <div style={{ maxWidth: 600, paddingTop: 40 }}>
+          <UpgradePrompt feature="Analytics Dashboard" plan="Pro" />
+        </div>
+      </AppShell>
+    );
+  }
 
   const trend = data?.recentTrend ? TREND_CONFIG[data.recentTrend] : null;
 
