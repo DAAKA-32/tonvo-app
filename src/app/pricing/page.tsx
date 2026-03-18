@@ -48,11 +48,17 @@ export default function PricingPage() {
         }),
       });
       const data = await res.json();
+      if (!res.ok) {
+        console.error("Checkout API error:", data);
+        alert(data.error || "Something went wrong. Please try again.");
+        return;
+      }
       if (data.url) {
         window.location.href = data.url;
       }
     } catch (err) {
       console.error("Upgrade error:", err);
+      alert("Network error. Please check your connection and try again.");
     } finally {
       setLoading(null);
     }
@@ -236,25 +242,6 @@ export default function PricingPage() {
                       </span>
                     )}
                   </div>
-                  {savings && (
-                    <span
-                      className="inline-block mt-2 text-xs font-semibold px-2 py-1 rounded-md"
-                      style={{
-                        backgroundColor: "rgba(52, 211, 153, 0.1)",
-                        color: "var(--color-positive)",
-                      }}
-                    >
-                      {savings}
-                    </span>
-                  )}
-                  {isAnnual && plan.yearlyPrice > 0 && (
-                    <p
-                      className="text-xs mt-1"
-                      style={{ color: "var(--color-text-muted)" }}
-                    >
-                      Billed ${plan.yearlyPrice}/year
-                    </p>
-                  )}
                 </div>
 
                 <ul
@@ -290,48 +277,30 @@ export default function PricingPage() {
                   ))}
                 </ul>
 
-                {plan.id === "team" ? (
-                  <a
-                    href="mailto:contact@tonvo.co?subject=Team Plan Inquiry"
-                    className="w-full py-3 rounded-xl font-semibold text-sm text-center no-underline block cursor-pointer transition-all hover:opacity-90"
-                    style={{
-                      background: isCurrent
+                <button
+                  onClick={() =>
+                    isUpgrade ? handleUpgrade(plan.id) : undefined
+                  }
+                  disabled={isCurrent || loading === plan.id}
+                  className="w-full py-3 rounded-xl font-semibold text-sm cursor-pointer border-none transition-all hover:opacity-90 disabled:opacity-40 disabled:cursor-not-allowed"
+                  style={{
+                    background: plan.popular
+                      ? "linear-gradient(135deg, #5c5c6e, #6e6e82)"
+                      : isCurrent
                         ? "rgba(52, 211, 153, 0.08)"
                         : "var(--color-surface-2)",
-                      color: isCurrent ? "var(--color-positive)" : "white",
-                      border: isCurrent
-                        ? "1px solid rgba(52, 211, 153, 0.2)"
-                        : "none",
-                    }}
-                  >
-                    {isCurrent ? "Current Plan" : "Contact Sales"}
-                  </a>
-                ) : (
-                  <button
-                    onClick={() =>
-                      isUpgrade ? handleUpgrade(plan.id) : undefined
-                    }
-                    disabled={isCurrent || loading === plan.id}
-                    className="w-full py-3 rounded-xl font-semibold text-sm cursor-pointer border-none transition-all hover:opacity-90 disabled:opacity-40 disabled:cursor-not-allowed"
-                    style={{
-                      background: plan.popular
-                        ? "linear-gradient(135deg, #5c5c6e, #6e6e82)"
-                        : isCurrent
-                          ? "rgba(52, 211, 153, 0.08)"
-                          : "var(--color-surface-2)",
-                      color: isCurrent ? "var(--color-positive)" : "white",
-                      border: isCurrent
-                        ? "1px solid rgba(52, 211, 153, 0.2)"
-                        : "none",
-                    }}
-                  >
-                    {loading === plan.id
-                      ? "Redirecting..."
-                      : isCurrent
-                        ? "Current Plan"
-                        : plan.cta}
-                  </button>
-                )}
+                    color: isCurrent ? "var(--color-positive)" : "white",
+                    border: isCurrent
+                      ? "1px solid rgba(52, 211, 153, 0.2)"
+                      : "none",
+                  }}
+                >
+                  {loading === plan.id
+                    ? "Redirecting..."
+                    : isCurrent
+                      ? "Current Plan"
+                      : plan.cta}
+                </button>
               </div>
             );
           })}

@@ -807,26 +807,10 @@ export default function HomePage() {
                           {plan.cta}
                         </Link>
                       )
-                    ) : isTeam ? (
-                      user ? (
-                        <a
-                          href="mailto:contact@tonvo.co?subject=Team Plan Inquiry"
-                          className="btn-secondary w-full py-3 rounded-xl font-semibold text-sm text-center no-underline block"
-                        >
-                          Contact Sales
-                        </a>
-                      ) : (
-                        <Link
-                          href="/login"
-                          className="btn-secondary w-full py-3 rounded-xl font-semibold text-sm text-center no-underline block"
-                        >
-                          Get Started
-                        </Link>
-                      )
                     ) : (
                       <Link
                         href={user ? "/pricing" : "/login"}
-                        className="btn-primary w-full py-3 rounded-xl font-semibold text-sm text-center no-underline block"
+                        className={`${plan.popular ? "btn-primary" : "btn-secondary"} w-full py-3 rounded-xl font-semibold text-sm text-center no-underline block`}
                       >
                         {user ? plan.cta : "Get Started"}
                       </Link>
