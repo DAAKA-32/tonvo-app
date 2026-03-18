@@ -91,14 +91,30 @@ export default function SessionPage() {
   const screenAnalysisTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const [isMobile, setIsMobile] = useState(false);
+  const [isIOS, setIsIOS] = useState(false);
   const [screenEnabled, setScreenEnabled] = useState(true);
   const [audioEnabled, setAudioEnabled] = useState(true);
 
-  // Detect mobile → disable screen sharing (not supported), enable audio-only
+  // Detect platform capabilities
   useEffect(() => {
-    const mobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent) ||
-      (navigator.maxTouchPoints > 0 && window.innerWidth < 1024);
-    if (mobile) {
+    const ua = navigator.userAgent;
+    const ios = /iPhone|iPad|iPod/i.test(ua);
+    const android = /Android/i.test(ua);
+    const mobile = ios || android || (navigator.maxTouchPoints > 0 && window.innerWidth < 768);
+
+    if (ios) {
+      // iOS: no getDisplayMedia at all → audio-only
+      setIsMobile(true);
+      setIsIOS(true);
+      setScreenEnabled(false);
+      setAudioEnabled(true);
+    } else if (android) {
+      // Android: getDisplayMedia works on Chrome → keep screen enabled
+      setIsMobile(true);
+      setIsIOS(false);
+      setAudioEnabled(true);
+      // Screen stays enabled by default on Android
+    } else if (mobile) {
       setIsMobile(true);
       setScreenEnabled(false);
       setAudioEnabled(true);
@@ -694,7 +710,7 @@ export default function SessionPage() {
                 <option value="networking">Networking</option>
               </select>
             )}
-            {!isRecording && !isMobile && (
+            {!isRecording && !isIOS && (
               <button onClick={() => setScreenEnabled((p) => !p)} className="mic-toggle" data-active={screenEnabled}>
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" /><line x1="8" y1="21" x2="16" y2="21" /><line x1="12" y1="17" x2="12" y2="21" /></svg>
                 <span className="mic-toggle-label">Screen {screenEnabled ? "On" : "Off"}</span>
@@ -741,13 +757,42 @@ export default function SessionPage() {
         {/* Mode info banner */}
         {!isRecording && (
           <div className="rounded-xl p-4 mb-6 border text-sm" style={{ backgroundColor: "rgba(200, 200, 216, 0.06)", borderColor: !screenEnabled && !audioEnabled ? "var(--color-negative)" : "var(--color-accent)", color: !screenEnabled && !audioEnabled ? "var(--color-negative)" : "var(--color-accent-light)" }}>
-            {isMobile
-              ? "Audio mode: microphone capture + real-time transcription + conversation intelligence. For screenshot analysis, use the Analyze Text tab."
+            {isIOS && !screenEnabled && audioEnabled
+              ? "Audio mode: put your call on speaker — Tonvo will capture both sides via microphone for real-time analysis."
+              : isMobile && screenEnabled && audioEnabled
+              ? "Full capture: screen sharing + microphone. Tonvo will analyze both the screen and audio in real time."
+              : isMobile && !screenEnabled && audioEnabled
+              ? "Audio mode: microphone capture + real-time transcription. Put your call on speaker for best results."
               : screenEnabled && audioEnabled ? "Full analysis: screen capture + audio transcription + conversation intelligence." : screenEnabled && !audioEnabled ? "Screen only: visual analysis active. No audio capture, no transcription." : !screenEnabled && audioEnabled ? "Audio only: microphone capture + transcription + conversation intelligence." : "Enable at least Screen or Audio to start a session."}
           </div>
         )}
 
-        {!isRecording && !isMobile && screenEnabled && audioEnabled && (
+        {/* Mobile speaker tip */}
+        {!isRecording && isMobile && audioEnabled && !screenEnabled && (
+          <div className="rounded-xl p-4 mb-3 border text-xs flex items-start gap-3" style={{ backgroundColor: "rgba(52, 211, 153, 0.04)", borderColor: "rgba(52, 211, 153, 0.15)", color: "var(--color-text-muted)" }}>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" style={{ color: "var(--color-positive)", flexShrink: 0, marginTop: 1 }}>
+              <path d="M11 5L6 9H2v6h4l5 4V5z" /><path d="M19.07 4.93a10 10 0 0 1 0 14.14" /><path d="M15.54 8.46a5 5 0 0 1 0 7.07" />
+            </svg>
+            <div>
+              <span className="font-semibold block mb-1" style={{ color: "var(--color-positive)" }}>Speaker mode recommended</span>
+              <p className="m-0 leading-relaxed">Put your phone call on speaker or use speakerphone so Tonvo can hear both sides of the conversation through the microphone. This gives the best analysis results.</p>
+            </div>
+          </div>
+        )}
+
+        {/* iOS: suggest Analyze Text for screenshots */}
+        {!isRecording && isIOS && (
+          <div className="rounded-xl p-4 mb-3 border text-xs flex items-start gap-3" style={{ backgroundColor: "rgba(200, 200, 216, 0.03)", borderColor: "var(--color-border)", color: "var(--color-text-muted)" }}>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0, marginTop: 1 }}>
+              <rect x="3" y="3" width="18" height="18" rx="2" ry="2" /><circle cx="8.5" cy="8.5" r="1.5" /><polyline points="21 15 16 10 5 21" />
+            </svg>
+            <div>
+              Want to analyze a text conversation (Instagram, Snap, WhatsApp)? Use <a href="/analyze-text" style={{ color: "var(--color-accent-light)", textDecoration: "underline", textUnderlineOffset: 2 }}>Analyze Conversation</a> to import screenshots or paste text.
+            </div>
+          </div>
+        )}
+
+        {!isRecording && !isIOS && screenEnabled && audioEnabled && (
           <div className="rounded-xl p-4 mb-3 border text-xs" style={{ backgroundColor: "rgba(52, 211, 153, 0.04)", borderColor: "rgba(52, 211, 153, 0.15)", color: "var(--color-text-muted)" }}>
             <div className="flex items-center gap-2 mb-2">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ color: "var(--color-positive)", flexShrink: 0 }}><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z" /><path d="M19 10v2a7 7 0 0 1-14 0v-2" /></svg>
@@ -757,7 +802,7 @@ export default function SessionPage() {
           </div>
         )}
 
-        {!isRecording && screenEnabled && !isMobile && (
+        {!isRecording && screenEnabled && !isIOS && (
           <div className="rounded-xl p-4 mb-3 border text-xs flex items-center gap-3" style={{ backgroundColor: "rgba(200, 200, 216, 0.03)", borderColor: "var(--color-border)", color: "var(--color-text-muted)" }}>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0 }}><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z" /></svg>
             Ensure you have the right to analyze the content visible on your screen. By starting a session, you confirm compliance with our <a href="/terms" target="_blank" style={{ color: "var(--color-accent-light)", textDecoration: "underline", textUnderlineOffset: 2 }}>Terms of Service</a>.

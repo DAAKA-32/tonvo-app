@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useCallback } from "react";
+import { useState, useRef, useCallback, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import AppShell from "@/components/AppShell";
 import { useToast } from "@/components/Toast";
@@ -181,6 +181,50 @@ export default function AnalyzePage() {
   const [audioFile, setAudioFile] = useState<File | null>(null);
   const [transcribing, setTranscribing] = useState(false);
   const [transcript, setTranscript] = useState("");
+
+  // Handle shared content from PWA Share Target
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const shared = params.get("shared");
+    if (shared !== "true") return;
+
+    const sharedText = params.get("text");
+    const sharedKey = params.get("key");
+
+    if (sharedText) {
+      setText(decodeURIComponent(sharedText));
+      setInputMode("text");
+      toast.show("Content received — ready to analyze", { type: "success", duration: 3000 });
+    } else if (sharedKey) {
+      // Fetch shared images from cache
+      fetch(`/api/share-target?key=${sharedKey}`)
+        .then((r) => r.json())
+        .then((data) => {
+          if (data.images && data.images.length > 0) {
+            const files: File[] = [];
+            const previews: string[] = [];
+            data.images.forEach((img: { data: string; mimeType: string }, i: number) => {
+              const byteString = atob(img.data);
+              const ab = new ArrayBuffer(byteString.length);
+              const ia = new Uint8Array(ab);
+              for (let j = 0; j < byteString.length; j++) ia[j] = byteString.charCodeAt(j);
+              const file = new File([ab], `shared-${i + 1}.jpg`, { type: img.mimeType });
+              files.push(file);
+              previews.push(`data:${img.mimeType};base64,${img.data}`);
+            });
+            setImages(files);
+            setImagePreviews(previews);
+            setInputMode("images");
+            toast.show(`${files.length} screenshot(s) received — ready to analyze`, { type: "success", duration: 3000 });
+          }
+        })
+        .catch(() => {});
+    }
+
+    // Clean URL params without reload
+    window.history.replaceState({}, "", "/analyze-text");
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   const audioInputRef = useRef<HTMLInputElement>(null);
 
   /* ── Image handlers ── */
