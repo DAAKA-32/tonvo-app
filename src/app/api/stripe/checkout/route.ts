@@ -21,7 +21,7 @@ export async function POST(req: NextRequest) {
       : plan.priceId;
 
     // Check if user already has a Stripe customer
-    const { data: existingSub } = await supabaseAdmin
+    const { data: existingSub, error: subError } = await supabaseAdmin
       .from("subscriptions")
       .select("stripe_customer_id")
       .eq("user_id", userId)
@@ -51,12 +51,11 @@ export async function POST(req: NextRequest) {
     }
 
     // Create checkout session
-    const origin = req.headers.get("origin") || "http://localhost:3000";
+    const origin = req.headers.get("origin") || "https://tonvo.co";
 
     const session = await getStripe().checkout.sessions.create({
       customer: customerId,
       mode: "subscription",
-      payment_method_types: ["card"],
       line_items: [{ price: priceId, quantity: 1 }],
       success_url: `${origin}/dashboard?session_id={CHECKOUT_SESSION_ID}&plan=${planId}`,
       cancel_url: `${origin}/pricing`,
@@ -67,8 +66,9 @@ export async function POST(req: NextRequest) {
     });
 
     return NextResponse.json({ url: session.url });
-  } catch (error) {
-    console.error("Checkout error:", error);
-    return NextResponse.json({ error: "Failed to create checkout session" }, { status: 500 });
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : String(error);
+    console.error("Checkout error:", message, error);
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }
