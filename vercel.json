@@ -1,5 +1,5 @@
 {
-  "toolbar": {
-    "enabled": false
+  "env": {
+    "NEXT_PUBLIC_VERCEL_TOOLBAR_ENABLED": "false"
   }
 }
