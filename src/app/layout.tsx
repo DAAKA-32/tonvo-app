@@ -15,10 +15,9 @@ const SITE_NAME = "Tonvo";
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  themeColor: [
-    { media: "(prefers-color-scheme: dark)", color: "#0a0a0c" },
-    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
-  ],
+  viewportFit: "cover",
+  themeColor: "#09090b",
+  colorScheme: "dark",
 };
 
 export const metadata: Metadata = {
@@ -67,6 +66,15 @@ export const metadata: Metadata = {
   icons: {
     icon: [{ url: "/logo-tonvo-remove.png", type: "image/png" }],
     apple: [{ url: "/logo-tonvo-remove.png" }],
+  },
+  manifest: "/manifest.json",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "black-translucent",
+    title: "Tonvo",
+  },
+  other: {
+    "mobile-web-app-capable": "yes",
   },
   openGraph: {
     type: "website",
@@ -326,7 +334,7 @@ const webSiteJsonLd = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" dir="ltr" className={inter.variable}>
+    <html lang="en" dir="ltr" className={inter.variable} style={{ backgroundColor: "#09090b" }}>
       <head>
         <script
           type="application/ld+json"

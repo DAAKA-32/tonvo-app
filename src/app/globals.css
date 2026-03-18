@@ -21,11 +21,21 @@
   box-sizing: border-box;
 }
 
+html {
+  background-color: var(--color-bg);
+  color-scheme: dark;
+}
+
 body {
   background-color: var(--color-bg);
   color: var(--color-text);
   font-family: var(--font-inter), "Inter", system-ui, -apple-system, sans-serif;
   margin: 0;
+  /* Safe area padding for iPhone notch / status bar */
+  padding-top: env(safe-area-inset-top);
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
+  padding-bottom: env(safe-area-inset-bottom);
 }
 
 ::selection {
@@ -1561,5 +1571,82 @@ body {
     left: auto;
     right: 8px;
     bottom: 8px;
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/*  Premium Loading Screen (CurtainIntro)                              */
+/* ------------------------------------------------------------------ */
+.curtain-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 40px;
+  background-color: #09090b;
+  pointer-events: none;
+}
+
+.curtain-glow {
+  position: absolute;
+  width: 320px;
+  height: 320px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(200, 200, 216, 0.06) 0%, transparent 70%);
+  pointer-events: none;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -55%);
+}
+
+.curtain-logo {
+  position: relative;
+  z-index: 1;
+}
+
+.curtain-progress-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  width: 200px;
+  position: relative;
+  z-index: 1;
+}
+
+.curtain-bar-track {
+  width: 100%;
+  height: 2px;
+  border-radius: 1px;
+  background: rgba(255, 255, 255, 0.06);
+  overflow: hidden;
+}
+
+.curtain-bar-fill {
+  height: 100%;
+  border-radius: 1px;
+  background: linear-gradient(90deg, rgba(200, 200, 216, 0.25), rgba(200, 200, 216, 0.5));
+  transition: width 0.15s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.curtain-label {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  color: var(--color-text-muted);
+  opacity: 0.6;
+}
+
+/* Mobile: slightly smaller progress bar */
+@media (max-width: 640px) {
+  .curtain-progress-wrap {
+    width: 160px;
+  }
+  .curtain-glow {
+    width: 240px;
+    height: 240px;
   }
 }

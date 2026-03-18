@@ -68,18 +68,28 @@ function IconX() {
 /* ------------------------------------------------------------------ */
 /*  Collapsible wrapper — animates height via grid trick              */
 /* ------------------------------------------------------------------ */
-function Collapse({ open, children }: { open: boolean; children: React.ReactNode }) {
+function Collapse({ open, children, className }: { open: boolean; children: React.ReactNode; className?: string }) {
   return (
     <div
+      className={className}
       style={{
         display: "grid",
         gridTemplateRows: open ? "1fr" : "0fr",
-        opacity: open ? 1 : 0,
-        transition: "grid-template-rows 0.3s ease, opacity 0.25s ease",
+        transition: "grid-template-rows 0.35s cubic-bezier(0.23, 1, 0.32, 1)",
       }}
     >
       <div style={{ overflow: "hidden" }}>
-        {children}
+        <div
+          style={{
+            opacity: open ? 1 : 0,
+            transform: open ? "translateY(0)" : "translateY(-6px)",
+            transition: open
+              ? "opacity 0.3s ease 0.08s, transform 0.3s cubic-bezier(0.23, 1, 0.32, 1) 0.08s"
+              : "opacity 0.2s ease, transform 0.2s ease",
+          }}
+        >
+          {children}
+        </div>
       </div>
     </div>
   );
@@ -109,64 +119,61 @@ function PasswordStrengthBlock({ password, checks, t }: {
   t: (key: string) => string;
 }) {
   const { level, label, color } = getPasswordStrength(password, t);
-  const show = password.length > 0;
 
   return (
-    <Collapse open={show}>
-      <div className="flex flex-col gap-2.5 pt-1 pb-1">
-        {/* Strength bars */}
-        <div className="flex items-center gap-3">
-          <div className="flex flex-1 gap-1">
-            {[1, 2, 3].map((i) => (
-              <div
-                key={i}
-                className="h-1 flex-1 rounded-full"
-                style={{
-                  backgroundColor: i <= level ? color : "var(--color-surface-3)",
-                  transition: "background-color 0.4s ease",
-                }}
-              />
-            ))}
-          </div>
-          <span
-            className="text-xs font-medium"
-            style={{ color, transition: "color 0.3s ease", minWidth: 48 }}
-          >
-            {label}
-          </span>
-        </div>
-
-        {/* Criteria */}
-        <div className="flex gap-4">
-          {[
-            { ok: checks.minLength, text: t("auth.rule8Chars") },
-            { ok: checks.hasLetter, text: t("auth.rule1Letter") },
-            { ok: checks.hasNumber, text: t("auth.rule1Number") },
-          ].map((rule) => (
-            <div key={rule.text} className="flex items-center gap-1.5">
-              <div
-                className="w-3 h-3 rounded-full flex items-center justify-center"
-                style={{
-                  backgroundColor: rule.ok ? "rgba(52, 211, 153, 0.15)" : "rgba(255, 255, 255, 0.04)",
-                  transition: "background-color 0.3s ease",
-                }}
-              >
-                {rule.ok && <IconCheck />}
-              </div>
-              <span
-                className="text-[11px]"
-                style={{
-                  color: rule.ok ? "var(--color-positive)" : "var(--color-text-muted)",
-                  transition: "color 0.3s ease",
-                }}
-              >
-                {rule.text}
-              </span>
-            </div>
+    <div className="flex flex-col gap-2.5 pt-1 pb-1">
+      {/* Strength bars */}
+      <div className="flex items-center gap-3">
+        <div className="flex flex-1 gap-1">
+          {[1, 2, 3].map((i) => (
+            <div
+              key={i}
+              className="h-1 flex-1 rounded-full"
+              style={{
+                backgroundColor: i <= level ? color : "var(--color-surface-3)",
+                transition: "background-color 0.4s ease",
+              }}
+            />
           ))}
         </div>
+        <span
+          className="text-xs font-medium"
+          style={{ color, transition: "color 0.3s ease", minWidth: 48 }}
+        >
+          {label}
+        </span>
       </div>
-    </Collapse>
+
+      {/* Criteria */}
+      <div className="flex gap-4">
+        {[
+          { ok: checks.minLength, text: t("auth.rule8Chars") },
+          { ok: checks.hasLetter, text: t("auth.rule1Letter") },
+          { ok: checks.hasNumber, text: t("auth.rule1Number") },
+        ].map((rule) => (
+          <div key={rule.text} className="flex items-center gap-1.5">
+            <div
+              className="w-3 h-3 rounded-full flex items-center justify-center"
+              style={{
+                backgroundColor: rule.ok ? "rgba(52, 211, 153, 0.15)" : "rgba(255, 255, 255, 0.04)",
+                transition: "background-color 0.3s ease",
+              }}
+            >
+              {rule.ok && <IconCheck />}
+            </div>
+            <span
+              className="text-[11px]"
+              style={{
+                color: rule.ok ? "var(--color-positive)" : "var(--color-text-muted)",
+                transition: "color 0.3s ease",
+              }}
+            >
+              {rule.text}
+            </span>
+          </div>
+        ))}
+      </div>
+    </div>
   );
 }
 
@@ -346,6 +353,7 @@ export default function LoginPage() {
   const [showConsent, setShowConsent] = useState(false);
   const [pendingGoogleUser, setPendingGoogleUser] = useState<import("firebase/auth").UserCredential | null>(null);
   const [redirecting, setRedirecting] = useState(false);
+  const [headingFade, setHeadingFade] = useState(false);
   const cardRef = useRef<HTMLDivElement>(null);
 
   const passwordChecks = useMemo(() => ({
@@ -471,10 +479,14 @@ export default function LoginPage() {
   }
 
   const handleToggle = useCallback(() => {
-    setIsRegister((prev) => !prev);
-    setError("");
-    setPassword("");
-    setConfirmPassword("");
+    setHeadingFade(true);
+    setTimeout(() => {
+      setIsRegister((prev) => !prev);
+      setError("");
+      setPassword("");
+      setConfirmPassword("");
+      setHeadingFade(false);
+    }, 150);
   }, []);
 
   return (
@@ -543,7 +555,9 @@ export default function LoginPage() {
             className="text-xl sm:text-[26px] font-bold tracking-tight"
             style={{
               color: "var(--color-text)",
-              transition: "opacity 0.25s ease",
+              opacity: headingFade ? 0 : 1,
+              transform: headingFade ? "translateY(4px)" : "translateY(0)",
+              transition: "opacity 0.15s ease, transform 0.15s ease",
             }}
           >
             {isRegister ? t("auth.createAccount") : t("auth.welcomeBack")}
@@ -552,7 +566,9 @@ export default function LoginPage() {
             className="mt-2 text-sm"
             style={{
               color: "var(--color-text-muted)",
-              transition: "opacity 0.25s ease",
+              opacity: headingFade ? 0 : 1,
+              transform: headingFade ? "translateY(4px)" : "translateY(0)",
+              transition: "opacity 0.15s ease, transform 0.15s ease",
             }}
           >
             {isRegister ? t("auth.signUpSubtitle") : t("auth.signInSubtitle")}
@@ -610,9 +626,9 @@ export default function LoginPage() {
           />
 
           {/* Password strength + criteria — collapse animated (signup only) */}
-          {isRegister && (
+          <Collapse open={isRegister && password.length > 0}>
             <PasswordStrengthBlock password={password} checks={passwordChecks} t={t} />
-          )}
+          </Collapse>
 
           {/* Confirm password — collapse animated (signup only) */}
           <Collapse open={isRegister}>
@@ -657,8 +673,8 @@ export default function LoginPage() {
             </div>
           </Collapse>
 
-          {/* Terms consent — signup only */}
-          {isRegister && (
+          {/* Terms consent — collapse animated (signup only) */}
+          <Collapse open={isRegister}>
             <label className="flex items-start gap-3 cursor-pointer mt-1" style={{ minHeight: 44 }}>
               <input
                 type="checkbox"
@@ -679,7 +695,7 @@ export default function LoginPage() {
                 {t("auth.termsConsentSuffix")}
               </span>
             </label>
-          )}
+          </Collapse>
 
           <button
             type="submit"

@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+  body { margin: 0; padding: 0; background: #000; display: flex; align-items: center; justify-content: center; height: 100vh; }
+  .og { width: 1200px; height: 630px; position: relative; overflow: hidden; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
+</style>
+</head>
+<body>
+<div class="og">
+  <svg width="1200" height="630" viewBox="0 0 1200 630" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0%" stop-color="#09090b"/>
+        <stop offset="50%" stop-color="#0e0e14"/>
+        <stop offset="100%" stop-color="#09090b"/>
+      </linearGradient>
+      <radialGradient id="glow1" cx="20%" cy="30%" r="40%">
+        <stop offset="0%" stop-color="rgba(200,200,216,0.12)"/>
+        <stop offset="100%" stop-color="transparent"/>
+      </radialGradient>
+      <radialGradient id="glow2" cx="80%" cy="70%" r="35%">
+        <stop offset="0%" stop-color="rgba(129,140,248,0.08)"/>
+        <stop offset="100%" stop-color="transparent"/>
+      </radialGradient>
+      <linearGradient id="accent" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0%" stop-color="#5c5c6e"/>
+        <stop offset="100%" stop-color="#8b8b96"/>
+      </linearGradient>
+    </defs>
+
+    <!-- Background -->
+    <rect width="1200" height="630" fill="url(#bg)"/>
+    <rect width="1200" height="630" fill="url(#glow1)"/>
+    <rect width="1200" height="630" fill="url(#glow2)"/>
+
+    <!-- Subtle grid -->
+    <pattern id="grid" width="60" height="60" patternUnits="userSpaceOnUse">
+      <rect width="60" height="60" fill="none" stroke="rgba(255,255,255,0.02)" stroke-width="0.5"/>
+    </pattern>
+    <rect width="1200" height="630" fill="url(#grid)"/>
+
+    <!-- Top accent line -->
+    <rect x="0" y="0" width="1200" height="3" fill="url(#accent)" opacity="0.6"/>
+
+    <!-- Logo circle -->
+    <circle cx="120" cy="315" r="45" fill="rgba(92,92,110,0.15)" stroke="rgba(200,200,216,0.1)" stroke-width="1"/>
+    <text x="120" y="328" text-anchor="middle" font-size="32" font-weight="800" fill="#c8c8d8" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,sans-serif">T</text>
+
+    <!-- Main title -->
+    <text x="200" y="270" font-size="52" font-weight="800" fill="#fafafa" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,sans-serif" letter-spacing="-1">Tonvo</text>
+
+    <!-- Subtitle -->
+    <text x="200" y="320" font-size="24" font-weight="500" fill="#c8c8d8" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,sans-serif">AI Conversation Copilot</text>
+
+    <!-- Description -->
+    <text x="200" y="370" font-size="17" fill="#8b8b96" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,sans-serif">Real-time insights, coaching &amp; tone analysis</text>
+    <text x="200" y="395" font-size="17" fill="#8b8b96" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,sans-serif">during your calls on Discord, Zoom &amp; Meet</text>
+
+    <!-- Feature pills -->
+    <rect x="200" y="430" width="130" height="32" rx="16" fill="rgba(52,211,153,0.1)" stroke="rgba(52,211,153,0.2)" stroke-width="1"/>
+    <text x="265" y="451" text-anchor="middle" font-size="12" font-weight="600" fill="#34d399" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,sans-serif">Live Coaching</text>
+
+    <rect x="345" y="430" width="140" height="32" rx="16" fill="rgba(129,140,248,0.1)" stroke="rgba(129,140,248,0.2)" stroke-width="1"/>
+    <text x="415" y="451" text-anchor="middle" font-size="12" font-weight="600" fill="#818cf8" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,sans-serif">Tone Detection</text>
+
+    <rect x="500" y="430" width="155" height="32" rx="16" fill="rgba(56,189,248,0.1)" stroke="rgba(56,189,248,0.2)" stroke-width="1"/>
+    <text x="578" y="451" text-anchor="middle" font-size="12" font-weight="600" fill="#38bdf8" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,sans-serif">Smart Suggestions</text>
+
+    <rect x="670" y="430" width="140" height="32" rx="16" fill="rgba(251,191,36,0.1)" stroke="rgba(251,191,36,0.2)" stroke-width="1"/>
+    <text x="740" y="451" text-anchor="middle" font-size="12" font-weight="600" fill="#fbbf24" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,sans-serif">Signal Detection</text>
+
+    <!-- Right side decorative elements -->
+    <!-- Tone indicator circles -->
+    <circle cx="1000" cy="200" r="35" fill="rgba(52,211,153,0.08)" stroke="rgba(52,211,153,0.15)" stroke-width="1"/>
+    <text x="1000" y="207" text-anchor="middle" font-size="22" font-weight="700" fill="#34d399" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,sans-serif">78</text>
+    <text x="1000" y="248" text-anchor="middle" font-size="10" fill="#8b8b96" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,sans-serif">Quality</text>
+
+    <circle cx="1100" cy="200" r="35" fill="rgba(129,140,248,0.08)" stroke="rgba(129,140,248,0.15)" stroke-width="1"/>
+    <text x="1100" y="207" text-anchor="middle" font-size="22" font-weight="700" fill="#818cf8" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,sans-serif">85</text>
+    <text x="1100" y="248" text-anchor="middle" font-size="10" fill="#8b8b96" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,sans-serif">Engagement</text>
+
+    <!-- Waveform decoration -->
+    <g transform="translate(950, 330)" opacity="0.4">
+      <rect x="0" y="10" width="4" height="20" rx="2" fill="#5c5c6e"/>
+      <rect x="10" y="5" width="4" height="30" rx="2" fill="#6e6e82"/>
+      <rect x="20" y="0" width="4" height="40" rx="2" fill="#818cf8"/>
+      <rect x="30" y="8" width="4" height="24" rx="2" fill="#6e6e82"/>
+      <rect x="40" y="12" width="4" height="16" rx="2" fill="#5c5c6e"/>
+      <rect x="50" y="3" width="4" height="34" rx="2" fill="#818cf8"/>
+      <rect x="60" y="10" width="4" height="20" rx="2" fill="#6e6e82"/>
+      <rect x="70" y="6" width="4" height="28" rx="2" fill="#5c5c6e"/>
+      <rect x="80" y="2" width="4" height="36" rx="2" fill="#818cf8"/>
+      <rect x="90" y="8" width="4" height="24" rx="2" fill="#6e6e82"/>
+      <rect x="100" y="12" width="4" height="16" rx="2" fill="#5c5c6e"/>
+      <rect x="110" y="5" width="4" height="30" rx="2" fill="#6e6e82"/>
+      <rect x="120" y="0" width="4" height="40" rx="2" fill="#818cf8"/>
+      <rect x="130" y="10" width="4" height="20" rx="2" fill="#5c5c6e"/>
+      <rect x="140" y="7" width="4" height="26" rx="2" fill="#6e6e82"/>
+      <rect x="150" y="3" width="4" height="34" rx="2" fill="#818cf8"/>
+      <rect x="160" y="11" width="4" height="18" rx="2" fill="#5c5c6e"/>
+      <rect x="170" y="6" width="4" height="28" rx="2" fill="#6e6e82"/>
+    </g>
+
+    <!-- Signal badges -->
+    <rect x="950" y="420" width="100" height="26" rx="13" fill="rgba(52,211,153,0.1)"/>
+    <circle cx="968" cy="433" r="4" fill="#34d399"/>
+    <text x="1000" y="438" text-anchor="middle" font-size="10" fill="#34d399" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,sans-serif">Opportunity</text>
+
+    <rect x="1060" y="420" width="100" height="26" rx="13" fill="rgba(248,113,113,0.1)"/>
+    <circle cx="1078" cy="433" r="4" fill="#f87171"/>
+    <text x="1110" y="438" text-anchor="middle" font-size="10" fill="#f87171" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,sans-serif">Objection</text>
+
+    <!-- URL -->
+    <text x="200" y="540" font-size="16" font-weight="600" fill="#5c5c6e" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,sans-serif">tonvo.co</text>
+
+    <!-- Free badge -->
+    <rect x="200" y="555" width="110" height="28" rx="14" fill="rgba(52,211,153,0.08)" stroke="rgba(52,211,153,0.15)" stroke-width="1"/>
+    <text x="255" y="574" text-anchor="middle" font-size="11" font-weight="600" fill="#34d399" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,sans-serif">Free to start</text>
+
+    <!-- Bottom accent line -->
+    <rect x="0" y="627" width="1200" height="3" fill="url(#accent)" opacity="0.6"/>
+  </svg>
+</div>
+<p style="color: white; font-size: 14px; margin-top: 20px;">
+  Right-click the image above > Save as PNG (1200x630)<br>
+  Or use: <code style="color: #818cf8;">node scripts/svg-to-png.js</code>
+</p>
+</body>
+</html>

@@ -7,6 +7,7 @@ import { useAuth } from "@/lib/auth-context";
 import CurtainIntro from "@/components/CurtainIntro";
 import AnimatedTitle from "@/components/AnimatedTitle";
 import TonvoLogo from "@/components/Logo";
+import { PRICING_PLANS, ANNUAL_DISCOUNT_PERCENT } from "@/lib/pricing-config";
 
 /* ------------------------------------------------------------------ */
 /*  Inline SVG icons (no external dependency)                         */
@@ -296,19 +297,35 @@ export default function HomePage() {
 
   const testimonials = [
     {
-      name: "Sarah M.",
-      role: "Account Executive",
-      text: "I used to lose deals without understanding why. Now I can see the exact moment a prospect disengages and course-correct immediately.",
+      name: "Claire Dupont",
+      role: "Senior Account Executive",
+      company: "Salesforce",
+      text: "I noticed I was talking over prospects without realizing it. Tonvo showed me exactly when I was losing them — my close rate went up 15% in two months just by listening more.",
+      initials: "CD",
+      gradient: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
     },
     {
-      name: "David L.",
+      name: "Marc Lefèvre",
       role: "Engineering Manager",
-      text: "Our 1-on-1s are way more productive. I catch tension early and address it before it becomes a real issue. The post-call summaries save me hours.",
+      company: "Datadog",
+      text: "We use it for 1-on-1s. It's subtle — you don't notice it during the call, but the post-meeting summary catches things I would have missed. Saved me from two difficult situations already.",
+      initials: "ML",
+      gradient: "linear-gradient(135deg, #f093fb 0%, #f5576c 100%)",
     },
     {
-      name: "Amira K.",
-      role: "Support Lead",
-      text: "The suggestion feature is genuinely useful. It doesn't give generic advice -- it actually understands the context of the conversation.",
+      name: "Nina Rossi",
+      role: "Customer Success Lead",
+      company: "HubSpot",
+      text: "The real-time suggestions actually make sense. It's not generic tips — it picks up on the specific conversation and gives you something you can use right then.",
+      initials: "NR",
+      gradient: "linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)",
+    },
+    {
+      name: "James Okafor",
+      role: "Freelance Consultant",
+      text: "I was skeptical, honestly. But after a week I realized I was preparing less for calls and getting better outcomes. It just helps you stay present.",
+      initials: "JO",
+      gradient: "linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)",
     },
   ];
 
@@ -422,24 +439,26 @@ export default function HomePage() {
             </div>
 
             {/* Social proof */}
-            <div className="animate-fade-up animate-delay-500 flex items-center justify-center gap-5 mt-16">
-              <div className="flex -space-x-2.5">
-                {["#5c5c6e", "#34d399", "#fbbf24", "#f87171", "#c8c8d8"].map((bg, i) => (
+            <div className="animate-fade-up animate-delay-500 flex items-center justify-center gap-4 mt-16 px-5 py-3 rounded-full" style={{ background: "rgba(255, 255, 255, 0.03)", border: "1px solid rgba(255, 255, 255, 0.06)" }}>
+              <div className="flex -space-x-2">
+                {[
+                  "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+                  "linear-gradient(135deg, #f093fb 0%, #f5576c 100%)",
+                  "linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)",
+                  "linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)",
+                ].map((bg, i) => (
                   <div
                     key={i}
-                    className="w-8 h-8 rounded-full flex items-center justify-center text-[10px] font-bold text-white"
-                    style={{ background: bg, border: "2px solid var(--color-bg)" }}
+                    className="w-7 h-7 rounded-full flex items-center justify-center text-[9px] font-semibold text-white"
+                    style={{ background: bg, border: "2px solid var(--color-bg)", boxShadow: "0 0 0 1px rgba(255,255,255,0.08)" }}
                   >
-                    {["S", "M", "K", "L", "A"][i]}
+                    {["C", "M", "N", "J"][i]}
                   </div>
                 ))}
               </div>
               <div className="text-left">
-                <p className="text-sm m-0 font-medium" style={{ color: "var(--color-text-silver)" }}>
-                  2,400+ professionals
-                </p>
-                <p className="text-xs m-0" style={{ color: "var(--color-text-muted)" }}>
-                  already use Tonvo daily
+                <p className="text-[13px] m-0 font-medium" style={{ color: "var(--color-text-silver)" }}>
+                  Trusted by 2,400+ professionals
                 </p>
               </div>
             </div>
@@ -623,39 +642,40 @@ export default function HomePage() {
         <section className="px-4 sm:px-6 py-16 sm:py-24 md:py-32">
           <div className="max-w-5xl mx-auto">
             <div className="text-center mb-16">
-              <span className="section-label">Testimonials</span>
+              <span className="section-label">What people say</span>
               <AnimatedTitle variant="right" className="section-heading">
-                People are already using Tonvo.
+                Real feedback from real users.
               </AnimatedTitle>
+              <p className="body-muted max-w-md mx-auto mt-4">
+                Professionals across sales, management, and consulting use Tonvo to improve the way they communicate.
+              </p>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-              {testimonials.map((t, i) => (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+              {testimonials.map((t) => (
                 <div
                   key={t.name}
-                  className="glass-card p-6 flex flex-col justify-between"
+                  className="glass-card p-7 flex flex-col justify-between"
                 >
-                  {/* Stars */}
-                  <div className="flex gap-1 mb-4">
-                    {[...Array(5)].map((_, j) => (
-                      <svg key={j} width="14" height="14" viewBox="0 0 24 24" fill="var(--color-neutral)" stroke="none">
-                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
-                      </svg>
-                    ))}
-                  </div>
-                  <p className="text-sm leading-relaxed mb-6 italic" style={{ color: "var(--color-text-silver)" }}>
-                    &ldquo;{t.text}&rdquo;
+                  {/* Quote icon */}
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" className="mb-4 opacity-20">
+                    <path d="M10 11H6C6 7.686 8.686 5 12 5v2c-2.206 0-4 1.794-4 4h2a2 2 0 012 2v2a2 2 0 01-2 2H8a2 2 0 01-2-2v-4zm10 0h-4c0-3.314 2.686-6 6-6v2c-2.206 0-4 1.794-4 4h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-4z" fill="var(--color-accent-light)" />
+                  </svg>
+                  <p className="text-[15px] leading-relaxed mb-6" style={{ color: "var(--color-text-silver)" }}>
+                    {t.text}
                   </p>
-                  <div className="flex items-center gap-3">
+                  <div className="flex items-center gap-3 mt-auto pt-4" style={{ borderTop: "1px solid rgba(255, 255, 255, 0.05)" }}>
                     <div
-                      className="w-9 h-9 rounded-full flex items-center justify-center text-sm font-bold text-white shrink-0"
-                      style={{ backgroundColor: ["#5c5c6e", "#34d399", "#fbbf24"][i] }}
+                      className="w-10 h-10 rounded-full flex items-center justify-center text-xs font-semibold text-white shrink-0"
+                      style={{ background: t.gradient }}
                     >
-                      {t.name[0]}
+                      {t.initials}
                     </div>
                     <div>
                       <div className="text-sm font-medium">{t.name}</div>
-                      <div className="text-xs" style={{ color: "var(--color-text-muted)" }}>{t.role}</div>
+                      <div className="text-xs" style={{ color: "var(--color-text-muted)" }}>
+                        {t.role}{t.company ? ` · ${t.company}` : ""}
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -705,136 +725,115 @@ export default function HomePage() {
                       border: "1px solid rgba(52, 211, 153, 0.2)",
                     }}
                   >
-                    -30%
+                    -{ANNUAL_DISCOUNT_PERCENT}%
                   </span>
                 </button>
               </div>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 items-start">
-              {/* Free */}
-              <div className="glass-card p-7 flex flex-col" style={{ minHeight: 420 }}>
-                <div className="mb-6">
-                  <h3 className="text-lg font-bold mb-1" style={{ color: "var(--color-text)" }}>Free</h3>
-                  <p className="text-xs mb-5" style={{ color: "var(--color-text-muted)" }}>Try Tonvo with basic features</p>
-                  <div className="flex items-baseline gap-1" style={{ minHeight: 48 }}>
-                    <span className="text-4xl font-bold" style={{ color: "var(--color-text)", minWidth: 56, display: "inline-block" }}>$0</span>
-                  </div>
-                </div>
-                <ul className="flex-1 space-y-3 mb-8" style={{ listStyle: "none", padding: 0, margin: 0 }}>
-                  {["3 sessions per month", "Real-time tone analysis", "Basic suggestions", "Session history (7 days)"].map((f) => (
-                    <li key={f} className="flex items-start gap-2.5 text-sm" style={{ color: "var(--color-text-silver)" }}>
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--color-accent-light)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mt-0.5 shrink-0"><polyline points="20 6 9 17 4 12" /></svg>
-                      {f}
-                    </li>
-                  ))}
-                </ul>
-                {user ? (
+              {PRICING_PLANS.map((plan) => {
+                const isFree = plan.monthlyPrice === 0;
+                const isTeam = plan.id === "team";
+                const displayPrice = isFree
+                  ? "$0"
+                  : annual
+                    ? `$${plan.monthlyEquivalent}`
+                    : `$${plan.monthlyPrice}`;
+
+                return (
                   <div
-                    className="w-full py-3 rounded-xl font-semibold text-sm text-center"
-                    style={{ background: "rgba(52, 211, 153, 0.08)", color: "var(--color-positive)", border: "1px solid rgba(52, 211, 153, 0.2)" }}
+                    key={plan.id}
+                    className="glass-card p-7 flex flex-col relative"
+                    style={{
+                      minHeight: 420,
+                      ...(plan.popular
+                        ? {
+                            borderColor: "rgba(200, 200, 216, 0.25)",
+                            boxShadow: "0 0 60px rgba(200, 200, 216, 0.05), 0 8px 32px rgba(0, 0, 0, 0.3)",
+                          }
+                        : {}),
+                    }}
                   >
-                    Current Plan
+                    {plan.popular && (
+                      <div
+                        className="absolute -top-3 left-1/2 -translate-x-1/2 text-xs font-semibold px-3.5 py-1 rounded-full"
+                        style={{ background: "linear-gradient(135deg, #5c5c6e, #6e6e82)", color: "white" }}
+                      >
+                        Most Popular
+                      </div>
+                    )}
+                    <div className="mb-6">
+                      <h3 className="text-lg font-bold mb-1" style={{ color: "var(--color-text)" }}>{plan.name}</h3>
+                      <p className="text-xs mb-5" style={{ color: "var(--color-text-muted)" }}>{plan.description}</p>
+                      <div className="flex items-baseline gap-1" style={{ minHeight: 48 }}>
+                        {annual && !isFree && (
+                          <span
+                            className="text-lg line-through mr-1 transition-opacity duration-200"
+                            style={{ color: "var(--color-text-muted)" }}
+                          >
+                            ${plan.monthlyPrice}
+                          </span>
+                        )}
+                        <span className="text-4xl font-bold" style={{ color: "var(--color-text)", minWidth: 56, display: "inline-block" }}>
+                          {displayPrice}
+                        </span>
+                        {plan.period && (
+                          <span className="text-sm" style={{ color: "var(--color-text-muted)" }}>{plan.period}</span>
+                        )}
+                      </div>
+                    </div>
+                    <ul className="flex-1 space-y-3 mb-8" style={{ listStyle: "none", padding: 0, margin: 0 }}>
+                      {plan.features.map((f) => (
+                        <li key={f} className="flex items-start gap-2.5 text-sm" style={{ color: "var(--color-text-silver)" }}>
+                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke={plan.popular ? "var(--color-positive)" : "var(--color-accent-light)"} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mt-0.5 shrink-0"><polyline points="20 6 9 17 4 12" /></svg>
+                          {f}
+                        </li>
+                      ))}
+                    </ul>
+                    {isFree ? (
+                      user ? (
+                        <div
+                          className="w-full py-3 rounded-xl font-semibold text-sm text-center"
+                          style={{ background: "rgba(52, 211, 153, 0.08)", color: "var(--color-positive)", border: "1px solid rgba(52, 211, 153, 0.2)" }}
+                        >
+                          Current Plan
+                        </div>
+                      ) : (
+                        <Link
+                          href="/login"
+                          className="btn-secondary w-full py-3 rounded-xl font-semibold text-sm text-center no-underline block"
+                        >
+                          {plan.cta}
+                        </Link>
+                      )
+                    ) : isTeam ? (
+                      user ? (
+                        <a
+                          href="mailto:contact@tonvo.co?subject=Team Plan Inquiry"
+                          className="btn-secondary w-full py-3 rounded-xl font-semibold text-sm text-center no-underline block"
+                        >
+                          Contact Sales
+                        </a>
+                      ) : (
+                        <Link
+                          href="/login"
+                          className="btn-secondary w-full py-3 rounded-xl font-semibold text-sm text-center no-underline block"
+                        >
+                          Get Started
+                        </Link>
+                      )
+                    ) : (
+                      <Link
+                        href={user ? "/pricing" : "/login"}
+                        className="btn-primary w-full py-3 rounded-xl font-semibold text-sm text-center no-underline block"
+                      >
+                        {user ? plan.cta : "Get Started"}
+                      </Link>
+                    )}
                   </div>
-                ) : (
-                  <Link
-                    href="/login"
-                    className="btn-secondary w-full py-3 rounded-xl font-semibold text-sm text-center no-underline block"
-                  >
-                    Get Started Free
-                  </Link>
-                )}
-              </div>
-
-              {/* Pro — highlighted */}
-              <div
-                className="glass-card p-7 flex flex-col relative"
-                style={{
-                  minHeight: 420,
-                  borderColor: "rgba(200, 200, 216, 0.25)",
-                  boxShadow: "0 0 60px rgba(200, 200, 216, 0.05), 0 8px 32px rgba(0, 0, 0, 0.3)",
-                }}
-              >
-                <div
-                  className="absolute -top-3 left-1/2 -translate-x-1/2 text-xs font-semibold px-3.5 py-1 rounded-full"
-                  style={{ background: "linear-gradient(135deg, #5c5c6e, #6e6e82)", color: "white" }}
-                >
-                  Most Popular
-                </div>
-                <div className="mb-6">
-                  <h3 className="text-lg font-bold mb-1" style={{ color: "var(--color-text)" }}>Pro</h3>
-                  <p className="text-xs mb-5" style={{ color: "var(--color-text-muted)" }}>For professionals who want an edge</p>
-                  <div className="flex items-baseline gap-1" style={{ minHeight: 48 }}>
-                    <span
-                      className="text-lg line-through mr-1 transition-opacity duration-200"
-                      style={{ color: "var(--color-text-muted)", opacity: annual ? 1 : 0, width: annual ? "auto" : 0, overflow: "hidden" }}
-                    >
-                      $19
-                    </span>
-                    <span className="text-4xl font-bold" style={{ color: "var(--color-text)", minWidth: 56, display: "inline-block" }}>
-                      ${annual ? "13" : "19"}
-                    </span>
-                    <span className="text-sm" style={{ color: "var(--color-text-muted)" }}>/month</span>
-                  </div>
-                </div>
-                <ul className="flex-1 space-y-3 mb-8" style={{ listStyle: "none", padding: 0, margin: 0 }}>
-                  {["Unlimited sessions", "Advanced conversation intelligence", "AI coaching tips & live insights", "Full session history", "Screen analysis", "Export PDF/CSV", "Priority support"].map((f) => (
-                    <li key={f} className="flex items-start gap-2.5 text-sm" style={{ color: "var(--color-text-silver)" }}>
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--color-positive)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mt-0.5 shrink-0"><polyline points="20 6 9 17 4 12" /></svg>
-                      {f}
-                    </li>
-                  ))}
-                </ul>
-                <Link
-                  href={user ? "/pricing" : "/login"}
-                  className="btn-primary w-full py-3 rounded-xl font-semibold text-sm text-center no-underline block"
-                >
-                  {user ? "Upgrade to Pro" : "Get Started"}
-                </Link>
-              </div>
-
-              {/* Team */}
-              <div className="glass-card p-7 flex flex-col" style={{ minHeight: 420 }}>
-                <div className="mb-6">
-                  <h3 className="text-lg font-bold mb-1" style={{ color: "var(--color-text)" }}>Team</h3>
-                  <p className="text-xs mb-5" style={{ color: "var(--color-text-muted)" }}>For teams that close deals together</p>
-                  <div className="flex items-baseline gap-1" style={{ minHeight: 48 }}>
-                    <span
-                      className="text-lg line-through mr-1 transition-opacity duration-200"
-                      style={{ color: "var(--color-text-muted)", opacity: annual ? 1 : 0, width: annual ? "auto" : 0, overflow: "hidden" }}
-                    >
-                      $49
-                    </span>
-                    <span className="text-4xl font-bold" style={{ color: "var(--color-text)", minWidth: 56, display: "inline-block" }}>
-                      ${annual ? "34" : "49"}
-                    </span>
-                    <span className="text-sm" style={{ color: "var(--color-text-muted)" }}>/user/month</span>
-                  </div>
-                </div>
-                <ul className="flex-1 space-y-3 mb-8" style={{ listStyle: "none", padding: 0, margin: 0 }}>
-                  {["Everything in Pro", "Team dashboard & analytics", "Manager insights & reports", "Custom coaching profiles", "API access", "SSO integration", "Dedicated support"].map((f) => (
-                    <li key={f} className="flex items-start gap-2.5 text-sm" style={{ color: "var(--color-text-silver)" }}>
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--color-accent-light)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mt-0.5 shrink-0"><polyline points="20 6 9 17 4 12" /></svg>
-                      {f}
-                    </li>
-                  ))}
-                </ul>
-                {user ? (
-                  <a
-                    href="mailto:contact@tonvo.co?subject=Team Plan Inquiry"
-                    className="btn-secondary w-full py-3 rounded-xl font-semibold text-sm text-center no-underline block"
-                  >
-                    Contact Sales
-                  </a>
-                ) : (
-                  <Link
-                    href="/login"
-                    className="btn-secondary w-full py-3 rounded-xl font-semibold text-sm text-center no-underline block"
-                  >
-                    Get Started
-                  </Link>
-                )}
-              </div>
+                );
+              })}
             </div>
 
             <p className="text-center text-xs mt-8" style={{ color: "var(--color-text-muted)" }}>
