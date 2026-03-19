@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getStripe, PLANS } from "@/lib/stripe";
+import { verifyAuth } from "@/lib/auth-server";
 
 /**
  * GET /api/stripe/health
@@ -7,6 +8,23 @@ import { getStripe, PLANS } from "@/lib/stripe";
  * Does NOT expose secrets — only reports presence/format.
  */
 export async function GET(req: NextRequest) {
+  const authUser = await verifyAuth(req);
+  if (!authUser) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  // Auth check: require ?secret= matching STRIPE_WEBHOOK_SECRET
+  const url = new URL(req.url);
+  const secret = url.searchParams.get("secret");
+  const expected = process.env.STRIPE_WEBHOOK_SECRET;
+
+  if (!expected || secret !== expected) {
+    return NextResponse.json(
+      { error: "Unauthorized" },
+      { status: 401 },
+    );
+  }
+
   const checks: Record<string, unknown> = {};
 
   // 1. Check env vars exist (never expose values)

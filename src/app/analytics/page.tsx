@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useAuth } from "@/lib/auth-context";
+import { authFetch } from "@/lib/api-client";
 import AppShell from "@/components/AppShell";
 import UpgradePrompt from "@/components/UpgradePrompt";
 import { usePlan } from "@/hooks/usePlan";
@@ -192,7 +193,7 @@ export default function AnalyticsPage() {
   useEffect(() => {
     if (!user || planLoading || !can("analyticsPage")) return;
 
-    fetch("/api/analytics", {
+    authFetch("/api/analytics", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ userId: user.uid }),

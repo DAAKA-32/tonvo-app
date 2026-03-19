@@ -10,6 +10,7 @@ import {
   reauthenticateWithCredential,
   firebaseSignOut,
 } from "@/lib/firebase";
+import { authFetch } from "@/lib/api-client";
 import AppShell from "@/components/AppShell";
 import { SUPPORTED_LANGUAGES } from "@/i18n/config";
 
@@ -161,7 +162,7 @@ export default function SettingsPage() {
 
   useEffect(() => {
     if (!user) return;
-    fetch("/api/subscription", {
+    authFetch("/api/subscription", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ userId: user.uid }),
@@ -212,7 +213,7 @@ export default function SettingsPage() {
     setCancelLoading(true);
     try {
       const action = cancelAtPeriodEnd ? "reactivate" : "cancel";
-      const res = await fetch("/api/stripe/cancel", {
+      const res = await authFetch("/api/stripe/cancel", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ userId: user.uid, action }),
@@ -231,7 +232,7 @@ export default function SettingsPage() {
     if (!user) return;
     setPortalLoading(true);
     try {
-      const res = await fetch("/api/stripe/portal", {
+      const res = await authFetch("/api/stripe/portal", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ userId: user.uid }),

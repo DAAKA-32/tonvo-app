@@ -2,6 +2,7 @@
 
 import { useState, useCallback, useRef } from "react";
 import { useTranslation } from "react-i18next";
+import { authFetch } from "@/lib/api-client";
 
 /**
  * Hook to translate AI-generated fields to the current UI language.
@@ -27,7 +28,7 @@ export function useTranslateFields() {
 
       setTranslating(true);
       try {
-        const res = await fetch("/api/translate", {
+        const res = await authFetch("/api/translate", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ fields, targetLanguage: lang }),

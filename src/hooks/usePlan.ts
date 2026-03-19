@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { useAuth } from "@/lib/auth-context";
 import { getPlanFeatures, type PlanId, type PlanFeatures } from "@/lib/plan-features";
+import { authFetch } from "@/lib/api-client";
 
 interface PlanState {
   plan: PlanId;
@@ -39,7 +40,7 @@ export function usePlan(): PlanState {
       setLoading(false);
       return;
     }
-    fetch("/api/subscription", {
+    authFetch("/api/subscription", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ userId: user.uid }),

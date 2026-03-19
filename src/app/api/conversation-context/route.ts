@@ -1,7 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 import { anthropicClient, CLAUDE_FAST } from "@/lib/anthropic";
+import { verifyAuth } from "@/lib/auth-server";
 
 export async function POST(req: NextRequest) {
+  const authUser = await verifyAuth(req);
+  if (!authUser) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
   const body = await req.json();
   const { previousSummary, newSegments, language } = body;
 

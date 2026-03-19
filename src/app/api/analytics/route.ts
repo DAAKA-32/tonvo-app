@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { supabaseAdmin } from "@/lib/supabase-admin";
+import { verifyAuth } from "@/lib/auth-server";
 
 interface ConversationRow {
   id: string;
@@ -11,7 +12,16 @@ interface ConversationRow {
 }
 
 export async function POST(req: NextRequest) {
+  const authUser = await verifyAuth(req);
+  if (!authUser) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
   const { userId } = await req.json();
+
+  if (userId && userId !== authUser.uid) {
+    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  }
 
   if (!userId) {
     return NextResponse.json({ error: "Missing userId" }, { status: 400 });

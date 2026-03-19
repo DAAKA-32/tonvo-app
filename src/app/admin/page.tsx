@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useAuth } from "@/lib/auth-context";
+import { authFetch } from "@/lib/api-client";
 import AppShell from "@/components/AppShell";
 
 const PLANS = ["free", "pro", "team"] as const;
@@ -18,7 +19,7 @@ export default function AdminPage() {
     setResult(null);
 
     try {
-      const res = await fetch("/api/admin/assign-plan", {
+      const res = await authFetch("/api/admin/assign-plan", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

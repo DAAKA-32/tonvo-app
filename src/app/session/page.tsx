@@ -6,6 +6,7 @@ import { useEffect, useState, useRef, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "@/lib/auth-context";
+import { authFetch, authFetchFormData } from "@/lib/api-client";
 import { AudioCaptureService, type CaptureOptions } from "@/services/audio-capture";
 import { supabase } from "@/lib/supabase";
 import AppShell from "@/components/AppShell";
@@ -89,6 +90,12 @@ export default function SessionPage() {
   const audioService = useRef<AudioCaptureService | null>(null);
   const processingToastId = useRef<string | null>(null);
   const screenAnalysisTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // Session time limit for free plan users
+  const sessionTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const [timeRemaining, setTimeRemaining] = useState<number | null>(null);
+  const warningShownRef = useRef(false);
+  const hasSessionTimeLimit = features.maxSessionDurationSec > 0;
 
   const [isMobile, setIsMobile] = useState(false);
   const [isIOS, setIsIOS] = useState(false);
@@ -175,6 +182,56 @@ export default function SessionPage() {
     return () => clearInterval(interval);
   }, [sessionStart]);
 
+  // Session time limit countdown for free plan users
+  useEffect(() => {
+    if (!isRecording || !hasSessionTimeLimit || !sessionStart) {
+      // Clean up timer when session stops
+      if (sessionTimerRef.current) {
+        clearInterval(sessionTimerRef.current);
+        sessionTimerRef.current = null;
+      }
+      setTimeRemaining(null);
+      warningShownRef.current = false;
+      return;
+    }
+
+    const maxDuration = features.maxSessionDurationSec;
+    const startTime = sessionStart.getTime();
+
+    // Initialize remaining time
+    const calcRemaining = () => Math.max(0, maxDuration - Math.floor((Date.now() - startTime) / 1000));
+    setTimeRemaining(calcRemaining());
+
+    sessionTimerRef.current = setInterval(() => {
+      const remaining = calcRemaining();
+      setTimeRemaining(remaining);
+
+      // Warning at 60 seconds remaining
+      if (remaining <= 60 && remaining > 0 && !warningShownRef.current) {
+        warningShownRef.current = true;
+        toast.show("1 minute remaining on your free session", { type: "info", duration: 5000 });
+      }
+
+      // Time's up — auto-stop
+      if (remaining <= 0) {
+        if (sessionTimerRef.current) {
+          clearInterval(sessionTimerRef.current);
+          sessionTimerRef.current = null;
+        }
+        toast.show("Session time limit reached. Upgrade to Pro for unlimited sessions.", { type: "error", duration: 8000 });
+        // Use ref to call stopSession to avoid stale closure
+        if (stopSessionRef.current) stopSessionRef.current();
+      }
+    }, 1000);
+
+    return () => {
+      if (sessionTimerRef.current) {
+        clearInterval(sessionTimerRef.current);
+        sessionTimerRef.current = null;
+      }
+    };
+  }, [isRecording, hasSessionTimeLimit, sessionStart, features.maxSessionDurationSec, toast]);
+
   // No auto-stop: the user controls when to end the session (copilot mode).
   // The analysisStatus may reach "completed" but the session keeps running.
 
@@ -184,6 +241,10 @@ export default function SessionPage() {
       if (screenAnalysisTimer.current) {
         clearTimeout(screenAnalysisTimer.current);
         screenAnalysisTimer.current = null;
+      }
+      if (sessionTimerRef.current) {
+        clearInterval(sessionTimerRef.current);
+        sessionTimerRef.current = null;
       }
       if (audioService.current) {
         audioService.current.stop();
@@ -214,7 +275,7 @@ export default function SessionPage() {
     if (generatingScreenSummary) return;
     setGeneratingScreenSummary(true);
     try {
-      const res = await fetch("/api/summarize-screen", {
+      const res = await authFetch("/api/summarize-screen", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -301,7 +362,7 @@ export default function SessionPage() {
       if (lastSeg?.text) formData.append("lastTranscript", lastSeg.text);
       formData.append("language", i18n.language);
       formData.append("userPlan", plan);
-      const res = await fetch("/api/analyze-screen", { method: "POST", body: formData });
+      const res = await authFetchFormData("/api/analyze-screen", formData, { method: "POST" });
       const data: ScreenAnalysis = await res.json();
       if (data.context) {
         setScreenAnalysis(data);
@@ -357,7 +418,7 @@ export default function SessionPage() {
       formData.append("audio", blob, `audio.${blobExt}`);
       // Pass detected language if we already know it, otherwise let Whisper auto-detect
       if (detectedLanguage) formData.append("language", detectedLanguage);
-      const transcribeRes = await fetch("/api/transcribe", { method: "POST", body: formData });
+      const transcribeRes = await authFetchFormData("/api/transcribe", formData, { method: "POST" });
       const transcribeData = await transcribeRes.json();
       const text: string = transcribeData.text;
       const speakerSegs: SpeakerSegment[] = transcribeData.speakerSegments || [];
@@ -383,7 +444,7 @@ export default function SessionPage() {
 
       // Send rolling summary + last 5 raw segments for richer context
       const recentSegs = segments.slice(-5).map((s) => ({ text: s.text, tone: s.tone.tone, speaker: s.speaker }));
-      const analyzeRes = await fetch("/api/analyze", {
+      const analyzeRes = await authFetch("/api/analyze", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -438,7 +499,7 @@ export default function SessionPage() {
         summaryUpdatePending.current = true;
         const segsToSummarize = [...unsummarizedSegments.current];
         unsummarizedSegments.current = [];
-        fetch("/api/conversation-context", {
+        authFetch("/api/conversation-context", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
@@ -498,7 +559,7 @@ export default function SessionPage() {
     // Check subscription limit
     if (user) {
       try {
-        const subRes = await fetch("/api/subscription", {
+        const subRes = await authFetch("/api/subscription", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ userId: user.uid, action: "check-session" }),
@@ -540,7 +601,7 @@ export default function SessionPage() {
         const { data } = await supabase.from("conversations").insert({ user_id: user.uid, title: `Session ${new Date().toLocaleString()}` }).select("id").single();
         if (data) setConversationId(data.id);
         // Increment session count for free plan users
-        fetch("/api/subscription", {
+        authFetch("/api/subscription", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ userId: user.uid, action: "increment" }),
@@ -605,7 +666,7 @@ export default function SessionPage() {
       toast.update(saveToastId, "Generating summary...", { type: "processing" });
       try {
         if (hasAudioData) {
-          const res = await fetch("/api/summarize", {
+          const res = await authFetch("/api/summarize", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
@@ -693,6 +754,23 @@ export default function SessionPage() {
                     {classConfig.label}
                   </span>
                 )}
+                {/* Free plan session countdown timer */}
+                {hasSessionTimeLimit && timeRemaining !== null && (
+                  <span
+                    className="text-xs px-2.5 py-1 rounded-md font-semibold"
+                    style={{
+                      backgroundColor: timeRemaining <= 60
+                        ? "rgba(248, 113, 113, 0.15)"
+                        : "rgba(251, 191, 36, 0.1)",
+                      color: timeRemaining <= 60
+                        ? "var(--color-negative)"
+                        : "var(--color-neutral)",
+                      transition: "background-color 0.3s ease, color 0.3s ease",
+                    }}
+                  >
+                    {Math.floor(timeRemaining / 60)}:{(timeRemaining % 60).toString().padStart(2, "0")} remaining
+                  </span>
+                )}
               </div>
             )}
           </div>
@@ -753,6 +831,42 @@ export default function SessionPage() {
             </button>
           </div>
         </div>
+
+        {/* Free plan time limit banner */}
+        {isRecording && hasSessionTimeLimit && timeRemaining !== null && (
+          <div
+            className="rounded-xl p-3 mb-4 border text-xs flex items-center justify-between"
+            style={{
+              backgroundColor: timeRemaining <= 60 ? "rgba(248, 113, 113, 0.06)" : "rgba(251, 191, 36, 0.04)",
+              borderColor: timeRemaining <= 60 ? "rgba(248, 113, 113, 0.25)" : "rgba(251, 191, 36, 0.15)",
+              color: timeRemaining <= 60 ? "var(--color-negative)" : "var(--color-text-muted)",
+              transition: "background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease",
+            }}
+          >
+            <div className="flex items-center gap-2">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0 }}>
+                <circle cx="12" cy="12" r="10" />
+                <polyline points="12 6 12 12 16 14" />
+              </svg>
+              <span>
+                Free plan: <strong>{Math.floor(timeRemaining / 60)}:{(timeRemaining % 60).toString().padStart(2, "0")}</strong> remaining
+                {timeRemaining <= 60 ? " — session ending soon" : ` of ${Math.floor(features.maxSessionDurationSec / 60)} min limit`}
+              </span>
+            </div>
+            <a
+              href="/pricing"
+              className="text-xs font-semibold px-3 py-1 rounded-md"
+              style={{
+                backgroundColor: "rgba(200, 200, 216, 0.1)",
+                color: "var(--color-accent-light)",
+                textDecoration: "none",
+                whiteSpace: "nowrap",
+              }}
+            >
+              Upgrade
+            </a>
+          </div>
+        )}
 
         {/* Mode info banner */}
         {!isRecording && (

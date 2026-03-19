@@ -2,6 +2,7 @@
 
 import { useState, useRef, useCallback, useEffect } from "react";
 import { useTranslation } from "react-i18next";
+import { authFetchFormData } from "@/lib/api-client";
 import AppShell from "@/components/AppShell";
 import { useToast } from "@/components/Toast";
 
@@ -269,7 +270,7 @@ export default function AnalyzePage() {
     try {
       const formData = new FormData();
       formData.append("audio", audioFile);
-      const res = await fetch("/api/transcribe", { method: "POST", body: formData });
+      const res = await authFetchFormData("/api/transcribe", formData, { method: "POST" });
       const data = await res.json();
       if (data.text) {
         setTranscript(data.text);
@@ -312,7 +313,7 @@ export default function AnalyzePage() {
         formData.append("transcript", transcript);
       }
 
-      const res = await fetch("/api/analyze-conversation", { method: "POST", body: formData });
+      const res = await authFetchFormData("/api/analyze-conversation", formData, { method: "POST" });
       const data = await res.json();
 
       if (data.error) {

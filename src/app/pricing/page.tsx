@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useAuth } from "@/lib/auth-context";
+import { authFetch } from "@/lib/api-client";
 import AppShell from "@/components/AppShell";
 import {
   PRICING_PLANS,
@@ -21,7 +22,7 @@ export default function PricingPage() {
 
   useEffect(() => {
     if (!user) return;
-    fetch("/api/subscription", {
+    authFetch("/api/subscription", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ userId: user.uid }),
@@ -39,7 +40,7 @@ export default function PricingPage() {
     setLoading(planId);
     setError(null);
     try {
-      const res = await fetch("/api/stripe/checkout", {
+      const res = await authFetch("/api/stripe/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -70,7 +71,7 @@ export default function PricingPage() {
     if (!user) return;
     setLoading("manage");
     try {
-      const res = await fetch("/api/stripe/portal", {
+      const res = await authFetch("/api/stripe/portal", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ userId: user.uid }),

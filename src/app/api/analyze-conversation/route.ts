@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { checkRateLimit, RATE_LIMITS } from "@/lib/rate-limit";
 import { anthropicClient, CLAUDE_DEEP } from "@/lib/anthropic";
+import { verifyAuth } from "@/lib/auth-server";
 
 /**
  * POST /api/analyze-conversation
@@ -18,6 +19,11 @@ import { anthropicClient, CLAUDE_DEEP } from "@/lib/anthropic";
  *  - images: (for type=images) one or more image files
  */
 export async function POST(req: NextRequest) {
+  const authUser = await verifyAuth(req);
+  if (!authUser) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
   const ip =
     req.headers.get("x-forwarded-for")?.split(",")[0] ||
     req.headers.get("x-real-ip") ||

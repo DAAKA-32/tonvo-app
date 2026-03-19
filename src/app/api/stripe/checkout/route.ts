@@ -1,11 +1,21 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getStripe, PLANS, type PlanId } from "@/lib/stripe";
 import { supabaseAdmin } from "@/lib/supabase-admin";
+import { verifyAuth } from "@/lib/auth-server";
 import Stripe from "stripe";
 
 export async function POST(req: NextRequest) {
+  const authUser = await verifyAuth(req);
+  if (!authUser) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
   try {
     const { planId, userId, userEmail, billing = "monthly" } = await req.json();
+
+    if (userId && userId !== authUser.uid) {
+      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+    }
 
     if (!planId || !userId || !userEmail) {
       return NextResponse.json(

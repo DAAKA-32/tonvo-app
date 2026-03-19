@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getPlanFeatures } from "@/lib/plan-features";
 import { z } from "zod/v4";
 import { anthropicClient, CLAUDE_FAST } from "@/lib/anthropic";
+import { verifyAuth } from "@/lib/auth-server";
 
 const ChatMetricsSchema = z.object({
   visibleMessageCount: z.number().default(0),
@@ -22,6 +23,11 @@ const ScreenAnalysisSchema = z.object({
 });
 
 export async function POST(req: NextRequest) {
+  const authUser = await verifyAuth(req);
+  if (!authUser) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
   try {
     const formData = await req.formData();
     const imageFile = formData.get("image") as File | null;

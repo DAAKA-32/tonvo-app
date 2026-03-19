@@ -1,8 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
 import { checkRateLimit, RATE_LIMITS } from "@/lib/rate-limit";
 import { anthropicClient, CLAUDE_DEEP } from "@/lib/anthropic";
+import { verifyAuth } from "@/lib/auth-server";
 
 export async function POST(req: NextRequest) {
+  const authUser = await verifyAuth(req);
+  if (!authUser) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
   const ip = req.headers.get("x-forwarded-for")?.split(",")[0] || req.headers.get("x-real-ip") || "unknown";
   const rl = checkRateLimit(`summarize:${ip}`, RATE_LIMITS.summarize);
   if (!rl.allowed) {

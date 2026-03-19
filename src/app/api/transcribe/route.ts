@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { checkRateLimit, RATE_LIMITS } from "@/lib/rate-limit";
+import { verifyAuth } from "@/lib/auth-server";
 
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 
@@ -70,6 +71,11 @@ function segmentBySpeaker(words: WhisperWord[]): SpeakerSegment[] {
 }
 
 export async function POST(req: NextRequest) {
+  const authUser = await verifyAuth(req);
+  if (!authUser) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
   if (!OPENAI_API_KEY) {
     return NextResponse.json({ error: "OpenAI API key not configured" }, { status: 500 });
   }

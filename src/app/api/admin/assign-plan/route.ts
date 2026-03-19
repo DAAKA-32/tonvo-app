@@ -1,10 +1,16 @@
 import { NextRequest, NextResponse } from "next/server";
 import { supabaseAdmin } from "@/lib/supabase-admin";
+import { verifyAuth } from "@/lib/auth-server";
 
 const ADMIN_EMAILS = ["emilien.neveu@gmail.com", "emilien.nepveu@gmail.com"];
 const VALID_PLANS = ["free", "pro", "team"];
 
 export async function POST(req: NextRequest) {
+  const authUser = await verifyAuth(req);
+  if (!authUser) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
   try {
     const { adminEmail, targetUserId, plan } = await req.json();
 

@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "@/lib/auth-context";
 import { auth, firebaseSignOut } from "@/lib/firebase";
+import { authFetch } from "@/lib/api-client";
 import TonvoLogo from "@/components/Logo";
 
 function IconDashboard() {
@@ -129,7 +130,7 @@ export default function Sidebar({ open, onClose }: SidebarProps) {
 
   useEffect(() => {
     if (!user) return;
-    fetch("/api/subscription", {
+    authFetch("/api/subscription", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ userId: user.uid }),

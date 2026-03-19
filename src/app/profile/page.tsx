@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "@/lib/auth-context";
 import { auth, updateProfile } from "@/lib/firebase";
+import { authFetch } from "@/lib/api-client";
 import AppShell from "@/components/AppShell";
 
 interface SubscriptionInfo {
@@ -78,7 +79,7 @@ export default function ProfilePage() {
 
   useEffect(() => {
     if (!user) return;
-    fetch("/api/subscription", {
+    authFetch("/api/subscription", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ userId: user.uid }),

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { anthropicClient, CLAUDE_FAST } from "@/lib/anthropic";
+import { verifyAuth } from "@/lib/auth-server";
 
 /**
  * POST /api/translate
@@ -10,6 +11,11 @@ import { anthropicClient, CLAUDE_FAST } from "@/lib/anthropic";
  * Output: { translated: Record<string, string | string[]> }
  */
 export async function POST(req: NextRequest) {
+  const authUser = await verifyAuth(req);
+  if (!authUser) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
   try {
     const { fields, targetLanguage } = await req.json();
 
