@@ -17,6 +17,7 @@ export default function PricingPage() {
   const [currentPlan, setCurrentPlan] = useState("free");
   const [loading, setLoading] = useState<string | null>(null);
   const [billing, setBilling] = useState<BillingCycle>("monthly");
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     if (!user) return;
@@ -36,6 +37,7 @@ export default function PricingPage() {
     if (!user || planId === "free") return;
 
     setLoading(planId);
+    setError(null);
     try {
       const res = await fetch("/api/stripe/checkout", {
         method: "POST",
@@ -50,7 +52,7 @@ export default function PricingPage() {
       const data = await res.json();
       if (!res.ok) {
         console.error("Checkout API error:", data);
-        alert(data.error || "Something went wrong. Please try again.");
+        setError(data.error || "Unable to start checkout. Please try again.");
         return;
       }
       if (data.url) {
@@ -58,7 +60,7 @@ export default function PricingPage() {
       }
     } catch (err) {
       console.error("Upgrade error:", err);
-      alert("Network error. Please check your connection and try again.");
+      setError("Network error. Please check your connection and try again.");
     } finally {
       setLoading(null);
     }
@@ -160,6 +162,27 @@ export default function PricingPage() {
             </div>
           )}
         </div>
+
+        {error && (
+          <div
+            className="mb-6 px-4 py-3 rounded-lg text-sm flex items-center gap-3"
+            style={{
+              background: "rgba(239, 68, 68, 0.08)",
+              border: "1px solid rgba(239, 68, 68, 0.2)",
+              color: "#f87171",
+            }}
+          >
+            <span style={{ flex: 1 }}>{error}</span>
+            <button
+              onClick={() => setError(null)}
+              className="border-none bg-transparent cursor-pointer p-1"
+              style={{ color: "#f87171" }}
+              aria-label="Dismiss"
+            >
+              &times;
+            </button>
+          </div>
+        )}
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 items-start">
           {PRICING_PLANS.map((plan) => {

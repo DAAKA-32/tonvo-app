@@ -187,10 +187,10 @@ export default function AnalyticsPage() {
   const [loading, setLoading] = useState(true);
   const [selectedMetric, setSelectedMetric] = useState<MetricKey>("overall");
 
-  const hasAccess = planLoading || can("analyticsPage");
+  const hasAccess = !planLoading && can("analyticsPage");
 
   useEffect(() => {
-    if (!user || !hasAccess) return;
+    if (!user || planLoading || !can("analyticsPage")) return;
 
     fetch("/api/analytics", {
       method: "POST",
@@ -205,9 +205,28 @@ export default function AnalyticsPage() {
         setLoading(false);
       })
       .catch(() => setLoading(false));
-  }, [user, hasAccess]);
+  }, [user, planLoading, can]);
 
-  // Gate: analytics is Pro+ only
+  // Show skeleton while plan is loading (prevents flash of content)
+  if (planLoading) {
+    return (
+      <AppShell>
+        <div style={{ maxWidth: 1100 }}>
+          <div className="mb-8">
+            <div className="h-7 w-32 rounded-lg shimmer mb-2" style={{ backgroundColor: "var(--color-surface-2)" }} />
+            <div className="h-4 w-64 rounded-lg shimmer" style={{ backgroundColor: "var(--color-surface-2)" }} />
+          </div>
+          <div className="space-y-4">
+            {[1, 2, 3].map((i) => (
+              <div key={i} className="h-24 rounded-xl shimmer" style={{ backgroundColor: "var(--color-surface-2)" }} />
+            ))}
+          </div>
+        </div>
+      </AppShell>
+    );
+  }
+
+  // Gate: analytics is Pro+ only — shown immediately after plan loads, no flash
   if (!hasAccess) {
     return (
       <AppShell>

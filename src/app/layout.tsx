@@ -23,7 +23,7 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: "Tonvo - AI Conversation Copilot | Real-Time Insights, Coaching & Tone Analysis",
+    default: "Tonvo — AI Conversation Copilot | Real-Time Call Insights",
     template: "%s | Tonvo",
   },
   description:
@@ -81,9 +81,9 @@ export const metadata: Metadata = {
     locale: "en_US",
     url: SITE_URL,
     siteName: SITE_NAME,
-    title: "Tonvo - AI Conversation Copilot | Real-Time Insights & Smart Suggestions",
+    title: "Tonvo — AI Conversation Copilot | Real-Time Call Analysis",
     description:
-      "Boost your calls with real-time AI analysis. Detect tone, get coaching tips, and improve communication instantly during Discord, Zoom, and Meet calls.",
+      "Analyze tone, emotions and intent in real time during calls. Get AI coaching tips and smart suggestions on Discord, Zoom and Meet. Free to start.",
     images: [
       {
         url: "/og-image.png",
@@ -139,7 +139,6 @@ const organizationJsonLd = {
     email: "contact@tonvo.co",
     contactType: "sales",
   },
-  sameAs: [],
 };
 
 const softwareJsonLd = {
@@ -200,13 +199,6 @@ const softwareJsonLd = {
       },
     },
   ],
-  aggregateRating: {
-    "@type": "AggregateRating",
-    ratingValue: "4.8",
-    ratingCount: "150",
-    bestRating: "5",
-    worstRating: "1",
-  },
 };
 
 const faqJsonLd = {
@@ -280,18 +272,6 @@ const faqJsonLd = {
   ],
 };
 
-const breadcrumbJsonLd = {
-  "@context": "https://schema.org",
-  "@type": "BreadcrumbList",
-  itemListElement: [
-    { "@type": "ListItem", position: 1, name: "Home", item: SITE_URL },
-    { "@type": "ListItem", position: 2, name: "Pricing", item: `${SITE_URL}/pricing` },
-    { "@type": "ListItem", position: 3, name: "Sign In", item: `${SITE_URL}/login` },
-    { "@type": "ListItem", position: 4, name: "Privacy Policy", item: `${SITE_URL}/privacy` },
-    { "@type": "ListItem", position: 5, name: "Terms of Service", item: `${SITE_URL}/terms` },
-  ],
-};
-
 const howToJsonLd = {
   "@context": "https://schema.org",
   "@type": "HowTo",
@@ -325,11 +305,6 @@ const webSiteJsonLd = {
   name: SITE_NAME,
   url: SITE_URL,
   description: "AI-powered conversation copilot for real-time insights during calls and chats.",
-  potentialAction: {
-    "@type": "SearchAction",
-    target: `${SITE_URL}/?q={search_term_string}`,
-    "query-input": "required name=search_term_string",
-  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -347,10 +322,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
-        />
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
         />
         <script
           type="application/ld+json"
