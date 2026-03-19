@@ -891,7 +891,7 @@ export default function HomePage() {
                 },
                 {
                   q: "Is Tonvo free to use?",
-                  a: "Yes, Tonvo offers a free plan with 3 sessions per month including real-time tone analysis and basic suggestions. The Pro plan at $19/month (or $182/year, saving 20%) unlocks unlimited sessions, advanced AI coaching, screen analysis, and full session history.",
+                  a: "Yes, Tonvo offers a free plan with 3 sessions per month including real-time tone analysis and basic suggestions. The Pro plan at $19/month (or $156/year, saving 30%) unlocks unlimited sessions, advanced AI coaching, screen analysis, and full session history.",
                 },
                 {
                   q: "Can other people see the copilot during screen sharing?",
