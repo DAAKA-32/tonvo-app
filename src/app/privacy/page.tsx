@@ -35,7 +35,7 @@ export default function PrivacyPage() {
               <strong>Tonvo</strong><br />
               42170 Chambles, France<br />
               SIREN 101 134 633<br />
-              Contact: <strong>contact@tonvo.co</strong>
+              Contact: <strong>tonvoco.pro@gmail.com</strong>
             </p>
           </section>
 
@@ -157,7 +157,7 @@ export default function PrivacyPage() {
               ))}
             </div>
             <p className="text-sm leading-relaxed mt-4 m-0">
-              To exercise any of these rights, contact us at: <strong>contact@tonvo.co</strong>
+              To exercise any of these rights, contact us at: <strong>tonvoco.pro@gmail.com</strong>
             </p>
           </section>
 
@@ -177,7 +177,7 @@ export default function PrivacyPage() {
             <p className="text-sm leading-relaxed m-0">
               Tonvo is not intended for use by individuals under the age of 16. We do not knowingly collect
               personal data from children. If you believe a child has provided us with personal data,
-              please contact us at <strong>contact@tonvo.co</strong>.
+              please contact us at <strong>tonvoco.pro@gmail.com</strong>.
             </p>
           </section>
 
@@ -198,7 +198,7 @@ export default function PrivacyPage() {
               For any questions regarding this Privacy Policy or your personal data:<br /><br />
               <strong>Tonvo</strong><br />
               42170 Chambles, France<br />
-              Email: <strong>contact@tonvo.co</strong><br /><br />
+              Email: <strong>tonvoco.pro@gmail.com</strong><br /><br />
               You also have the right to lodge a complaint with your local data protection authority
               (e.g., CNIL in France).
             </p>

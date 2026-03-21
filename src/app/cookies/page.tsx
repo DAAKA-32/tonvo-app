@@ -104,7 +104,7 @@ export default function CookiesPage() {
             <h2 className="text-lg font-semibold mb-3" style={{ color: "var(--color-text)" }}>5. Contact</h2>
             <p className="text-sm leading-relaxed m-0">
               For questions about our use of cookies:<br /><br />
-              Email: <strong>contact@tonvo.co</strong>
+              Email: <strong>tonvoco.pro@gmail.com</strong>
             </p>
           </section>
         </div>

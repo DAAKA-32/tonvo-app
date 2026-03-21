@@ -963,7 +963,7 @@ export default function HomePage() {
                 <ul className="list-none p-0 m-0 space-y-2.5">
                   <li><Link href="/about" className="text-sm no-underline hover:opacity-80 transition-colors" style={{ color: "var(--color-text-muted)" }}>About</Link></li>
                   <li><Link href="/blog" className="text-sm no-underline hover:opacity-80 transition-colors" style={{ color: "var(--color-text-muted)" }}>Blog</Link></li>
-
+                  <li><a href="mailto:tonvoco.pro@gmail.com" className="text-sm no-underline hover:opacity-80 transition-colors" style={{ color: "var(--color-text-muted)" }}>Contact</a></li>
                 </ul>
               </div>
 

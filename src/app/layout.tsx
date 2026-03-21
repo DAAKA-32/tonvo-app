@@ -136,7 +136,7 @@ const organizationJsonLd = {
     "Tonvo provides real-time conversation intelligence powered by AI. Analyze tone, emotions, and intent during calls and chats.",
   contactPoint: {
     "@type": "ContactPoint",
-    email: "contact@tonvo.co",
+    email: "tonvoco.pro@gmail.com",
     contactType: "sales",
   },
 };

@@ -45,7 +45,7 @@ export default function LegalPage() {
             <div className="rounded-xl p-5" style={{ backgroundColor: "var(--color-surface)" }}>
               <p className="text-sm m-0">
                 <strong style={{ color: "var(--color-text)" }}>Name:</strong> Emilien Nepveu<br />
-                <strong style={{ color: "var(--color-text)" }}>Email:</strong> contact@tonvo.co
+                <strong style={{ color: "var(--color-text)" }}>Email:</strong> tonvoco.pro@gmail.com
               </p>
             </div>
           </section>
@@ -55,7 +55,7 @@ export default function LegalPage() {
             <div className="rounded-xl p-5" style={{ backgroundColor: "var(--color-surface)" }}>
               <p className="text-sm m-0">
                 <strong style={{ color: "var(--color-text)" }}>DPO:</strong> Emilien Nepveu (same as Publication Director)<br />
-                <strong style={{ color: "var(--color-text)" }}>Contact:</strong> contact@tonvo.co
+                <strong style={{ color: "var(--color-text)" }}>Contact:</strong> tonvoco.pro@gmail.com
               </p>
             </div>
           </section>

@@ -88,7 +88,7 @@ export default function TermsPage() {
               <li><strong>Pro Plan:</strong> $19/month. Unlimited sessions with full history retention.</li>
               <li><strong>Team Plan:</strong> $49/user/month. Includes team collaboration features.</li>
               <li>Payments are processed securely via Stripe. You may cancel your subscription at any time through the Settings page.</li>
-              <li>Refunds are handled on a case-by-case basis. Contact <strong>contact@tonvo.co</strong> for refund requests.</li>
+              <li>Refunds are handled on a case-by-case basis. Contact <strong>tonvoco.pro@gmail.com</strong> for refund requests.</li>
             </ul>
           </section>
 
@@ -155,7 +155,7 @@ export default function TermsPage() {
               For questions about these Terms:<br /><br />
               <strong>Tonvo</strong><br />
               42170 Chambles, France<br />
-              Email: <strong>contact@tonvo.co</strong>
+              Email: <strong>tonvoco.pro@gmail.com</strong>
             </p>
           </section>
         </div>
