@@ -14,7 +14,7 @@ import { useToast } from "@/components/Toast";
 import ToneIndicator from "@/components/ToneIndicator";
 import AudioWave from "@/components/AudioWave";
 import SuggestionCard from "@/components/SuggestionCard";
-import CopilotOverlay from "@/components/CopilotOverlay";
+import SmartCopilotOverlay from "@/components/SmartCopilotOverlay";
 import CopilotPiP from "@/components/CopilotPiP";
 import UpgradePrompt from "@/components/UpgradePrompt";
 import { usePlan } from "@/hooks/usePlan";
@@ -151,6 +151,7 @@ export default function SessionPage() {
   const [classification, setClassification] = useState<ConversationClassification>("neutral");
   const [coachingTip, setCoachingTip] = useState("");
   const [liveInsight, setLiveInsight] = useState("");
+  const [suggestedResponses, setSuggestedResponses] = useState<Array<{ text: string; intent: string; label: string }>>([]);
   const [responseDelay, setResponseDelay] = useState<string>("normal");
   const [keyMoments, setKeyMoments] = useState<KeyMoment[]>([]);
   const [timeline, setTimeline] = useState<TimelineEvent[]>([]);
@@ -160,6 +161,9 @@ export default function SessionPage() {
   // Conversation mode (domain-specific analysis)
   const [conversationMode, setConversationMode] = useState<ConversationMode>("general");
   const [detectedLanguage, setDetectedLanguage] = useState<string | null>(null);
+
+  // Track whether PiP window is open — hides in-page overlay to prevent screen-share visibility
+  const [pipOpen, setPipOpen] = useState(false);
 
   // Rolling conversation summary -- gives AI full context without sending all segments
   const conversationSummary = useRef<string>("");
@@ -518,6 +522,9 @@ export default function SessionPage() {
       setCurrentTone(analysis.tone);
       setCurrentSuggestion(analysis.suggestion);
       setCurrentEmotions(analysis.emotions || []);
+      if (Array.isArray(analysis.suggestedResponses) && analysis.suggestedResponses.length > 0) {
+        setSuggestedResponses(analysis.suggestedResponses);
+      }
 
       // Update classification and coaching
       if (analysis.classification) setClassification(analysis.classification);
@@ -1398,6 +1405,7 @@ export default function SessionPage() {
         coachingTip={coachingTip}
         liveInsight={liveInsight}
         suggestion={currentSuggestion}
+        suggestedResponses={suggestedResponses}
         signals={signals}
         qualityScore={qualityScore}
         engagementScore={engagementScore}
@@ -1406,19 +1414,23 @@ export default function SessionPage() {
         currentTone={currentTone}
         classification={classification}
         onStop={stopSession}
+        onPiPStateChange={setPipOpen}
       />
 
-      {/* Copilot Overlay — fallback floating panel (Pro+ only) */}
-      {isRecording && can("copilotOverlay") && (
-        <CopilotOverlay
+      {/* Smart Copilot Overlay — Clearty-style, fallback when PiP is blocked or closed (Pro+ only) */}
+      {isRecording && can("copilotOverlay") && !pipOpen && (
+        <SmartCopilotOverlay
           coachingTip={coachingTip}
           liveInsight={liveInsight}
           suggestion={currentSuggestion}
+          suggestedResponses={suggestedResponses}
           signals={signals}
           qualityScore={qualityScore}
           engagementScore={engagementScore}
           speakerBalance={speakerBalance}
           elapsed={elapsed}
+          currentTone={currentTone}
+          classification={classification}
           onStop={stopSession}
         />
       )}

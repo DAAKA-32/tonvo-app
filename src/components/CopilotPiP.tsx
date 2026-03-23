@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useCallback } from "react";
-import type { ConversationSignal } from "@/types/analysis";
+import type { ConversationSignal, SuggestedResponse } from "@/types/analysis";
 
 interface CopilotSignal {
   signal: ConversationSignal;
@@ -14,6 +14,7 @@ interface CopilotPiPProps {
   coachingTip: string;
   liveInsight: string;
   suggestion: string;
+  suggestedResponses: SuggestedResponse[];
   signals: CopilotSignal[];
   qualityScore: number;
   engagementScore: number;
@@ -22,6 +23,25 @@ interface CopilotPiPProps {
   currentTone: string;
   classification: string;
   onStop: () => void;
+  onPiPStateChange?: (isOpen: boolean) => void;
+}
+
+// TypeScript declarations for Document Picture-in-Picture API (Chrome 116+)
+interface DocumentPictureInPictureOptions {
+  width?: number;
+  height?: number;
+  disallowReturnToOpener?: boolean;
+}
+
+interface DocumentPictureInPicture {
+  requestWindow(options?: DocumentPictureInPictureOptions): Promise<Window>;
+  window: Window | null;
+}
+
+declare global {
+  interface Window {
+    documentPictureInPicture?: DocumentPictureInPicture;
+  }
 }
 
 const SIGNAL_COLORS: Record<string, { color: string; bg: string }> = {
@@ -53,28 +73,7 @@ function escapeHTML(str: string): string {
     .replace(/"/g, "&quot;");
 }
 
-function buildHTML(props: CopilotPiPProps): string {
-  const {
-    coachingTip, liveInsight, suggestion, signals,
-    qualityScore, engagementScore, speakerBalance,
-    elapsed, currentTone, classification,
-  } = props;
-
-  const recentSignals = signals.slice(-4);
-  const youPct = speakerBalance != null ? Math.round(speakerBalance * 100) : null;
-
-  const toneColors: Record<string, string> = {
-    positive: "#34d399", neutral: "#fbbf24", negative: "#f87171", hesitant: "#fb923c",
-  };
-  const classColors: Record<string, string> = {
-    very_positive: "#34d399", positive: "#6ee7b7", neutral: "#fbbf24", awkward: "#fb923c", negative: "#f87171",
-  };
-
-  return `<!DOCTYPE html>
-<html>
-<head>
-<title>Tonvo Copilot</title>
-<style>
+const PIP_CSS = `
   * { margin:0; padding:0; box-sizing:border-box; }
   body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -137,14 +136,57 @@ function buildHTML(props: CopilotPiPProps): string {
     transition: background 0.15s;
   }
   .stop-btn:hover { background: rgba(248,113,113,0.3); }
-  .tip {
-    margin-top: 10px; padding: 8px 10px; border-radius: 8px;
-    background: rgba(99,102,241,0.08); border: 1px solid rgba(99,102,241,0.15);
-    font-size: 10px; color: #a5b4fc; line-height: 1.5; text-align: center;
+  .pip-badge {
+    margin-top: 10px; padding: 4px 8px; border-radius: 6px;
+    background: rgba(52,211,153,0.08); border: 1px solid rgba(52,211,153,0.15);
+    font-size: 9px; color: #34d399; text-align: center;
   }
-</style>
-</head>
-<body>
+  .responses-section { margin-bottom: 12px; }
+  .responses-header {
+    display: flex; align-items: center; gap: 5px; margin-bottom: 8px;
+    font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #34d399;
+  }
+  .response-card {
+    padding: 10px 12px; border-radius: 12px; margin-bottom: 6px;
+    background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06);
+  }
+  .response-card:first-child {
+    background: rgba(52,211,153,0.06); border-color: rgba(52,211,153,0.15);
+  }
+  .response-meta {
+    display: flex; align-items: center; gap: 5px; margin-bottom: 4px;
+  }
+  .response-icon { font-size: 12px; }
+  .response-label {
+    font-size: 9px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.06em; color: #8b8b96;
+  }
+  .response-text { font-size: 13px; line-height: 1.5; color: #fafafa; }
+`;
+
+const INTENT_ICONS: Record<string, string> = {
+  empathize: "💬", redirect: "↩", close: "🎯", probe: "🔍",
+  agree: "✓", challenge: "⚡", clarify: "💡", deflect: "🛡",
+};
+
+function buildBodyContent(props: CopilotPiPProps): string {
+  const {
+    coachingTip, liveInsight, suggestion, suggestedResponses, signals,
+    qualityScore, engagementScore, speakerBalance,
+    elapsed, currentTone, classification,
+  } = props;
+
+  const recentSignals = signals.slice(-4);
+  const youPct = speakerBalance != null ? Math.round(speakerBalance * 100) : null;
+
+  const toneColors: Record<string, string> = {
+    positive: "#34d399", neutral: "#fbbf24", negative: "#f87171", hesitant: "#fb923c",
+  };
+  const classColors: Record<string, string> = {
+    very_positive: "#34d399", positive: "#6ee7b7", neutral: "#fbbf24", awkward: "#fb923c", negative: "#f87171",
+  };
+
+  return `
   <div class="header">
     <div class="header-left">
       <div class="pulse"></div>
@@ -168,6 +210,19 @@ function buildHTML(props: CopilotPiPProps): string {
       <span class="score-value" style="color:${engagementScore > 0 ? scoreColor(engagementScore) : "#8b8b96"}">${engagementScore > 0 ? engagementScore : "--"}</span>
     </div>
   </div>
+
+  ${suggestedResponses && suggestedResponses.length > 0 ? `
+  <div class="responses-section">
+    <div class="responses-header"><div class="dot" style="background:#34d399"></div> Say This</div>
+    ${suggestedResponses.map(r => `
+    <div class="response-card">
+      <div class="response-meta">
+        <span class="response-icon">${INTENT_ICONS[r.intent] || "💬"}</span>
+        <span class="response-label">${escapeHTML(r.label)}</span>
+      </div>
+      <p class="response-text">${escapeHTML(r.text)}</p>
+    </div>`).join("")}
+  </div>` : ""}
 
   <div class="section">
     <div class="section-header" style="color:#818cf8"><div class="dot" style="background:#818cf8"></div> Coaching</div>
@@ -211,32 +266,96 @@ function buildHTML(props: CopilotPiPProps): string {
     Stop Session
   </button>
 
-  <div class="tip">
-    Pour que cette fenetre soit invisible en partage d'ecran, partagez uniquement la fenetre Discord/Zoom (pas l'ecran entier).
-  </div>
+  <div class="pip-badge">Invisible en partage d'ecran</div>`;
+}
+
+// Build full HTML page (for window.open fallback)
+function buildFullHTML(props: CopilotPiPProps): string {
+  return `<!DOCTYPE html>
+<html>
+<head>
+<title>Tonvo Copilot</title>
+<style>${PIP_CSS}
+  .tip {
+    margin-top: 10px; padding: 8px 10px; border-radius: 8px;
+    background: rgba(99,102,241,0.08); border: 1px solid rgba(99,102,241,0.15);
+    font-size: 10px; color: #a5b4fc; line-height: 1.5; text-align: center;
+  }
+</style>
+</head>
+<body>
+  ${buildBodyContent(props)}
 </body>
 </html>`;
 }
 
 /**
- * CopilotPiP — Opens the copilot in a separate browser window (window.open).
+ * CopilotPiP — Opens the copilot in a Document Picture-in-Picture window.
  *
- * This separate window is NOT captured when sharing a specific application
- * window (Discord, Zoom, etc.) — only full-screen sharing would show it.
+ * Document PiP windows (Chrome 116+) are EXCLUDED from screen capture by the OS,
+ * making the copilot invisible during both full-screen and window-specific sharing.
  *
- * The user should share the Discord/Zoom window specifically (not full screen)
- * to keep this copilot invisible to other participants.
+ * Falls back to window.open() on browsers that don't support Document PiP.
  */
 export default function CopilotPiP(props: CopilotPiPProps) {
-  const popupRef = useRef<Window | null>(null);
+  const pipWindowRef = useRef<Window | null>(null);
   const propsRef = useRef(props);
   propsRef.current = props;
   const updateTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const modeRef = useRef<"documentPiP" | "windowOpen" | null>(null);
 
-  const openPopup = useCallback(() => {
-    // Calculate position: right side of the screen
-    const width = 340;
-    const height = 560;
+  const wireStopButton = useCallback((win: Window) => {
+    win.document.addEventListener("click", (e) => {
+      const target = e.target as HTMLElement;
+      if (target.id === "stopBtn" || target.closest("#stopBtn")) {
+        propsRef.current.onStop();
+      }
+    });
+  }, []);
+
+  // Try Document PiP first, fallback to window.open
+  const openPiP = useCallback(async () => {
+    // === Strategy 1: Document Picture-in-Picture API (Chrome 116+) ===
+    if (window.documentPictureInPicture) {
+      try {
+        const pipWindow = await window.documentPictureInPicture.requestWindow({
+          width: 400,
+          height: 640,
+        });
+
+        // Inject styles
+        const style = pipWindow.document.createElement("style");
+        style.textContent = PIP_CSS;
+        pipWindow.document.head.appendChild(style);
+
+        // Set background color on body
+        pipWindow.document.body.style.background = "#0e0e11";
+        pipWindow.document.body.style.margin = "0";
+
+        // Render content
+        pipWindow.document.body.innerHTML = buildBodyContent(propsRef.current);
+
+        wireStopButton(pipWindow);
+
+        // Listen for PiP window close
+        pipWindow.addEventListener("pagehide", () => {
+          pipWindowRef.current = null;
+          modeRef.current = null;
+          propsRef.current.onPiPStateChange?.(false);
+        });
+
+        pipWindowRef.current = pipWindow;
+        modeRef.current = "documentPiP";
+        propsRef.current.onPiPStateChange?.(true);
+        return;
+      } catch (err) {
+        console.warn("Document PiP failed, falling back to window.open:", err);
+      }
+    }
+
+    // === Strategy 2: Fallback window.open() ===
+    const width = 400;
+    const height = 640;
     const left = window.screen.availWidth - width - 20;
     const top = 60;
 
@@ -248,89 +367,93 @@ export default function CopilotPiP(props: CopilotPiPProps) {
 
     if (!popup) {
       console.warn("Popup blocked — copilot will only appear in-page");
+      propsRef.current.onPiPStateChange?.(false);
       return;
     }
 
-    popupRef.current = popup;
-
-    // Initial render
     popup.document.open();
-    popup.document.write(buildHTML(propsRef.current));
+    popup.document.write(buildFullHTML(propsRef.current));
     popup.document.close();
 
-    // Wire stop button via message
-    popup.addEventListener("click", (e) => {
-      const target = e.target as HTMLElement;
-      if (target.id === "stopBtn" || target.closest("#stopBtn")) {
-        propsRef.current.onStop();
-      }
-    });
+    wireStopButton(popup);
 
     // Clean up reference when popup is closed manually
     const checkClosed = setInterval(() => {
-      if (!popupRef.current || popupRef.current.closed) {
+      if (!pipWindowRef.current || (pipWindowRef.current as Window & { closed?: boolean }).closed) {
         clearInterval(checkClosed);
-        popupRef.current = null;
+        pipWindowRef.current = null;
+        modeRef.current = null;
+        propsRef.current.onPiPStateChange?.(false);
       }
     }, 1000);
 
-    return popup;
-  }, []);
+    pipWindowRef.current = popup;
+    modeRef.current = "windowOpen";
+    propsRef.current.onPiPStateChange?.(true);
+  }, [wireStopButton]);
 
-  // Open popup when active becomes true
+  // Open PiP when active becomes true
   useEffect(() => {
     if (props.active) {
-      if (!popupRef.current || popupRef.current.closed) {
-        openPopup();
+      const win = pipWindowRef.current;
+      const isClosed = !win || (modeRef.current === "windowOpen" && (win as Window & { closed?: boolean }).closed);
+      if (isClosed) {
+        openPiP();
       }
     }
-    if (!props.active && popupRef.current && !popupRef.current.closed) {
-      popupRef.current.close();
-      popupRef.current = null;
+    if (!props.active && pipWindowRef.current) {
+      const win = pipWindowRef.current;
+      if (modeRef.current === "windowOpen") {
+        (win as Window & { close: () => void }).close();
+      } else if (modeRef.current === "documentPiP") {
+        win.close();
+      }
+      pipWindowRef.current = null;
+      modeRef.current = null;
+      props.onPiPStateChange?.(false);
     }
-  }, [props.active, openPopup]);
+  }, [props.active, openPiP]);
 
-  // Update popup content every second (for timer) + when key data changes
+  // Update content when props change
   useEffect(() => {
     if (!props.active) return;
-
-    // Update on every meaningful change
-    const popup = popupRef.current;
-    if (!popup || popup.closed) return;
+    const win = pipWindowRef.current;
+    if (!win) return;
 
     try {
-      popup.document.open();
-      popup.document.write(buildHTML(props));
-      popup.document.close();
-
-      // Re-wire stop button
-      popup.addEventListener("click", (e) => {
-        const target = e.target as HTMLElement;
-        if (target.id === "stopBtn" || target.closest("#stopBtn")) {
-          propsRef.current.onStop();
-        }
-      });
+      if (modeRef.current === "documentPiP") {
+        // Document PiP: update body innerHTML directly (styles persist)
+        win.document.body.innerHTML = buildBodyContent(props);
+        wireStopButton(win);
+      } else if (modeRef.current === "windowOpen") {
+        // window.open: rewrite entire document
+        win.document.open();
+        win.document.write(buildFullHTML(props));
+        win.document.close();
+        wireStopButton(win);
+      }
     } catch {
-      popupRef.current = null;
+      pipWindowRef.current = null;
+      modeRef.current = null;
     }
   }, [
     props.active, props.coachingTip, props.liveInsight, props.suggestion,
-    props.qualityScore, props.engagementScore, props.elapsed,
-    props.signals.length, props.speakerBalance, props.currentTone,
-    props.classification,
+    props.suggestedResponses, props.qualityScore, props.engagementScore,
+    props.elapsed, props.signals.length, props.speakerBalance,
+    props.currentTone, props.classification, wireStopButton,
   ]);
 
-  // Close popup on unmount
+  // Close on unmount
   useEffect(() => {
     return () => {
       if (updateTimerRef.current) clearInterval(updateTimerRef.current);
-      if (popupRef.current && !popupRef.current.closed) {
-        popupRef.current.close();
-        popupRef.current = null;
+      if (pipWindowRef.current) {
+        try { pipWindowRef.current.close(); } catch {}
+        pipWindowRef.current = null;
+        modeRef.current = null;
       }
     };
   }, []);
 
-  // Renders nothing — manages the external window only
   return null;
 }

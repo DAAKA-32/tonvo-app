@@ -25,6 +25,12 @@ export interface SpeakerSegment {
   end: number;
 }
 
+export interface SuggestedResponse {
+  text: string;
+  intent: string;
+  label: string;
+}
+
 export interface ToneResult {
   tone: Tone;
   confidence: number;
@@ -38,6 +44,7 @@ export interface ToneResult {
   liveInsight: string;
   engagementScore: number;
   responseDelay: "fast" | "normal" | "slow" | "silence";
+  suggestedResponses?: SuggestedResponse[];
   speakerDynamics?: {
     dominantSpeaker: string;
     balanceRatio: number; // 0-1, 0.5 = perfectly balanced

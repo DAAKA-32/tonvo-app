@@ -26,6 +26,7 @@ const FALLBACK_ANALYSIS = {
   liveInsight: "",
   engagementScore: 50,
   responseDelay: "normal" as const,
+  suggestedResponses: [],
 };
 
 export async function POST(req: NextRequest) {
@@ -95,6 +96,11 @@ export async function POST(req: NextRequest) {
 - "liveInsight": a brief readable insight about what is happening in the conversation right now (1 sentence). If multiple speakers are detected, comment on the interaction dynamics.
 - "engagementScore": 0-100 how engaged/interested the OTHER party seems (based on their responses, questions, and participation). If only one speaker is detected, estimate based on available cues.
 - "responseDelay": estimate based on speech patterns: "fast" (quick back-and-forth), "normal", "slow" (long pauses, filler words), "silence" (very sparse speech)
+- "suggestedResponses": array of exactly 3 objects, each with:
+  - "text": a ready-to-say response phrase (1-2 sentences) the user can speak verbatim right now. Must be natural, contextual, and adapted to the conversation tone and domain.
+  - "intent": one of "empathize", "redirect", "close", "probe", "agree", "challenge", "clarify", "deflect"
+  - "label": a 2-3 word label describing the approach (e.g. "Show empathy", "Ask deeper", "Redirect topic", "Close the deal")
+  Each response must be distinct in strategy. Prioritize the most impactful response first. These are the KEY deliverable — they must sound human, not robotic.
 - "speakerDynamics": object with:
   - "dominantSpeaker": which speaker is talking more ("Speaker 1", "Speaker 2", or "balanced")
   - "balanceRatio": 0 to 1 (0.5 = perfectly balanced, 0 = Speaker 1 only, 1 = Speaker 2 only)
@@ -136,11 +142,26 @@ Only return valid JSON. No markdown, no explanation.${contextBlock}`,
     analysis.liveInsight = typeof analysis.liveInsight === "string" ? analysis.liveInsight : "";
     analysis.signalLabel = typeof analysis.signalLabel === "string" ? analysis.signalLabel : "";
 
+    // Validate suggestedResponses
+    if (Array.isArray(analysis.suggestedResponses)) {
+      analysis.suggestedResponses = analysis.suggestedResponses
+        .filter((r: unknown) => r && typeof r === "object" && typeof (r as Record<string, unknown>).text === "string")
+        .slice(0, 3)
+        .map((r: Record<string, unknown>) => ({
+          text: String(r.text),
+          intent: typeof r.intent === "string" ? r.intent : "clarify",
+          label: typeof r.label === "string" ? r.label : "Suggestion",
+        }));
+    } else {
+      analysis.suggestedResponses = [];
+    }
+
     // Strip Pro-only features for free users
     if (!planFeatures.coachingTips) analysis.coachingTip = "";
     if (!planFeatures.liveInsight) analysis.liveInsight = "";
     if (!planFeatures.signalDetection) { analysis.signal = "none"; analysis.signalLabel = ""; }
     if (!planFeatures.speakerBalance) delete analysis.speakerDynamics;
+    if (!planFeatures.coachingTips) analysis.suggestedResponses = [];
 
     return NextResponse.json(analysis);
   } catch (error) {
