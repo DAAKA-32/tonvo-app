@@ -86,6 +86,8 @@ export class AudioCaptureService {
           displayMediaOptions.systemAudio = "include";
           // preferCurrentTab: false ensures user can pick any screen/window
           displayMediaOptions.preferCurrentTab = false;
+          // Exclude Tonvo tab from the screen-share picker (Chrome 107+, ignored elsewhere)
+          displayMediaOptions.selfBrowserSurface = "exclude";
         }
 
         displayStream = await navigator.mediaDevices.getDisplayMedia(
@@ -191,13 +193,20 @@ export class AudioCaptureService {
       }
     };
 
-    this.mediaRecorder.start(5000);
+    // Record in 10-second chunks to give Whisper more context per call
+    // (reduces fragmentation: fewer cuts mid-sentence)
+    this.mediaRecorder.start(10000);
 
     this.intervalId = setInterval(() => {
       if (this.audioChunks.length > 0 && !this.sending) {
+        // Skip sending if audio level is very low (silence) — accumulate until speech resumes
+        // This prevents sending silence-only chunks that produce hallucinations
+        if (this.audioLevel < 0.01 && this.audioChunks.length < 3) {
+          return; // Wait for speech or until buffer is large enough (30s max)
+        }
         this.sendChunks();
       }
-    }, 5500);
+    }, 10500);
   }
 
   /** Stop only the screen capture (video tracks) while keeping audio running. */

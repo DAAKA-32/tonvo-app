@@ -18,6 +18,7 @@ import SmartCopilotOverlay, { type PrepData } from "@/components/SmartCopilotOve
 import CopilotPiP, { type CopilotPiPHandle } from "@/components/CopilotPiP";
 import UpgradePrompt from "@/components/UpgradePrompt";
 import { usePlan } from "@/hooks/usePlan";
+import { useParticipants } from "@/hooks/useParticipants";
 import type {
   Tone,
   TranscriptSegment,
@@ -171,9 +172,16 @@ export default function SessionPage() {
   // Detected question from other speaker
   const [detectedQuestion, setDetectedQuestion] = useState<DetectedQuestion | null>(null);
 
-  // Track whether PiP window is open — hides in-page overlay to prevent screen-share visibility
+  // Track whether PiP window is open — NO in-page overlay during live sessions (screen-share invisible)
   const [pipOpen, setPipOpen] = useState(false);
+  const [copilotMode, setCopilotMode] = useState<"none" | "documentPiP" | "popup" | "failed">("none");
   const copilotPiPRef = useRef<CopilotPiPHandle>(null);
+
+  // Deduplication: track last segment text to detect overlapping transcriptions
+  const lastSegmentText = useRef<string>("");
+
+  // Participant tracking from speaker diarization
+  const { participants, updateFromSegments: updateParticipants, reset: resetParticipants } = useParticipants();
 
   // Rolling conversation summary -- gives AI full context without sending all segments
   const conversationSummary = useRef<string>("");
@@ -455,8 +463,10 @@ export default function SessionPage() {
       if (detectedLanguage) formData.append("language", detectedLanguage);
       const transcribeRes = await authFetchFormData("/api/transcribe", formData, { method: "POST" });
       const transcribeData = await transcribeRes.json();
-      const text: string = transcribeData.text;
+      let text: string = transcribeData.text;
       const speakerSegs: SpeakerSegment[] = transcribeData.speakerSegments || [];
+      // Update participant tracking from detected speakers
+      if (speakerSegs.length > 0) updateParticipants(speakerSegs);
       // Store detected language for subsequent chunks
       if (transcribeData.language && !detectedLanguage) {
         setDetectedLanguage(transcribeData.language);
@@ -472,6 +482,33 @@ export default function SessionPage() {
         consecutiveSilenceCount.current += 1;
         return;
       }
+
+      // --- Deduplication: skip near-duplicate or overlapping transcriptions ---
+      const prevText = lastSegmentText.current;
+      if (prevText) {
+        const normalize = (s: string) => s.toLowerCase().replace(/[^a-z0-9\u00C0-\u024F]/g, "");
+        const normNew = normalize(text);
+        const normPrev = normalize(prevText);
+        // Skip if identical or if previous fully contains the new chunk
+        if (normNew === normPrev || (normNew.length > 5 && normPrev.includes(normNew))) {
+          setProcessing(false);
+          if (processingToastId.current) { toast.dismiss(processingToastId.current); processingToastId.current = null; }
+          return;
+        }
+        // Trim overlapping prefix: chunk N+1 may repeat the tail of chunk N
+        if (normNew.length > 20 && normPrev.length > 20) {
+          const maxOverlap = Math.min(normPrev.length, Math.floor(normNew.length * 0.6));
+          for (let len = maxOverlap; len >= 10; len--) {
+            if (normNew.startsWith(normPrev.slice(-len))) {
+              const ratio = len / normNew.length;
+              const trimmed = text.slice(Math.round(ratio * text.length)).trim();
+              if (trimmed.length > 5) { text = trimmed; }
+              break;
+            }
+          }
+        }
+      }
+      lastSegmentText.current = text;
 
       // Reset silence counter on valid speech
       consecutiveSilenceCount.current = 0;
@@ -624,11 +661,13 @@ export default function SessionPage() {
       setQualityScore(0); setEngagementScore(0); setScreenAnalysis(null); setScreenAnalysisCompleted(false);
       setScreenSummary(null); screenSummaryRef.current = null; screenAnalysisHistory.current = [];
       setClassification("neutral"); setCoachingTip(""); setLiveInsight(""); setResponseDelay("normal"); setSpeakerBalance(undefined);
+      resetParticipants();
       setActiveTab("insights");
       conversationSummary.current = "";
       unsummarizedSegments.current = [];
       summaryUpdatePending.current = false;
       consecutiveSilenceCount.current = 0;
+      lastSegmentText.current = "";
       screenStableCount.current = 0;
       screenAnalysisStartTime.current = Date.now();
       setAnalysisStatus("running");
@@ -666,6 +705,22 @@ export default function SessionPage() {
       }
     }
   }
+
+  // Handle PiP state changes with mode-specific toasts
+  const handlePiPStateChange = useCallback((isOpen: boolean, mode?: "documentPiP" | "popup" | "failed") => {
+    setPipOpen(isOpen);
+    setCopilotMode(isOpen ? (mode || "documentPiP") : (mode === "failed" ? "failed" : "none"));
+
+    if (isOpen && mode === "documentPiP") {
+      toast.show("AI Copilot running — invisible to screen share.", { type: "success", duration: 4000 });
+    } else if (isOpen && mode === "popup") {
+      toast.show("Copilot in a separate window. Tip: share a specific window (not entire screen) to keep it hidden.", { type: "info", duration: 8000 });
+    } else if (!isOpen && mode === "failed") {
+      toast.show("Copilot window blocked by browser. Allow popups for this site, or use Chrome for invisible PiP.", { type: "error", duration: 10000 });
+    } else if (!isOpen && isRecording) {
+      toast.show("Copilot window closed. Reopen from session controls.", { type: "info", duration: 5000 });
+    }
+  }, [toast, isRecording]);
 
   async function stopSession() {
     if (screenAnalysisTimer.current) { clearTimeout(screenAnalysisTimer.current); screenAnalysisTimer.current = null; }
@@ -1369,26 +1424,48 @@ export default function SessionPage() {
                 </div>
               ) : (
                 <div className="divide-y" style={{ borderColor: "var(--color-border)" }}>
-                  {segments.map((seg, i) => (
+                  {/* Merge consecutive segments from the same speaker for cleaner display */}
+                  {segments.reduce<{ speaker?: string; texts: string[]; tone: TranscriptSegment["tone"]; timestamp: number; signals: Array<{ signal: ConversationSignal; label: string }> }[]>((merged, seg) => {
+                    const last = merged[merged.length - 1];
+                    if (last && last.speaker === seg.speaker && seg.timestamp - last.timestamp < 30000) {
+                      // Same speaker within 30s — merge texts
+                      last.texts.push(seg.text);
+                      last.tone = seg.tone; // Keep latest tone
+                      if (seg.tone.signal && seg.tone.signal !== "none") {
+                        last.signals.push({ signal: seg.tone.signal, label: seg.tone.signalLabel || SIGNAL_CONFIG[seg.tone.signal].label });
+                      }
+                    } else {
+                      merged.push({
+                        speaker: seg.speaker,
+                        texts: [seg.text],
+                        tone: seg.tone,
+                        timestamp: seg.timestamp,
+                        signals: seg.tone.signal && seg.tone.signal !== "none" ? [{ signal: seg.tone.signal, label: seg.tone.signalLabel || SIGNAL_CONFIG[seg.tone.signal].label }] : [],
+                      });
+                    }
+                    return merged;
+                  }, []).map((group, i) => (
                     <div key={i} className="p-4 flex items-start gap-4 segment-enter">
-                      <ToneIndicator tone={seg.tone.tone} size="sm" showLabel={false} />
+                      <ToneIndicator tone={group.tone.tone} size="sm" showLabel={false} />
                       <div className="flex-1">
-                        {seg.tone.signal && seg.tone.signal !== "none" && (
-                          <div className="mb-1">
-                            <span className="text-xs px-2 py-0.5 rounded font-medium" style={{ backgroundColor: SIGNAL_CONFIG[seg.tone.signal].bg, color: SIGNAL_CONFIG[seg.tone.signal].color }}>
-                              {seg.tone.signalLabel || SIGNAL_CONFIG[seg.tone.signal].label}
-                            </span>
+                        {group.signals.length > 0 && (
+                          <div className="mb-1 flex flex-wrap gap-1">
+                            {group.signals.map((s, si) => (
+                              <span key={si} className="text-xs px-2 py-0.5 rounded font-medium" style={{ backgroundColor: SIGNAL_CONFIG[s.signal].bg, color: SIGNAL_CONFIG[s.signal].color }}>
+                                {s.label}
+                              </span>
+                            ))}
                           </div>
                         )}
                         <p className="text-sm m-0" style={{ color: "var(--color-text)" }}>
-                          {seg.speaker && <span className="text-xs font-semibold mr-2" style={{ color: seg.speaker === "Speaker 1" ? "#818cf8" : "var(--color-accent-light)" }}>{seg.speaker === "Speaker 1" ? t("copilot.you") : seg.speaker === "Speaker 2" ? t("copilot.them") : seg.speaker}:</span>}
-                          {seg.text}
+                          {group.speaker && <span className="text-xs font-semibold mr-2" style={{ color: group.speaker === "Speaker 1" ? "#818cf8" : "var(--color-accent-light)" }}>{group.speaker === "Speaker 1" ? t("copilot.you") : group.speaker === "Speaker 2" ? t("copilot.them") : group.speaker}:</span>}
+                          {group.texts.join(" ")}
                         </p>
                         <div className="flex items-center gap-3 mt-1">
-                          <span className="text-xs" style={{ color: "var(--color-text-muted)" }}>{new Date(seg.timestamp).toLocaleTimeString()}</span>
-                          {seg.tone.classification && (
-                            <span className="text-xs px-1.5 py-0.5 rounded" style={{ backgroundColor: CLASSIFICATION_CONFIG[seg.tone.classification].bg, color: CLASSIFICATION_CONFIG[seg.tone.classification].color }}>
-                              {CLASSIFICATION_CONFIG[seg.tone.classification].label}
+                          <span className="text-xs" style={{ color: "var(--color-text-muted)" }}>{new Date(group.timestamp).toLocaleTimeString()}</span>
+                          {group.tone.classification && (
+                            <span className="text-xs px-1.5 py-0.5 rounded" style={{ backgroundColor: CLASSIFICATION_CONFIG[group.tone.classification].bg, color: CLASSIFICATION_CONFIG[group.tone.classification].color }}>
+                              {CLASSIFICATION_CONFIG[group.tone.classification].label}
                             </span>
                           )}
                         </div>
@@ -1444,20 +1521,13 @@ export default function SessionPage() {
       <CopilotPiP
         ref={copilotPiPRef}
         active={isRecording && can("copilotPiP")}
-        coachingTip={coachingTip}
-        liveInsight={liveInsight}
         suggestion={currentSuggestion}
         suggestedResponses={suggestedResponses}
         detectedQuestion={detectedQuestion}
-        signals={signals}
-        qualityScore={qualityScore}
-        engagementScore={engagementScore}
-        speakerBalance={speakerBalance}
         elapsed={elapsed}
-        currentTone={currentTone}
-        classification={classification}
+        participants={participants}
         onStop={stopSession}
-        onPiPStateChange={setPipOpen}
+        onPiPStateChange={handlePiPStateChange}
       />
 
       {/* Smart Copilot Overlay — Prep mode (before call) */}
@@ -1470,24 +1540,25 @@ export default function SessionPage() {
         />
       )}
 
-      {/* Smart Copilot Overlay — Live mode (during call), fallback when PiP is blocked or closed */}
-      {isRecording && can("copilotOverlay") && !pipOpen && (
-        <SmartCopilotOverlay
-          mode="live"
-          coachingTip={coachingTip}
-          liveInsight={liveInsight}
-          suggestion={currentSuggestion}
-          suggestedResponses={suggestedResponses}
-          detectedQuestion={detectedQuestion}
-          signals={signals}
-          qualityScore={qualityScore}
-          engagementScore={engagementScore}
-          speakerBalance={speakerBalance}
-          elapsed={elapsed}
-          currentTone={currentTone}
-          classification={classification}
-          onStop={stopSession}
-        />
+      {/* Copilot status — NO in-page coaching during live session (invisible to screen share) */}
+      {isRecording && can("copilotPiP") && pipOpen && (
+        <div className="copilot-status-pill">
+          <div className="copilot-status-pill__pulse" />
+          <span>AI Copilot active</span>
+          <span className="copilot-status-pill__mode">
+            {copilotMode === "documentPiP" ? "Invisible to screen share" : "Separate window"}
+          </span>
+        </div>
+      )}
+
+      {/* Reopen button — shown when PiP was closed mid-session */}
+      {isRecording && can("copilotPiP") && !pipOpen && (
+        <button className="copilot-reopen-btn" onClick={() => copilotPiPRef.current?.requestOpen()}>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <rect x="2" y="3" width="20" height="14" rx="2" /><line x1="8" x2="16" y1="21" y2="21" /><line x1="12" x2="12" y1="17" y2="21" />
+          </svg>
+          Reopen Copilot Window
+        </button>
       )}
     </AppShell>
   );

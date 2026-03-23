@@ -1,30 +1,24 @@
 "use client";
 
 import { useEffect, useRef, useCallback, useImperativeHandle, forwardRef } from "react";
-import type { ConversationSignal, SuggestedResponse, DetectedQuestion } from "@/types/analysis";
+import type { SuggestedResponse, DetectedQuestion } from "@/types/analysis";
+import type { Participant } from "@/hooks/useParticipants";
 
 interface CopilotSignal {
-  signal: ConversationSignal;
+  signal: string;
   label: string;
   time: number;
 }
 
 interface CopilotPiPProps {
   active: boolean;
-  coachingTip: string;
-  liveInsight: string;
   suggestion: string;
   suggestedResponses: SuggestedResponse[];
   detectedQuestion?: DetectedQuestion | null;
-  signals: CopilotSignal[];
-  qualityScore: number;
-  engagementScore: number;
-  speakerBalance?: number;
   elapsed: number;
-  currentTone: string;
-  classification: string;
   onStop: () => void;
-  onPiPStateChange?: (isOpen: boolean) => void;
+  onPiPStateChange?: (isOpen: boolean, mode?: "documentPiP" | "popup" | "failed") => void;
+  participants?: Participant[];
 }
 
 // TypeScript declarations for Document Picture-in-Picture API (Chrome 116+)
@@ -45,25 +39,10 @@ declare global {
   }
 }
 
-const SIGNAL_COLORS: Record<string, { color: string; bg: string }> = {
-  objection:   { color: "#f87171", bg: "rgba(248,113,113,0.15)" },
-  question:    { color: "#fbbf24", bg: "rgba(251,191,36,0.15)" },
-  opportunity: { color: "#34d399", bg: "rgba(52,211,153,0.15)" },
-  hesitation:  { color: "#fbbf24", bg: "rgba(251,191,36,0.15)" },
-  agreement:   { color: "#34d399", bg: "rgba(52,211,153,0.15)" },
-  key_point:   { color: "#c8c8d8", bg: "rgba(200,200,216,0.15)" },
-};
-
 function formatTime(secs: number) {
   const m = Math.floor(secs / 60).toString().padStart(2, "0");
   const s = (secs % 60).toString().padStart(2, "0");
   return `${m}:${s}`;
-}
-
-function scoreColor(score: number) {
-  if (score >= 70) return "#34d399";
-  if (score >= 40) return "#fbbf24";
-  return "#f87171";
 }
 
 function escapeHTML(str: string): string {
@@ -98,37 +77,20 @@ const PIP_CSS = `
   @keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:0.4; } }
   .title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; }
   .timer { font-size: 11px; color: #8b8b96; font-variant-numeric: tabular-nums; }
-  .badges { display: flex; gap: 6px; align-items: center; }
-  .badge { font-size: 10px; font-weight: 600; padding: 2px 8px; border-radius: 6px; text-transform: capitalize; }
-  .scores {
-    display: flex; align-items: center; justify-content: center; gap: 20px;
-    padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.06); margin-bottom: 12px;
-  }
-  .score-item { text-align: center; }
-  .score-label { font-size: 9px; text-transform: uppercase; letter-spacing: 0.05em; color: #8b8b96; display: block; margin-bottom: 2px; }
-  .score-value { font-size: 22px; font-weight: 700; line-height: 1; }
-  .divider { width: 1px; height: 28px; background: rgba(255,255,255,0.06); }
-  .section { margin-bottom: 12px; }
-  .section-header {
-    display: flex; align-items: center; gap: 5px; margin-bottom: 5px;
-    font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em;
-  }
+  .detected-question { border-radius: 10px; padding: 8px 10px; margin-bottom: 10px; }
+  .dq-header { display: flex; align-items: center; gap: 6px; margin-bottom: 4px; }
+  .dq-speaker { font-size: 10px; font-weight: 700; }
+  .dq-urgent { font-size: 8px; background: rgba(248,113,113,0.15); color: #f87171; padding: 1px 6px; border-radius: 4px; font-weight: 600; }
+  .dq-text { font-size: 12px; color: #e4e4e7; line-height: 1.4; font-style: italic; }
   .dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
-  .section-text { font-size: 12.5px; line-height: 1.55; color: #e4e4e7; }
-  .muted { color: #8b8b96; font-style: italic; }
-  .balance-bar {
-    display: flex; height: 6px; border-radius: 3px; overflow: hidden; gap: 1px;
-    background: rgba(255,255,255,0.04); margin-top: 4px;
+  .quick-tip {
+    display: flex; align-items: flex-start; gap: 6px; padding: 8px 10px; border-radius: 8px; margin-top: 8px;
+    background: rgba(52,211,153,0.06); border: 1px solid rgba(52,211,153,0.1); font-size: 11px; line-height: 1.5; color: #34d399;
   }
-  .balance-you { background: #818cf8; border-radius: 3px; transition: width 0.5s; }
-  .balance-them { background: #c8c8d8; border-radius: 3px; transition: width 0.5s; }
-  .balance-labels { display: flex; justify-content: space-between; font-size: 9px; color: #8b8b96; }
-  .signals { display: flex; flex-wrap: wrap; gap: 4px; }
-  .signal-badge {
-    display: flex; align-items: center; gap: 4px;
-    padding: 3px 8px; border-radius: 6px; font-size: 10px; font-weight: 500;
+  .empty {
+    display: flex; flex-direction: column; align-items: center; gap: 8px;
+    padding: 24px 16px; color: #8b8b96; font-size: 12px; text-align: center;
   }
-  .signal-dot { width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0; }
   .stop-btn {
     display: flex; align-items: center; justify-content: center; gap: 6px;
     width: 100%; padding: 9px; border: none; border-radius: 8px;
@@ -163,18 +125,65 @@ const PIP_CSS = `
     letter-spacing: 0.06em; color: #8b8b96;
   }
   .response-text { font-size: 13px; line-height: 1.5; color: #fafafa; }
+  .badges { display: flex; gap: 4px; }
+  .badge {
+    font-size: 9px; font-weight: 600; padding: 2px 8px; border-radius: 6px;
+    text-transform: capitalize;
+  }
+  .scores {
+    display: flex; align-items: center; justify-content: center; gap: 16px;
+    padding: 8px 0; margin-bottom: 10px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .score-item { text-align: center; }
+  .score-label { display: block; font-size: 8px; text-transform: uppercase; letter-spacing: 0.06em; color: #8b8b96; margin-bottom: 2px; }
+  .score-value { font-size: 18px; font-weight: 700; }
+  .divider { width: 1px; height: 24px; background: rgba(255,255,255,0.06); }
+  .section { margin-bottom: 10px; }
+  .section-header {
+    display: flex; align-items: center; gap: 5px; margin-bottom: 4px;
+    font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em;
+  }
+  .section-text { font-size: 12px; line-height: 1.5; color: #e4e4e7; }
+  .section-text.muted { color: #5a5a64; font-style: italic; }
+  .balance-labels { display: flex; justify-content: space-between; font-size: 9px; color: #8b8b96; margin-bottom: 4px; }
+  .balance-bar { display: flex; gap: 1px; height: 4px; border-radius: 2px; overflow: hidden; }
+  .balance-you { background: #818cf8; border-radius: 2px; }
+  .balance-them { background: #c8c8d8; border-radius: 2px; }
+  .signals { display: flex; flex-wrap: wrap; gap: 4px; }
+  .signal-badge {
+    display: flex; align-items: center; gap: 4px; padding: 3px 8px; border-radius: 6px;
+    font-size: 9px; font-weight: 500;
+  }
+  .signal-dot { width: 4px; height: 4px; border-radius: 50%; }
 `;
+
+const SIGNAL_COLORS: Record<string, { color: string; bg: string }> = {
+  objection:   { color: "#f87171", bg: "rgba(248,113,113,0.15)" },
+  question:    { color: "#fbbf24", bg: "rgba(251,191,36,0.15)" },
+  opportunity: { color: "#34d399", bg: "rgba(52,211,153,0.15)" },
+  hesitation:  { color: "#fbbf24", bg: "rgba(251,191,36,0.15)" },
+  agreement:   { color: "#34d399", bg: "rgba(52,211,153,0.15)" },
+  key_point:   { color: "#c8c8d8", bg: "rgba(200,200,216,0.15)" },
+};
+
+function scoreColor(score: number) {
+  if (score >= 70) return "#34d399";
+  if (score >= 40) return "#fbbf24";
+  return "#f87171";
+}
 
 const INTENT_ICONS: Record<string, string> = {
   empathize: "💬", redirect: "↩", close: "🎯", probe: "🔍",
   agree: "✓", challenge: "⚡", clarify: "💡", deflect: "🛡",
 };
 
-function buildBodyContent(props: CopilotPiPProps): string {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function buildBodyContent(props: Record<string, any>, windowMode: "documentPiP" | "windowOpen" = "documentPiP"): string {
   const {
-    coachingTip, liveInsight, suggestion, suggestedResponses, detectedQuestion, signals,
-    qualityScore, engagementScore, speakerBalance,
-    elapsed, currentTone, classification,
+    coachingTip = "", liveInsight = "", suggestion = "", suggestedResponses = [], detectedQuestion = null, signals = [],
+    qualityScore = 0, engagementScore = 0, speakerBalance,
+    elapsed = 0, currentTone = "neutral", classification = "neutral",
   } = props;
 
   const recentSignals = signals.slice(-4);
@@ -224,7 +233,7 @@ function buildBodyContent(props: CopilotPiPProps): string {
   ${suggestedResponses && suggestedResponses.length > 0 ? `
   <div class="responses-section">
     <div class="responses-header"><div class="dot" style="background:#34d399"></div> Say This</div>
-    ${suggestedResponses.map(r => `
+    ${suggestedResponses.map((r: {intent: string; label: string; text: string}) => `
     <div class="response-card">
       <div class="response-meta">
         <span class="response-icon">${INTENT_ICONS[r.intent] || "💬"}</span>
@@ -264,7 +273,7 @@ function buildBodyContent(props: CopilotPiPProps): string {
   <div class="section">
     <div class="section-header" style="color:#fbbf24"><div class="dot" style="background:#fbbf24"></div> Signals</div>
     <div class="signals">
-      ${recentSignals.map(s => {
+      ${recentSignals.map((s: {signal: string; label: string}) => {
         const cfg = SIGNAL_COLORS[s.signal] || SIGNAL_COLORS.key_point;
         return `<div class="signal-badge" style="background:${cfg.bg};color:${cfg.color}"><span class="signal-dot" style="background:${cfg.color}"></span><span>${escapeHTML(s.label)}</span></div>`;
       }).join("")}
@@ -276,11 +285,12 @@ function buildBodyContent(props: CopilotPiPProps): string {
     Stop Session
   </button>
 
-  <div class="pip-badge">Invisible en partage d'ecran</div>`;
+  <div class="pip-badge">${windowMode === "documentPiP" ? "Invisible en partage d'ecran" : "Partagez une fenetre specifique pour rester invisible"}</div>`;
 }
 
 // Build full HTML page (for window.open fallback)
-function buildFullHTML(props: CopilotPiPProps): string {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function buildFullHTML(props: Record<string, any>): string {
   return `<!DOCTYPE html>
 <html>
 <head>
@@ -294,7 +304,7 @@ function buildFullHTML(props: CopilotPiPProps): string {
 </style>
 </head>
 <body>
-  ${buildBodyContent(props)}
+  ${buildBodyContent(props, "windowOpen")}
 </body>
 </html>`;
 }
@@ -362,7 +372,7 @@ const CopilotPiP = forwardRef<CopilotPiPHandle, CopilotPiPProps>(function Copilo
 
         pipWindowRef.current = pipWindow;
         modeRef.current = "documentPiP";
-        propsRef.current.onPiPStateChange?.(true);
+        propsRef.current.onPiPStateChange?.(true, "documentPiP");
         return;
       } catch (err) {
         console.warn("Document PiP failed, falling back to window.open:", err);
@@ -382,8 +392,8 @@ const CopilotPiP = forwardRef<CopilotPiPHandle, CopilotPiPProps>(function Copilo
     );
 
     if (!popup) {
-      console.warn("Popup blocked — copilot will only appear in-page");
-      propsRef.current.onPiPStateChange?.(false);
+      console.warn("Popup blocked — no copilot window available");
+      propsRef.current.onPiPStateChange?.(false, "failed");
       return;
     }
 
@@ -405,7 +415,7 @@ const CopilotPiP = forwardRef<CopilotPiPHandle, CopilotPiPProps>(function Copilo
 
     pipWindowRef.current = popup;
     modeRef.current = "windowOpen";
-    propsRef.current.onPiPStateChange?.(true);
+    propsRef.current.onPiPStateChange?.(true, "popup");
   }, [wireStopButton]);
 
   // Expose requestOpen to parent — MUST be called from a user gesture (click)
@@ -447,10 +457,8 @@ const CopilotPiP = forwardRef<CopilotPiPHandle, CopilotPiPProps>(function Copilo
       modeRef.current = null;
     }
   }, [
-    props.active, props.coachingTip, props.liveInsight, props.suggestion,
-    props.suggestedResponses, props.qualityScore, props.engagementScore,
-    props.elapsed, props.signals.length, props.speakerBalance,
-    props.currentTone, props.classification, wireStopButton,
+    props.active, props.suggestion, props.suggestedResponses,
+    props.elapsed, props.participants, wireStopButton,
   ]);
 
   // Close on unmount
