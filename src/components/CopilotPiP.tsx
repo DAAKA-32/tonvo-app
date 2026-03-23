@@ -4,12 +4,6 @@ import { useEffect, useRef, useCallback, useImperativeHandle, forwardRef } from 
 import type { SuggestedResponse, DetectedQuestion } from "@/types/analysis";
 import type { Participant } from "@/hooks/useParticipants";
 
-interface CopilotSignal {
-  signal: string;
-  label: string;
-  time: number;
-}
-
 interface CopilotPiPProps {
   active: boolean;
   suggestion: string;
@@ -125,76 +119,22 @@ const PIP_CSS = `
     letter-spacing: 0.06em; color: #8b8b96;
   }
   .response-text { font-size: 13px; line-height: 1.5; color: #fafafa; }
-  .badges { display: flex; gap: 4px; }
-  .badge {
-    font-size: 9px; font-weight: 600; padding: 2px 8px; border-radius: 6px;
-    text-transform: capitalize;
-  }
-  .scores {
-    display: flex; align-items: center; justify-content: center; gap: 16px;
-    padding: 8px 0; margin-bottom: 10px;
-    border-bottom: 1px solid rgba(255,255,255,0.06);
-  }
-  .score-item { text-align: center; }
-  .score-label { display: block; font-size: 8px; text-transform: uppercase; letter-spacing: 0.06em; color: #8b8b96; margin-bottom: 2px; }
-  .score-value { font-size: 18px; font-weight: 700; }
-  .divider { width: 1px; height: 24px; background: rgba(255,255,255,0.06); }
-  .section { margin-bottom: 10px; }
-  .section-header {
-    display: flex; align-items: center; gap: 5px; margin-bottom: 4px;
-    font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em;
-  }
-  .section-text { font-size: 12px; line-height: 1.5; color: #e4e4e7; }
-  .section-text.muted { color: #5a5a64; font-style: italic; }
-  .balance-labels { display: flex; justify-content: space-between; font-size: 9px; color: #8b8b96; margin-bottom: 4px; }
-  .balance-bar { display: flex; gap: 1px; height: 4px; border-radius: 2px; overflow: hidden; }
-  .balance-you { background: #818cf8; border-radius: 2px; }
-  .balance-them { background: #c8c8d8; border-radius: 2px; }
-  .signals { display: flex; flex-wrap: wrap; gap: 4px; }
-  .signal-badge {
-    display: flex; align-items: center; gap: 4px; padding: 3px 8px; border-radius: 6px;
-    font-size: 9px; font-weight: 500;
-  }
-  .signal-dot { width: 4px; height: 4px; border-radius: 50%; }
+  .participants { padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.06); margin-bottom: 10px; }
+  .participants-header { display: flex; align-items: center; gap: 5px; margin-bottom: 6px; font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #8b8b96; }
+  .participants-items { display: flex; flex-wrap: wrap; gap: 6px; }
+  .participant-chip { display: flex; align-items: center; gap: 4px; padding: 3px 8px; border-radius: 8px; font-size: 10px; font-weight: 500; }
+  .participant-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
 `;
 
-const SIGNAL_COLORS: Record<string, { color: string; bg: string }> = {
-  objection:   { color: "#f87171", bg: "rgba(248,113,113,0.15)" },
-  question:    { color: "#fbbf24", bg: "rgba(251,191,36,0.15)" },
-  opportunity: { color: "#34d399", bg: "rgba(52,211,153,0.15)" },
-  hesitation:  { color: "#fbbf24", bg: "rgba(251,191,36,0.15)" },
-  agreement:   { color: "#34d399", bg: "rgba(52,211,153,0.15)" },
-  key_point:   { color: "#c8c8d8", bg: "rgba(200,200,216,0.15)" },
-};
-
-function scoreColor(score: number) {
-  if (score >= 70) return "#34d399";
-  if (score >= 40) return "#fbbf24";
-  return "#f87171";
-}
+const AVATAR_COLORS_PIP = ["#818cf8", "#34d399", "#fb923c", "#f87171", "#38bdf8", "#c084fc"];
 
 const INTENT_ICONS: Record<string, string> = {
   empathize: "💬", redirect: "↩", close: "🎯", probe: "🔍",
   agree: "✓", challenge: "⚡", clarify: "💡", deflect: "🛡",
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function buildBodyContent(props: Record<string, any>, windowMode: "documentPiP" | "windowOpen" = "documentPiP"): string {
-  const {
-    coachingTip = "", liveInsight = "", suggestion = "", suggestedResponses = [], detectedQuestion = null, signals = [],
-    qualityScore = 0, engagementScore = 0, speakerBalance,
-    elapsed = 0, currentTone = "neutral", classification = "neutral",
-  } = props;
-
-  const recentSignals = signals.slice(-4);
-  const youPct = speakerBalance != null ? Math.round(speakerBalance * 100) : null;
-
-  const toneColors: Record<string, string> = {
-    positive: "#34d399", neutral: "#fbbf24", negative: "#f87171", hesitant: "#fb923c",
-  };
-  const classColors: Record<string, string> = {
-    very_positive: "#34d399", positive: "#6ee7b7", neutral: "#fbbf24", awkward: "#fb923c", negative: "#f87171",
-  };
+function buildBodyContent(props: CopilotPiPProps): string {
+  const { suggestion = "", suggestedResponses = [], detectedQuestion = null, elapsed = 0, participants = [] } = props;
 
   return `
   <div class="header">
@@ -203,32 +143,30 @@ function buildBodyContent(props: Record<string, any>, windowMode: "documentPiP" 
       <span class="title">AI Copilot</span>
       <span class="timer">${formatTime(elapsed)}</span>
     </div>
-    <div class="badges">
-      <span class="badge" style="background:${(toneColors[currentTone] || "#fbbf24") + "22"};color:${toneColors[currentTone] || "#fbbf24"}">${currentTone}</span>
-      ${classification && classification !== "neutral" ? `<span class="badge" style="background:${(classColors[classification] || "#fbbf24") + "22"};color:${classColors[classification] || "#fbbf24"}">${classification.replace("_", " ")}</span>` : ""}
-    </div>
   </div>
 
   ${detectedQuestion && detectedQuestion.text ? `
-  <div class="detected-question" style="background:${detectedQuestion.urgency === "high" ? "rgba(248,113,113,0.08)" : "rgba(251,191,36,0.06)"};border:1px solid ${detectedQuestion.urgency === "high" ? "rgba(248,113,113,0.25)" : "rgba(251,191,36,0.2)"};border-radius:10px;padding:8px 10px;margin-bottom:8px">
-    <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px">
-      <span style="font-size:10px;color:${detectedQuestion.urgency === "high" ? "#f87171" : "#fbbf24"};font-weight:700">${escapeHTML(detectedQuestion.speaker)}</span>
-      ${detectedQuestion.urgency === "high" ? '<span style="font-size:8px;background:rgba(248,113,113,0.15);color:#f87171;padding:1px 6px;border-radius:4px;font-weight:600">Respond now</span>' : ""}
+  <div class="detected-question" style="background:${detectedQuestion.urgency === "high" ? "rgba(248,113,113,0.08)" : "rgba(251,191,36,0.06)"};border:1px solid ${detectedQuestion.urgency === "high" ? "rgba(248,113,113,0.25)" : "rgba(251,191,36,0.2)"}">
+    <div class="dq-header">
+      <span class="dq-speaker" style="color:${detectedQuestion.urgency === "high" ? "#f87171" : "#fbbf24"}">${escapeHTML(detectedQuestion.speaker)}</span>
+      ${detectedQuestion.urgency === "high" ? '<span class="dq-urgent">Respond now</span>' : ""}
     </div>
-    <p style="font-size:12px;color:#e4e4e7;margin:0;line-height:1.4;font-style:italic">&ldquo;${escapeHTML(detectedQuestion.text)}&rdquo;</p>
+    <p class="dq-text">&ldquo;${escapeHTML(detectedQuestion.text)}&rdquo;</p>
   </div>` : ""}
 
-  <div class="scores">
-    <div class="score-item">
-      <span class="score-label">Quality</span>
-      <span class="score-value" style="color:${qualityScore > 0 ? scoreColor(qualityScore) : "#8b8b96"}">${qualityScore > 0 ? qualityScore : "--"}</span>
+  ${participants.length > 0 ? `
+  <div class="participants">
+    <div class="participants-header">
+      <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      ${participants.length} participant${participants.length > 1 ? "s" : ""}
     </div>
-    <div class="divider"></div>
-    <div class="score-item">
-      <span class="score-label">Engagement</span>
-      <span class="score-value" style="color:${engagementScore > 0 ? scoreColor(engagementScore) : "#8b8b96"}">${engagementScore > 0 ? engagementScore : "--"}</span>
+    <div class="participants-items">
+      ${participants.map((p: {label: string}, i: number) => {
+        const color = AVATAR_COLORS_PIP[i % AVATAR_COLORS_PIP.length];
+        return '<div class="participant-chip" style="background:' + color + '15;color:' + color + '"><span class="participant-dot" style="background:' + color + '"></span>' + escapeHTML(p.label) + '</div>';
+      }).join("")}
     </div>
-  </div>
+  </div>` : ""}
 
   ${suggestedResponses && suggestedResponses.length > 0 ? `
   <div class="responses-section">
@@ -236,48 +174,23 @@ function buildBodyContent(props: Record<string, any>, windowMode: "documentPiP" 
     ${suggestedResponses.map((r: {intent: string; label: string; text: string}) => `
     <div class="response-card">
       <div class="response-meta">
-        <span class="response-icon">${INTENT_ICONS[r.intent] || "💬"}</span>
+        <span class="response-icon">${INTENT_ICONS[r.intent] || "\u{1F4AC}"}</span>
         <span class="response-label">${escapeHTML(r.label)}</span>
       </div>
       <p class="response-text">${escapeHTML(r.text)}</p>
     </div>`).join("")}
-  </div>` : ""}
-
-  <div class="section">
-    <div class="section-header" style="color:#818cf8"><div class="dot" style="background:#818cf8"></div> Coaching</div>
-    <p class="section-text ${coachingTip ? "" : "muted"}">${coachingTip ? escapeHTML(coachingTip) : "En attente d'analyse..."}</p>
-  </div>
-
-  <div class="section">
-    <div class="section-header" style="color:#38bdf8"><div class="dot" style="background:#38bdf8"></div> Insight</div>
-    <p class="section-text ${liveInsight ? "" : "muted"}">${liveInsight ? escapeHTML(liveInsight) : "Les insights apparaitront ici..."}</p>
-  </div>
+  </div>` : `
+  <div class="empty">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#8b8b96" stroke-width="1.5" style="opacity:0.4">
+      <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+    </svg>
+    <span>Listening... suggestions will appear here</span>
+  </div>`}
 
   ${suggestion ? `
-  <div class="section">
-    <div class="section-header" style="color:#34d399"><div class="dot" style="background:#34d399"></div> Suggestion</div>
-    <p class="section-text">${escapeHTML(suggestion)}</p>
-  </div>` : ""}
-
-  ${youPct != null ? `
-  <div class="section">
-    <div class="section-header" style="color:#c8c8d8"><div class="dot" style="background:#c8c8d8"></div> Speaker Balance</div>
-    <div class="balance-labels"><span>You ${youPct}%</span><span>Them ${100 - youPct}%</span></div>
-    <div class="balance-bar">
-      <div class="balance-you" style="width:${youPct}%"></div>
-      <div class="balance-them" style="width:${100 - youPct}%"></div>
-    </div>
-  </div>` : ""}
-
-  ${recentSignals.length > 0 ? `
-  <div class="section">
-    <div class="section-header" style="color:#fbbf24"><div class="dot" style="background:#fbbf24"></div> Signals</div>
-    <div class="signals">
-      ${recentSignals.map((s: {signal: string; label: string}) => {
-        const cfg = SIGNAL_COLORS[s.signal] || SIGNAL_COLORS.key_point;
-        return `<div class="signal-badge" style="background:${cfg.bg};color:${cfg.color}"><span class="signal-dot" style="background:${cfg.color}"></span><span>${escapeHTML(s.label)}</span></div>`;
-      }).join("")}
-    </div>
+  <div class="quick-tip">
+    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#34d399" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+    <span>${escapeHTML(suggestion)}</span>
   </div>` : ""}
 
   <button class="stop-btn" id="stopBtn">
@@ -285,26 +198,19 @@ function buildBodyContent(props: Record<string, any>, windowMode: "documentPiP" 
     Stop Session
   </button>
 
-  <div class="pip-badge">${windowMode === "documentPiP" ? "Invisible en partage d'ecran" : "Partagez une fenetre specifique pour rester invisible"}</div>`;
+  <div class="pip-badge">Invisible en partage d'ecran</div>`;
 }
 
 // Build full HTML page (for window.open fallback)
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function buildFullHTML(props: Record<string, any>): string {
+function buildFullHTML(props: CopilotPiPProps): string {
   return `<!DOCTYPE html>
 <html>
 <head>
 <title>Tonvo Copilot</title>
-<style>${PIP_CSS}
-  .tip {
-    margin-top: 10px; padding: 8px 10px; border-radius: 8px;
-    background: rgba(99,102,241,0.08); border: 1px solid rgba(99,102,241,0.15);
-    font-size: 10px; color: #a5b4fc; line-height: 1.5; text-align: center;
-  }
-</style>
+<style>${PIP_CSS}</style>
 </head>
 <body>
-  ${buildBodyContent(props, "windowOpen")}
+  ${buildBodyContent(props)}
 </body>
 </html>`;
 }
