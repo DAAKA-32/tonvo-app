@@ -27,6 +27,7 @@ const FALLBACK_ANALYSIS = {
   engagementScore: 50,
   responseDelay: "normal" as const,
   suggestedResponses: [],
+  detectedQuestion: null,
 };
 
 export async function POST(req: NextRequest) {
@@ -101,6 +102,11 @@ export async function POST(req: NextRequest) {
   - "intent": one of "empathize", "redirect", "close", "probe", "agree", "challenge", "clarify", "deflect"
   - "label": a 2-3 word label describing the approach (e.g. "Show empathy", "Ask deeper", "Redirect topic", "Close the deal")
   Each response must be distinct in strategy. Prioritize the most impactful response first. These are the KEY deliverable — they must sound human, not robotic.
+- "detectedQuestion": if the OTHER party (not the user) asked a question or raised a point that needs a response, return an object with:
+  - "text": the exact question or key point detected (verbatim or close paraphrase)
+  - "speaker": who asked it (e.g. "Speaker 2", "Interviewer", "Client")
+  - "urgency": "low", "medium", or "high" based on how important it is to address immediately
+  If no question was detected, return null. This is CRITICAL — the suggestedResponses MUST directly answer this detected question when present.
 - "speakerDynamics": object with:
   - "dominantSpeaker": which speaker is talking more ("Speaker 1", "Speaker 2", or "balanced")
   - "balanceRatio": 0 to 1 (0.5 = perfectly balanced, 0 = Speaker 1 only, 1 = Speaker 2 only)
@@ -154,6 +160,18 @@ Only return valid JSON. No markdown, no explanation.${contextBlock}`,
         }));
     } else {
       analysis.suggestedResponses = [];
+    }
+
+    // Validate detectedQuestion
+    if (analysis.detectedQuestion && typeof analysis.detectedQuestion === "object") {
+      analysis.detectedQuestion = {
+        text: typeof analysis.detectedQuestion.text === "string" ? analysis.detectedQuestion.text : "",
+        speaker: typeof analysis.detectedQuestion.speaker === "string" ? analysis.detectedQuestion.speaker : "Speaker 2",
+        urgency: ["low", "medium", "high"].includes(analysis.detectedQuestion.urgency) ? analysis.detectedQuestion.urgency : "medium",
+      };
+      if (!analysis.detectedQuestion.text) analysis.detectedQuestion = null;
+    } else {
+      analysis.detectedQuestion = null;
     }
 
     // Strip Pro-only features for free users

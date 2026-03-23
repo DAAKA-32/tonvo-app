@@ -14,8 +14,8 @@ import { useToast } from "@/components/Toast";
 import ToneIndicator from "@/components/ToneIndicator";
 import AudioWave from "@/components/AudioWave";
 import SuggestionCard from "@/components/SuggestionCard";
-import SmartCopilotOverlay from "@/components/SmartCopilotOverlay";
-import CopilotPiP from "@/components/CopilotPiP";
+import SmartCopilotOverlay, { type PrepData } from "@/components/SmartCopilotOverlay";
+import CopilotPiP, { type CopilotPiPHandle } from "@/components/CopilotPiP";
 import UpgradePrompt from "@/components/UpgradePrompt";
 import { usePlan } from "@/hooks/usePlan";
 import type {
@@ -28,6 +28,7 @@ import type {
   KeyMoment,
   SpeakerSegment,
   TimelineEvent,
+  DetectedQuestion,
 } from "@/types/analysis";
 
 interface ScreenAnalysis {
@@ -162,13 +163,43 @@ export default function SessionPage() {
   const [conversationMode, setConversationMode] = useState<ConversationMode>("general");
   const [detectedLanguage, setDetectedLanguage] = useState<string | null>(null);
 
+  // Proactive copilot prep mode
+  const [prepData, setPrepData] = useState<PrepData | null>(null);
+  const [prepLoading, setPrepLoading] = useState(false);
+  const prevModeRef = useRef<string>("");
+
+  // Detected question from other speaker
+  const [detectedQuestion, setDetectedQuestion] = useState<DetectedQuestion | null>(null);
+
   // Track whether PiP window is open — hides in-page overlay to prevent screen-share visibility
   const [pipOpen, setPipOpen] = useState(false);
+  const copilotPiPRef = useRef<CopilotPiPHandle>(null);
 
   // Rolling conversation summary -- gives AI full context without sending all segments
   const conversationSummary = useRef<string>("");
   const unsummarizedSegments = useRef<Array<{ text: string; tone: string; speaker?: string; signal?: string; signalLabel?: string }>>([]);
   const summaryUpdatePending = useRef(false);
+
+  // Fetch proactive prep when mode changes and not recording
+  useEffect(() => {
+    if (isRecording || !user || !can("copilotOverlay")) return;
+    if (conversationMode === prevModeRef.current) return;
+    prevModeRef.current = conversationMode;
+
+    setPrepLoading(true);
+    setPrepData(null);
+    authFetch("/api/copilot-prep", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ mode: conversationMode, language: i18n.language }),
+    })
+      .then((r) => r.json())
+      .then((data) => {
+        if (data.greeting) setPrepData(data);
+      })
+      .catch(() => {})
+      .finally(() => setPrepLoading(false));
+  }, [conversationMode, isRecording, user, can, i18n.language]);
 
   // Analysis lifecycle
   const [analysisStatus, setAnalysisStatus] = useState<"idle" | "running" | "completed">("idle");
@@ -525,6 +556,12 @@ export default function SessionPage() {
       if (Array.isArray(analysis.suggestedResponses) && analysis.suggestedResponses.length > 0) {
         setSuggestedResponses(analysis.suggestedResponses);
       }
+      // Track detected question from other speaker
+      if (analysis.detectedQuestion && analysis.detectedQuestion.text) {
+        setDetectedQuestion(analysis.detectedQuestion);
+      } else {
+        setDetectedQuestion(null);
+      }
 
       // Update classification and coaching
       if (analysis.classification) setClassification(analysis.classification);
@@ -595,6 +632,10 @@ export default function SessionPage() {
       screenStableCount.current = 0;
       screenAnalysisStartTime.current = Date.now();
       setAnalysisStatus("running");
+      // Open Document PiP from user gesture context (click) — required for screen-capture exclusion
+      if (can("copilotPiP")) {
+        copilotPiPRef.current?.requestOpen();
+      }
       const hasAudio = audioService.current.hasAudio;
       const hasVideo = audioService.current.hasVideo;
       const hasSystemAudio = audioService.current.hasSystemAudio;
@@ -1401,11 +1442,13 @@ export default function SessionPage() {
 
       {/* Copilot PiP — floats above ALL windows (Pro+ only) */}
       <CopilotPiP
+        ref={copilotPiPRef}
         active={isRecording && can("copilotPiP")}
         coachingTip={coachingTip}
         liveInsight={liveInsight}
         suggestion={currentSuggestion}
         suggestedResponses={suggestedResponses}
+        detectedQuestion={detectedQuestion}
         signals={signals}
         qualityScore={qualityScore}
         engagementScore={engagementScore}
@@ -1417,13 +1460,25 @@ export default function SessionPage() {
         onPiPStateChange={setPipOpen}
       />
 
-      {/* Smart Copilot Overlay — Clearty-style, fallback when PiP is blocked or closed (Pro+ only) */}
+      {/* Smart Copilot Overlay — Prep mode (before call) */}
+      {!isRecording && can("copilotOverlay") && (
+        <SmartCopilotOverlay
+          mode="prep"
+          prepData={prepData}
+          prepLoading={prepLoading}
+          onStartSession={startSession}
+        />
+      )}
+
+      {/* Smart Copilot Overlay — Live mode (during call), fallback when PiP is blocked or closed */}
       {isRecording && can("copilotOverlay") && !pipOpen && (
         <SmartCopilotOverlay
+          mode="live"
           coachingTip={coachingTip}
           liveInsight={liveInsight}
           suggestion={currentSuggestion}
           suggestedResponses={suggestedResponses}
+          detectedQuestion={detectedQuestion}
           signals={signals}
           qualityScore={qualityScore}
           engagementScore={engagementScore}

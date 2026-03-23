@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useRef, useCallback } from "react";
-import type { ConversationSignal, SuggestedResponse } from "@/types/analysis";
+import { useEffect, useRef, useCallback, useImperativeHandle, forwardRef } from "react";
+import type { ConversationSignal, SuggestedResponse, DetectedQuestion } from "@/types/analysis";
 
 interface CopilotSignal {
   signal: ConversationSignal;
@@ -15,6 +15,7 @@ interface CopilotPiPProps {
   liveInsight: string;
   suggestion: string;
   suggestedResponses: SuggestedResponse[];
+  detectedQuestion?: DetectedQuestion | null;
   signals: CopilotSignal[];
   qualityScore: number;
   engagementScore: number;
@@ -171,7 +172,7 @@ const INTENT_ICONS: Record<string, string> = {
 
 function buildBodyContent(props: CopilotPiPProps): string {
   const {
-    coachingTip, liveInsight, suggestion, suggestedResponses, signals,
+    coachingTip, liveInsight, suggestion, suggestedResponses, detectedQuestion, signals,
     qualityScore, engagementScore, speakerBalance,
     elapsed, currentTone, classification,
   } = props;
@@ -198,6 +199,15 @@ function buildBodyContent(props: CopilotPiPProps): string {
       ${classification && classification !== "neutral" ? `<span class="badge" style="background:${(classColors[classification] || "#fbbf24") + "22"};color:${classColors[classification] || "#fbbf24"}">${classification.replace("_", " ")}</span>` : ""}
     </div>
   </div>
+
+  ${detectedQuestion && detectedQuestion.text ? `
+  <div class="detected-question" style="background:${detectedQuestion.urgency === "high" ? "rgba(248,113,113,0.08)" : "rgba(251,191,36,0.06)"};border:1px solid ${detectedQuestion.urgency === "high" ? "rgba(248,113,113,0.25)" : "rgba(251,191,36,0.2)"};border-radius:10px;padding:8px 10px;margin-bottom:8px">
+    <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px">
+      <span style="font-size:10px;color:${detectedQuestion.urgency === "high" ? "#f87171" : "#fbbf24"};font-weight:700">${escapeHTML(detectedQuestion.speaker)}</span>
+      ${detectedQuestion.urgency === "high" ? '<span style="font-size:8px;background:rgba(248,113,113,0.15);color:#f87171;padding:1px 6px;border-radius:4px;font-weight:600">Respond now</span>' : ""}
+    </div>
+    <p style="font-size:12px;color:#e4e4e7;margin:0;line-height:1.4;font-style:italic">&ldquo;${escapeHTML(detectedQuestion.text)}&rdquo;</p>
+  </div>` : ""}
 
   <div class="scores">
     <div class="score-item">
@@ -289,15 +299,21 @@ function buildFullHTML(props: CopilotPiPProps): string {
 </html>`;
 }
 
+export interface CopilotPiPHandle {
+  /** Must be called from a user gesture (click handler) to enable Document PiP */
+  requestOpen: () => Promise<void>;
+}
+
 /**
  * CopilotPiP — Opens the copilot in a Document Picture-in-Picture window.
  *
  * Document PiP windows (Chrome 116+) are EXCLUDED from screen capture by the OS,
  * making the copilot invisible during both full-screen and window-specific sharing.
  *
+ * IMPORTANT: Call ref.requestOpen() from a click handler (user gesture required).
  * Falls back to window.open() on browsers that don't support Document PiP.
  */
-export default function CopilotPiP(props: CopilotPiPProps) {
+const CopilotPiP = forwardRef<CopilotPiPHandle, CopilotPiPProps>(function CopilotPiP(props, ref) {
   const pipWindowRef = useRef<Window | null>(null);
   const propsRef = useRef(props);
   propsRef.current = props;
@@ -392,27 +408,21 @@ export default function CopilotPiP(props: CopilotPiPProps) {
     propsRef.current.onPiPStateChange?.(true);
   }, [wireStopButton]);
 
-  // Open PiP when active becomes true
+  // Expose requestOpen to parent — MUST be called from a user gesture (click)
+  useImperativeHandle(ref, () => ({
+    requestOpen: openPiP,
+  }), [openPiP]);
+
+  // Close PiP when active becomes false (opening is handled by parent via ref.requestOpen)
   useEffect(() => {
-    if (props.active) {
-      const win = pipWindowRef.current;
-      const isClosed = !win || (modeRef.current === "windowOpen" && (win as Window & { closed?: boolean }).closed);
-      if (isClosed) {
-        openPiP();
-      }
-    }
     if (!props.active && pipWindowRef.current) {
       const win = pipWindowRef.current;
-      if (modeRef.current === "windowOpen") {
-        (win as Window & { close: () => void }).close();
-      } else if (modeRef.current === "documentPiP") {
-        win.close();
-      }
+      try { win.close(); } catch {}
       pipWindowRef.current = null;
       modeRef.current = null;
       props.onPiPStateChange?.(false);
     }
-  }, [props.active, openPiP]);
+  }, [props.active]);
 
   // Update content when props change
   useEffect(() => {
@@ -456,4 +466,6 @@ export default function CopilotPiP(props: CopilotPiPProps) {
   }, []);
 
   return null;
-}
+});
+
+export default CopilotPiP;

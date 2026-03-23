@@ -31,6 +31,12 @@ export interface SuggestedResponse {
   label: string;
 }
 
+export interface DetectedQuestion {
+  text: string;
+  speaker: string;
+  urgency: "low" | "medium" | "high";
+}
+
 export interface ToneResult {
   tone: Tone;
   confidence: number;
@@ -45,6 +51,7 @@ export interface ToneResult {
   engagementScore: number;
   responseDelay: "fast" | "normal" | "slow" | "silence";
   suggestedResponses?: SuggestedResponse[];
+  detectedQuestion?: DetectedQuestion;
   speakerDynamics?: {
     dominantSpeaker: string;
     balanceRatio: number; // 0-1, 0.5 = perfectly balanced
