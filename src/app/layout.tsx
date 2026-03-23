@@ -336,6 +336,26 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <Providers>
           {children}
         </Providers>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function(){
+                function removeVercelToolbar(){
+                  var selectors = ['#vercel-live-feedback','[data-vercel-toolbar]','vercel-live-feedback'];
+                  selectors.forEach(function(s){
+                    document.querySelectorAll(s).forEach(function(el){ el.remove(); });
+                  });
+                  document.querySelectorAll('iframe').forEach(function(f){
+                    if(f.src && (f.src.includes('vercel.live') || f.src.includes('vercel.com')))f.remove();
+                  });
+                }
+                removeVercelToolbar();
+                var observer = new MutationObserver(removeVercelToolbar);
+                observer.observe(document.body, { childList: true, subtree: true });
+              })();
+            `,
+          }}
+        />
       </body>
     </html>
   );

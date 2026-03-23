@@ -297,35 +297,31 @@ export default function HomePage() {
 
   const testimonials = [
     {
-      name: "Claire Dupont",
-      role: "Senior Account Executive",
+      name: "Sarah Mitchell",
+      role: "Account Executive",
       company: "Salesforce",
-      text: "I noticed I was talking over prospects without realizing it. Tonvo showed me exactly when I was losing them — my close rate went up 15% in two months just by listening more.",
-      initials: "CD",
-      gradient: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+      text: "Honestly, I didn't think I needed this. But after my first week I realized how much I was missing in calls. Now I actually listen instead of scrambling to take notes.",
+      avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&fit=crop&crop=face",
     },
     {
-      name: "Marc Lefèvre",
+      name: "David Chen",
       role: "Engineering Manager",
       company: "Datadog",
-      text: "We use it for 1-on-1s. It's subtle — you don't notice it during the call, but the post-meeting summary catches things I would have missed. Saved me from two difficult situations already.",
-      initials: "ML",
-      gradient: "linear-gradient(135deg, #f093fb 0%, #f5576c 100%)",
+      text: "The summary after each 1-on-1 is a game changer. I caught things I would've completely forgotten. My team even noticed I'm more present during our calls now.",
+      avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&h=80&fit=crop&crop=face",
     },
     {
-      name: "Nina Rossi",
+      name: "Jessica Adams",
       role: "Customer Success Lead",
       company: "HubSpot",
-      text: "The real-time suggestions actually make sense. It's not generic tips — it picks up on the specific conversation and gives you something you can use right then.",
-      initials: "NR",
-      gradient: "linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)",
+      text: "I used to spend 20 minutes after every call writing up notes. Now it's just… done. And the transcription is surprisingly accurate, even with accents.",
+      avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=80&h=80&fit=crop&crop=face",
     },
     {
-      name: "James Okafor",
+      name: "Marcus Johnson",
       role: "Freelance Consultant",
-      text: "I was skeptical, honestly. But after a week I realized I was preparing less for calls and getting better outcomes. It just helps you stay present.",
-      initials: "JO",
-      gradient: "linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)",
+      text: "I was skeptical at first — another AI tool, right? But this one actually delivers. I prep less, listen more, and my clients can tell the difference.",
+      avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=80&h=80&fit=crop&crop=face",
     },
   ];
 
@@ -442,18 +438,18 @@ export default function HomePage() {
             <div className="animate-fade-up animate-delay-500 flex items-center justify-center gap-4 mt-16 px-5 py-3 rounded-full" style={{ background: "rgba(255, 255, 255, 0.03)", border: "1px solid rgba(255, 255, 255, 0.06)" }}>
               <div className="flex -space-x-2">
                 {[
-                  "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
-                  "linear-gradient(135deg, #f093fb 0%, #f5576c 100%)",
-                  "linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)",
-                  "linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)",
-                ].map((bg, i) => (
-                  <div
+                  "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=56&h=56&fit=crop&crop=face",
+                  "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=56&h=56&fit=crop&crop=face",
+                  "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=56&h=56&fit=crop&crop=face",
+                  "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=56&h=56&fit=crop&crop=face",
+                ].map((src, i) => (
+                  <img
                     key={i}
-                    className="w-7 h-7 rounded-full flex items-center justify-center text-[9px] font-semibold text-white"
-                    style={{ background: bg, border: "2px solid var(--color-bg)", boxShadow: "0 0 0 1px rgba(255,255,255,0.08)" }}
-                  >
-                    {["C", "M", "N", "J"][i]}
-                  </div>
+                    src={src}
+                    alt=""
+                    className="w-7 h-7 rounded-full object-cover"
+                    style={{ border: "2px solid var(--color-bg)", boxShadow: "0 0 0 1px rgba(255,255,255,0.08)" }}
+                  />
                 ))}
               </div>
               <div className="text-left">
@@ -665,12 +661,11 @@ export default function HomePage() {
                     {t.text}
                   </p>
                   <div className="flex items-center gap-3 mt-auto pt-4" style={{ borderTop: "1px solid rgba(255, 255, 255, 0.05)" }}>
-                    <div
-                      className="w-10 h-10 rounded-full flex items-center justify-center text-xs font-semibold text-white shrink-0"
-                      style={{ background: t.gradient }}
-                    >
-                      {t.initials}
-                    </div>
+                    <img
+                      src={t.avatar}
+                      alt={t.name}
+                      className="w-10 h-10 rounded-full object-cover shrink-0"
+                    />
                     <div>
                       <div className="text-sm font-medium">{t.name}</div>
                       <div className="text-xs" style={{ color: "var(--color-text-muted)" }}>

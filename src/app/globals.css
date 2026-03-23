@@ -1,5 +1,21 @@
 @import "tailwindcss";
 
+/* Hide Vercel toolbar/feedback widget */
+#vercel-live-feedback,
+[data-vercel-toolbar],
+vercel-live-feedback,
+iframe[src*="vercel.live"],
+iframe[src*="vercel.com"] {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  position: absolute !important;
+  overflow: hidden !important;
+}
+
 :root {
   --color-bg: #09090b;
   --color-surface: #111114;
