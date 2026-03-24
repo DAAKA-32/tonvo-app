@@ -199,11 +199,6 @@ export class AudioCaptureService {
 
     this.intervalId = setInterval(() => {
       if (this.audioChunks.length > 0 && !this.sending) {
-        // Skip sending if audio level is very low (silence) — accumulate until speech resumes
-        // This prevents sending silence-only chunks that produce hallucinations
-        if (this.audioLevel < 0.01 && this.audioChunks.length < 3) {
-          return; // Wait for speech or until buffer is large enough (30s max)
-        }
         this.sendChunks();
       }
     }, 10500);

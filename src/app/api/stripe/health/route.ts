@@ -2,9 +2,13 @@ import { NextRequest, NextResponse } from "next/server";
 import { getStripe, PLANS } from "@/lib/stripe";
 import { verifyAuth } from "@/lib/auth-server";
 
+// Admin-only emails (same as admin/assign-plan). Must match Firebase auth email.
+const ADMIN_EMAILS = (process.env.ADMIN_EMAILS || "").split(",").map((e) => e.trim().toLowerCase()).filter(Boolean);
+
 /**
  * GET /api/stripe/health
  * Diagnostic endpoint to verify Stripe configuration.
+ * Admin-only: requires Firebase auth + email in ADMIN_EMAILS env var.
  * Does NOT expose secrets — only reports presence/format.
  */
 export async function GET(req: NextRequest) {
@@ -13,16 +17,10 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  // Auth check: require ?secret= matching STRIPE_WEBHOOK_SECRET
-  const url = new URL(req.url);
-  const secret = url.searchParams.get("secret");
-  const expected = process.env.STRIPE_WEBHOOK_SECRET;
-
-  if (!expected || secret !== expected) {
-    return NextResponse.json(
-      { error: "Unauthorized" },
-      { status: 401 },
-    );
+  // Admin gate: validate authenticated user's email (not client-provided)
+  const userEmail = (authUser.email || "").toLowerCase();
+  if (!userEmail || !ADMIN_EMAILS.includes(userEmail)) {
+    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   }
 
   const checks: Record<string, unknown> = {};

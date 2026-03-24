@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { anthropicClient, CLAUDE_FAST } from "@/lib/anthropic";
 import { verifyAuth } from "@/lib/auth-server";
+import { checkRateLimit, RATE_LIMITS } from "@/lib/rate-limit";
 
 /**
  * POST /api/translate
@@ -14,6 +15,12 @@ export async function POST(req: NextRequest) {
   const authUser = await verifyAuth(req);
   if (!authUser) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  const ip = req.headers.get("x-forwarded-for")?.split(",")[0] || req.headers.get("x-real-ip") || "unknown";
+  const rl = checkRateLimit(`translate:${ip}`, RATE_LIMITS.translate);
+  if (!rl.allowed) {
+    return NextResponse.json({ error: "Rate limit exceeded", retryAfterMs: rl.retryAfterMs }, { status: 429 });
   }
 
   try {

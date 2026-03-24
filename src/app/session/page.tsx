@@ -15,7 +15,7 @@ import ToneIndicator from "@/components/ToneIndicator";
 import AudioWave from "@/components/AudioWave";
 import SuggestionCard from "@/components/SuggestionCard";
 import SmartCopilotOverlay, { type PrepData } from "@/components/SmartCopilotOverlay";
-import CopilotPiP, { type CopilotPiPHandle } from "@/components/CopilotPiP";
+import CopilotPiP, { type CopilotPiPHandle, type CopilotPiPLabels } from "@/components/CopilotPiP";
 import UpgradePrompt from "@/components/UpgradePrompt";
 import { usePlan } from "@/hooks/usePlan";
 import { useParticipants } from "@/hooks/useParticipants";
@@ -58,6 +58,7 @@ interface ScreenSummaryResult {
   recommendation: string;
 }
 
+// Static color/bg configs — labels are translated inside the component via signalLabel()/classLabel()/delayLabel()
 const SIGNAL_CONFIG: Record<ConversationSignal, { label: string; color: string; bg: string }> = {
   objection:   { label: "Objection",   color: "var(--color-negative)",     bg: "rgba(248, 113, 113, 0.1)" },
   question:    { label: "Question",    color: "var(--color-neutral)",      bg: "rgba(251, 191, 36, 0.1)" },
@@ -81,6 +82,21 @@ const DELAY_CONFIG: Record<string, { label: string; color: string }> = {
   normal:  { label: "Normal",  color: "var(--color-accent-light)" },
   slow:    { label: "Slow",    color: "var(--color-neutral)" },
   silence: { label: "Silence", color: "var(--color-negative)" },
+};
+
+// i18n key maps for labels (used inside component where t() is available)
+const SIGNAL_I18N: Record<ConversationSignal, string> = {
+  objection: "session.signalObjection", question: "session.signalQuestion",
+  opportunity: "session.signalOpportunity", hesitation: "session.signalHesitation",
+  agreement: "session.signalAgreement", key_point: "session.signalKeyPoint", none: "",
+};
+const CLASS_I18N: Record<ConversationClassification, string> = {
+  very_positive: "session.classExcellent", positive: "session.classPositive",
+  neutral: "session.classNeutral", awkward: "session.classAwkward", negative: "session.classNegative",
+};
+const DELAY_I18N: Record<string, string> = {
+  fast: "session.delayFast", normal: "session.delayNormal",
+  slow: "session.delaySlow", silence: "session.delaySilence",
 };
 
 export default function SessionPage() {
@@ -181,7 +197,7 @@ export default function SessionPage() {
   const lastSegmentText = useRef<string>("");
 
   // Participant tracking from speaker diarization
-  const { participants, updateFromSegments: updateParticipants, reset: resetParticipants } = useParticipants();
+  const { participants, updateFromSegments: updateParticipants, reset: resetParticipants } = useParticipants(t("copilot.you"), t("copilot.participant", { n: "{{n}}" }));
 
   // Rolling conversation summary -- gives AI full context without sending all segments
   const conversationSummary = useRef<string>("");
@@ -410,6 +426,8 @@ export default function SessionPage() {
       if (data.context) {
         setScreenAnalysis(data);
         screenAnalysisHistory.current.push(data);
+        // Cap screen history to last 10 captures to prevent memory bloat
+        if (screenAnalysisHistory.current.length > 10) screenAnalysisHistory.current = screenAnalysisHistory.current.slice(-10);
         // Add screen capture event to unified timeline
         setTimeline((prev) => [...prev, {
           timestamp: Date.now(),
@@ -462,6 +480,7 @@ export default function SessionPage() {
       // Pass detected language if we already know it, otherwise let Whisper auto-detect
       if (detectedLanguage) formData.append("language", detectedLanguage);
       const transcribeRes = await authFetchFormData("/api/transcribe", formData, { method: "POST" });
+      if (!transcribeRes.ok) throw new Error(`Transcribe API error: ${transcribeRes.status}`);
       const transcribeData = await transcribeRes.json();
       let text: string = transcribeData.text;
       const speakerSegs: SpeakerSegment[] = transcribeData.speakerSegments || [];
@@ -514,7 +533,7 @@ export default function SessionPage() {
       consecutiveSilenceCount.current = 0;
       toast.update(processingToastId.current!, "Analyzing conversation...", { type: "processing" });
 
-      // Send rolling summary + last 5 raw segments for richer context
+      // Send rolling summary + last 5 raw segments + copilot memory for richer context
       const recentSegs = segments.slice(-5).map((s) => ({ text: s.text, tone: s.tone.tone, speaker: s.speaker }));
       const analyzeRes = await authFetch("/api/analyze", {
         method: "POST",
@@ -528,15 +547,18 @@ export default function SessionPage() {
           screenContext: screenAnalysis?.context || undefined,
           screenContentType: screenAnalysis?.contentType || undefined,
           language: i18n.language,
-          userPlan: plan,
+          lastDetectedQuestion: detectedQuestion || undefined,
+          lastSuggestions: suggestedResponses.length > 0 ? suggestedResponses.map((r) => r.text) : undefined,
         }),
       });
+      if (!analyzeRes.ok) throw new Error(`Analyze API error: ${analyzeRes.status}`);
       const analysis: ToneResult = await analyzeRes.json();
       const dominantSpeaker = speakerSegs.length > 0 ? speakerSegs[speakerSegs.length - 1].speaker : undefined;
       const segment: TranscriptSegment = { text, timestamp: Date.now(), tone: analysis, speaker: dominantSpeaker, speakerSegments: speakerSegs.length > 0 ? speakerSegs : undefined, detectedLanguage: transcribeData.language || undefined };
+      // Windowed state: keep full segments for save, but cap timeline/signals to prevent memory bloat
       setSegments((prev) => [...prev, segment]);
 
-      // Add transcript event to unified timeline
+      // Add transcript event to unified timeline (cap at 200 events for long sessions)
       setTimeline((prev) => {
         const events: TimelineEvent[] = [...prev, {
           timestamp: Date.now(),
@@ -545,7 +567,6 @@ export default function SessionPage() {
           speaker: dominantSpeaker,
           tone: analysis.tone,
         }];
-        // Add signal event if detected
         if (analysis.signal && analysis.signal !== "none") {
           events.push({
             timestamp: Date.now(),
@@ -554,7 +575,7 @@ export default function SessionPage() {
             signalLabel: analysis.signalLabel,
           });
         }
-        return events;
+        return events.length > 200 ? events.slice(-200) : events;
       });
 
       // Queue segment for rolling summary update
@@ -566,8 +587,8 @@ export default function SessionPage() {
         signalLabel: analysis.signalLabel,
       });
 
-      // Update rolling summary every 3 new segments (async, non-blocking)
-      if (unsummarizedSegments.current.length >= 3 && !summaryUpdatePending.current) {
+      // Update rolling summary every 2 new segments (async, non-blocking)
+      if (unsummarizedSegments.current.length >= 2 && !summaryUpdatePending.current) {
         summaryUpdatePending.current = true;
         const segsToSummarize = [...unsummarizedSegments.current];
         unsummarizedSegments.current = [];
@@ -580,11 +601,15 @@ export default function SessionPage() {
             language: i18n.language,
           }),
         })
-          .then((r) => r.json())
+          .then((r) => { if (!r.ok) throw new Error(`Context API: ${r.status}`); return r.json(); })
           .then((data) => {
             if (data.summary) conversationSummary.current = data.summary;
           })
-          .catch((err) => console.error("Rolling summary error:", err))
+          .catch((err) => {
+            console.error("Rolling summary error:", err);
+            // Restore segments to queue so they're retried next cycle
+            unsummarizedSegments.current.unshift(...segsToSummarize);
+          })
           .finally(() => { summaryUpdatePending.current = false; });
       }
       setCurrentTone(analysis.tone);
@@ -594,9 +619,11 @@ export default function SessionPage() {
         setSuggestedResponses(analysis.suggestedResponses);
       }
       // Track detected question from other speaker
+      // Only update if a new question is detected; only clear if the AI explicitly returned null
+      // (meaning the question has been answered or is no longer relevant)
       if (analysis.detectedQuestion && analysis.detectedQuestion.text) {
         setDetectedQuestion(analysis.detectedQuestion);
-      } else {
+      } else if (analysis.detectedQuestion === null) {
         setDetectedQuestion(null);
       }
 
@@ -617,10 +644,11 @@ export default function SessionPage() {
       }
 
       // Track key moments
-      if (analysis.signal && analysis.signal !== "none") {
-        setSignals((prev) => [...prev, { signal: analysis.signal, label: analysis.signalLabel || SIGNAL_CONFIG[analysis.signal].label, time: Date.now() }]);
-        setKeyMoments((prev) => [...prev, { timestamp: Date.now(), type: analysis.signal, label: analysis.signalLabel || SIGNAL_CONFIG[analysis.signal].label, text }]);
-        const cfg = SIGNAL_CONFIG[analysis.signal];
+      const cfg = analysis.signal && analysis.signal !== "none" ? SIGNAL_CONFIG[analysis.signal] : undefined;
+      if (analysis.signal && analysis.signal !== "none" && cfg) {
+        const signalLabel = analysis.signalLabel || cfg.label;
+        setSignals((prev) => { const next = [...prev, { signal: analysis.signal, label: signalLabel, time: Date.now() }]; return next.length > 50 ? next.slice(-50) : next; });
+        setKeyMoments((prev) => { const next = [...prev, { timestamp: Date.now(), type: analysis.signal, label: signalLabel, text }]; return next.length > 30 ? next.slice(-30) : next; });
         const tt = analysis.signal === "objection" ? "error" as const : (analysis.signal === "opportunity" || analysis.signal === "agreement") ? "success" as const : "info" as const;
         toast.update(processingToastId.current!, cfg.label + (analysis.signalLabel ? `: ${analysis.signalLabel}` : ""), { type: tt, duration: 3000 });
         processingToastId.current = null;
@@ -633,6 +661,15 @@ export default function SessionPage() {
       if (processingToastId.current) { toast.update(processingToastId.current, "Analysis failed", { type: "error", duration: 4000 }); processingToastId.current = null; }
     } finally { setProcessing(false); }
   }, [toast, segments, detectedLanguage, conversationMode]);
+
+  // Stable ref wrapper: always calls the latest processAudioChunk closure
+  // (AudioCaptureService stores onChunkReady once at start — without this ref,
+  //  subsequent chunks would call the stale initial closure with segments=[])
+  const processAudioChunkRef = useRef(processAudioChunk);
+  processAudioChunkRef.current = processAudioChunk;
+  const stableProcessAudioChunk = useCallback((blob: Blob) => {
+    return processAudioChunkRef.current(blob);
+  }, []);
 
   async function startSession() {
     if (!screenEnabled && !audioEnabled) { toast.show("Enable at least Screen or Audio to start.", { type: "error", duration: 4000 }); return; }
@@ -656,7 +693,7 @@ export default function SessionPage() {
     audioService.current = new AudioCaptureService();
     const options: CaptureOptions = { screenEnabled, audioEnabled };
     try {
-      await audioService.current.start(processAudioChunk, options);
+      await audioService.current.start(stableProcessAudioChunk, options);
       setIsRecording(true); setSessionStart(new Date()); setSegments([]); setSignals([]); setKeyMoments([]); setTimeline([]); setDetectedLanguage(null);
       setQualityScore(0); setEngagementScore(0); setScreenAnalysis(null); setScreenAnalysisCompleted(false);
       setScreenSummary(null); screenSummaryRef.current = null; screenAnalysisHistory.current = [];
@@ -695,6 +732,8 @@ export default function SessionPage() {
         }).catch(() => {});
       }
     } catch (err) {
+      // Clean up partially initialized audio service
+      if (audioService.current) { try { audioService.current.stop(); } catch {} audioService.current = null; }
       const msg = err instanceof Error ? err.message : "";
       if (msg.includes("PERMISSION_DENIED:screen")) {
         toast.show("Screen sharing was cancelled. Please select a screen or window to share.", { type: "error", duration: 5000 });
@@ -724,7 +763,12 @@ export default function SessionPage() {
 
   async function stopSession() {
     if (screenAnalysisTimer.current) { clearTimeout(screenAnalysisTimer.current); screenAnalysisTimer.current = null; }
-    if (audioService.current) audioService.current.stop();
+    // Process final audio chunk before stopping (up to 10s of speech would be lost otherwise)
+    let finalBlob: Blob | null = null;
+    if (audioService.current) finalBlob = audioService.current.stop();
+    if (finalBlob && finalBlob.size > 1000) {
+      try { await stableProcessAudioChunk(finalBlob); } catch { /* best-effort */ }
+    }
     setIsRecording(false); setSessionStart(null); setAnalysisStatus("idle");
     consecutiveSilenceCount.current = 0;
     screenAnalysisStartTime.current = 0;
@@ -777,10 +821,6 @@ export default function SessionPage() {
               signals,
               mode: conversationMode,
               qualityScore,
-              screenContext: screenAnalysis?.context || null,
-              screenAnalysisHistory: screenAnalysisHistory.current.length > 0
-                ? screenAnalysisHistory.current.map((h) => ({ context: h.context, contentType: h.contentType, mood: h.mood, insight: h.insight }))
-                : undefined,
               language: i18n.language,
             }),
           });
@@ -794,7 +834,6 @@ export default function SessionPage() {
               score: summary.score,
               diagnosis: summary.diagnosis,
               follow_up_actions: summary.followUpActions,
-              social_score: summary.socialAttractivenessScore,
               strengths: summary.strengths,
               improvements: summary.improvements,
             }).eq("id", conversationId);
@@ -1528,6 +1567,16 @@ export default function SessionPage() {
         participants={participants}
         onStop={stopSession}
         onPiPStateChange={handlePiPStateChange}
+        labels={{
+          title: t("copilot.title"),
+          sayThis: t("copilot.sayThis"),
+          listening: t("copilot.listening"),
+          stopSession: t("copilot.stopSession"),
+          respondNow: t("copilot.respondNow"),
+          invisibleBadge: t("copilot.invisibleInScreenShare"),
+          participantCount: t("copilot.participantCount", { count: 1 }),
+          participantCountPlural: t("copilot.participantCount", { count: 2 }),
+        }}
       />
 
       {/* Smart Copilot Overlay — Prep mode (before call) */}

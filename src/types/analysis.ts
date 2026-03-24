@@ -96,23 +96,12 @@ export interface ConversationSummary {
   overallTone: Tone;
   classification: ConversationClassification;
   score: ConversationScore;
-  keyPoints: string[];
   insights: string[];
   recommendation: string;
   diagnosis: string;
-  objections: ObjectionDetail[];
   followUpActions: string[];
-  socialAttractivenessScore: number;
   strengths: string[];
   improvements: string[];
-  speakerBreakdown?: {
-    speaker1TalkRatio: number;
-    speaker2TalkRatio: number;
-    speaker1Tone: Tone;
-    speaker2Tone: Tone;
-  };
-  screenInsights?: string[];
-  visualNarrative?: string;
 }
 
 // Unified timeline merging screen captures and audio segments

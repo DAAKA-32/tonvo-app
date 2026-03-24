@@ -2,7 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { supabaseAdmin } from "@/lib/supabase-admin";
 import { verifyAuth } from "@/lib/auth-server";
 
-const ADMIN_EMAILS = ["emilien.neveu@gmail.com", "emilien.nepveu@gmail.com"];
+// Admin emails from env var (comma-separated). Validated against the Firebase auth token, not the request body.
+const ADMIN_EMAILS = (process.env.ADMIN_EMAILS || "").split(",").map((e) => e.trim().toLowerCase()).filter(Boolean);
 const VALID_PLANS = ["free", "pro", "team"];
 
 export async function POST(req: NextRequest) {
@@ -11,12 +12,14 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  try {
-    const { adminEmail, targetUserId, plan } = await req.json();
+  // Admin gate: use the email from the verified Firebase token (not from request body)
+  const callerEmail = (authUser.email || "").toLowerCase();
+  if (!callerEmail || !ADMIN_EMAILS.includes(callerEmail)) {
+    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  }
 
-    if (!adminEmail || !ADMIN_EMAILS.includes(adminEmail)) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
-    }
+  try {
+    const { targetUserId, plan } = await req.json();
 
     if (!targetUserId || !plan) {
       return NextResponse.json({ error: "Missing targetUserId or plan" }, { status: 400 });

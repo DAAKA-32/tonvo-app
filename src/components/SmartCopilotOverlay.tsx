@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
+import { useTranslation } from "react-i18next";
 import type { SuggestedResponse, DetectedQuestion } from "@/types/analysis";
 import type { Participant } from "@/hooks/useParticipants";
 import ParticipantsList from "./ParticipantsList";
@@ -66,6 +67,7 @@ export default function SmartCopilotOverlay({
   prepLoading = false,
   onStartSession,
 }: SmartCopilotOverlayProps) {
+  const { t } = useTranslation();
   const [collapsed, setCollapsed] = useState(false);
   const [copiedIdx, setCopiedIdx] = useState<number | null>(null);
   const prevResponsesRef = useRef<SuggestedResponse[]>([]);
@@ -108,9 +110,9 @@ export default function SmartCopilotOverlay({
       <div className="smart-overlay smart-overlay--collapsed" onClick={() => setCollapsed(false)}>
         <div className="smart-overlay__collapsed-inner">
           <div className="smart-overlay__pulse" />
-          <span className="smart-overlay__collapsed-label">AI Copilot</span>
+          <span className="smart-overlay__collapsed-label">{t("copilot.title")}</span>
           {mode === "live" && <span className="smart-overlay__collapsed-time">{formatTime(elapsed)}</span>}
-          {mode === "prep" && <span className="smart-overlay__collapsed-time">Prep</span>}
+          {mode === "prep" && <span className="smart-overlay__collapsed-time">{t("copilot.prepMode")}</span>}
           {detectedQuestion && (
             <span className="smart-overlay__question-badge">?</span>
           )}
@@ -130,13 +132,13 @@ export default function SmartCopilotOverlay({
         <div className="smart-overlay__header">
           <div className="smart-overlay__header-left">
             <div className="smart-overlay__pulse smart-overlay__pulse--prep" />
-            <span className="smart-overlay__title">AI Copilot</span>
+            <span className="smart-overlay__title">{t("copilot.title")}</span>
             <span className="smart-overlay__badge" style={{ color: "#818cf8", backgroundColor: "rgba(129,140,248,0.15)" }}>
-              Prep Mode
+              {t("copilot.prepMode")}
             </span>
           </div>
           <div className="smart-overlay__header-right">
-            <button className="smart-overlay__collapse-btn" onClick={() => setCollapsed(true)} aria-label="Collapse">
+            <button className="smart-overlay__collapse-btn" onClick={() => setCollapsed(true)} aria-label={t("copilot.collapse")}>
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="5" y1="12" x2="19" y2="12" /></svg>
             </button>
           </div>
@@ -146,7 +148,7 @@ export default function SmartCopilotOverlay({
           {prepLoading ? (
             <div className="smart-overlay__prep-loading">
               <div className="smart-overlay__prep-spinner" />
-              <span>Preparing your briefing...</span>
+              <span>{t("copilot.preparing")}</span>
             </div>
           ) : prepData ? (
             <div className="smart-overlay__prep-content">
@@ -160,7 +162,7 @@ export default function SmartCopilotOverlay({
                 <div className="smart-overlay__prep-section">
                   <div className="smart-overlay__section-header">
                     <div className="smart-overlay__section-dot" style={{ background: "#818cf8" }} />
-                    <span style={{ color: "#818cf8" }}>Preparation</span>
+                    <span style={{ color: "#818cf8" }}>{t("copilot.preparation")}</span>
                   </div>
                   <div className="smart-overlay__prep-tips">
                     {prepData.prepTips.map((tip, i) => (
@@ -181,7 +183,7 @@ export default function SmartCopilotOverlay({
                 <div className="smart-overlay__prep-section">
                   <div className="smart-overlay__section-header">
                     <div className="smart-overlay__section-dot" style={{ background: "#34d399" }} />
-                    <span style={{ color: "#34d399" }}>Opening Lines</span>
+                    <span style={{ color: "#34d399" }}>{t("copilot.openingLines")}</span>
                   </div>
                   <div className="smart-overlay__prep-openers">
                     {prepData.openingLines.map((line, i) => (
@@ -213,7 +215,7 @@ export default function SmartCopilotOverlay({
                 <div className="smart-overlay__prep-section">
                   <div className="smart-overlay__section-header">
                     <div className="smart-overlay__section-dot" style={{ background: "#fbbf24" }} />
-                    <span style={{ color: "#fbbf24" }}>They Might Ask</span>
+                    <span style={{ color: "#fbbf24" }}>{t("copilot.theyMightAsk")}</span>
                   </div>
                   <div className="smart-overlay__prep-questions">
                     {prepData.anticipatedQuestions.map((q, i) => (
@@ -237,7 +239,7 @@ export default function SmartCopilotOverlay({
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--color-text-muted)" strokeWidth="1.5" style={{ opacity: 0.4 }}>
                 <path d="M12 2L2 7l10 5 10-5-10-5z" /><path d="M2 17l10 5 10-5" /><path d="M2 12l10 5 10-5" />
               </svg>
-              <span>Select a mode and the copilot will brief you</span>
+              <span>{t("copilot.selectMode")}</span>
             </div>
           )}
         </div>
@@ -246,7 +248,7 @@ export default function SmartCopilotOverlay({
         {onStartSession && (
           <button className="smart-overlay__start" onClick={onStartSession}>
             <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3" /></svg>
-            Start Session
+            {t("copilot.startSession")}
           </button>
         )}
       </div>
@@ -260,11 +262,11 @@ export default function SmartCopilotOverlay({
       <div className="smart-overlay__header">
         <div className="smart-overlay__header-left">
           <div className="smart-overlay__pulse" />
-          <span className="smart-overlay__title">AI Copilot</span>
+          <span className="smart-overlay__title">{t("copilot.title")}</span>
           <span className="smart-overlay__timer">{formatTime(elapsed)}</span>
         </div>
         <div className="smart-overlay__header-right">
-          <button className="smart-overlay__collapse-btn" onClick={() => setCollapsed(true)} aria-label="Collapse">
+          <button className="smart-overlay__collapse-btn" onClick={() => setCollapsed(true)} aria-label={t("copilot.collapse")}>
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="5" y1="12" x2="19" y2="12" /></svg>
           </button>
         </div>
@@ -287,7 +289,7 @@ export default function SmartCopilotOverlay({
               {detectedQuestion.speaker}
             </span>
             {detectedQuestion.urgency === "high" && (
-              <span className="smart-overlay__dq-urgent">Respond now</span>
+              <span className="smart-overlay__dq-urgent">{t("copilot.respondNow")}</span>
             )}
           </div>
           <p className="smart-overlay__dq-text">&ldquo;{detectedQuestion.text}&rdquo;</p>
@@ -326,7 +328,7 @@ export default function SmartCopilotOverlay({
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--color-text-muted)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" style={{ opacity: 0.4 }}>
                 <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
               </svg>
-              <span>Listening... suggestions will appear here</span>
+              <span>{t("copilot.listening")}</span>
             </div>
           )}
 
@@ -343,7 +345,7 @@ export default function SmartCopilotOverlay({
       {onStop && (
         <button className="smart-overlay__stop" onClick={onStop}>
           <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><rect x="4" y="4" width="16" height="16" rx="2" /></svg>
-          Stop Session
+          {t("copilot.stopSession")}
         </button>
       )}
     </div>

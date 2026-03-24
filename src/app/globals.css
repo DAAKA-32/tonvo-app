@@ -907,11 +907,12 @@ body {
     height: 300px;
   }
   .toast-container {
-    max-width: 100%;
     top: auto;
     bottom: 16px;
+    bottom: calc(16px + env(safe-area-inset-bottom, 0px));
     right: 12px;
     left: 12px;
+    max-width: none;
   }
 }
 
@@ -950,7 +951,7 @@ body {
   gap: 10px;
   pointer-events: none;
   max-width: 380px;
-  width: 100%;
+  width: auto;
 }
 
 .toast-item {
@@ -968,6 +969,8 @@ body {
     0 0 0 1px rgba(255, 255, 255, 0.03) inset;
   pointer-events: auto;
   will-change: transform, opacity;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .toast-icon {
@@ -979,10 +982,13 @@ body {
 
 .toast-message {
   flex: 1;
+  min-width: 0;
   font-size: 13px;
   font-weight: 500;
   color: var(--color-text);
   line-height: 1.4;
+  overflow-wrap: break-word;
+  word-break: break-word;
 }
 
 .toast-close {
@@ -1043,10 +1049,16 @@ body {
 @media (max-width: 480px) {
   .toast-container {
     top: auto;
-    bottom: 16px;
-    right: 16px;
-    left: 16px;
+    bottom: 12px;
+    bottom: calc(12px + env(safe-area-inset-bottom, 0px));
+    right: 12px;
+    right: calc(12px + env(safe-area-inset-right, 0px));
+    left: 12px;
+    left: calc(12px + env(safe-area-inset-left, 0px));
     max-width: none;
+  }
+  .toast-item {
+    padding: 12px 14px;
   }
   .toast-enter {
     animation: toastSlideUp 0.3s cubic-bezier(0.23, 1, 0.32, 1) both;

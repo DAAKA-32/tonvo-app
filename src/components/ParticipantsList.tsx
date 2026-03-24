@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslation } from "react-i18next";
 import type { Participant } from "@/hooks/useParticipants";
 
 interface ParticipantsListProps {
@@ -9,6 +10,7 @@ interface ParticipantsListProps {
 const AVATAR_COLORS = ["#818cf8", "#34d399", "#fb923c", "#f87171", "#38bdf8", "#c084fc"];
 
 export default function ParticipantsList({ participants }: ParticipantsListProps) {
+  const { t } = useTranslation();
   if (participants.length === 0) return null;
 
   return (
@@ -20,7 +22,7 @@ export default function ParticipantsList({ participants }: ParticipantsListProps
           <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
           <path d="M16 3.13a4 4 0 0 1 0 7.75" />
         </svg>
-        <span>{participants.length} participant{participants.length > 1 ? "s" : ""}</span>
+        <span>{t("copilot.participantCount", { count: participants.length })}</span>
       </div>
       <div className="participants-list__items">
         {participants.map((p, i) => {

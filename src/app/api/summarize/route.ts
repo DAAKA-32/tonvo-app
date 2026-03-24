@@ -16,7 +16,7 @@ export async function POST(req: NextRequest) {
   }
 
   const body = await req.json();
-  const { segments, signals, qualityScore, screenContext, mode, screenAnalysisHistory, language } = body;
+  const { segments, signals, qualityScore, mode, language } = body;
 
   if (!segments || !Array.isArray(segments)) {
     return NextResponse.json({ error: "Missing segments array" }, { status: 400 });
@@ -24,66 +24,45 @@ export async function POST(req: NextRequest) {
 
   const transcript = segments
     .map((s: { text: string; tone: string; speaker?: string; signal?: string; signalLabel?: string }) =>
-      `[${s.speaker || "Unknown"}][${s.tone}${s.signal && s.signal !== "none" ? ` | ${s.signal}: ${s.signalLabel}` : ""}] ${s.text}`
+      `[${s.speaker || "?"}][${s.tone}${s.signal && s.signal !== "none" ? `|${s.signal}` : ""}] ${s.text}`
     )
     .join("\n");
 
   const signalSummary = signals?.length
-    ? `\n\nDetected signals during session: ${signals.map((s: { signal: string; label: string }) => `${s.signal} ("${s.label}")`).join(", ")}`
+    ? `\nSignals: ${signals.map((s: { signal: string; label: string }) => `${s.signal}("${s.label}")`).join(", ")}`
     : "";
 
-  const screenInfo = screenAnalysisHistory?.length
-    ? `\n\nScreen analysis timeline (${screenAnalysisHistory.length} captures):\n${screenAnalysisHistory.map((h: { context: string; contentType: string; mood: string; insight: string }, i: number) => `[Capture ${i + 1}] (${h.contentType}, ${h.mood}) ${h.context}${h.insight ? " -- " + h.insight : ""}`).join("\n")}`
-    : screenContext
-      ? `\n\nScreen context: ${screenContext}`
-      : "";
-
-  const modeLabel = mode && mode !== "general" ? `\nConversation mode: ${mode}` : "";
+  const modeLabel = mode && mode !== "general" ? `\nMode: ${mode}` : "";
 
   try {
     const message = await anthropicClient.messages.create({
       model: CLAUDE_DEEP,
-      max_tokens: 1500,
+      max_tokens: 900,
       messages: [
         {
           role: "user",
           content: transcript,
         },
       ],
-      system: `You are Tonvo, an elite conversation intelligence coach. Given a full transcript with tone, signal, and speaker annotations, produce a comprehensive post-session analysis as a JSON object:
+      system: `You are Tonvo, a conversation coach. Analyze this transcript and return a JSON object.
 
-- "overallTone": dominant tone ("positive", "neutral", "negative", "hesitant")
-- "classification": overall conversation classification, one of: "very_positive", "positive", "neutral", "awkward", "negative"
-- "score": object with sub-scores (each 0-100):
-  - "overall": weighted average of all sub-scores
-  - "engagement": how engaged and active both parties were
-  - "tone": overall positivity and professionalism of the tone
-  - "fluidity": how smooth and natural the conversation flowed
-  - "interest": how much interest/enthusiasm was shown
-- "keyPoints": array of 3-5 key points from the conversation
-- "insights": array of 3-4 insights about conversation dynamics. When multiple speakers are identified, include insights about each speaker's behavior and the interaction quality.
-- "recommendation": one actionable sentence for next conversation
-- "diagnosis": 2-3 sentence diagnosis of the conversation quality, what went well, what could improve
-- "objections": array of objects for each objection detected: { "text": the objection text, "label": short label, "timestamp": 0, "resolved": boolean whether it was addressed, "speaker": who raised it }
-- "followUpActions": array of 2-4 concrete follow-up actions to take after this conversation
-- "socialAttractivenessScore": 0-100 score estimating the speaker's communication effectiveness (charisma, likability, communication skill, persuasiveness)
-- "strengths": array of 2-3 things the speaker did well
-- "improvements": array of 2-3 specific things to improve
-- "speakerBreakdown": object with:
-  - "speaker1TalkRatio": 0-1 proportion of talk time for Speaker 1
-  - "speaker2TalkRatio": 0-1 proportion of talk time for Speaker 2
-  - "speaker1Tone": dominant tone for Speaker 1 ("positive", "neutral", "negative", "hesitant")
-  - "speaker2Tone": dominant tone for Speaker 2 ("positive", "neutral", "negative", "hesitant")
-- "screenInsights": array of 2-3 insights derived from cross-referencing what was said in the transcript with what was shown on screen (only if screen data is available, otherwise empty array)
-- "visualNarrative": 1-2 sentence description of how the screen content evolved during the session (only if screen data is available, otherwise empty string)
+STYLE: Write like a sharp human coach — direct, specific, no filler. Avoid generic phrases like "overall the conversation was productive" or "consider improving your approach". Reference actual moments from the conversation. Be concise.
 
-When screen analysis data is provided, cross-reference what was said in the transcript with what was shown on screen. Note correlations, discrepancies, or patterns between the visual content and the spoken conversation.
+Output exactly these fields:
+- "overallTone": "positive"|"neutral"|"negative"|"hesitant"
+- "classification": "very_positive"|"positive"|"neutral"|"awkward"|"negative"
+- "score": {"overall","engagement","tone","fluidity","interest"} each 0-100
+- "insights": 3 short specific observations about what happened (reference actual content)
+- "recommendation": 1 direct sentence — the single most impactful thing to do differently next time
+- "diagnosis": 2 sentences max — what went well and what didn't. Be specific, not generic.
+- "followUpActions": 2-3 concrete next steps (specific enough to act on immediately)
+- "strengths": 2-3 things done well (cite specific moments)
+- "improvements": 2-3 things to improve (with specific examples from the conversation)
 
-Average quality score during session: ${qualityScore || "N/A"}.${signalSummary}${screenInfo}${modeLabel}
+Quality score during session: ${qualityScore || "N/A"}.${signalSummary}${modeLabel}
 
-IMPORTANT: All text content in "keyPoints", "insights", "recommendation", "diagnosis", "followUpActions", "strengths", "improvements", "screenInsights", "visualNarrative", and objection labels MUST be written in ${language || "en"} (the user's language). JSON keys and enum values (tone names, classification values) stay in English.
-
-Only return valid JSON. No markdown, no explanation.`,
+All text content MUST be in ${language || "en"}. Keys and enum values stay in English.
+Return valid JSON only. No markdown.`,
     });
 
     const content = message.content[0];
@@ -100,20 +79,15 @@ Only return valid JSON. No markdown, no explanation.`,
       return NextResponse.json({ error: "Failed to parse AI summary" }, { status: 500 });
     }
 
-    // Validate and sanitize critical fields
+    // Validate and sanitize
     summary.overallTone = ["positive", "neutral", "negative", "hesitant"].includes(summary.overallTone) ? summary.overallTone : "neutral";
     summary.classification = ["very_positive", "positive", "neutral", "awkward", "negative"].includes(summary.classification) ? summary.classification : "neutral";
-    summary.keyPoints = Array.isArray(summary.keyPoints) ? summary.keyPoints.slice(0, 5) : [];
     summary.insights = Array.isArray(summary.insights) ? summary.insights.slice(0, 4) : [];
     summary.recommendation = typeof summary.recommendation === "string" ? summary.recommendation : "";
     summary.diagnosis = typeof summary.diagnosis === "string" ? summary.diagnosis : "";
-    summary.objections = Array.isArray(summary.objections) ? summary.objections : [];
     summary.followUpActions = Array.isArray(summary.followUpActions) ? summary.followUpActions.slice(0, 4) : [];
-    summary.socialAttractivenessScore = typeof summary.socialAttractivenessScore === "number" ? Math.max(0, Math.min(100, summary.socialAttractivenessScore)) : 50;
     summary.strengths = Array.isArray(summary.strengths) ? summary.strengths.slice(0, 3) : [];
     summary.improvements = Array.isArray(summary.improvements) ? summary.improvements.slice(0, 3) : [];
-    summary.screenInsights = Array.isArray(summary.screenInsights) ? summary.screenInsights.slice(0, 3) : [];
-    summary.visualNarrative = typeof summary.visualNarrative === "string" ? summary.visualNarrative : "";
 
     if (summary.score && typeof summary.score === "object") {
       for (const key of ["overall", "engagement", "tone", "fluidity", "interest"]) {

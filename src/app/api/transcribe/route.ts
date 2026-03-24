@@ -44,7 +44,7 @@ function segmentBySpeaker(words: WhisperWord[]): SpeakerSegment[] {
       // Pause detected -> potential speaker switch
       segments.push({
         speaker: `Speaker ${currentSpeaker + 1}`,
-        text: currentWords.join("").trim(),
+        text: currentWords.join(" ").trim(),
         start: segStart,
         end: prevEnd,
       });
@@ -61,7 +61,7 @@ function segmentBySpeaker(words: WhisperWord[]): SpeakerSegment[] {
   if (currentWords.length > 0) {
     segments.push({
       speaker: `Speaker ${currentSpeaker + 1}`,
-      text: currentWords.join("").trim(),
+      text: currentWords.join(" ").trim(),
       start: segStart,
       end: prevEnd,
     });

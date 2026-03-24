@@ -3,14 +3,15 @@ import { checkRateLimit, RATE_LIMITS } from "@/lib/rate-limit";
 import { anthropicClient, CLAUDE_FAST } from "@/lib/anthropic";
 import { getPlanFeatures } from "@/lib/plan-features";
 import { verifyAuth } from "@/lib/auth-server";
+import { getUserSubscription } from "@/lib/subscription";
 
-// Domain-specific prompt templates
+// Domain-specific focus areas
 const MODE_PROMPTS: Record<string, string> = {
-  general: `Focus on: communication clarity, emotional tone, engagement level, and conversation flow.`,
-  sales: `Focus on: objection handling, buying signals, value proposition delivery, urgency creation, rapport building, and closing opportunities. Flag any price objection, competitor mention, or stall tactic.`,
-  recruitment: `Focus on: candidate enthusiasm, cultural fit signals, skill validation, red flags, salary negotiation cues, and mutual interest indicators.`,
-  support: `Focus on: customer frustration level, issue resolution progress, empathy display, escalation risk, and satisfaction signals.`,
-  networking: `Focus on: mutual interest, follow-up potential, rapport quality, conversation balance, and connection depth.`,
+  general: `Focus on: communication clarity, emotional tone, engagement, conversation flow.`,
+  sales: `Focus on: objection handling, buying signals, value delivery, urgency, rapport, closing. Flag price objections, competitor mentions, stall tactics.`,
+  recruitment: `Focus on: candidate enthusiasm, cultural fit, skill validation, red flags, salary cues, mutual interest.`,
+  support: `Focus on: frustration level, resolution progress, empathy, escalation risk, satisfaction signals.`,
+  networking: `Focus on: mutual interest, follow-up potential, rapport, conversation balance, connection depth.`,
 };
 
 const FALLBACK_ANALYSIS = {
@@ -43,10 +44,15 @@ export async function POST(req: NextRequest) {
   }
 
   const body = await req.json();
-  const { text, conversationSummary, recentSegments, speakerSegments, mode, screenContext, screenContentType, language, userPlan } = body;
+  const {
+    text, conversationSummary, recentSegments, speakerSegments,
+    mode, screenContext, screenContentType, language,
+    lastDetectedQuestion, lastSuggestions,
+  } = body;
 
-  // Plan-aware feature gating (userPlan passed from client)
-  const planFeatures = getPlanFeatures(userPlan);
+  // Resolve plan server-side from authenticated user (never trust client-provided plan)
+  const sub = await getUserSubscription(authUser.uid);
+  const planFeatures = getPlanFeatures(sub.plan);
 
   if (!text || typeof text !== "string") {
     return NextResponse.json({ error: "Missing text field" }, { status: 400 });
@@ -55,23 +61,42 @@ export async function POST(req: NextRequest) {
   const conversationMode = mode && MODE_PROMPTS[mode] ? mode : "general";
   const modeInstruction = MODE_PROMPTS[conversationMode];
 
-  const summaryBlock = conversationSummary
-    ? `\n\nFull conversation summary so far:\n"${conversationSummary}"`
-    : "";
+  // Build structured context blocks
+  const blocks: string[] = [];
 
-  const recentBlock = recentSegments?.length
-    ? `\n\nLast ${recentSegments.length} raw segments:\n${recentSegments.map((s: { text: string; tone: string; speaker?: string }) => `[${s.speaker || "Unknown"}][${s.tone}] ${s.text}`).join("\n")}`
-    : "";
+  if (conversationSummary) {
+    blocks.push(`CONVERSATION SO FAR:\n${conversationSummary}`);
+  }
 
-  const speakerBlock = speakerSegments?.length
-    ? `\n\nSpeaker-segmented transcript for this chunk:\n${speakerSegments.map((s: { speaker: string; text: string }) => `[${s.speaker}]: ${s.text}`).join("\n")}`
-    : "";
+  if (recentSegments?.length) {
+    const formatted = recentSegments.map((s: { text: string; tone: string; speaker?: string }) =>
+      `[${s.speaker || "?"}] ${s.text}`
+    ).join("\n");
+    blocks.push(`RECENT EXCHANGES:\n${formatted}`);
+  }
 
-  const screenBlock = screenContext
-    ? `\n\nScreen context: [${screenContentType || "unknown"}] ${screenContext}`
-    : "";
+  if (speakerSegments?.length) {
+    const formatted = speakerSegments.map((s: { speaker: string; text: string }) =>
+      `[${s.speaker}]: ${s.text}`
+    ).join("\n");
+    blocks.push(`THIS SEGMENT (speaker-separated):\n${formatted}`);
+  }
 
-  const contextBlock = summaryBlock + recentBlock + speakerBlock + screenBlock;
+  // Feed back the unanswered question so Claude keeps it in mind
+  if (lastDetectedQuestion) {
+    blocks.push(`UNANSWERED QUESTION from ${lastDetectedQuestion.speaker}: "${lastDetectedQuestion.text}"`);
+  }
+
+  // Feed back previous suggestions so Claude doesn't repeat itself
+  if (lastSuggestions?.length) {
+    blocks.push(`YOUR PREVIOUS SUGGESTIONS (do NOT repeat these):\n${lastSuggestions.map((s: string) => `- ${s}`).join("\n")}`);
+  }
+
+  if (screenContext) {
+    blocks.push(`SCREEN: [${screenContentType || "unknown"}] ${screenContext}`);
+  }
+
+  const contextBlock = blocks.length > 0 ? "\n\n" + blocks.join("\n\n") : "";
 
   try {
     const message = await anthropicClient.messages.create({
@@ -83,41 +108,43 @@ export async function POST(req: NextRequest) {
           content: text,
         },
       ],
-      system: `You are Tonvo, an elite real-time conversation intelligence coach. Analyze the speech transcript segment in the context of the conversation and return a JSON object with ALL of these fields:
+      system: `You are Tonvo, a real-time conversation copilot. Analyze this speech segment and return JSON.
 
-- "tone": one of "positive", "neutral", "negative", "hesitant"
-- "confidence": number 0-1
-- "suggestion": short actionable suggestion (1 sentence) for how to respond or continue
-- "emotions": array of 1-3 detected emotions (e.g. "curious", "frustrated", "excited", "confused", "confident", "anxious", "assertive", "defensive", "enthusiastic")
-- "signal": exactly one of: "objection", "question", "opportunity", "hesitation", "agreement", "key_point", "none"
-- "signalLabel": 2-5 word contextual label (e.g. "Price objection", "Budget question"), or "" if signal is "none"
-- "qualityScore": 0-100 conversation quality for this segment (clarity, engagement, professionalism)
-- "classification": overall conversation vibe right now, one of: "very_positive", "positive", "neutral", "awkward", "negative"
-- "coachingTip": a brief real-time coaching tip (1 sentence) to improve the speaker's delivery, tone, or approach. Be specific and actionable.
-- "liveInsight": a brief readable insight about what is happening in the conversation right now (1 sentence). If multiple speakers are detected, comment on the interaction dynamics.
-- "engagementScore": 0-100 how engaged/interested the OTHER party seems (based on their responses, questions, and participation). If only one speaker is detected, estimate based on available cues.
-- "responseDelay": estimate based on speech patterns: "fast" (quick back-and-forth), "normal", "slow" (long pauses, filler words), "silence" (very sparse speech)
-- "suggestedResponses": array of exactly 3 objects, each with:
-  - "text": a ready-to-say response phrase (1-2 sentences) the user can speak verbatim right now. Must be natural, contextual, and adapted to the conversation tone and domain.
-  - "intent": one of "empathize", "redirect", "close", "probe", "agree", "challenge", "clarify", "deflect"
-  - "label": a 2-3 word label describing the approach (e.g. "Show empathy", "Ask deeper", "Redirect topic", "Close the deal")
-  Each response must be distinct in strategy. Prioritize the most impactful response first. These are the KEY deliverable — they must sound human, not robotic.
-- "detectedQuestion": if the OTHER party (not the user) asked a question or raised a point that needs a response, return an object with:
-  - "text": the exact question or key point detected (verbatim or close paraphrase)
-  - "speaker": who asked it (e.g. "Speaker 2", "Interviewer", "Client")
-  - "urgency": "low", "medium", or "high" based on how important it is to address immediately
-  If no question was detected, return null. This is CRITICAL — the suggestedResponses MUST directly answer this detected question when present.
-- "speakerDynamics": object with:
-  - "dominantSpeaker": which speaker is talking more ("Speaker 1", "Speaker 2", or "balanced")
-  - "balanceRatio": 0 to 1 (0.5 = perfectly balanced, 0 = Speaker 1 only, 1 = Speaker 2 only)
-  - "interactionStyle": brief label like "one-sided monologue", "active dialogue", "interview-style", "collaborative discussion"
+YOUR #1 JOB: Generate 3 suggested responses the user can say RIGHT NOW. These must:
+- Directly address whatever was just said (especially any question asked)
+- Reference specific words/topics from the conversation (not generic phrases)
+- Sound like a real person speaking naturally — casual, confident, conversational
+- Be 1-2 sentences each, ready to say verbatim
+- Each use a different strategy
 
-Context mode: ${conversationMode}
-${modeInstruction}
+BAD (never generate): "I appreciate your perspective", "That's a great point", "I understand your concern"
+GOOD: "The $2k difference covers onboarding — want me to break that down?", "I had the same worry initially, but after 3 months...", "What specifically about the timeline concerns you?"
 
-IMPORTANT: All text content in "suggestion", "coachingTip", "liveInsight", "signalLabel", and "emotions" MUST be written in ${language || "en"} (the user's language). JSON keys stay in English.
+JSON fields:
+- "tone": "positive"|"neutral"|"negative"|"hesitant"
+- "confidence": 0-1
+- "suggestion": 1 short actionable tip referencing something specific from the conversation
+- "emotions": 1-3 detected emotions
+- "signal": "objection"|"question"|"opportunity"|"hesitation"|"agreement"|"key_point"|"none"
+- "signalLabel": 2-5 word label if signal != "none", else ""
+- "qualityScore": 0-100
+- "classification": "very_positive"|"positive"|"neutral"|"awkward"|"negative"
+- "coachingTip": 1 specific coaching sentence (what to do RIGHT NOW, not general advice)
+- "liveInsight": 1 sentence about what's happening in the conversation right now
+- "engagementScore": 0-100 (other party's engagement)
+- "responseDelay": "fast"|"normal"|"slow"|"silence"
+- "suggestedResponses": exactly 3 objects with:
+  - "text": response to say (1-2 sentences, natural, specific to this conversation)
+  - "intent": "empathize"|"redirect"|"close"|"probe"|"agree"|"challenge"|"clarify"|"deflect"
+  - "label": 2-3 word label
+- "detectedQuestion": if the OTHER person asked something needing a response:
+  {"text": their exact question, "speaker": who, "urgency": "low"|"medium"|"high"}
+  null if no question. Keep detecting the same question until it's been answered.
+- "speakerDynamics": {"dominantSpeaker": string, "balanceRatio": 0-1, "interactionStyle": string}
 
-Only return valid JSON. No markdown, no explanation.${contextBlock}`,
+Mode: ${conversationMode}. ${modeInstruction}
+
+All text content in ${language || "en"}. Keys/enums in English. Valid JSON only, no markdown.${contextBlock}`,
     });
 
     const content = message.content[0];

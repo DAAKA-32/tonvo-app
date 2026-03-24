@@ -3,6 +3,8 @@ import { getPlanFeatures } from "@/lib/plan-features";
 import { z } from "zod/v4";
 import { anthropicClient, CLAUDE_FAST } from "@/lib/anthropic";
 import { verifyAuth } from "@/lib/auth-server";
+import { getUserSubscription } from "@/lib/subscription";
+import { checkRateLimit, RATE_LIMITS } from "@/lib/rate-limit";
 
 const ChatMetricsSchema = z.object({
   visibleMessageCount: z.number().default(0),
@@ -28,13 +30,19 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
+  const ip = req.headers.get("x-forwarded-for")?.split(",")[0] || req.headers.get("x-real-ip") || "unknown";
+  const rl = checkRateLimit(`screen:${ip}`, RATE_LIMITS.screenAnalysis);
+  if (!rl.allowed) {
+    return NextResponse.json({ error: "Rate limit exceeded", retryAfterMs: rl.retryAfterMs }, { status: 429 });
+  }
+
   try {
     const formData = await req.formData();
     const imageFile = formData.get("image") as File | null;
-    const userPlan = formData.get("userPlan") as string | null;
 
-    // Plan gate: screen analysis is Pro+ only
-    const features = getPlanFeatures(userPlan);
+    // Resolve plan server-side (never trust client-provided plan)
+    const sub = await getUserSubscription(authUser.uid);
+    const features = getPlanFeatures(sub.plan);
     if (!features.screenAnalysis) {
       return NextResponse.json(
         { error: "Screen analysis requires the Pro plan.", upgrade: true },

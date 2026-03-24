@@ -4,6 +4,18 @@ import { useEffect, useRef, useCallback, useImperativeHandle, forwardRef } from 
 import type { SuggestedResponse, DetectedQuestion } from "@/types/analysis";
 import type { Participant } from "@/hooks/useParticipants";
 
+/** Pre-translated labels passed from the parent (PiP window has no i18n context) */
+export interface CopilotPiPLabels {
+  title: string;
+  sayThis: string;
+  listening: string;
+  stopSession: string;
+  respondNow: string;
+  invisibleBadge: string;
+  participantCount: string;
+  participantCountPlural: string;
+}
+
 interface CopilotPiPProps {
   active: boolean;
   suggestion: string;
@@ -13,6 +25,7 @@ interface CopilotPiPProps {
   onStop: () => void;
   onPiPStateChange?: (isOpen: boolean, mode?: "documentPiP" | "popup" | "failed") => void;
   participants?: Participant[];
+  labels?: CopilotPiPLabels;
 }
 
 // TypeScript declarations for Document Picture-in-Picture API (Chrome 116+)
@@ -134,13 +147,28 @@ const INTENT_ICONS: Record<string, string> = {
 };
 
 function buildBodyContent(props: CopilotPiPProps): string {
-  const { suggestion = "", suggestedResponses = [], detectedQuestion = null, elapsed = 0, participants = [] } = props;
+  const { suggestion = "", suggestedResponses = [], detectedQuestion = null, elapsed = 0, participants = [], labels } = props;
+
+  const l = {
+    title: labels?.title || "AI Copilot",
+    sayThis: labels?.sayThis || "Say This",
+    listening: labels?.listening || "Listening... suggestions will appear here",
+    stopSession: labels?.stopSession || "Stop Session",
+    respondNow: labels?.respondNow || "Respond now",
+    invisibleBadge: labels?.invisibleBadge || "Invisible during screen share",
+    participantCount: labels?.participantCount || "{{count}} participant",
+    participantCountPlural: labels?.participantCountPlural || "{{count}} participants",
+  };
+
+  const pCount = participants.length > 1
+    ? l.participantCountPlural.replace("{{count}}", String(participants.length))
+    : l.participantCount.replace("{{count}}", String(participants.length));
 
   return `
   <div class="header">
     <div class="header-left">
       <div class="pulse"></div>
-      <span class="title">AI Copilot</span>
+      <span class="title">${escapeHTML(l.title)}</span>
       <span class="timer">${formatTime(elapsed)}</span>
     </div>
   </div>
@@ -149,7 +177,7 @@ function buildBodyContent(props: CopilotPiPProps): string {
   <div class="detected-question" style="background:${detectedQuestion.urgency === "high" ? "rgba(248,113,113,0.08)" : "rgba(251,191,36,0.06)"};border:1px solid ${detectedQuestion.urgency === "high" ? "rgba(248,113,113,0.25)" : "rgba(251,191,36,0.2)"}">
     <div class="dq-header">
       <span class="dq-speaker" style="color:${detectedQuestion.urgency === "high" ? "#f87171" : "#fbbf24"}">${escapeHTML(detectedQuestion.speaker)}</span>
-      ${detectedQuestion.urgency === "high" ? '<span class="dq-urgent">Respond now</span>' : ""}
+      ${detectedQuestion.urgency === "high" ? `<span class="dq-urgent">${escapeHTML(l.respondNow)}</span>` : ""}
     </div>
     <p class="dq-text">&ldquo;${escapeHTML(detectedQuestion.text)}&rdquo;</p>
   </div>` : ""}
@@ -158,7 +186,7 @@ function buildBodyContent(props: CopilotPiPProps): string {
   <div class="participants">
     <div class="participants-header">
       <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-      ${participants.length} participant${participants.length > 1 ? "s" : ""}
+      ${escapeHTML(pCount)}
     </div>
     <div class="participants-items">
       ${participants.map((p: {label: string}, i: number) => {
@@ -170,7 +198,7 @@ function buildBodyContent(props: CopilotPiPProps): string {
 
   ${suggestedResponses && suggestedResponses.length > 0 ? `
   <div class="responses-section">
-    <div class="responses-header"><div class="dot" style="background:#34d399"></div> Say This</div>
+    <div class="responses-header"><div class="dot" style="background:#34d399"></div> ${escapeHTML(l.sayThis)}</div>
     ${suggestedResponses.map((r: {intent: string; label: string; text: string}) => `
     <div class="response-card">
       <div class="response-meta">
@@ -184,7 +212,7 @@ function buildBodyContent(props: CopilotPiPProps): string {
     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#8b8b96" stroke-width="1.5" style="opacity:0.4">
       <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
     </svg>
-    <span>Listening... suggestions will appear here</span>
+    <span>${escapeHTML(l.listening)}</span>
   </div>`}
 
   ${suggestion ? `
@@ -195,10 +223,10 @@ function buildBodyContent(props: CopilotPiPProps): string {
 
   <button class="stop-btn" id="stopBtn">
     <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><rect x="4" y="4" width="16" height="16" rx="2"/></svg>
-    Stop Session
+    ${escapeHTML(l.stopSession)}
   </button>
 
-  <div class="pip-badge">Invisible en partage d'ecran</div>`;
+  <div class="pip-badge">${escapeHTML(l.invisibleBadge)}</div>`;
 }
 
 // Build full HTML page (for window.open fallback)
