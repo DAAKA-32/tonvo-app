@@ -8,6 +8,7 @@ import { useTranslation } from "react-i18next";
 import { useAuth } from "@/lib/auth-context";
 import { authFetch, authFetchFormData } from "@/lib/api-client";
 import { AudioCaptureService, type CaptureOptions } from "@/services/audio-capture";
+import { LiveSpeechService } from "@/services/live-speech";
 import { supabase } from "@/lib/supabase";
 import AppShell from "@/components/AppShell";
 import { useToast } from "@/components/Toast";
@@ -106,6 +107,7 @@ export default function SessionPage() {
   const toast = useToast();
   const { plan, can, features, sessionsRemaining } = usePlan();
   const audioService = useRef<AudioCaptureService | null>(null);
+  const liveSpeech = useRef<LiveSpeechService | null>(null);
   const processingToastId = useRef<string | null>(null);
   const screenAnalysisTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -117,8 +119,13 @@ export default function SessionPage() {
 
   const [isMobile, setIsMobile] = useState(false);
   const [isIOS, setIsIOS] = useState(false);
-  const [screenEnabled, setScreenEnabled] = useState(true);
+  const [screenEnabled, setScreenEnabled] = useState(features.screenAnalysis);
   const [audioEnabled, setAudioEnabled] = useState(true);
+
+  // Sync screenEnabled with plan — disable if plan doesn't allow it
+  useEffect(() => {
+    if (!features.screenAnalysis) setScreenEnabled(false);
+  }, [features.screenAnalysis]);
 
   // Detect platform capabilities
   useEffect(() => {
@@ -148,11 +155,12 @@ export default function SessionPage() {
   const [isRecording, setIsRecording] = useState(false);
   const [segments, setSegments] = useState<TranscriptSegment[]>([]);
   const [currentTone, setCurrentTone] = useState<Tone>("neutral");
-  const [currentSuggestion, setCurrentSuggestion] = useState("Start a session to get real-time analysis...");
+  const [currentSuggestion, setCurrentSuggestion] = useState("");
   const [currentEmotions, setCurrentEmotions] = useState<string[]>([]);
   const [sessionStart, setSessionStart] = useState<Date | null>(null);
   const [elapsed, setElapsed] = useState(0);
   const [processing, setProcessing] = useState(false);
+  const [interimText, setInterimText] = useState("");
   const [conversationId, setConversationId] = useState<string | null>(null);
   const [qualityScore, setQualityScore] = useState(0);
   const [engagementScore, setEngagementScore] = useState(0);
@@ -268,7 +276,7 @@ export default function SessionPage() {
       // Warning at 60 seconds remaining
       if (remaining <= 60 && remaining > 0 && !warningShownRef.current) {
         warningShownRef.current = true;
-        toast.show("1 minute remaining on your free session", { type: "info", duration: 5000 });
+        toast.show(t("session.timeWarning"), { type: "info", duration: 5000 });
       }
 
       // Time's up — auto-stop
@@ -277,7 +285,7 @@ export default function SessionPage() {
           clearInterval(sessionTimerRef.current);
           sessionTimerRef.current = null;
         }
-        toast.show("Session time limit reached. Upgrade to Pro for unlimited sessions.", { type: "error", duration: 8000 });
+        toast.show(t("session.timeLimitReached"), { type: "error", duration: 8000 });
         // Use ref to call stopSession to avoid stale closure
         if (stopSessionRef.current) stopSessionRef.current();
       }
@@ -350,19 +358,24 @@ export default function SessionPage() {
       const data: ScreenSummaryResult = await res.json();
       screenSummaryRef.current = data;
       setScreenSummary(data);
-      // Screen summary generated -- keep session running (user stops manually)
+      // Screen summary generated — auto-stop in screen-only mode
       if (!audioService.current?.audioEnabled) {
         stopScreenAnalysis();
-        toast.show("Screen analysis complete -- session still active", { type: "success", duration: 3000 });
+        toast.show(t("session.screenAnalysisComplete", "Screen analysis complete — generating report..."), { type: "success", duration: 3000 });
+        // Auto-stop session after a short delay so the summary state settles
+        setTimeout(() => { stopSessionRef.current?.(); }, 1500);
       } else {
-        toast.show("Screen summary updated", { type: "success", duration: 3000 });
+        toast.show(t("session.screenSummaryUpdated"), { type: "success", duration: 3000 });
       }
     } catch (err) {
       console.error("Screen summary generation error:", err);
-      toast.show("Failed to generate screen summary", { type: "error", duration: 4000 });
-      // Stop screen polling on error but keep session alive
       if (!audioService.current?.audioEnabled) {
+        // Screen-only: stop session on error — no point keeping a dead session
         stopScreenAnalysis();
+        toast.show(t("session.screenSummaryFailed", "Analysis failed — please try again."), { type: "error", duration: 4000 });
+        setTimeout(() => { stopSessionRef.current?.(); }, 1000);
+      } else {
+        toast.show(t("session.screenSummaryFailed"), { type: "error", duration: 4000 });
       }
     } finally {
       setGeneratingScreenSummary(false);
@@ -371,6 +384,11 @@ export default function SessionPage() {
 
   // Track whether screen content is stable (no changes detected)
   const screenStableCount = useRef(0);
+  // Track consecutive non-conversational frames (screen-only: warn user if no chat visible)
+  const nonConversationalCount = useRef(0);
+  const nonConversationalWarned = useRef(false);
+  // Screen-only static mode: count captures to trigger summary after 2 successful analyses
+  const screenOnlyCaptureCount = useRef(0);
 
   // Build structured visual context from recent screen captures for multi-frame memory
   function buildVisualContextSummary(): string {
@@ -402,6 +420,7 @@ export default function SessionPage() {
   const analyzeScreen = useCallback(async () => {
     if (!audioService.current || !audioService.current.hasVideo || screenAnalysisCompleted) return;
 
+    const isScreenOnly = !audioService.current.audioEnabled;
     const frame = await audioService.current.captureFrame();
     if (!frame) return;
     setAnalyzingScreen(true);
@@ -436,21 +455,49 @@ export default function SessionPage() {
           contentType: data.contentType,
           screenMood: data.mood,
         }]);
+
+        // ──── Screen-only STATIC mode: 2 captures then generate report ────
+        if (isScreenOnly) {
+          const isConversational = ["chat", "email", "video"].includes(data.contentType);
+          if (isConversational) {
+            nonConversationalCount.current = 0;
+            screenOnlyCaptureCount.current += 1;
+            if (screenOnlyCaptureCount.current >= 2) {
+              // Enough context — generate summary and stop
+              pauseScreenAnalysis();
+              setScreenAnalysisCompleted(true);
+              generateScreenSummary(data);
+              return;
+            }
+            // Take one more capture after a short delay for extra context
+            scheduleNextCapture("chat");
+          } else {
+            nonConversationalCount.current += 1;
+            if (nonConversationalCount.current >= 3 && !nonConversationalWarned.current) {
+              nonConversationalWarned.current = true;
+              toast.show(
+                t("session.noConversationDetected", "No conversation detected on screen. Please display a chat, email, or messaging app to analyze."),
+                { type: "info", duration: 8000 }
+              );
+            }
+            // Keep trying — user might switch to a conversation
+            scheduleNextCapture(data.contentType);
+          }
+          return;
+        }
+
+        // ──── Mixed mode (screen + audio): existing adaptive polling ────
         if (data.analysisComplete) {
-          // Screen content is stable -- count consecutive stable frames
           screenStableCount.current += 1;
           if (screenStableCount.current >= 2) {
-            // Stop polling and generate summary
             pauseScreenAnalysis();
             setScreenAnalysisCompleted(true);
             generateScreenSummary(data);
             return;
           }
         } else {
-          // Content changed -- reset stable counter
           screenStableCount.current = 0;
         }
-        // Schedule next capture with adaptive interval
         scheduleNextCapture(data.contentType);
       } else {
         // No data -- keep polling at default interval
@@ -468,9 +515,9 @@ export default function SessionPage() {
     if (!audioService.current?.audioEnabled) return;
     setProcessing(true);
     if (processingToastId.current) {
-      toast.update(processingToastId.current, "Transcribing audio...", { type: "processing" });
+      toast.update(processingToastId.current, t("session.transcribing"), { type: "processing" });
     } else {
-      processingToastId.current = toast.show("Transcribing audio...", { type: "processing" });
+      processingToastId.current = toast.show(t("session.transcribing"), { type: "processing" });
     }
     try {
       const formData = new FormData();
@@ -489,8 +536,10 @@ export default function SessionPage() {
       // Store detected language for subsequent chunks
       if (transcribeData.language && !detectedLanguage) {
         setDetectedLanguage(transcribeData.language);
+        // Update live speech language for better accuracy
+        liveSpeech.current?.setLanguage(transcribeData.language);
       }
-      const WHISPER_HALLUCINATIONS = ["sous-titres","amara.org","sous-titrage","merci d'avoir regard","merci de votre visionnage","thank you for watching","subtitles by","transcrit par","please subscribe","music","ご視聴","ごちそうさま","お疲れ様","よろしくお願い","ありがとうございま","チャンネル登録","最後まで","見てくれて"];
+      const WHISPER_HALLUCINATIONS = ["sous-titres","amara.org","sous-titrage","merci d'avoir regard","merci de votre visionnage","thank you for watching","thanks for watching","subtitles by","transcrit par","please subscribe","like and subscribe","music","video/content end","end of video","fin de la vidéo","ご視聴","ごちそうさま","お疲れ様","よろしくお願い","ありがとうございま","チャンネル登録","最後まで","見てくれて"];
       const lower = (text || "").trim().toLowerCase();
       // Detect non-Latin script hallucinations (Japanese, Chinese, Korean, Arabic, etc.)
       // when no language has been detected yet or detected language uses Latin script
@@ -516,10 +565,11 @@ export default function SessionPage() {
         return;
       }
       lastSegmentText.current = text;
+      setInterimText(""); // Clear interim — Whisper result is authoritative
 
       // Reset silence counter on valid speech
       consecutiveSilenceCount.current = 0;
-      toast.update(processingToastId.current!, "Analyzing conversation...", { type: "processing" });
+      toast.update(processingToastId.current!, t("session.analyzing"), { type: "processing" });
 
       // Send rolling summary + last 5 raw segments + copilot memory for richer context
       const recentSegs = segments.slice(-5).map((s) => ({ text: s.text, tone: s.tone.tone, speaker: s.speaker }));
@@ -641,12 +691,12 @@ export default function SessionPage() {
         toast.update(processingToastId.current!, cfg.label + (analysis.signalLabel ? `: ${analysis.signalLabel}` : ""), { type: tt, duration: 3000 });
         processingToastId.current = null;
       } else {
-        toast.update(processingToastId.current!, "Segment analyzed", { type: "success", duration: 2000 });
+        toast.update(processingToastId.current!, t("session.segmentAnalyzed"), { type: "success", duration: 2000 });
         processingToastId.current = null;
       }
     } catch (err) {
       console.error("Processing error:", err);
-      if (processingToastId.current) { toast.update(processingToastId.current, "Analysis failed", { type: "error", duration: 4000 }); processingToastId.current = null; }
+      if (processingToastId.current) { toast.update(processingToastId.current, t("session.analysisFailed"), { type: "error", duration: 4000 }); processingToastId.current = null; }
     } finally { setProcessing(false); }
   }, [toast, segments, detectedLanguage, conversationMode]);
 
@@ -660,7 +710,16 @@ export default function SessionPage() {
   }, []);
 
   async function startSession() {
-    if (!screenEnabled && !audioEnabled) { toast.show("Enable at least Screen or Audio to start.", { type: "error", duration: 4000 }); return; }
+    // Block screen-only on free plan — screen analysis requires Pro
+    const effectiveScreen = screenEnabled && features.screenAnalysis;
+    if (!effectiveScreen && !audioEnabled) {
+      if (screenEnabled && !features.screenAnalysis) {
+        toast.show(t("session.screenProOnly", "Screen analysis is available on the Pro plan. Upgrade to unlock this feature!"), { type: "info", duration: 5000 });
+      } else {
+        toast.show(t("session.enableAtLeast"), { type: "error", duration: 4000 });
+      }
+      return;
+    }
 
     // Check subscription limit
     if (user) {
@@ -672,14 +731,14 @@ export default function SessionPage() {
         });
         const subCheck = await subRes.json();
         if (!subCheck.allowed) {
-          toast.show(subCheck.reason || "Session limit reached. Upgrade your plan.", { type: "error", duration: 6000 });
+          toast.show(subCheck.reason || t("session.sessionLimitReached"), { type: "error", duration: 6000 });
           return;
         }
       } catch { /* Allow session if check fails */ }
     }
 
     audioService.current = new AudioCaptureService();
-    const options: CaptureOptions = { screenEnabled, audioEnabled };
+    const options: CaptureOptions = { screenEnabled: effectiveScreen, audioEnabled };
     try {
       await audioService.current.start(stableProcessAudioChunk, options);
       setIsRecording(true); setSessionStart(new Date()); setSegments([]); setSignals([]); setKeyMoments([]); setTimeline([]); setDetectedLanguage(null);
@@ -694,21 +753,39 @@ export default function SessionPage() {
       consecutiveSilenceCount.current = 0;
       lastSegmentText.current = "";
       screenStableCount.current = 0;
+      nonConversationalCount.current = 0;
+      nonConversationalWarned.current = false;
+      screenOnlyCaptureCount.current = 0;
       screenAnalysisStartTime.current = Date.now();
       setAnalysisStatus("running");
-      // Open Document PiP from user gesture context (click) — required for screen-capture exclusion
-      if (can("copilotPiP")) {
+      // Open Document PiP from user gesture context (click) — only for audio sessions (no PiP in screen-only)
+      if (can("copilotPiP") && audioEnabled) {
         copilotPiPRef.current?.requestOpen();
+      }
+      // Start live interim transcription (Web Speech API) for instant feedback
+      if (audioEnabled) {
+        const ls = new LiveSpeechService();
+        if (ls.supported) {
+          ls.setLanguage(i18n.language || "en");
+          ls.start((text, isFinal) => {
+            if (!isFinal) {
+              setInterimText(text);
+            } else {
+              setInterimText(""); // Clear — Whisper will provide the final version
+            }
+          });
+          liveSpeech.current = ls;
+        }
       }
       const hasAudio = audioService.current.hasAudio;
       const hasVideo = audioService.current.hasVideo;
       const hasSystemAudio = audioService.current.hasSystemAudio;
-      if (hasVideo && hasAudio && hasSystemAudio) toast.show("Full capture active: screen + mic + system audio (Discord, Zoom, etc). You can switch apps freely.", { type: "success", duration: 5000 });
-      else if (hasVideo && hasAudio && !hasSystemAudio) toast.show("Screen + mic active. System audio not captured -- to hear others, share a Chrome tab or enable 'Share system audio'.", { type: "info", duration: 6000 });
-      else if (hasVideo && !audioEnabled) toast.show("Screen capture started. You can switch apps -- analysis runs in background.", { type: "info", duration: 4000 });
-      else if (hasVideo && audioEnabled && !hasAudio) toast.show("Screen captured but no audio detected. Make sure to check 'Share audio' in the sharing dialog.", { type: "error", duration: 6000 });
-      else if (hasAudio) toast.show("Audio session started -- listening via microphone...", { type: "success", duration: 3000 });
-      if (screenEnabled && hasVideo) { screenAnalysisTimer.current = setTimeout(() => analyzeScreen(), 3000); }
+      if (hasVideo && hasAudio && hasSystemAudio) toast.show(t("session.fullCapture"), { type: "success", duration: 5000 });
+      else if (hasVideo && hasAudio && !hasSystemAudio) toast.show(t("session.screenMicCapture"), { type: "info", duration: 6000 });
+      else if (hasVideo && !audioEnabled) toast.show(t("session.screenOnlyStarted"), { type: "info", duration: 5000 });
+      else if (hasVideo && audioEnabled && !hasAudio) toast.show(t("session.screenNoAudio"), { type: "error", duration: 6000 });
+      else if (hasAudio) toast.show(t("session.audioStarted"), { type: "success", duration: 3000 });
+      if (effectiveScreen && hasVideo) { screenAnalysisTimer.current = setTimeout(() => analyzeScreen(), 3000); }
       if (user) {
         const { data } = await supabase.from("conversations").insert({ user_id: user.uid, title: `Session ${new Date().toLocaleString()}` }).select("id").single();
         if (data) setConversationId(data.id);
@@ -722,13 +799,14 @@ export default function SessionPage() {
     } catch (err) {
       // Clean up partially initialized audio service
       if (audioService.current) { try { audioService.current.stop(); } catch {} audioService.current = null; }
+      if (liveSpeech.current) { try { liveSpeech.current.stop(); } catch {} liveSpeech.current = null; }
       const msg = err instanceof Error ? err.message : "";
       if (msg.includes("PERMISSION_DENIED:screen")) {
-        toast.show("Screen sharing was cancelled. Please select a screen or window to share.", { type: "error", duration: 5000 });
+        toast.show(t("session.screenShareCancelled"), { type: "error", duration: 5000 });
       } else if (msg.includes("PERMISSION_DENIED:microphone")) {
-        toast.show("Microphone access was denied. Allow microphone in your browser settings.", { type: "error", duration: 5000 });
+        toast.show(t("session.micDenied"), { type: "error", duration: 5000 });
       } else {
-        toast.show(screenEnabled ? "Screen sharing required. Select a screen/window." : "Microphone access required.", { type: "error", duration: 6000 });
+        toast.show(effectiveScreen ? t("session.screenRequired") : t("session.micRequired"), { type: "error", duration: 6000 });
       }
     }
   }
@@ -739,21 +817,23 @@ export default function SessionPage() {
     setCopilotMode(isOpen ? (mode || "documentPiP") : (mode === "failed" ? "failed" : "none"));
 
     if (isOpen && mode === "documentPiP") {
-      toast.show("AI Copilot running — invisible to screen share.", { type: "success", duration: 4000 });
+      toast.show(t("session.copilotRunning"), { type: "success", duration: 4000 });
     } else if (isOpen && mode === "popup") {
-      toast.show("Copilot in a separate window. Tip: share a specific window (not entire screen) to keep it hidden.", { type: "info", duration: 8000 });
+      toast.show(t("session.copilotPopup"), { type: "info", duration: 8000 });
     } else if (!isOpen && mode === "failed") {
-      toast.show("Copilot window blocked by browser. Allow popups for this site, or use Chrome for invisible PiP.", { type: "error", duration: 10000 });
+      toast.show(t("session.copilotBlocked"), { type: "error", duration: 10000 });
     } else if (!isOpen && isRecording) {
-      toast.show("Copilot window closed. Reopen from session controls.", { type: "info", duration: 5000 });
+      toast.show(t("session.copilotClosed"), { type: "info", duration: 5000 });
     }
   }, [toast, isRecording]);
 
   async function stopSession() {
     if (screenAnalysisTimer.current) { clearTimeout(screenAnalysisTimer.current); screenAnalysisTimer.current = null; }
-    // Process final audio chunk before stopping (up to 10s of speech would be lost otherwise)
+    // Process final audio chunk before stopping (up to 3s of speech would be lost otherwise)
     let finalBlob: Blob | null = null;
     if (audioService.current) finalBlob = audioService.current.stop();
+    if (liveSpeech.current) { liveSpeech.current.stop(); liveSpeech.current = null; }
+    setInterimText("");
     if (finalBlob && finalBlob.size > 1000) {
       try { await stableProcessAudioChunk(finalBlob); } catch { /* best-effort */ }
     }
@@ -766,7 +846,7 @@ export default function SessionPage() {
     const currentScreenSummary = screenSummaryRef.current;
     const hasScreenData = currentScreenSummary || screenAnalysis;
     if (conversationId && (hasAudioData || hasScreenData)) {
-      const saveToastId = toast.show("Saving session...", { type: "processing" });
+      const saveToastId = toast.show(t("session.saving"), { type: "processing" });
 
       // Phase 1: Save essential fields immediately (always works even if new columns are missing)
       const toneMap: Record<string, string> = { very_positive: "positive", positive: "positive", neutral: "neutral", awkward: "hesitant", negative: "negative" };
@@ -798,7 +878,7 @@ export default function SessionPage() {
       }
 
       // Phase 2: Generate and save full summary (uses new columns that may need migration)
-      toast.update(saveToastId, "Generating summary...", { type: "processing" });
+      toast.update(saveToastId, t("session.generatingSummary"), { type: "processing" });
       try {
         if (hasAudioData) {
           const res = await authFetch("/api/summarize", {
@@ -838,13 +918,13 @@ export default function SessionPage() {
             improvements: currentScreenSummary.improvements,
           }).eq("id", conversationId);
         }
-        toast.update(saveToastId, "Session saved", { type: "success", duration: 2000 });
+        toast.update(saveToastId, t("session.sessionSaved"), { type: "success", duration: 2000 });
       } catch (err) {
         console.error("Summary enrichment error:", err);
-        toast.update(saveToastId, "Session saved", { type: "success", duration: 2000 });
+        toast.update(saveToastId, t("session.sessionSaved"), { type: "success", duration: 2000 });
       }
       router.push(`/summary/${conversationId}`);
-    } else { toast.show("Session ended", { type: "info", duration: 3000 }); }
+    } else { toast.show(t("session.sessionEnded"), { type: "info", duration: 3000 }); }
   }
   stopSessionRef.current = stopSession;
 
@@ -868,7 +948,7 @@ export default function SessionPage() {
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-8 gap-4">
           <div>
-            <h1 className="section-heading text-glow mb-1">Live Session</h1>
+            <h1 className="section-heading text-glow mb-1">{t("session.title")}</h1>
             {isRecording && (
               <div className="flex items-center gap-3">
                 <span className="text-sm" style={{ color: "var(--color-text-muted)" }}>{formatTime(elapsed)}</span>
@@ -919,9 +999,20 @@ export default function SessionPage() {
               </select>
             )}
             {!isRecording && !isIOS && (
-              <button onClick={() => setScreenEnabled((p) => !p)} className="mic-toggle" data-active={screenEnabled}>
+              <button
+                onClick={() => {
+                  if (!features.screenAnalysis) {
+                    toast.show(t("session.screenProOnly", "Screen analysis is available on the Pro plan. Upgrade to unlock this feature!"), { type: "info", duration: 5000 });
+                    return;
+                  }
+                  setScreenEnabled((p) => !p);
+                }}
+                className="mic-toggle"
+                data-active={screenEnabled && features.screenAnalysis}
+                style={!features.screenAnalysis ? { opacity: 0.5 } : undefined}
+              >
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" /><line x1="8" y1="21" x2="16" y2="21" /><line x1="12" y1="17" x2="12" y2="21" /></svg>
-                <span className="mic-toggle-label">Screen {screenEnabled ? "On" : "Off"}</span>
+                <span className="mic-toggle-label">{screenEnabled && features.screenAnalysis ? t("session.screenOn") : !features.screenAnalysis ? t("session.screenOffPro") : t("session.screenOff")}</span>
               </button>
             )}
             {!isRecording && (
@@ -931,7 +1022,7 @@ export default function SessionPage() {
                 ) : (
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="1" y1="1" x2="23" y2="23" /><path d="M9 9v3a3 3 0 0 0 5.12 2.12M15 9.34V4a3 3 0 0 0-5.94-.6" /><path d="M17 16.95A7 7 0 0 1 5 12v-2m14 0v2c0 .76-.12 1.5-.35 2.18" /><line x1="12" y1="19" x2="12" y2="23" /><line x1="8" y1="23" x2="16" y2="23" /></svg>
                 )}
-                <span className="mic-toggle-label">Audio {audioEnabled ? "On" : "Off"}</span>
+                <span className="mic-toggle-label">{audioEnabled ? t("session.audioOn") : t("session.audioOff")}</span>
               </button>
             )}
             {isRecording && (
@@ -957,7 +1048,7 @@ export default function SessionPage() {
             <button onClick={isRecording ? stopSession : startSession} disabled={!isRecording && !screenEnabled && !audioEnabled}
               className="w-full sm:w-auto px-6 py-3 rounded-xl font-semibold text-white cursor-pointer border-none transition-all hover:opacity-90 disabled:opacity-40 disabled:cursor-not-allowed"
               style={{ backgroundColor: isRecording ? "var(--color-negative)" : "var(--color-accent)", minHeight: 48 }}>
-              {isRecording ? "Stop Session" : "Start Recording"}
+              {isRecording ? t("session.stopSession") : t("session.startRecording")}
             </button>
           </div>
         </div>
@@ -1004,10 +1095,10 @@ export default function SessionPage() {
             {isIOS && !screenEnabled && audioEnabled
               ? "Audio mode: put your call on speaker — Tonvo will capture both sides via microphone for real-time analysis."
               : isMobile && screenEnabled && audioEnabled
-              ? "Full capture: screen sharing + microphone. Tonvo will analyze both the screen and audio in real time."
+              ? t("session.modeFullCapture")
               : isMobile && !screenEnabled && audioEnabled
-              ? "Audio mode: microphone capture + real-time transcription. Put your call on speaker for best results."
-              : screenEnabled && audioEnabled ? "Full analysis: screen capture + audio transcription + conversation intelligence." : screenEnabled && !audioEnabled ? "Screen only: visual analysis active. No audio capture, no transcription." : !screenEnabled && audioEnabled ? "Audio only: microphone capture + transcription + conversation intelligence." : "Enable at least Screen or Audio to start a session."}
+              ? t("session.modeMobileAudio")
+              : screenEnabled && audioEnabled ? t("session.modeFullAnalysis") : screenEnabled && !audioEnabled ? t("session.modeScreenOnly") : !screenEnabled && audioEnabled ? t("session.modeAudioOnly") : t("session.modeNone")}
           </div>
         )}
 
@@ -1264,7 +1355,7 @@ export default function SessionPage() {
                 <p className="text-xs m-0" style={{ color: "var(--color-text-muted)" }}>{screenAnalysis.insight}</p>
               </div>
             ) : (
-              <p className="text-sm m-0" style={{ color: "var(--color-text-muted)" }}>{analyzingScreen ? "Capturing screen content..." : "Waiting for first screen analysis..."}</p>
+              <p className="text-sm m-0" style={{ color: "var(--color-text-muted)" }}>{analyzingScreen ? t("session.analyzing") : t("session.waitingFirstAnalysis")}</p>
             )}
           </div>
         )}
@@ -1431,9 +1522,16 @@ export default function SessionPage() {
             {/* Latest coaching + insight combined */}
             {segments.length === 0 && (
               <div className="glass-card-static rounded-xl p-8 text-center">
-                <p className="text-sm m-0" style={{ color: "var(--color-text-muted)" }}>
-                  {isRecording ? audioService.current?.hasAudio ? "Listening... insights will appear here as conversation is analyzed." : "No audio detected. Check your audio source." : "Press Start Recording to begin."}
-                </p>
+                {isRecording && interimText ? (
+                  <div>
+                    <p className="text-xs font-semibold uppercase tracking-wider mb-2" style={{ color: "var(--color-accent-light)", opacity: 0.7 }}>Live</p>
+                    <p className="text-sm m-0" style={{ color: "var(--color-text)", opacity: 0.8 }}>{interimText}</p>
+                  </div>
+                ) : (
+                  <p className="text-sm m-0" style={{ color: "var(--color-text-muted)" }}>
+                    {isRecording ? audioService.current?.hasAudio ? t("session.listeningInsights") : t("session.noAudioDetected") : t("session.pressStart")}
+                  </p>
+                )}
               </div>
             )}
           </div>
@@ -1443,14 +1541,26 @@ export default function SessionPage() {
         {audioEnabled && activeTab === "transcript" && (
           <div>
             <div className="rounded-xl border overflow-hidden" style={{ backgroundColor: "var(--color-surface)", borderColor: "var(--color-border)" }}>
-              {segments.length === 0 ? (
+              {segments.length === 0 && !interimText ? (
                 <div className="p-8 text-center">
                   <p className="text-sm" style={{ color: "var(--color-text-muted)" }}>
-                    {isRecording ? audioService.current?.hasAudio ? "Listening... speak to see the transcript here." : "No audio detected. Check your audio source." : "Press Start Recording to begin."}
+                    {isRecording ? audioService.current?.hasAudio ? t("session.listeningTranscript") : t("session.noAudioDetected") : t("session.pressStart")}
                   </p>
                 </div>
               ) : (
                 <div className="divide-y" style={{ borderColor: "var(--color-border)" }}>
+                  {/* Live interim transcription — instant feedback while Whisper processes */}
+                  {interimText && isRecording && (
+                    <div className="p-4 flex items-start gap-4" style={{ opacity: 0.7 }}>
+                      <div style={{ width: 12, height: 12, borderRadius: "50%", backgroundColor: "var(--color-accent-light)", animation: "pulse 1.5s ease-in-out infinite", flexShrink: 0, marginTop: 4 }} />
+                      <div className="flex-1">
+                        <p className="text-sm m-0 italic" style={{ color: "var(--color-text)" }}>
+                          {interimText}
+                        </p>
+                        <span className="text-xs" style={{ color: "var(--color-text-muted)" }}>Live</span>
+                      </div>
+                    </div>
+                  )}
                   {/* Merge consecutive segments from the same speaker for cleaner display */}
                   {segments.reduce<{ speaker?: string; texts: string[]; tone: TranscriptSegment["tone"]; timestamp: number; signals: Array<{ signal: ConversationSignal; label: string }> }[]>((merged, seg) => {
                     const last = merged[merged.length - 1];
@@ -1553,6 +1663,7 @@ export default function SessionPage() {
         detectedQuestion={detectedQuestion}
         elapsed={elapsed}
         participants={participants}
+        interimText={interimText}
         onStop={stopSession}
         onPiPStateChange={handlePiPStateChange}
         labels={{
@@ -1567,34 +1678,26 @@ export default function SessionPage() {
         }}
       />
 
-      {/* Smart Copilot Overlay — Prep mode (before call) */}
-      {!isRecording && can("copilotOverlay") && (
-        <SmartCopilotOverlay
-          mode="prep"
-          prepData={prepData}
-          prepLoading={prepLoading}
-          onStartSession={startSession}
-        />
-      )}
+      {/* Smart Copilot Overlay removed — prep mode was confusing and unnecessary */}
 
       {/* Copilot status — NO in-page coaching during live session (invisible to screen share) */}
       {isRecording && can("copilotPiP") && pipOpen && (
         <div className="copilot-status-pill">
           <div className="copilot-status-pill__pulse" />
-          <span>AI Copilot active</span>
+          <span>{t("session.copilotActive")}</span>
           <span className="copilot-status-pill__mode">
-            {copilotMode === "documentPiP" ? "Invisible to screen share" : "Separate window"}
+            {copilotMode === "documentPiP" ? t("session.copilotInvisible") : t("session.copilotSeparateWindow")}
           </span>
         </div>
       )}
 
       {/* Reopen button — shown when PiP was closed mid-session */}
-      {isRecording && can("copilotPiP") && !pipOpen && (
+      {isRecording && can("copilotPiP") && !pipOpen && audioEnabled && (
         <button className="copilot-reopen-btn" onClick={() => copilotPiPRef.current?.requestOpen()}>
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <rect x="2" y="3" width="20" height="14" rx="2" /><line x1="8" x2="16" y1="21" y2="21" /><line x1="12" x2="12" y1="17" y2="21" />
           </svg>
-          Reopen Copilot Window
+          {t("session.reopenCopilot")}
         </button>
       )}
     </AppShell>

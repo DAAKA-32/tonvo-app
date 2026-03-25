@@ -23,7 +23,16 @@ const DEFAULT_SUB: UserSubscription = {
   sessionsReset: new Date().toISOString(),
 };
 
-export async function getUserSubscription(userId: string): Promise<UserSubscription> {
+/** Permanent plan overrides — these accounts always get the specified plan regardless of Stripe/DB state. */
+const PLAN_OVERRIDES: Record<string, PlanId> = {
+  "emilien.nepveu@gmail.com": "team",
+};
+
+export async function getUserSubscription(userId: string, email?: string | null): Promise<UserSubscription> {
+  // Check permanent overrides first
+  if (email && PLAN_OVERRIDES[email.toLowerCase()]) {
+    return { ...DEFAULT_SUB, plan: PLAN_OVERRIDES[email.toLowerCase()], status: "active" };
+  }
   const { data } = await supabaseAdmin
     .from("subscriptions")
     .select("*")
@@ -56,8 +65,8 @@ export async function getUserSubscription(userId: string): Promise<UserSubscript
   };
 }
 
-export async function canStartSession(userId: string): Promise<{ allowed: boolean; reason?: string }> {
-  const sub = await getUserSubscription(userId);
+export async function canStartSession(userId: string, email?: string | null): Promise<{ allowed: boolean; reason?: string }> {
+  const sub = await getUserSubscription(userId, email);
   const plan = PLANS[sub.plan];
 
   // Paid plans: unlimited
@@ -76,11 +85,11 @@ export async function canStartSession(userId: string): Promise<{ allowed: boolea
   return { allowed: true };
 }
 
-export async function incrementSessionCount(userId: string): Promise<void> {
-  const sub = await getUserSubscription(userId);
+export async function incrementSessionCount(userId: string, email?: string | null): Promise<void> {
+  const sub = await getUserSubscription(userId, email);
 
-  if (sub.stripeSubscriptionId) {
-    // Paid user -- no need to track
+  if (sub.plan !== "free") {
+    // Paid/override user -- no need to track session count
     return;
   }
 

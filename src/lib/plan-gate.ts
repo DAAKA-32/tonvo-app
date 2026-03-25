@@ -21,7 +21,8 @@ interface GateResult {
  */
 export async function checkPlanFeature(
   userId: string | null | undefined,
-  feature: keyof PlanFeatures
+  feature: keyof PlanFeatures,
+  email?: string | null
 ): Promise<GateResult> {
   if (!userId) {
     return {
@@ -35,7 +36,7 @@ export async function checkPlanFeature(
     };
   }
 
-  const sub = await getUserSubscription(userId);
+  const sub = await getUserSubscription(userId, email);
   const features = getPlanFeatures(sub.plan);
   const val = features[feature];
   const allowed = typeof val === "boolean" ? val : typeof val === "number" ? val !== 0 : false;
@@ -65,8 +66,8 @@ export async function checkPlanFeature(
  * Check session limits (count-based).
  * Replaces the old canStartSession function with plan-aware logic.
  */
-export async function checkSessionLimit(userId: string): Promise<GateResult & { sessionsUsed: number; sessionsLimit: number }> {
-  const sub = await getUserSubscription(userId);
+export async function checkSessionLimit(userId: string, email?: string | null): Promise<GateResult & { sessionsUsed: number; sessionsLimit: number }> {
+  const sub = await getUserSubscription(userId, email);
   const features = getPlanFeatures(sub.plan);
 
   if (features.sessionsPerMonth === -1) {

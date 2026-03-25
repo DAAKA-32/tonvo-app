@@ -4,6 +4,25 @@ import { verifyAuth } from "@/lib/auth-server";
 
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 
+/** Convert Whisper language name or locale to ISO-639-1 code. Returns null if unknown. */
+function toISO639(lang: string): string | null {
+  const l = lang.toLowerCase().trim();
+  // Already a 2-letter code
+  if (/^[a-z]{2}$/.test(l)) return l;
+  // Locale like "fr-FR" or "en-US"
+  if (/^[a-z]{2}[_-]/.test(l)) return l.slice(0, 2);
+  // Whisper full names → ISO codes (most common)
+  const map: Record<string, string> = {
+    english: "en", french: "fr", spanish: "es", german: "de", italian: "it",
+    portuguese: "pt", dutch: "nl", russian: "ru", chinese: "zh", japanese: "ja",
+    korean: "ko", arabic: "ar", hindi: "hi", turkish: "tr", polish: "pl",
+    swedish: "sv", danish: "da", norwegian: "no", finnish: "fi", greek: "el",
+    czech: "cs", romanian: "ro", hungarian: "hu", thai: "th", vietnamese: "vi",
+    indonesian: "id", malay: "ms", ukrainian: "uk", hebrew: "he", catalan: "ca",
+  };
+  return map[l] || null;
+}
+
 // Simple pause-based speaker segmentation.
 // Whisper returns word-level timestamps; gaps > PAUSE_THRESHOLD suggest a speaker change.
 const PAUSE_THRESHOLD = 1.5; // seconds
@@ -124,9 +143,11 @@ export async function POST(req: NextRequest) {
     whisperForm.append("response_format", "verbose_json");
     whisperForm.append("timestamp_granularities[]", "word");
 
-    // If language specified, use it. Otherwise let Whisper auto-detect.
+    // If language specified, convert to ISO-639-1 code (Whisper returns full names like "french"
+    // but only accepts codes like "fr" as input)
     if (language) {
-      whisperForm.append("language", language);
+      const iso = toISO639(language);
+      if (iso) whisperForm.append("language", iso);
     }
 
     const response = await fetch("https://api.openai.com/v1/audio/transcriptions", {

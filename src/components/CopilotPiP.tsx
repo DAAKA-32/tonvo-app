@@ -26,6 +26,8 @@ interface CopilotPiPProps {
   onPiPStateChange?: (isOpen: boolean, mode?: "documentPiP" | "popup" | "failed") => void;
   participants?: Participant[];
   labels?: CopilotPiPLabels;
+  /** Live interim transcription text (Web Speech API). */
+  interimText?: string;
 }
 
 // TypeScript declarations for Document Picture-in-Picture API (Chrome 116+)
@@ -147,7 +149,7 @@ const INTENT_ICONS: Record<string, string> = {
 };
 
 function buildBodyContent(props: CopilotPiPProps): string {
-  const { suggestion = "", suggestedResponses = [], detectedQuestion = null, elapsed = 0, participants = [], labels } = props;
+  const { suggestion = "", suggestedResponses = [], detectedQuestion = null, elapsed = 0, participants = [], labels, interimText = "" } = props;
 
   const l = {
     title: labels?.title || "AI Copilot",
@@ -207,6 +209,10 @@ function buildBodyContent(props: CopilotPiPProps): string {
       </div>
       <p class="response-text">${escapeHTML(r.text)}</p>
     </div>`).join("")}
+  </div>` : interimText ? `
+  <div class="empty" style="gap:6px">
+    <div style="width:8px;height:8px;border-radius:50%;background:#818cf8;animation:pulse 1.5s ease-in-out infinite"></div>
+    <span style="font-style:italic;color:#c8c8d8;font-size:11px">${escapeHTML(interimText)}</span>
   </div>` : `
   <div class="empty">
     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#8b8b96" stroke-width="1.5" style="opacity:0.4">
@@ -264,7 +270,11 @@ const CopilotPiP = forwardRef<CopilotPiPHandle, CopilotPiPProps>(function Copilo
   const updateTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const modeRef = useRef<"documentPiP" | "windowOpen" | null>(null);
 
+  const stopWiredRef = useRef<WeakSet<Window>>(new WeakSet());
   const wireStopButton = useCallback((win: Window) => {
+    // Only wire once per window — prevents duplicate listeners on every PiP content update
+    if (stopWiredRef.current.has(win)) return;
+    stopWiredRef.current.add(win);
     win.document.addEventListener("click", (e) => {
       const target = e.target as HTMLElement;
       if (target.id === "stopBtn" || target.closest("#stopBtn")) {

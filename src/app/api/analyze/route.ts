@@ -51,7 +51,7 @@ export async function POST(req: NextRequest) {
   } = body;
 
   // Resolve plan server-side from authenticated user (never trust client-provided plan)
-  const sub = await getUserSubscription(authUser.uid);
+  const sub = await getUserSubscription(authUser.uid, authUser.email);
   const planFeatures = getPlanFeatures(sub.plan);
 
   if (!text || typeof text !== "string") {

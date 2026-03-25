@@ -20,17 +20,17 @@ export async function POST(req: NextRequest) {
     }
 
     if (action === "check-session") {
-      const result = await canStartSession(userId);
+      const result = await canStartSession(userId, authUser.email);
       return NextResponse.json(result);
     }
 
     if (action === "increment") {
-      await incrementSessionCount(userId);
+      await incrementSessionCount(userId, authUser.email);
       return NextResponse.json({ ok: true });
     }
 
     // Default: return subscription info
-    const sub = await getUserSubscription(userId);
+    const sub = await getUserSubscription(userId, authUser.email);
     return NextResponse.json(sub);
   } catch (error) {
     console.error("Subscription check error:", error);

@@ -224,10 +224,11 @@ export class AudioCaptureService {
       if (level > this.peakLevelInCycle) this.peakLevelInCycle = level;
     }, 250);
 
-    // Every 10s, cycle the recorder: stop → collect complete file → restart
+    // Every 5s, cycle the recorder: stop → collect complete file → restart
+    // 5s balances real-time feedback with Whisper accuracy (3s produces too many hallucinations).
     this.intervalId = setInterval(() => {
       this.cycleRecording();
-    }, 10000);
+    }, 5000);
   }
 
   /** Stop only the screen capture (video tracks) while keeping audio running. */
@@ -335,10 +336,13 @@ export class AudioCaptureService {
     try {
       while (this.pendingBlobs.length > 0) {
         const blob = this.pendingBlobs.shift()!;
-        await this.onChunkReady(blob);
+        try {
+          await this.onChunkReady(blob);
+        } catch (err) {
+          // Log but continue processing remaining blobs — one failed chunk shouldn't block the pipeline
+          console.error("processQueue chunk error:", err);
+        }
       }
-    } catch (err) {
-      console.error("processQueue error:", err);
     } finally {
       this.sending = false;
     }

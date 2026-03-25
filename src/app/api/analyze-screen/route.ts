@@ -41,7 +41,7 @@ export async function POST(req: NextRequest) {
     const imageFile = formData.get("image") as File | null;
 
     // Resolve plan server-side (never trust client-provided plan)
-    const sub = await getUserSubscription(authUser.uid);
+    const sub = await getUserSubscription(authUser.uid, authUser.email);
     const features = getPlanFeatures(sub.plan);
     if (!features.screenAnalysis) {
       return NextResponse.json(
