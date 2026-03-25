@@ -502,30 +502,13 @@ export default function SessionPage() {
         return;
       }
 
-      // --- Deduplication: skip near-duplicate or overlapping transcriptions ---
+      // --- Deduplication: skip only exact duplicate transcriptions ---
+      // (The await in sendChunks prevents re-sending the same audio, so aggressive dedup is no longer needed)
       const prevText = lastSegmentText.current;
-      if (prevText) {
-        const normalize = (s: string) => s.toLowerCase().replace(/[^a-z0-9\u00C0-\u024F]/g, "");
-        const normNew = normalize(text);
-        const normPrev = normalize(prevText);
-        // Skip if identical or if previous fully contains the new chunk
-        if (normNew === normPrev || (normNew.length > 5 && normPrev.includes(normNew))) {
-          setProcessing(false);
-          if (processingToastId.current) { toast.dismiss(processingToastId.current); processingToastId.current = null; }
-          return;
-        }
-        // Trim overlapping prefix: chunk N+1 may repeat the tail of chunk N
-        if (normNew.length > 20 && normPrev.length > 20) {
-          const maxOverlap = Math.min(normPrev.length, Math.floor(normNew.length * 0.6));
-          for (let len = maxOverlap; len >= 10; len--) {
-            if (normNew.startsWith(normPrev.slice(-len))) {
-              const ratio = len / normNew.length;
-              const trimmed = text.slice(Math.round(ratio * text.length)).trim();
-              if (trimmed.length > 5) { text = trimmed; }
-              break;
-            }
-          }
-        }
+      if (prevText && text.trim().toLowerCase() === prevText.trim().toLowerCase()) {
+        setProcessing(false);
+        if (processingToastId.current) { toast.dismiss(processingToastId.current); processingToastId.current = null; }
+        return;
       }
       lastSegmentText.current = text;
 
