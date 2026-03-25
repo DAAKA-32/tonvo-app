@@ -12,7 +12,7 @@ export class AudioCaptureService {
   private audioChunks: Blob[] = [];
   private stream: MediaStream | null = null;
   private displayStream: MediaStream | null = null;
-  private onChunkReady: ((blob: Blob) => void) | null = null;
+  private onChunkReady: ((blob: Blob) => Promise<void> | void) | null = null;
   private sending = false;
   private intervalId: ReturnType<typeof setInterval> | null = null;
   private _hasAudio = false;
@@ -60,7 +60,7 @@ export class AudioCaptureService {
     return this._currentAudioLevel;
   }
 
-  async start(onChunkReady: (blob: Blob) => void, options: CaptureOptions): Promise<void> {
+  async start(onChunkReady: (blob: Blob) => Promise<void> | void, options: CaptureOptions): Promise<void> {
     this.onChunkReady = onChunkReady;
     const { screenEnabled, audioEnabled, systemAudioEnabled = true } = options;
     this._audioEnabled = audioEnabled;
@@ -245,17 +245,22 @@ export class AudioCaptureService {
     });
   }
 
-  private sendChunks() {
+  private async sendChunks() {
     if (this.audioChunks.length === 0 || !this.onChunkReady || this.sending) return;
     this.sending = true;
 
-    // Use the actual MIME type from MediaRecorder (e.g. "audio/webm;codecs=opus")
-    const actualMime = this.mediaRecorder?.mimeType || "audio/webm";
-    const blob = new Blob(this.audioChunks, { type: actualMime });
-    this.audioChunks = [];
-    this.onChunkReady(blob);
-
-    this.sending = false;
+    try {
+      // Use the actual MIME type from MediaRecorder (e.g. "audio/webm;codecs=opus")
+      const actualMime = this.mediaRecorder?.mimeType || "audio/webm";
+      const blob = new Blob(this.audioChunks, { type: actualMime });
+      this.audioChunks = [];
+      // Await the callback so we don't send the next chunk until this one is fully processed
+      await this.onChunkReady(blob);
+    } catch (err) {
+      console.error("sendChunks error:", err);
+    } finally {
+      this.sending = false;
+    }
   }
 
   stop(): Blob | null {
