@@ -27,6 +27,9 @@ export class AudioCaptureService {
   private pendingBlobs: Blob[] = [];
   private _stopped = false;
   private isCycling = false;
+  // Track peak audio energy per recording cycle to detect silence
+  private peakLevelInCycle = 0;
+  private levelSampleTimer: ReturnType<typeof setInterval> | null = null;
 
   /** Whether audio capture is active AND producing audio data. */
   get hasAudio(): boolean {
@@ -203,6 +206,13 @@ export class AudioCaptureService {
     // transcription for all subsequent chunks.)
     this.mediaRecorder.start();
 
+    // Sample audio energy 4x/sec to detect silence vs speech per cycle
+    this.peakLevelInCycle = 0;
+    this.levelSampleTimer = setInterval(() => {
+      const level = this.audioLevel;
+      if (level > this.peakLevelInCycle) this.peakLevelInCycle = level;
+    }, 250);
+
     // Every 10s, cycle the recorder: stop → collect complete file → restart
     this.intervalId = setInterval(() => {
       this.cycleRecording();
@@ -259,6 +269,11 @@ export class AudioCaptureService {
     if (!this.mediaRecorder || this.mediaRecorder.state !== "recording") return;
 
     this.isCycling = true;
+
+    // Snapshot and reset peak level for this cycle
+    const hadSpeech = this.peakLevelInCycle > 0.01;
+    this.peakLevelInCycle = 0;
+
     try {
       // Stop current recording — triggers ondataavailable then onstop
       await new Promise<void>((resolve) => {
@@ -266,8 +281,13 @@ export class AudioCaptureService {
         this.mediaRecorder!.stop();
       });
 
-      // Collect the complete recording as a standalone blob
-      this.collectChunksToQueue();
+      // Only queue the blob if speech was detected in this cycle;
+      // silent chunks cause Whisper to hallucinate repeated text.
+      if (hadSpeech) {
+        this.collectChunksToQueue();
+      } else {
+        this.audioChunks = []; // discard silent audio
+      }
 
       // Restart recording if session is still active and stream is live
       if (!this._stopped && this.stream && this.stream.getTracks().some((t) => t.readyState === "live")) {
@@ -324,6 +344,10 @@ export class AudioCaptureService {
       clearInterval(this.intervalId);
       this.intervalId = null;
     }
+    if (this.levelSampleTimer) {
+      clearInterval(this.levelSampleTimer);
+      this.levelSampleTimer = null;
+    }
 
     // Stop MediaRecorder and wait for the final ondataavailable + onstop events
     if (this.mediaRecorder && this.mediaRecorder.state !== "inactive") {
@@ -331,6 +355,7 @@ export class AudioCaptureService {
         this.mediaRecorder!.addEventListener("stop", () => resolve(), { once: true });
         this.mediaRecorder!.stop();
       });
+      // Always collect the final chunk (user just stopped — likely was speaking)
       this.collectChunksToQueue();
     }
 

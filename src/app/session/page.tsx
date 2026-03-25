@@ -502,10 +502,11 @@ export default function SessionPage() {
         return;
       }
 
-      // --- Deduplication: skip only exact duplicate transcriptions ---
-      // (The await in sendChunks prevents re-sending the same audio, so aggressive dedup is no longer needed)
+      // --- Deduplication: skip duplicate or near-duplicate transcriptions ---
+      // Whisper can hallucinate the same text on silent chunks with minor whitespace differences.
+      const normalize = (s: string) => s.trim().toLowerCase().replace(/\s+/g, " ");
       const prevText = lastSegmentText.current;
-      if (prevText && text.trim().toLowerCase() === prevText.trim().toLowerCase()) {
+      if (prevText && normalize(text) === normalize(prevText)) {
         setProcessing(false);
         if (processingToastId.current) { toast.dismiss(processingToastId.current); processingToastId.current = null; }
         return;
