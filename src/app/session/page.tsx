@@ -306,7 +306,7 @@ export default function SessionPage() {
         sessionTimerRef.current = null;
       }
       if (audioService.current) {
-        audioService.current.stop();
+        audioService.current.stop().catch(() => {});
       }
     };
   }, []);
@@ -716,7 +716,7 @@ export default function SessionPage() {
       }
     } catch (err) {
       // Clean up partially initialized audio service
-      if (audioService.current) { try { audioService.current.stop(); } catch {} audioService.current = null; }
+      if (audioService.current) { audioService.current.stop().catch(() => {}); audioService.current = null; }
       const msg = err instanceof Error ? err.message : "";
       if (msg.includes("PERMISSION_DENIED:screen")) {
         toast.show("Screen sharing was cancelled. Please select a screen or window to share.", { type: "error", duration: 5000 });
@@ -746,11 +746,10 @@ export default function SessionPage() {
 
   async function stopSession() {
     if (screenAnalysisTimer.current) { clearTimeout(screenAnalysisTimer.current); screenAnalysisTimer.current = null; }
-    // Process final audio chunk before stopping (up to 10s of speech would be lost otherwise)
-    let finalBlob: Blob | null = null;
-    if (audioService.current) finalBlob = audioService.current.stop();
-    if (finalBlob && finalBlob.size > 1000) {
-      try { await stableProcessAudioChunk(finalBlob); } catch { /* best-effort */ }
+    // Stop recording and process all remaining audio (including the final chunk)
+    // stop() now handles final chunk internally via the onChunkReady callback
+    if (audioService.current) {
+      await audioService.current.stop();
     }
     setIsRecording(false); setSessionStart(null); setAnalysisStatus("idle");
     consecutiveSilenceCount.current = 0;

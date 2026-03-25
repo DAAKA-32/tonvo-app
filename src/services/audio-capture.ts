@@ -24,6 +24,9 @@ export class AudioCaptureService {
   private analyserNode: AnalyserNode | null = null;
   private _currentAudioLevel = 0; // 0-1 normalized audio energy
   private _hasSystemAudio = false;
+  private pendingBlobs: Blob[] = [];
+  private _stopped = false;
+  private isCycling = false;
 
   /** Whether audio capture is active AND producing audio data. */
   get hasAudio(): boolean {
@@ -64,6 +67,7 @@ export class AudioCaptureService {
     this.onChunkReady = onChunkReady;
     const { screenEnabled, audioEnabled, systemAudioEnabled = true } = options;
     this._audioEnabled = audioEnabled;
+    this._stopped = false;
 
     if (screenEnabled) {
       // Request screen capture with system audio support.
@@ -163,7 +167,7 @@ export class AudioCaptureService {
 
       // Listen for screen share ending
       displayStream.getVideoTracks().forEach((track) => {
-        track.onended = () => this.stop();
+        track.onended = () => { this.stop(); };
       });
 
     } else if (audioEnabled) {
@@ -193,15 +197,16 @@ export class AudioCaptureService {
       }
     };
 
-    // Record in 10-second chunks to give Whisper more context per call
-    // (reduces fragmentation: fewer cuts mid-sentence)
-    this.mediaRecorder.start(10000);
+    // Start recording WITHOUT timeslice — each stop() produces a complete,
+    // standalone audio file with proper container headers that Whisper can parse.
+    // (Using start(timeslice) only gives headers in the first chunk, breaking
+    // transcription for all subsequent chunks.)
+    this.mediaRecorder.start();
 
+    // Every 10s, cycle the recorder: stop → collect complete file → restart
     this.intervalId = setInterval(() => {
-      if (this.audioChunks.length > 0 && !this.sending) {
-        this.sendChunks();
-      }
-    }, 10500);
+      this.cycleRecording();
+    }, 10000);
   }
 
   /** Stop only the screen capture (video tracks) while keeping audio running. */
@@ -245,34 +250,110 @@ export class AudioCaptureService {
     });
   }
 
-  private async sendChunks() {
-    if (this.audioChunks.length === 0 || !this.onChunkReady || this.sending) return;
+  /**
+   * Cycle the MediaRecorder: stop current recording (producing a complete audio file),
+   * then immediately restart for the next chunk.
+   */
+  private async cycleRecording(): Promise<void> {
+    if (this.isCycling || this._stopped) return;
+    if (!this.mediaRecorder || this.mediaRecorder.state !== "recording") return;
+
+    this.isCycling = true;
+    try {
+      // Stop current recording — triggers ondataavailable then onstop
+      await new Promise<void>((resolve) => {
+        this.mediaRecorder!.addEventListener("stop", () => resolve(), { once: true });
+        this.mediaRecorder!.stop();
+      });
+
+      // Collect the complete recording as a standalone blob
+      this.collectChunksToQueue();
+
+      // Restart recording if session is still active and stream is live
+      if (!this._stopped && this.stream && this.stream.getTracks().some((t) => t.readyState === "live")) {
+        this.mediaRecorder!.start();
+      }
+    } catch (err) {
+      console.error("cycleRecording error:", err);
+    } finally {
+      this.isCycling = false;
+    }
+
+    // Process the queue (non-blocking — runs in background)
+    this.processQueue();
+  }
+
+  /** Move accumulated audioChunks into a single blob on the pending queue. */
+  private collectChunksToQueue(): void {
+    if (this.audioChunks.length === 0) return;
+    const actualMime = this.mediaRecorder?.mimeType || "audio/webm";
+    const blob = new Blob(this.audioChunks, { type: actualMime });
+    this.audioChunks = [];
+    // Skip tiny blobs (silence/noise — matches Whisper's 1KB threshold)
+    if (blob.size > 1000) {
+      this.pendingBlobs.push(blob);
+    }
+  }
+
+  /** Process pending blobs sequentially through the onChunkReady callback. */
+  private async processQueue(): Promise<void> {
+    if (this.sending || this.pendingBlobs.length === 0 || !this.onChunkReady) return;
     this.sending = true;
 
     try {
-      // Use the actual MIME type from MediaRecorder (e.g. "audio/webm;codecs=opus")
-      const actualMime = this.mediaRecorder?.mimeType || "audio/webm";
-      const blob = new Blob(this.audioChunks, { type: actualMime });
-      this.audioChunks = [];
-      // Await the callback so we don't send the next chunk until this one is fully processed
-      await this.onChunkReady(blob);
+      while (this.pendingBlobs.length > 0) {
+        const blob = this.pendingBlobs.shift()!;
+        await this.onChunkReady(blob);
+      }
     } catch (err) {
-      console.error("sendChunks error:", err);
+      console.error("processQueue error:", err);
     } finally {
       this.sending = false;
     }
   }
 
-  stop(): Blob | null {
+  /**
+   * Stop recording, process all remaining audio, and release resources.
+   * The final audio chunk is processed through the onChunkReady callback
+   * before this method resolves.
+   */
+  async stop(): Promise<void> {
+    this._stopped = true;
+
     if (this.intervalId) {
       clearInterval(this.intervalId);
       this.intervalId = null;
     }
 
+    // Stop MediaRecorder and wait for the final ondataavailable + onstop events
     if (this.mediaRecorder && this.mediaRecorder.state !== "inactive") {
-      this.mediaRecorder.stop();
+      await new Promise<void>((resolve) => {
+        this.mediaRecorder!.addEventListener("stop", () => resolve(), { once: true });
+        this.mediaRecorder!.stop();
+      });
+      this.collectChunksToQueue();
     }
 
+    // Wait for any in-flight send to finish, then drain the queue
+    while (this.sending) {
+      await new Promise((r) => setTimeout(r, 50));
+    }
+    // Drain remaining blobs (including the final chunk)
+    if (this.pendingBlobs.length > 0 && this.onChunkReady) {
+      this.sending = true;
+      try {
+        while (this.pendingBlobs.length > 0) {
+          const blob = this.pendingBlobs.shift()!;
+          await this.onChunkReady(blob);
+        }
+      } catch (err) {
+        console.error("stop drain error:", err);
+      } finally {
+        this.sending = false;
+      }
+    }
+
+    // Release all resources
     if (this.stream) {
       this.stream.getTracks().forEach((track) => track.stop());
       this.stream = null;
@@ -296,14 +377,6 @@ export class AudioCaptureService {
       this.audioContext = null;
     }
     this.analyserNode = null;
-
-    if (this.audioChunks.length > 0) {
-      const blob = new Blob(this.audioChunks, { type: "audio/webm" });
-      this.audioChunks = [];
-      return blob;
-    }
-
-    return null;
   }
 
   private getSupportedMimeType(): string {
