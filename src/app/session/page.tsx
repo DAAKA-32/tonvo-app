@@ -490,9 +490,13 @@ export default function SessionPage() {
       if (transcribeData.language && !detectedLanguage) {
         setDetectedLanguage(transcribeData.language);
       }
-      const WHISPER_HALLUCINATIONS = ["sous-titres","amara.org","sous-titrage","merci d'avoir regard","merci de votre visionnage","thank you for watching","subtitles by","transcrit par","please subscribe","music"];
+      const WHISPER_HALLUCINATIONS = ["sous-titres","amara.org","sous-titrage","merci d'avoir regard","merci de votre visionnage","thank you for watching","subtitles by","transcrit par","please subscribe","music","ご視聴","ごちそうさま","お疲れ様","よろしくお願い","ありがとうございま","チャンネル登録","最後まで","見てくれて"];
       const lower = (text || "").trim().toLowerCase();
-      const isHallucination = !text || lower.length < 3 || WHISPER_HALLUCINATIONS.some((h) => lower.includes(h));
+      // Detect non-Latin script hallucinations (Japanese, Chinese, Korean, Arabic, etc.)
+      // when no language has been detected yet or detected language uses Latin script
+      const hasNonLatinScript = /[\u3000-\u9FFF\uAC00-\uD7AF\u0600-\u06FF]/.test(text || "");
+      const expectsLatinScript = !detectedLanguage || /^(fr|en|es|pt|de|it|nl|pl|ro|cs|sv|da|no|fi|hu|tr|vi|id|ms)$/.test(detectedLanguage);
+      const isHallucination = !text || lower.length < 3 || WHISPER_HALLUCINATIONS.some((h) => lower.includes(h)) || (hasNonLatinScript && expectsLatinScript);
       if (isHallucination) {
         setProcessing(false);
         if (processingToastId.current) { toast.dismiss(processingToastId.current); processingToastId.current = null; }

@@ -176,10 +176,21 @@ export class AudioCaptureService {
     } else if (audioEnabled) {
       // Audio-only mode (no screen)
       try {
-        this.stream = await navigator.mediaDevices.getUserMedia({
+        const micStream = await navigator.mediaDevices.getUserMedia({
           audio: { echoCancellation: true, noiseSuppression: true },
         });
         this._hasAudio = true;
+
+        // Set up AudioContext + AnalyserNode for energy detection (same as screen+audio mode)
+        const audioContext = new AudioContext();
+        this.audioContext = audioContext;
+        const destination = audioContext.createMediaStreamDestination();
+        this.analyserNode = audioContext.createAnalyser();
+        this.analyserNode.fftSize = 256;
+        const micSource = audioContext.createMediaStreamSource(micStream);
+        micSource.connect(destination);
+        micSource.connect(this.analyserNode);
+        this.stream = destination.stream;
       } catch (err) {
         if (err instanceof DOMException && err.name === "NotAllowedError") {
           throw new Error("PERMISSION_DENIED:microphone");
@@ -271,7 +282,8 @@ export class AudioCaptureService {
     this.isCycling = true;
 
     // Snapshot and reset peak level for this cycle
-    const hadSpeech = this.peakLevelInCycle > 0.01;
+    // If no analyser available, assume speech (don't filter)
+    const hadSpeech = !this.analyserNode || this.peakLevelInCycle > 0.01;
     this.peakLevelInCycle = 0;
 
     try {
