@@ -345,11 +345,11 @@ export class AudioCaptureService {
   }
 
   /**
-   * Stop recording, process all remaining audio, and release resources.
-   * The final audio chunk is processed through the onChunkReady callback
-   * before this method resolves.
+   * Stop recording and release resources.
+   * Returns the final audio blob (if any) for the caller to process.
+   * Any previously queued blobs continue processing in the background via processQueue.
    */
-  async stop(): Promise<void> {
+  stop(): Blob | null {
     this._stopped = true;
 
     if (this.intervalId) {
@@ -361,33 +361,17 @@ export class AudioCaptureService {
       this.levelSampleTimer = null;
     }
 
-    // Stop MediaRecorder and wait for the final ondataavailable + onstop events
+    let finalBlob: Blob | null = null;
+
     if (this.mediaRecorder && this.mediaRecorder.state !== "inactive") {
-      await new Promise<void>((resolve) => {
-        this.mediaRecorder!.addEventListener("stop", () => resolve(), { once: true });
-        this.mediaRecorder!.stop();
-      });
-      // Always collect the final chunk (user just stopped — likely was speaking)
-      this.collectChunksToQueue();
+      this.mediaRecorder.stop();
     }
 
-    // Wait for any in-flight send to finish, then drain the queue
-    while (this.sending) {
-      await new Promise((r) => setTimeout(r, 50));
-    }
-    // Drain remaining blobs (including the final chunk)
-    if (this.pendingBlobs.length > 0 && this.onChunkReady) {
-      this.sending = true;
-      try {
-        while (this.pendingBlobs.length > 0) {
-          const blob = this.pendingBlobs.shift()!;
-          await this.onChunkReady(blob);
-        }
-      } catch (err) {
-        console.error("stop drain error:", err);
-      } finally {
-        this.sending = false;
-      }
+    // Collect any accumulated audio chunks as the final blob
+    if (this.audioChunks.length > 0) {
+      const mime = this.mediaRecorder?.mimeType || "audio/webm";
+      finalBlob = new Blob(this.audioChunks, { type: mime });
+      this.audioChunks = [];
     }
 
     // Release all resources
@@ -414,6 +398,8 @@ export class AudioCaptureService {
       this.audioContext = null;
     }
     this.analyserNode = null;
+
+    return finalBlob;
   }
 
   private getSupportedMimeType(): string {
