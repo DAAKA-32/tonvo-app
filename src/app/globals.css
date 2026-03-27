@@ -211,72 +211,85 @@ body {
 .animate-delay-500 { animation-delay: 500ms; }
 .animate-delay-600 { animation-delay: 600ms; }
 
-/* ===== Features infinite marquee (desktop ≥1084px only) ===== */
+/* ===== Features horizontal scroll ===== */
 
-/* Default: show grid, hide marquee */
-.features-marquee { display: none; }
-.features-grid-fallback { display: block; }
-
-@media (min-width: 1084px) {
-  .features-grid-fallback { display: none; }
-  .features-marquee { display: block; }
-}
-
-.features-marquee {
+.features-scroll-wrapper {
   position: relative;
-  max-width: 1084px;
+  max-width: 1200px;
   margin-left: auto;
   margin-right: auto;
-  overflow: clip;
-  padding-top: 8px;
-  margin-top: -8px;
 }
 
 /* Fade edges */
-.features-marquee::before,
-.features-marquee::after {
-  content: "";
+.features-scroll-fade {
   position: absolute;
   top: 0;
   bottom: 0;
-  width: 45px;
+  width: 40px;
   z-index: 2;
   pointer-events: none;
 }
-.features-marquee::before {
+.features-scroll-fade--left {
   left: 0;
   background: linear-gradient(to right, var(--color-bg) 0%, transparent 100%);
 }
-.features-marquee::after {
+.features-scroll-fade--right {
   right: 0;
   background: linear-gradient(to left, var(--color-bg) 0%, transparent 100%);
 }
 
-.features-marquee-track {
-  display: flex;
-  width: max-content;
-  animation: featuresScroll 30s linear infinite;
-}
-.features-marquee-track:hover {
-  animation-play-state: paused;
-}
-
-.features-marquee-set {
+.features-scroll {
   display: flex;
   gap: 20px;
-  padding-right: 20px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  padding: 8px 24px 16px;
+
+  /* Custom scrollbar */
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.15) transparent;
+}
+.features-scroll::-webkit-scrollbar {
+  height: 4px;
+}
+.features-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+.features-scroll::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 4px;
+}
+.features-scroll::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.25);
 }
 
-.features-marquee-card {
-  width: 340px;
-  flex-shrink: 0;
-  position: relative;
-  z-index: 3;
+.features-scroll-card {
+  min-width: 280px;
+  max-width: 320px;
+  flex: 0 0 auto;
+  scroll-snap-align: center;
 }
 
-@keyframes featuresScroll {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
+/* Mobile: single card view with swipe */
+@media (max-width: 640px) {
+  .features-scroll-card {
+    min-width: calc(100vw - 80px);
+    max-width: calc(100vw - 80px);
+  }
+  .features-scroll {
+    padding: 8px 20px 16px;
+  }
+  .features-scroll-fade { width: 20px; }
+}
+
+/* Tablet: wider cards */
+@media (min-width: 641px) and (max-width: 1023px) {
+  .features-scroll-card {
+    min-width: calc(50vw - 60px);
+    max-width: 340px;
+  }
 }
 
 /* ===== Premium Typography System ===== */
@@ -578,6 +591,7 @@ body {
   top: 0;
   left: 0;
   bottom: 0;
+  padding-top: env(safe-area-inset-top);
   z-index: 40;
   background: rgba(14, 14, 17, 0.97);
   border-right: 1px solid rgba(255, 255, 255, 0.04);

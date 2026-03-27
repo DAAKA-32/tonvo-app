@@ -623,6 +623,7 @@ export default function HomePage() {
           backgroundColor: "rgba(9, 9, 11, 0.85)",
           backdropFilter: "blur(12px)",
           borderColor: "var(--color-border)",
+          paddingTop: "env(safe-area-inset-top)",
           transform: navVisible ? "translateY(0)" : "translateY(-100%)",
           opacity: navVisible ? 1 : 0,
           transition: "transform 0.3s cubic-bezier(0.23, 1, 0.32, 1), opacity 0.25s ease",
@@ -802,11 +803,13 @@ export default function HomePage() {
             </div>
           </div>
 
-          {/* Mobile/tablet: normal grid */}
-          <div className="features-grid-fallback px-4 sm:px-6">
-            <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-5">
+          {/* Horizontal scroll container */}
+          <div className="features-scroll-wrapper">
+            <div className="features-scroll-fade features-scroll-fade--left" />
+            <div className="features-scroll-fade features-scroll-fade--right" />
+            <div className="features-scroll">
               {features.map((f) => (
-                <div key={f.title} className="glass-card p-6">
+                <div key={f.title} className="glass-card p-6 features-scroll-card">
                   <div
                     className="w-10 h-10 rounded-lg flex items-center justify-center mb-4"
                     style={{ backgroundColor: "var(--color-surface-2)", color: f.color }}
@@ -817,31 +820,6 @@ export default function HomePage() {
                   <p className="text-sm leading-relaxed m-0" style={{ color: "var(--color-text-muted)" }}>
                     {f.desc}
                   </p>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Desktop ≥1084px: infinite horizontal scroll */}
-          <div className="features-marquee">
-            <div className="features-marquee-track">
-              {/* Duplicate the set twice for seamless loop */}
-              {[0, 1].map((setIndex) => (
-                <div key={setIndex} className="features-marquee-set" aria-hidden={setIndex === 1}>
-                  {features.map((f) => (
-                    <div key={`${setIndex}-${f.title}`} className="glass-card p-6 features-marquee-card">
-                      <div
-                        className="w-10 h-10 rounded-lg flex items-center justify-center mb-4"
-                        style={{ backgroundColor: "var(--color-surface-2)", color: f.color }}
-                      >
-                        {f.icon}
-                      </div>
-                      <h3 className="card-title mb-2">{f.title}</h3>
-                      <p className="text-sm leading-relaxed m-0" style={{ color: "var(--color-text-muted)" }}>
-                        {f.desc}
-                      </p>
-                    </div>
-                  ))}
                 </div>
               ))}
             </div>
