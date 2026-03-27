@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useTranslation } from "react-i18next";
 import TonvoLogo from "@/components/Logo";
 import { useToast } from "@/components/Toast";
+import { useAuth } from "@/lib/auth-context";
 import { getAuthErrorKey } from "@/lib/auth-errors";
 import {
   auth,
@@ -343,6 +344,7 @@ export default function LoginPage() {
   const router = useRouter();
   const { t } = useTranslation();
   const { show } = useToast();
+  const { waitForUser } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -364,13 +366,15 @@ export default function LoginPage() {
 
   const isPasswordValid = passwordChecks.minLength && passwordChecks.hasLetter && passwordChecks.hasNumber;
 
-  /** Show success toast, fade out card, then redirect */
-  function redirectWithFeedback(message: string) {
+  /** Show success toast, wait for auth context to sync, then redirect */
+  async function redirectWithFeedback(message: string) {
     setRedirecting(true);
     show(message, { type: "success", duration: 3000 });
-    setTimeout(() => {
-      router.push("/dashboard");
-    }, 800);
+    // Wait for the auth context to have the user before navigating
+    await waitForUser();
+    // Small delay for the fade-out animation
+    await new Promise((r) => setTimeout(r, 400));
+    router.push("/dashboard");
   }
 
   async function handleEmailAuth(e: React.FormEvent) {

@@ -51,55 +51,59 @@ export default function DashboardPage() {
     if (!user) return;
 
     async function fetchData() {
-      // Run conversations + count in parallel (saves 1 round-trip)
-      const [recentResult, countResult] = await Promise.all([
-        supabase
-          .from("conversations")
-          .select("*")
-          .eq("user_id", user!.uid)
-          .order("created_at", { ascending: false })
-          .limit(5),
-        supabase
-          .from("conversations")
-          .select("*", { count: "exact", head: true })
-          .eq("user_id", user!.uid),
-      ]);
+      try {
+        // Run conversations + count in parallel (saves 1 round-trip)
+        const [recentResult, countResult] = await Promise.all([
+          supabase
+            .from("conversations")
+            .select("*")
+            .eq("user_id", user!.uid)
+            .order("created_at", { ascending: false })
+            .limit(5),
+          supabase
+            .from("conversations")
+            .select("*", { count: "exact", head: true })
+            .eq("user_id", user!.uid),
+        ]);
 
-      const convos = recentResult.data;
-      if (convos) setConversations(convos);
+        const convos = recentResult.data;
+        if (convos) setConversations(convos);
 
-      // Fetch segment stats only if we have conversations
-      const convoIds = (convos || []).map((c) => c.id);
-      const segments = convoIds.length > 0
-        ? (await supabase
-            .from("analysis_segments")
-            .select("tone, confidence")
-            .in("conversation_id", convoIds)
-          ).data
-        : null;
+        // Fetch segment stats only if we have conversations
+        const convoIds = (convos || []).map((c) => c.id);
+        const segments = convoIds.length > 0
+          ? (await supabase
+              .from("analysis_segments")
+              .select("tone, confidence")
+              .in("conversation_id", convoIds)
+            ).data
+          : null;
 
-      const toneCounts = { positive: 0, neutral: 0, negative: 0, hesitant: 0 };
-      let confidenceSum = 0;
+        const toneCounts = { positive: 0, neutral: 0, negative: 0, hesitant: 0 };
+        let confidenceSum = 0;
 
-      if (segments) {
-        for (const seg of segments) {
-          if (seg.tone in toneCounts) {
-            toneCounts[seg.tone as keyof typeof toneCounts]++;
+        if (segments) {
+          for (const seg of segments) {
+            if (seg.tone in toneCounts) {
+              toneCounts[seg.tone as keyof typeof toneCounts]++;
+            }
+            confidenceSum += seg.confidence;
           }
-          confidenceSum += seg.confidence;
         }
+
+        setStats({
+          totalSessions: countResult.count || 0,
+          totalSegments: segments?.length || 0,
+          avgConfidence: segments && segments.length > 0
+            ? Math.round((confidenceSum / segments.length) * 100)
+            : 0,
+          toneCounts,
+        });
+      } catch (err) {
+        console.error("Dashboard fetch failed:", err);
+      } finally {
+        setLoadingData(false);
       }
-
-      setStats({
-        totalSessions: countResult.count || 0,
-        totalSegments: segments?.length || 0,
-        avgConfidence: segments && segments.length > 0
-          ? Math.round((confidenceSum / segments.length) * 100)
-          : 0,
-        toneCounts,
-      });
-
-      setLoadingData(false);
     }
 
     fetchData();
