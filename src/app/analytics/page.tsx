@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useAuth } from "@/lib/auth-context";
 import { authFetch } from "@/lib/api-client";
 import AppShell from "@/components/AppShell";
@@ -38,9 +39,9 @@ function getScoreColor(score: number) {
 }
 
 const TREND_CONFIG = {
-  improving: { label: "Improving", color: "var(--color-positive)", arrow: "^" },
-  declining: { label: "Declining", color: "var(--color-negative)", arrow: "v" },
-  stable: { label: "Stable", color: "var(--color-neutral)", arrow: "-" },
+  improving: { key: "improving", color: "var(--color-positive)", arrow: "^" },
+  declining: { key: "declining", color: "var(--color-negative)", arrow: "v" },
+  stable: { key: "stable", color: "var(--color-neutral)", arrow: "-" },
 };
 
 const CLASSIFICATION_COLORS: Record<string, string> = {
@@ -181,7 +182,10 @@ function ScoreBar({ label, value, color }: { label: string; value: number; color
   );
 }
 
+const METRIC_KEYS: MetricKey[] = ["overall", "engagement", "tone", "fluidity", "interest", "social"];
+
 export default function AnalyticsPage() {
+  const { t } = useTranslation();
   const { user } = useAuth();
   const { can, loading: planLoading } = usePlan();
   const [data, setData] = useState<AnalyticsData | null>(null);
@@ -251,9 +255,9 @@ export default function AnalyticsPage() {
     <AppShell>
       <div style={{ maxWidth: 1100 }}>
         <div className="mb-8">
-          <h1 className="section-heading text-glow mb-1">Analytics</h1>
+          <h1 className="section-heading text-glow mb-1">{t("analytics.title")}</h1>
           <p className="body-muted text-sm m-0">
-            Track your conversation performance over time.
+            {t("analytics.subtitle")}
           </p>
         </div>
 
@@ -272,9 +276,9 @@ export default function AnalyticsPage() {
                 <path d="M18.7 8l-5.1 5.2-2.8-2.7L7 14.3" />
               </svg>
             </div>
-            <p className="text-sm font-medium mb-1" style={{ color: "var(--color-text)" }}>No analytics yet</p>
+            <p className="text-sm font-medium mb-1" style={{ color: "var(--color-text)" }}>{t("analytics.noData")}</p>
             <p className="text-xs" style={{ color: "var(--color-text-muted)" }}>
-              Complete at least one session to see your performance trends.
+              {t("analytics.noDataDesc")}
             </p>
           </div>
         ) : (
@@ -283,43 +287,43 @@ export default function AnalyticsPage() {
             <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-3 mb-6">
               {/* Total Sessions */}
               <div className="kpi-card flex flex-col items-center text-center">
-                <span className="text-xs mb-2" style={{ color: "var(--color-text-muted)" }}>Total Sessions</span>
+                <span className="text-xs mb-2" style={{ color: "var(--color-text-muted)" }}>{t("analytics.totalSessions")}</span>
                 <span className="text-3xl font-bold" style={{ color: "var(--color-text)" }}>{data.totalSessions}</span>
               </div>
 
               {/* Average Score */}
               <div className="kpi-card flex flex-col items-center text-center">
-                <span className="text-xs mb-2" style={{ color: "var(--color-text-muted)" }}>Avg Score</span>
+                <span className="text-xs mb-2" style={{ color: "var(--color-text-muted)" }}>{t("analytics.avgScore")}</span>
                 <span className="text-3xl font-bold" style={{ color: getScoreColor((data.averages || { overall: 0, engagement: 0, tone: 0, fluidity: 0, interest: 0, social: 0 }).overall) }}>
                   {(data.averages || { overall: 0, engagement: 0, tone: 0, fluidity: 0, interest: 0, social: 0 }).overall}
                 </span>
-                <span className="text-[10px] mt-1" style={{ color: "var(--color-text-muted)" }}>/100</span>
+                <span className="text-[10px] mt-1" style={{ color: "var(--color-text-muted)" }}>{t("analytics.outOf100")}</span>
               </div>
 
               {/* Trend */}
               <div className="kpi-card flex flex-col items-center text-center">
-                <span className="text-xs mb-2" style={{ color: "var(--color-text-muted)" }}>Trend</span>
+                <span className="text-xs mb-2" style={{ color: "var(--color-text-muted)" }}>{t("analytics.trend")}</span>
                 {trend && (
                   <div className="flex items-center gap-1">
                     <span className="text-lg font-bold" style={{ color: trend.color }}>{trend.arrow}</span>
-                    <span className="text-sm font-semibold" style={{ color: trend.color }}>{trend.label}</span>
+                    <span className="text-sm font-semibold" style={{ color: trend.color }}>{t(`analytics.${trend.key}`)}</span>
                   </div>
                 )}
                 {delta !== 0 && (
                   <span className="text-[10px] mt-1" style={{ color: delta > 0 ? "var(--color-positive)" : "var(--color-negative)" }}>
-                    {delta > 0 ? "+" : ""}{delta} vs avg
+                    {delta > 0 ? "+" : ""}{delta} {t("analytics.vsAvg")}
                   </span>
                 )}
               </div>
 
               {/* Streak */}
               <div className="kpi-card flex flex-col items-center text-center">
-                <span className="text-xs mb-2" style={{ color: "var(--color-text-muted)" }}>Best Streak</span>
+                <span className="text-xs mb-2" style={{ color: "var(--color-text-muted)" }}>{t("analytics.bestStreak")}</span>
                 <span className="text-3xl font-bold" style={{ color: "var(--color-accent-light)" }}>
                   {data.streaks?.best ?? 0}
                 </span>
                 <span className="text-[10px] mt-1" style={{ color: "var(--color-text-muted)" }}>
-                  sessions {">"}= 60
+                  {t("analytics.streakThreshold")}
                 </span>
               </div>
             </div>
@@ -328,20 +332,20 @@ export default function AnalyticsPage() {
             <div className="glass-card p-6 mb-6">
               <div className="flex items-center justify-between mb-4">
                 <span className="text-xs font-medium uppercase tracking-wider" style={{ color: "var(--color-accent-light)" }}>
-                  Score Progression
+                  {t("analytics.scoreProgression")}
                 </span>
                 <div className="flex gap-1">
-                  {(["overall", "engagement", "tone", "fluidity", "interest", "social"] as MetricKey[]).map((m) => (
+                  {METRIC_KEYS.map((m) => (
                     <button
                       key={m}
                       onClick={() => setSelectedMetric(m)}
-                      className="text-[10px] px-2 py-1 rounded-md border-none cursor-pointer capitalize"
+                      className="text-[10px] px-2 py-1 rounded-md border-none cursor-pointer"
                       style={{
                         backgroundColor: selectedMetric === m ? "rgba(200, 200, 216, 0.12)" : "transparent",
                         color: selectedMetric === m ? "var(--color-text)" : "var(--color-text-muted)",
                       }}
                     >
-                      {m}
+                      {t(`analytics.${m}`)}
                     </button>
                   ))}
                 </div>
@@ -358,7 +362,7 @@ export default function AnalyticsPage() {
                 </div>
               ) : (
                 <p className="text-xs text-center py-6" style={{ color: "var(--color-text-muted)" }}>
-                  Need at least 2 sessions to show progression.
+                  {t("analytics.minSessions")}
                 </p>
               )}
 
@@ -380,30 +384,27 @@ export default function AnalyticsPage() {
               {/* Average Performance */}
               <div className="glass-card p-6">
                 <span className="text-xs font-medium uppercase tracking-wider block mb-4" style={{ color: "var(--color-accent-light)" }}>
-                  Average Performance
+                  {t("analytics.averagePerformance")}
                 </span>
                 <div className="space-y-3">
-                  <ScoreBar label="Overall" value={(data.averages || { overall: 0, engagement: 0, tone: 0, fluidity: 0, interest: 0, social: 0 }).overall} color={getScoreColor((data.averages || { overall: 0, engagement: 0, tone: 0, fluidity: 0, interest: 0, social: 0 }).overall)} />
-                  <ScoreBar label="Engagement" value={(data.averages || { overall: 0, engagement: 0, tone: 0, fluidity: 0, interest: 0, social: 0 }).engagement} color={getScoreColor((data.averages || { overall: 0, engagement: 0, tone: 0, fluidity: 0, interest: 0, social: 0 }).engagement)} />
-                  <ScoreBar label="Tone" value={(data.averages || { overall: 0, engagement: 0, tone: 0, fluidity: 0, interest: 0, social: 0 }).tone} color={getScoreColor((data.averages || { overall: 0, engagement: 0, tone: 0, fluidity: 0, interest: 0, social: 0 }).tone)} />
-                  <ScoreBar label="Fluidity" value={(data.averages || { overall: 0, engagement: 0, tone: 0, fluidity: 0, interest: 0, social: 0 }).fluidity} color={getScoreColor((data.averages || { overall: 0, engagement: 0, tone: 0, fluidity: 0, interest: 0, social: 0 }).fluidity)} />
-                  <ScoreBar label="Interest" value={(data.averages || { overall: 0, engagement: 0, tone: 0, fluidity: 0, interest: 0, social: 0 }).interest} color={getScoreColor((data.averages || { overall: 0, engagement: 0, tone: 0, fluidity: 0, interest: 0, social: 0 }).interest)} />
-                  <ScoreBar label="Social" value={(data.averages || { overall: 0, engagement: 0, tone: 0, fluidity: 0, interest: 0, social: 0 }).social} color={getScoreColor((data.averages || { overall: 0, engagement: 0, tone: 0, fluidity: 0, interest: 0, social: 0 }).social)} />
+                  {METRIC_KEYS.map((m) => (
+                    <ScoreBar key={m} label={t(`analytics.${m}`)} value={(data.averages || { overall: 0, engagement: 0, tone: 0, fluidity: 0, interest: 0, social: 0 })[m]} color={getScoreColor((data.averages || { overall: 0, engagement: 0, tone: 0, fluidity: 0, interest: 0, social: 0 })[m])} />
+                  ))}
                 </div>
               </div>
 
               {/* Tone Distribution */}
               <div className="glass-card p-6">
                 <span className="text-xs font-medium uppercase tracking-wider block mb-4" style={{ color: "var(--color-accent-light)" }}>
-                  Tone Distribution
+                  {t("analytics.toneDistribution")}
                 </span>
                 {(() => {
                   const total = Object.values((data.toneDistribution || {})).reduce((a, b) => a + b, 0) || 1;
                   const tones = [
-                    { key: "positive", label: "Positive", color: "var(--color-positive)" },
-                    { key: "neutral", label: "Neutral", color: "var(--color-neutral)" },
-                    { key: "negative", label: "Negative", color: "var(--color-negative)" },
-                    { key: "hesitant", label: "Hesitant", color: "var(--color-neutral)" },
+                    { key: "positive", label: t("analytics.positive"), color: "var(--color-positive)" },
+                    { key: "neutral", label: t("analytics.neutral"), color: "var(--color-neutral)" },
+                    { key: "negative", label: t("analytics.negative"), color: "var(--color-negative)" },
+                    { key: "hesitant", label: t("analytics.hesitant"), color: "var(--color-neutral)" },
                   ];
                   return (
                     <div className="space-y-4">
@@ -448,7 +449,7 @@ export default function AnalyticsPage() {
               {/* Weekly Activity */}
               <div className="glass-card p-6">
                 <span className="text-xs font-medium uppercase tracking-wider block mb-4" style={{ color: "var(--color-accent-light)" }}>
-                  Weekly Activity
+                  {t("analytics.weeklyActivity")}
                 </span>
                 <BarChart
                   data={(data.weeklyActivity || []).map((w) => ({
@@ -460,15 +461,15 @@ export default function AnalyticsPage() {
                   height={100}
                 />
                 <div className="flex justify-between mt-2">
-                  <span className="text-[10px]" style={{ color: "var(--color-text-muted)" }}>8 weeks ago</span>
-                  <span className="text-[10px]" style={{ color: "var(--color-text-muted)" }}>This week</span>
+                  <span className="text-[10px]" style={{ color: "var(--color-text-muted)" }}>{t("analytics.weeksAgo")}</span>
+                  <span className="text-[10px]" style={{ color: "var(--color-text-muted)" }}>{t("analytics.thisWeek")}</span>
                 </div>
               </div>
 
               {/* Tone Breakdown */}
               <div className="glass-card p-6">
                 <span className="text-xs font-medium uppercase tracking-wider block mb-4" style={{ color: "var(--color-accent-light)" }}>
-                  Tone Breakdown
+                  {t("analytics.toneBreakdown")}
                 </span>
                 <div className="space-y-3">
                   {Object.entries((data.toneBreakdown || {}))
@@ -496,18 +497,18 @@ export default function AnalyticsPage() {
               <div className="glass-card-static overflow-hidden">
                 <div className="p-4 border-b" style={{ borderColor: "rgba(39,39,42,0.5)" }}>
                   <span className="text-xs font-medium uppercase tracking-wider" style={{ color: "var(--color-accent-light)" }}>
-                    Session History
+                    {t("analytics.sessionHistory")}
                   </span>
                 </div>
                 <table className="data-table">
                   <thead>
                     <tr>
-                      <th>Date</th>
-                      <th>Overall</th>
-                      <th>Engagement</th>
-                      <th>Tone</th>
-                      <th>Social</th>
-                      <th>Verdict</th>
+                      <th>{t("analytics.date")}</th>
+                      <th>{t("analytics.overall")}</th>
+                      <th>{t("analytics.engagement")}</th>
+                      <th>{t("analytics.tone")}</th>
+                      <th>{t("analytics.social")}</th>
+                      <th>{t("analytics.verdict")}</th>
                     </tr>
                   </thead>
                   <tbody>

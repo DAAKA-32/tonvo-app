@@ -139,21 +139,21 @@ function getToneColor(tone: string) {
   return "var(--color-text-muted)";
 }
 
-const CLASSIFICATION_CONFIG: Record<string, { label: string; color: string; bg: string }> = {
-  very_positive: { label: "Very Positive", color: "#34d399", bg: "rgba(52,211,153,0.12)" },
-  positive: { label: "Positive", color: "#6ee7b7", bg: "rgba(110,231,183,0.12)" },
-  neutral: { label: "Neutral", color: "#fbbf24", bg: "rgba(251,191,36,0.12)" },
-  awkward: { label: "Awkward", color: "#fb923c", bg: "rgba(251,146,60,0.12)" },
-  negative: { label: "Negative", color: "#f87171", bg: "rgba(248,113,113,0.12)" },
+const CLASSIFICATION_STYLES: Record<string, { key: string; color: string; bg: string }> = {
+  very_positive: { key: "analyzePage.veryPositive", color: "#34d399", bg: "rgba(52,211,153,0.12)" },
+  positive: { key: "analyzePage.positive", color: "#6ee7b7", bg: "rgba(110,231,183,0.12)" },
+  neutral: { key: "analyzePage.neutral", color: "#fbbf24", bg: "rgba(251,191,36,0.12)" },
+  awkward: { key: "analyzePage.awkward", color: "#fb923c", bg: "rgba(251,146,60,0.12)" },
+  negative: { key: "analyzePage.negative", color: "#f87171", bg: "rgba(248,113,113,0.12)" },
 };
 
-const MODE_OPTIONS: { value: AnalysisMode; label: string }[] = [
-  { value: "general", label: "General" },
-  { value: "sales", label: "Sales" },
-  { value: "dating", label: "Dating / Social" },
-  { value: "recruitment", label: "Recruitment" },
-  { value: "support", label: "Support" },
-  { value: "networking", label: "Networking" },
+const MODE_KEYS: { value: AnalysisMode; key: string }[] = [
+  { value: "general", key: "analyzePage.modeGeneral" },
+  { value: "sales", key: "analyzePage.modeSales" },
+  { value: "dating", key: "analyzePage.modeDating" },
+  { value: "recruitment", key: "analyzePage.modeRecruitment" },
+  { value: "support", key: "analyzePage.modeSupport" },
+  { value: "networking", key: "analyzePage.modeNetworking" },
 ];
 
 /* ------------------------------------------------------------------ */
@@ -195,7 +195,7 @@ export default function AnalyzePage() {
     if (sharedText) {
       setText(decodeURIComponent(sharedText));
       setInputMode("text");
-      toast.show("Content received — ready to analyze", { type: "success", duration: 3000 });
+      toast.show(t("analyzePage.contentReceived"), { type: "success", duration: 3000 });
     } else if (sharedKey) {
       // Fetch shared images from cache
       fetch(`/api/share-target?key=${sharedKey}`)
@@ -216,7 +216,7 @@ export default function AnalyzePage() {
             setImages(files);
             setImagePreviews(previews);
             setInputMode("images");
-            toast.show(`${files.length} screenshot(s) received — ready to analyze`, { type: "success", duration: 3000 });
+            toast.show(t("analyzePage.screenshotsReceived", { count: files.length }), { type: "success", duration: 3000 });
           }
         })
         .catch(() => {});
@@ -274,12 +274,12 @@ export default function AnalyzePage() {
       const data = await res.json();
       if (data.text) {
         setTranscript(data.text);
-        toast.show("Transcription complete", { type: "success", duration: 3000 });
+        toast.show(t("analyzePage.transcriptionComplete"), { type: "success", duration: 3000 });
       } else {
-        toast.show("Transcription failed", { type: "error", duration: 4000 });
+        toast.show(t("analyzePage.transcriptionFailed"), { type: "error", duration: 4000 });
       }
     } catch {
-      toast.show("Transcription failed", { type: "error", duration: 4000 });
+      toast.show(t("analyzePage.transcriptionFailed"), { type: "error", duration: 4000 });
     } finally {
       setTranscribing(false);
     }
@@ -320,10 +320,10 @@ export default function AnalyzePage() {
         toast.update(toastId, data.error, { type: "error", duration: 5000 });
       } else {
         setResult(data);
-        toast.update(toastId, "Analysis complete", { type: "success", duration: 3000 });
+        toast.update(toastId, t("analyzePage.analysisComplete"), { type: "success", duration: 3000 });
       }
     } catch {
-      toast.update(toastId, "Analysis failed", { type: "error", duration: 5000 });
+      toast.update(toastId, t("analyzePage.analysisFailed"), { type: "error", duration: 5000 });
     } finally {
       setAnalyzing(false);
     }
@@ -345,9 +345,9 @@ export default function AnalyzePage() {
       <div className="analyze-page">
         {/* Header */}
         <div className="mb-6">
-          <h1 className="section-heading text-glow mb-1">Analyze Conversation</h1>
+          <h1 className="section-heading text-glow mb-1">{t("analyzePage.title")}</h1>
           <p className="body-muted text-sm m-0">
-            Import screenshots, paste text, or upload audio to analyze any conversation.
+            {t("analyzePage.subtitle")}
           </p>
         </div>
 
@@ -359,19 +359,19 @@ export default function AnalyzePage() {
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <polyline points="15 18 9 12 15 6" />
               </svg>
-              New analysis
+              {t("analyzePage.newAnalysis")}
             </button>
 
-            <ResultsView result={result} />
+            <ResultsView result={result} t={t} />
           </div>
         ) : (
           <>
             {/* ── Input Mode Tabs ── */}
             <div className="analyze-tabs">
               {([
-                { key: "images" as InputMode, icon: <IconImage size={16} />, label: "Screenshots" },
-                { key: "text" as InputMode, icon: <IconText size={16} />, label: "Text" },
-                { key: "audio" as InputMode, icon: <IconAudio size={16} />, label: "Audio" },
+                { key: "images" as InputMode, icon: <IconImage size={16} />, label: t("analyzePage.screenshots") },
+                { key: "text" as InputMode, icon: <IconText size={16} />, label: t("analyzePage.text") },
+                { key: "audio" as InputMode, icon: <IconAudio size={16} />, label: t("analyzePage.audio") },
               ]).map((tab) => (
                 <button
                   key={tab.key}
@@ -394,10 +394,10 @@ export default function AnalyzePage() {
                   >
                     <IconImage size={32} />
                     <span className="text-sm font-medium" style={{ color: "var(--color-text)" }}>
-                      Tap to select screenshots
+                      {t("analyzePage.tapScreenshots")}
                     </span>
                     <span className="text-xs" style={{ color: "var(--color-text-muted)" }}>
-                      Select up to 10 images from your gallery
+                      {t("analyzePage.selectUpTo10")}
                     </span>
                   </button>
                 ) : (
@@ -424,7 +424,7 @@ export default function AnalyzePage() {
                       )}
                     </div>
                     <p className="text-xs mt-2" style={{ color: "var(--color-text-muted)" }}>
-                      {images.length}/10 screenshots
+                      {t("analyzePage.screenshotCount", { count: images.length })}
                     </p>
                   </div>
                 )}
@@ -445,7 +445,7 @@ export default function AnalyzePage() {
                 <textarea
                   value={text}
                   onChange={(e) => setText(e.target.value)}
-                  placeholder="Paste your conversation here...&#10;&#10;Example:&#10;Me: Hey, how's it going?&#10;Them: Good! What's up?&#10;Me: Just wanted to check in about tomorrow..."
+                  placeholder={t("analyzePage.textPlaceholder")}
                   rows={8}
                   className="analyze-textarea"
                 />
@@ -462,10 +462,10 @@ export default function AnalyzePage() {
                   >
                     <IconAudio size={32} />
                     <span className="text-sm font-medium" style={{ color: "var(--color-text)" }}>
-                      Tap to select an audio file
+                      {t("analyzePage.tapAudio")}
                     </span>
                     <span className="text-xs" style={{ color: "var(--color-text-muted)" }}>
-                      Voice notes, recordings — MP3, WAV, M4A, OGG
+                      {t("analyzePage.audioFormats")}
                     </span>
                   </button>
                 ) : (
@@ -494,14 +494,14 @@ export default function AnalyzePage() {
                         disabled={transcribing}
                         className="analyze-cta-secondary mt-3"
                       >
-                        {transcribing ? "Transcribing..." : "Transcribe audio"}
+                        {transcribing ? t("analyzePage.transcribing") : t("analyzePage.transcribeAudio")}
                       </button>
                     )}
 
                     {transcript && (
                       <div className="mt-3">
                         <label className="text-xs font-medium mb-1 block" style={{ color: "var(--color-text-muted)" }}>
-                          Transcript (editable)
+                          {t("analyzePage.transcriptEditable")}
                         </label>
                         <textarea
                           value={transcript}
@@ -526,13 +526,13 @@ export default function AnalyzePage() {
             {/* ── Context (optional) ── */}
             <div className="analyze-section">
               <label className="text-xs font-medium mb-2 block" style={{ color: "var(--color-text-muted)" }}>
-                Context (optional)
+                {t("analyzePage.contextLabel")}
               </label>
               <input
                 type="text"
                 value={context}
                 onChange={(e) => setContext(e.target.value)}
-                placeholder="e.g. First date conversation, Job interview follow-up..."
+                placeholder={t("analyzePage.contextPlaceholder")}
                 className="analyze-input"
               />
             </div>
@@ -540,16 +540,16 @@ export default function AnalyzePage() {
             {/* ── Mode selector ── */}
             <div className="analyze-section">
               <label className="text-xs font-medium mb-2 block" style={{ color: "var(--color-text-muted)" }}>
-                Conversation type
+                {t("analyzePage.conversationType")}
               </label>
               <div className="analyze-mode-grid">
-                {MODE_OPTIONS.map((m) => (
+                {MODE_KEYS.map((m) => (
                   <button
                     key={m.value}
                     onClick={() => setAnalysisMode(m.value)}
                     className={`analyze-mode-chip ${analysisMode === m.value ? "active" : ""}`}
                   >
-                    {m.label}
+                    {t(m.key)}
                   </button>
                 ))}
               </div>
@@ -564,19 +564,19 @@ export default function AnalyzePage() {
               {analyzing ? (
                 <>
                   <span className="analyze-spinner" />
-                  Analyzing...
+                  {t("analyzePage.analyzingBtn")}
                 </>
               ) : (
                 <>
                   <IconArrowUp size={18} />
-                  Analyze conversation
+                  {t("analyzePage.analyzeBtn")}
                 </>
               )}
             </button>
 
             {/* ── Privacy note ── */}
             <p className="text-xs text-center mt-4" style={{ color: "var(--color-text-muted)", opacity: 0.5 }}>
-              Your content is analyzed securely and not stored permanently.
+              {t("analyzePage.privacyNote")}
             </p>
           </>
         )}
@@ -588,8 +588,8 @@ export default function AnalyzePage() {
 /* ------------------------------------------------------------------ */
 /*  Results View                                                       */
 /* ------------------------------------------------------------------ */
-function ResultsView({ result }: { result: AnalysisResult }) {
-  const cls = CLASSIFICATION_CONFIG[result.classification] || CLASSIFICATION_CONFIG.neutral;
+function ResultsView({ result, t }: { result: AnalysisResult; t: (key: string, opts?: Record<string, unknown>) => string }) {
+  const style = CLASSIFICATION_STYLES[result.classification] || CLASSIFICATION_STYLES.neutral;
 
   return (
     <div className="analyze-results-inner">
@@ -599,24 +599,24 @@ function ResultsView({ result }: { result: AnalysisResult }) {
           <span className="analyze-score-value" style={{ color: getScoreColor(result.score.overall) }}>
             {result.score.overall}
           </span>
-          <span className="analyze-score-label">overall</span>
+          <span className="analyze-score-label">{t("analyzePage.overall")}</span>
         </div>
         <span
           className="analyze-classification-badge"
-          style={{ backgroundColor: cls.bg, color: cls.color }}
+          style={{ backgroundColor: style.bg, color: style.color }}
         >
-          {cls.label}
+          {t(style.key)}
         </span>
       </div>
 
       {/* Sub-scores */}
       <div className="analyze-scores-grid">
         {[
-          { label: "Engagement", value: result.score.engagement },
-          { label: "Tone", value: result.score.tone },
-          { label: "Fluidity", value: result.score.fluidity },
-          { label: "Interest", value: result.score.interest },
-          { label: "Social", value: result.socialScore },
+          { label: t("analyzePage.engagement"), value: result.score.engagement },
+          { label: t("analyzePage.tone"), value: result.score.tone },
+          { label: t("analyzePage.fluidity"), value: result.score.fluidity },
+          { label: t("analyzePage.interest"), value: result.score.interest },
+          { label: t("analyzePage.social"), value: result.socialScore },
         ].map((s) => (
           <div key={s.label} className="analyze-score-item">
             <div className="analyze-score-bar-track">
@@ -636,7 +636,7 @@ function ResultsView({ result }: { result: AnalysisResult }) {
       {/* Diagnosis */}
       <div className="glass-card p-4">
         <h3 className="text-xs font-semibold uppercase tracking-wider mb-2" style={{ color: "var(--color-accent-light)" }}>
-          Diagnosis
+          {t("analyzePage.diagnosis")}
         </h3>
         <p className="text-sm m-0" style={{ color: "var(--color-text)", lineHeight: 1.6 }}>
           {result.diagnosis}
@@ -647,7 +647,7 @@ function ResultsView({ result }: { result: AnalysisResult }) {
       {result.toneTimeline && result.toneTimeline.length > 0 && (
         <div className="glass-card p-4">
           <h3 className="text-xs font-semibold uppercase tracking-wider mb-3" style={{ color: "var(--color-accent-light)" }}>
-            Tone Flow
+            {t("analyzePage.toneFlow")}
           </h3>
           <div className="space-y-2">
             {result.toneTimeline.map((entry, i) => (
@@ -674,7 +674,7 @@ function ResultsView({ result }: { result: AnalysisResult }) {
       {result.speakerBreakdown?.speakers && result.speakerBreakdown.speakers.length > 0 && (
         <div className="glass-card p-4">
           <h3 className="text-xs font-semibold uppercase tracking-wider mb-3" style={{ color: "var(--color-accent-light)" }}>
-            Speakers
+            {t("analyzePage.speakers")}
           </h3>
           <div className="space-y-3">
             {result.speakerBreakdown.speakers.map((s, i) => (
@@ -716,7 +716,7 @@ function ResultsView({ result }: { result: AnalysisResult }) {
       {result.keyPoints?.length > 0 && (
         <div className="glass-card p-4">
           <h3 className="text-xs font-semibold uppercase tracking-wider mb-3" style={{ color: "var(--color-accent-light)" }}>
-            Key Points
+            {t("analyzePage.keyPoints")}
           </h3>
           <ul className="space-y-2 m-0 pl-0" style={{ listStyle: "none" }}>
             {result.keyPoints.map((p, i) => (
@@ -735,7 +735,7 @@ function ResultsView({ result }: { result: AnalysisResult }) {
       {result.insights?.length > 0 && (
         <div className="glass-card p-4">
           <h3 className="text-xs font-semibold uppercase tracking-wider mb-3" style={{ color: "var(--color-accent-light)" }}>
-            Insights
+            {t("analyzePage.insights")}
           </h3>
           <div className="space-y-2">
             {result.insights.map((ins, i) => (
@@ -751,7 +751,7 @@ function ResultsView({ result }: { result: AnalysisResult }) {
       {result.signals?.length > 0 && (
         <div className="glass-card p-4">
           <h3 className="text-xs font-semibold uppercase tracking-wider mb-3" style={{ color: "var(--color-accent-light)" }}>
-            Signals Detected
+            {t("analyzePage.signalsDetected")}
           </h3>
           <div className="flex flex-wrap gap-2">
             {result.signals.map((s, i) => (
@@ -779,7 +779,7 @@ function ResultsView({ result }: { result: AnalysisResult }) {
         {result.strengths?.length > 0 && (
           <div className="glass-card p-4">
             <h3 className="text-xs font-semibold uppercase tracking-wider mb-3" style={{ color: "var(--color-positive)" }}>
-              Strengths
+              {t("analyzePage.strengths")}
             </h3>
             <ul className="space-y-1.5 m-0 pl-0" style={{ listStyle: "none" }}>
               {result.strengths.map((s, i) => (
@@ -794,7 +794,7 @@ function ResultsView({ result }: { result: AnalysisResult }) {
         {result.improvements?.length > 0 && (
           <div className="glass-card p-4">
             <h3 className="text-xs font-semibold uppercase tracking-wider mb-3" style={{ color: "var(--color-neutral)" }}>
-              Improvements
+              {t("analyzePage.improvements")}
             </h3>
             <ul className="space-y-1.5 m-0 pl-0" style={{ listStyle: "none" }}>
               {result.improvements.map((s, i) => (
@@ -812,7 +812,7 @@ function ResultsView({ result }: { result: AnalysisResult }) {
       {result.recommendation && (
         <div className="glass-card p-4" style={{ borderLeft: "2px solid var(--color-accent-light)" }}>
           <h3 className="text-xs font-semibold uppercase tracking-wider mb-2" style={{ color: "var(--color-accent-light)" }}>
-            Recommendation
+            {t("analyzePage.recommendation")}
           </h3>
           <p className="text-sm m-0" style={{ color: "var(--color-text)", lineHeight: 1.6 }}>
             {result.recommendation}

@@ -338,14 +338,8 @@ export default function DashboardPage() {
                   <Link
                     key={conv.id}
                     href={`/summary/${conv.id}`}
-                    className="no-underline flex items-center gap-4 p-3 rounded-xl transition-all"
-                    style={{ backgroundColor: "transparent" }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.backgroundColor = "rgba(255,255,255,0.03)";
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.backgroundColor = "transparent";
-                    }}>
+                    className="conversation-link no-underline flex items-center gap-4 p-3 rounded-xl transition-all"
+                  >
                     {conv.overall_tone ? (
                       <ToneIndicator tone={conv.overall_tone as Tone} size="sm" showLabel={false} />
                     ) : (

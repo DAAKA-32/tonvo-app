@@ -578,6 +578,24 @@ body {
   color: rgba(139, 139, 150, 0.5);
 }
 
+/* Back-to-home link on login — CSS hover instead of JS to prevent cursor flicker */
+.login-back-link {
+  color: var(--color-text-muted);
+  border: 1px solid rgba(255, 255, 255, 0.04);
+}
+.login-back-link:hover {
+  color: var(--color-text);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Dashboard conversation list item hover */
+.conversation-link {
+  background-color: transparent;
+}
+.conversation-link:hover {
+  background-color: rgba(255, 255, 255, 0.03);
+}
+
 /* ===== App Shell (Sidebar layout) ===== */
 .app-shell {
   display: flex;

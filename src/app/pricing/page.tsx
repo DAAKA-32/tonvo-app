@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { useAuth } from "@/lib/auth-context";
 import { authFetch } from "@/lib/api-client";
 import AppShell from "@/components/AppShell";
@@ -13,7 +14,14 @@ import {
   type BillingCycle,
 } from "@/lib/pricing-config";
 
+const PLAN_I18N_KEY: Record<string, string> = {
+  free: "pricing.planFree",
+  pro: "pricing.planPro",
+  team: "pricing.planTeam",
+};
+
 export default function PricingPage() {
+  const { t } = useTranslation();
   const { user } = useAuth();
   const [currentPlan, setCurrentPlan] = useState("free");
   const [loading, setLoading] = useState<string | null>(null);
@@ -53,7 +61,7 @@ export default function PricingPage() {
       const data = await res.json();
       if (!res.ok) {
         console.error("Checkout API error:", data);
-        setError(data.error || "Unable to start checkout. Please try again.");
+        setError(data.error || t("pricing.checkoutError"));
         return;
       }
       if (data.url) {
@@ -61,7 +69,7 @@ export default function PricingPage() {
       }
     } catch (err) {
       console.error("Upgrade error:", err);
-      setError("Network error. Please check your connection and try again.");
+      setError(t("pricing.networkError"));
     } finally {
       setLoading(null);
     }
@@ -92,13 +100,13 @@ export default function PricingPage() {
       <div style={{ maxWidth: 1000 }}>
         <div className="text-center mb-16">
           <h1 className="section-heading text-glow mb-4">
-            Simple, transparent pricing.
+            {t("pricing.title")}
           </h1>
           <p className="text-sm mb-8" style={{ color: "var(--color-text-muted)" }}>
-            Start free. Upgrade when you need more power.
+            {t("pricing.subtitle")}
           </p>
 
-          {/* Billing Toggle — matches landing page */}
+          {/* Billing Toggle */}
           <div
             className="inline-flex items-center gap-3 px-1.5 py-1.5 rounded-full"
             style={{
@@ -118,7 +126,7 @@ export default function PricingPage() {
                   : "var(--color-text-muted)",
               }}
             >
-              Monthly
+              {t("pricing.monthly")}
             </button>
             <button
               onClick={() => setBilling("yearly")}
@@ -132,7 +140,7 @@ export default function PricingPage() {
                   : "var(--color-text-muted)",
               }}
             >
-              Annual
+              {t("pricing.annual")}
               <span
                 className="text-xs font-semibold px-2 py-0.5 rounded-full"
                 style={{
@@ -158,7 +166,7 @@ export default function PricingPage() {
                   color: "var(--color-text-muted)",
                 }}
               >
-                {loading === "manage" ? "Loading..." : "Manage Subscription"}
+                {loading === "manage" ? t("pricing.managingSubscription") : t("pricing.manageSubscription")}
               </button>
             </div>
           )}
@@ -193,6 +201,8 @@ export default function PricingPage() {
             const isAnnual = billing === "yearly";
             const price = getDisplayPrice(plan, billing);
             const period = getPeriodLabel(plan);
+            const i18nKey = PLAN_I18N_KEY[plan.id];
+            const translatedFeatures = t(`${i18nKey}.features`, { returnObjects: true }) as string[];
 
             return (
               <div
@@ -217,7 +227,7 @@ export default function PricingPage() {
                       color: "white",
                     }}
                   >
-                    Most Popular
+                    {t("pricing.mostPopular")}
                   </div>
                 )}
 
@@ -226,19 +236,18 @@ export default function PricingPage() {
                     className="text-lg font-bold mb-1"
                     style={{ color: "var(--color-text)" }}
                   >
-                    {plan.name}
+                    {t(`${i18nKey}.name`)}
                   </h3>
                   <p
                     className="text-xs mb-5"
                     style={{ color: "var(--color-text-muted)" }}
                   >
-                    {plan.description}
+                    {t(`${i18nKey}.description`)}
                   </p>
                   <div
                     className="flex items-baseline gap-1"
                     style={{ minHeight: 48 }}
                   >
-                    {/* Strikethrough original price when annual */}
                     {isAnnual && plan.monthlyPrice > 0 && (
                       <span
                         className="text-lg line-through mr-1 transition-opacity duration-200"
@@ -272,9 +281,9 @@ export default function PricingPage() {
                   className="flex-1 space-y-3 mb-8"
                   style={{ listStyle: "none", padding: 0, margin: 0 }}
                 >
-                  {plan.features.map((feature) => (
+                  {(Array.isArray(translatedFeatures) ? translatedFeatures : plan.features).map((feature, i) => (
                     <li
-                      key={feature}
+                      key={i}
                       className="flex items-start gap-2.5 text-sm"
                       style={{ color: "var(--color-text-silver)" }}
                     >
@@ -320,10 +329,10 @@ export default function PricingPage() {
                   }}
                 >
                   {loading === plan.id
-                    ? "Redirecting..."
+                    ? t("pricing.redirecting")
                     : isCurrent
-                      ? "Current Plan"
-                      : plan.cta}
+                      ? t("pricing.currentPlan")
+                      : t(`${i18nKey}.cta`)}
                 </button>
               </div>
             );
@@ -334,7 +343,7 @@ export default function PricingPage() {
           className="text-center text-xs mt-8"
           style={{ color: "var(--color-text-muted)" }}
         >
-          All plans include a 7-day money-back guarantee. Cancel anytime.
+          {t("pricing.guarantee")}
         </p>
       </div>
     </AppShell>

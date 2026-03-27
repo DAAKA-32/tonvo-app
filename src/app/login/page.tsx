@@ -510,20 +510,11 @@ export default function LoginPage() {
       {/* Back to home */}
       <Link
         href="/"
-        className="fixed top-6 left-6 z-20 flex items-center gap-2 text-sm font-medium no-underline rounded-lg px-3 py-2 transition-all"
+        className="login-back-link fixed left-6 z-20 flex items-center gap-2 text-sm font-medium no-underline rounded-lg px-3 py-2 transition-all"
         style={{
-          color: "var(--color-text-muted)",
+          top: "calc(env(safe-area-inset-top, 0px) + 1rem)",
           background: "rgba(17, 17, 20, 0.4)",
           backdropFilter: "blur(12px)",
-          border: "1px solid rgba(255, 255, 255, 0.04)",
-        }}
-        onMouseEnter={(e) => {
-          e.currentTarget.style.color = "var(--color-text)";
-          e.currentTarget.style.borderColor = "rgba(255, 255, 255, 0.1)";
-        }}
-        onMouseLeave={(e) => {
-          e.currentTarget.style.color = "var(--color-text-muted)";
-          e.currentTarget.style.borderColor = "rgba(255, 255, 255, 0.04)";
         }}
       >
         <IconArrowLeft />
