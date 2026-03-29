@@ -17,6 +17,7 @@ import AudioWave from "@/components/AudioWave";
 import SuggestionCard from "@/components/SuggestionCard";
 import SmartCopilotOverlay, { type PrepData } from "@/components/SmartCopilotOverlay";
 import CopilotPiP, { type CopilotPiPHandle, type CopilotPiPLabels } from "@/components/CopilotPiP";
+import CopilotInline from "@/components/CopilotInline";
 import UpgradePrompt from "@/components/UpgradePrompt";
 import { usePlan } from "@/hooks/usePlan";
 import { useParticipants } from "@/hooks/useParticipants";
@@ -758,8 +759,8 @@ export default function SessionPage() {
       screenOnlyCaptureCount.current = 0;
       screenAnalysisStartTime.current = Date.now();
       setAnalysisStatus("running");
-      // Open Document PiP from user gesture context (click) — only for audio sessions (no PiP in screen-only)
-      if (can("copilotPiP") && audioEnabled) {
+      // Open Document PiP from user gesture context (click) — desktop only (mobile uses inline copilot)
+      if (can("copilotPiP") && audioEnabled && !isMobile) {
         copilotPiPRef.current?.requestOpen();
       }
       // Start live interim transcription (Web Speech API) for instant feedback
@@ -1654,34 +1655,56 @@ export default function SessionPage() {
         )}
       </div>
 
-      {/* Copilot PiP — floats above ALL windows (Pro+ only) */}
-      <CopilotPiP
-        ref={copilotPiPRef}
-        active={isRecording && can("copilotPiP")}
-        suggestion={currentSuggestion}
-        suggestedResponses={suggestedResponses}
-        detectedQuestion={detectedQuestion}
-        elapsed={elapsed}
-        participants={participants}
-        interimText={interimText}
-        onStop={stopSession}
-        onPiPStateChange={handlePiPStateChange}
-        labels={{
-          title: t("copilot.title"),
-          sayThis: t("copilot.sayThis"),
-          listening: t("copilot.listening"),
-          stopSession: t("copilot.stopSession"),
-          respondNow: t("copilot.respondNow"),
-          invisibleBadge: t("copilot.invisibleInScreenShare"),
-          participantCount: t("copilot.participantCount", { count: 1 }),
-          participantCountPlural: t("copilot.participantCount", { count: 2 }),
-        }}
-      />
+      {/* Copilot PiP — desktop only (Pro+ only) */}
+      {!isMobile && (
+        <CopilotPiP
+          ref={copilotPiPRef}
+          active={isRecording && can("copilotPiP")}
+          suggestion={currentSuggestion}
+          suggestedResponses={suggestedResponses}
+          detectedQuestion={detectedQuestion}
+          elapsed={elapsed}
+          participants={participants}
+          interimText={interimText}
+          onStop={stopSession}
+          onPiPStateChange={handlePiPStateChange}
+          labels={{
+            title: t("copilot.title"),
+            sayThis: t("copilot.sayThis"),
+            listening: t("copilot.listening"),
+            stopSession: t("copilot.stopSession"),
+            respondNow: t("copilot.respondNow"),
+            invisibleBadge: t("copilot.invisibleInScreenShare"),
+            participantCount: t("copilot.participantCount", { count: 1 }),
+            participantCountPlural: t("copilot.participantCount", { count: 2 }),
+          }}
+        />
+      )}
 
-      {/* Smart Copilot Overlay removed — prep mode was confusing and unnecessary */}
+      {/* Copilot Inline — mobile only, embedded directly in the page */}
+      {isMobile && isRecording && can("copilotPiP") && audioEnabled && (
+        <CopilotInline
+          suggestion={currentSuggestion}
+          suggestedResponses={suggestedResponses}
+          detectedQuestion={detectedQuestion}
+          elapsed={elapsed}
+          participants={participants}
+          interimText={interimText}
+          onStop={stopSession}
+          labels={{
+            title: t("copilot.title"),
+            sayThis: t("copilot.sayThis"),
+            listening: t("copilot.listening"),
+            stopSession: t("copilot.stopSession"),
+            respondNow: t("copilot.respondNow"),
+            participantCount: t("copilot.participantCount", { count: 1 }),
+            participantCountPlural: t("copilot.participantCount", { count: 2 }),
+          }}
+        />
+      )}
 
-      {/* Copilot status — NO in-page coaching during live session (invisible to screen share) */}
-      {isRecording && can("copilotPiP") && pipOpen && (
+      {/* Copilot status — desktop only, NO in-page coaching during live session (invisible to screen share) */}
+      {!isMobile && isRecording && can("copilotPiP") && pipOpen && (
         <div className="copilot-status-pill">
           <div className="copilot-status-pill__pulse" />
           <span>{t("session.copilotActive")}</span>
@@ -1691,8 +1714,8 @@ export default function SessionPage() {
         </div>
       )}
 
-      {/* Reopen button — shown when PiP was closed mid-session */}
-      {isRecording && can("copilotPiP") && !pipOpen && audioEnabled && (
+      {/* Reopen button — desktop only, shown when PiP was closed mid-session */}
+      {!isMobile && isRecording && can("copilotPiP") && !pipOpen && audioEnabled && (
         <button className="copilot-reopen-btn" onClick={() => copilotPiPRef.current?.requestOpen()}>
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <rect x="2" y="3" width="20" height="14" rx="2" /><line x1="8" x2="16" y1="21" y2="21" /><line x1="12" x2="12" y1="17" y2="21" />
