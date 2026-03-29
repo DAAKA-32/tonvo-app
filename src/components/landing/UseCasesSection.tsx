@@ -71,31 +71,13 @@ const useCases: UseCase[] = [
 
 export default function UseCasesSection() {
   return (
-    <section id="use-cases" className="px-4 sm:px-6 py-16 sm:py-24 md:py-32 overflow-hidden">
+    <section id="use-cases" className="px-4 sm:px-6 py-16 sm:py-24 md:py-32">
       <div className="max-w-5xl mx-auto">
         <div className="text-center mb-16">
-          <motion.span
-            className="section-label"
-            initial={{ opacity: 0, y: 12 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-40px" }}
-            transition={{ duration: 0.5, ease: [0.25, 0.1, 0.25, 1] }}
-          >
-            Use Cases
-          </motion.span>
+          <span className="section-label">Use Cases</span>
           <AnimatedTitle variant="left" className="section-heading">
             Works wherever conversations matter.
           </AnimatedTitle>
-          <motion.p
-            className="text-sm mt-4 max-w-lg mx-auto"
-            style={{ color: "var(--color-text-muted)" }}
-            initial={{ opacity: 0, y: 10 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-40px" }}
-            transition={{ duration: 0.5, delay: 0.2, ease: [0.25, 0.1, 0.25, 1] }}
-          >
-            From sales floors to boardrooms — Tonvo adapts to your world.
-          </motion.p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
@@ -103,48 +85,25 @@ export default function UseCasesSection() {
             <motion.div
               key={uc.title}
               className="glass-card usecase-card p-6"
-              initial={{
-                opacity: 0,
-                x: i % 2 === 0 ? -50 : 50,
-                y: 20,
-              }}
-              whileInView={{ opacity: 1, x: 0, y: 0 }}
-              viewport={{ once: true, margin: "-50px" }}
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-40px" }}
               transition={{
-                duration: 0.65,
-                delay: i * 0.15,
+                duration: 0.45,
+                delay: i * 0.1,
                 ease: [0.25, 0.1, 0.25, 1],
               }}
             >
-              <motion.div
+              <div
                 className="w-12 h-12 rounded-xl flex items-center justify-center mb-4 usecase-icon"
                 style={{ backgroundColor: "var(--color-surface-2)", color: "var(--color-accent-light)" }}
-                initial={{ scale: 0.6, opacity: 0 }}
-                whileInView={{ scale: 1, opacity: 1 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.4, delay: 0.2 + i * 0.15, ease: "easeOut" }}
               >
                 {uc.icon}
-              </motion.div>
-              <motion.h3
-                className="card-title mb-2"
-                initial={{ opacity: 0, x: -10 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.4, delay: 0.3 + i * 0.15 }}
-              >
-                {uc.title}
-              </motion.h3>
-              <motion.p
-                className="text-sm leading-relaxed m-0"
-                style={{ color: "var(--color-text-muted)" }}
-                initial={{ opacity: 0 }}
-                whileInView={{ opacity: 1 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.4, delay: 0.4 + i * 0.15 }}
-              >
+              </div>
+              <h3 className="card-title mb-2">{uc.title}</h3>
+              <p className="text-sm leading-relaxed m-0" style={{ color: "var(--color-text-muted)" }}>
                 {uc.desc}
-              </motion.p>
+              </p>
             </motion.div>
           ))}
         </div>

@@ -453,39 +453,6 @@ body {
   opacity: 0.2;
 }
 
-/* Benefits accent line */
-.benefits-accent-line {
-  width: 60px;
-  height: 2px;
-  background: linear-gradient(90deg, transparent, var(--color-accent-light), transparent);
-  transform-origin: center;
-}
-
-/* Benefit card hover glow */
-@media (hover: hover) and (pointer: fine) {
-  .benefit-card:hover {
-    box-shadow:
-      0 0 30px rgba(200, 200, 216, 0.06),
-      0 8px 24px rgba(0, 0, 0, 0.3);
-  }
-  .benefit-card:hover .metric-text {
-    text-shadow: 0 0 20px rgba(200, 200, 216, 0.15);
-  }
-}
-
-/* Use case card hover effects */
-@media (hover: hover) and (pointer: fine) {
-  .usecase-card:hover {
-    border-color: rgba(200, 200, 216, 0.15);
-    box-shadow:
-      0 0 40px rgba(200, 200, 216, 0.04),
-      0 12px 32px rgba(0, 0, 0, 0.35);
-  }
-  .usecase-card:hover .usecase-icon {
-    background-color: rgba(200, 200, 216, 0.08) !important;
-    box-shadow: 0 0 16px rgba(200, 200, 216, 0.08);
-  }
-}
 
 .hero-glow {
   position: absolute;
