@@ -803,13 +803,14 @@ export default function HomePage() {
             </div>
           </div>
 
-          {/* Horizontal scroll container */}
+          {/* Horizontal scroll: marquee on desktop, swipe on mobile */}
           <div className="features-scroll-wrapper">
             <div className="features-scroll-fade features-scroll-fade--left" />
             <div className="features-scroll-fade features-scroll-fade--right" />
             <div className="features-scroll">
-              {features.map((f) => (
-                <div key={f.title} className="glass-card p-6 features-scroll-card">
+              {/* Render cards twice for seamless marquee loop on desktop */}
+              {[...features, ...features].map((f, i) => (
+                <div key={`${f.title}-${i}`} className="glass-card p-6 features-scroll-card" aria-hidden={i >= features.length ? true : undefined}>
                   <div
                     className="w-10 h-10 rounded-lg flex items-center justify-center mb-4"
                     style={{ backgroundColor: "var(--color-surface-2)", color: f.color }}
