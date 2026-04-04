@@ -23,10 +23,23 @@ const DEFAULT_SUB: UserSubscription = {
   sessionsReset: new Date().toISOString(),
 };
 
-/** Permanent plan overrides — these accounts always get the specified plan regardless of Stripe/DB state. */
-const PLAN_OVERRIDES: Record<string, PlanId> = {
-  "emilien.nepveu@gmail.com": "team",
-};
+/**
+ * Permanent plan overrides — these accounts always get the specified plan regardless of Stripe/DB state.
+ * Format: "email:plan,email:plan" (e.g., "admin@example.com:team,test@example.com:pro")
+ */
+function parsePlanOverrides(): Record<string, PlanId> {
+  const raw = process.env.PLAN_OVERRIDES || "";
+  const overrides: Record<string, PlanId> = {};
+  for (const entry of raw.split(",")) {
+    const [email, plan] = entry.trim().split(":");
+    if (email && plan && ["free", "pro", "team"].includes(plan)) {
+      overrides[email.toLowerCase().trim()] = plan as PlanId;
+    }
+  }
+  return overrides;
+}
+
+const PLAN_OVERRIDES = parsePlanOverrides();
 
 export async function getUserSubscription(userId: string, email?: string | null): Promise<UserSubscription> {
   // Check permanent overrides first

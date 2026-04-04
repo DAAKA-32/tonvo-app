@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getStripe, PLANS, type PlanId } from "@/lib/stripe";
 import { supabaseAdmin } from "@/lib/supabase-admin";
 import { verifyAuth } from "@/lib/auth-server";
+import { getAppUrl } from "@/lib/url";
 import Stripe from "stripe";
 
 export async function POST(req: NextRequest) {
@@ -111,15 +112,15 @@ export async function POST(req: NextRequest) {
       }
     }
 
-    // Create checkout session
-    const origin = req.headers.get("origin") || req.headers.get("referer")?.replace(/\/[^/]*$/, "") || "https://tonvo.co";
+    // Create checkout session — use canonical URL, never trust Origin header
+    const appUrl = getAppUrl();
 
     const session = await stripe.checkout.sessions.create({
       customer: customerId,
       mode: "subscription",
       line_items: [{ price: priceId, quantity: 1 }],
-      success_url: `${origin}/dashboard?session_id={CHECKOUT_SESSION_ID}&plan=${planId}`,
-      cancel_url: `${origin}/pricing`,
+      success_url: `${appUrl}/dashboard?session_id={CHECKOUT_SESSION_ID}&plan=${planId}`,
+      cancel_url: `${appUrl}/pricing`,
       metadata: {
         userId,
         planId,

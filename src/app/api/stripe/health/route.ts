@@ -28,7 +28,13 @@ export async function GET(req: NextRequest) {
   // 1. Check env vars exist (never expose values)
   const keyRaw = process.env.STRIPE_SECRET_KEY;
   checks.secretKeySet = !!keyRaw;
-  checks.secretKeyPrefix = keyRaw ? keyRaw.trim().slice(0, 8) + "..." : null;
+  checks.secretKeyMode = keyRaw?.trim().startsWith("sk_live_")
+    ? "live"
+    : keyRaw?.trim().startsWith("sk_test_")
+      ? "test"
+      : keyRaw
+        ? "unknown_format"
+        : null;
   checks.secretKeyLength = keyRaw?.trim().length ?? 0;
   checks.secretKeyHasWhitespace = keyRaw !== keyRaw?.trim();
 
@@ -37,10 +43,10 @@ export async function GET(req: NextRequest) {
 
   // 2. Check price IDs
   checks.priceIds = {
-    proMonthly: PLANS.pro.priceId ? PLANS.pro.priceId.slice(0, 12) + "..." : "MISSING",
-    proYearly: PLANS.pro.yearlyPriceId ? PLANS.pro.yearlyPriceId.slice(0, 12) + "..." : "MISSING",
-    teamMonthly: PLANS.team.priceId ? PLANS.team.priceId.slice(0, 12) + "..." : "MISSING",
-    teamYearly: PLANS.team.yearlyPriceId ? PLANS.team.yearlyPriceId.slice(0, 12) + "..." : "MISSING",
+    proMonthly: !!PLANS.pro.priceId,
+    proYearly: !!PLANS.pro.yearlyPriceId,
+    teamMonthly: !!PLANS.team.priceId,
+    teamYearly: !!PLANS.team.yearlyPriceId,
   };
 
   // 3. Test Stripe connection
