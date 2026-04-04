@@ -97,16 +97,21 @@ export class LiveSpeechService {
     this.recognition = recognition;
   }
 
-  /** Set the recognition language (e.g., "en-US", "fr-FR"). */
+  /** Set the recognition language (e.g., "en-US", "fr-FR"). Restarts if currently running. */
   setLanguage(lang: string): void {
-    if (this.recognition) {
-      // Map short codes to full BCP-47 for better accuracy
-      const langMap: Record<string, string> = {
-        en: "en-US", fr: "fr-FR", es: "es-ES", de: "de-DE",
-        pt: "pt-BR", it: "it-IT", nl: "nl-NL", pl: "pl-PL",
-        ja: "ja-JP", ko: "ko-KR", zh: "zh-CN", ar: "ar-SA",
-      };
-      this.recognition.lang = langMap[lang] || lang;
+    if (!this.recognition) return;
+    // Map short codes to full BCP-47 for better accuracy
+    const langMap: Record<string, string> = {
+      en: "en-US", fr: "fr-FR", es: "es-ES", de: "de-DE",
+      pt: "pt-BR", it: "it-IT", nl: "nl-NL", pl: "pl-PL",
+      ja: "ja-JP", ko: "ko-KR", zh: "zh-CN", ar: "ar-SA",
+    };
+    const newLang = langMap[lang] || lang;
+    if (this.recognition.lang === newLang) return;
+    this.recognition.lang = newLang;
+    // Restart recognition so the new language takes effect
+    if (this.running) {
+      try { this.recognition.stop(); } catch { /* will auto-restart via onend */ }
     }
   }
 

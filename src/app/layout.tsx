@@ -15,6 +15,8 @@ const SITE_NAME = "Tonvo";
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
   viewportFit: "cover",
   themeColor: "#09090b",
   colorScheme: "dark",
@@ -336,6 +338,42 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <Providers>
           {children}
         </Providers>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function(){
+                // Block Ctrl/Cmd + scroll wheel zoom
+                document.addEventListener('wheel',function(e){
+                  if(e.ctrlKey||e.metaKey){e.preventDefault();}
+                },{passive:false});
+
+                // Block Ctrl/Cmd + +/-/0 keyboard zoom
+                document.addEventListener('keydown',function(e){
+                  if((e.ctrlKey||e.metaKey)&&(e.key==='+'||e.key==='-'||e.key==='='||e.key==='0')){
+                    e.preventDefault();
+                  }
+                });
+
+                // Block double-tap zoom on mobile
+                var lastTouchEnd=0;
+                document.addEventListener('touchend',function(e){
+                  var now=Date.now();
+                  if(now-lastTouchEnd<=300){e.preventDefault();}
+                  lastTouchEnd=now;
+                },false);
+
+                // Block pinch-to-zoom on mobile
+                document.addEventListener('touchmove',function(e){
+                  if(e.touches&&e.touches.length>1){e.preventDefault();}
+                },{passive:false});
+
+                // Block gesturestart/gesturechange (Safari iOS)
+                document.addEventListener('gesturestart',function(e){e.preventDefault();});
+                document.addEventListener('gesturechange',function(e){e.preventDefault();});
+              })();
+            `,
+          }}
+        />
         <script
           dangerouslySetInnerHTML={{
             __html: `

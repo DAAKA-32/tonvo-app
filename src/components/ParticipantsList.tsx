@@ -40,7 +40,7 @@ export default function ParticipantsList({ participants }: ParticipantsListProps
                   </svg>
                 ) : (
                   <span className="participants-list__initial">
-                    {p.label.charAt(0).toUpperCase()}
+                    {(p.label || "?").charAt(0).toUpperCase()}
                   </span>
                 )}
               </div>

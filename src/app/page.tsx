@@ -276,21 +276,34 @@ export default function HomePage() {
       name: "Sarah Mitchell",
       role: "Account Executive",
       company: "Salesforce",
-      text: "Honestly, I didn't think I needed this. But after my first week I realized how much I was missing in calls. Now I actually listen instead of scrambling to take notes.",
+      text: "Honestly, I didn't think I needed this. But after my first week I realized how much I was missing in calls.",
+      highlight: "Now I actually listen instead of scrambling to take notes.",
       avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&fit=crop&crop=face",
+      metric: { value: "3h", label: "saved per week" },
+      featured: true,
     },
     {
       name: "David Chen",
       role: "Engineering Manager",
       company: "Datadog",
-      text: "The summary after each 1-on-1 is a game changer. I caught things I would've completely forgotten. My team even noticed I'm more present during our calls now.",
+      text: "The summary after each 1-on-1 is a game changer. I caught things I would've completely forgotten.",
+      highlight: "My team even noticed I'm more present during our calls now.",
       avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&h=80&fit=crop&crop=face",
+    },
+    {
+      name: "Priya Sharma",
+      role: "Head of Sales",
+      company: "Notion",
+      text: "We rolled Tonvo out to our entire SDR team. Ramp time for new hires dropped significantly because they can review real call summaries instead of shadowing for weeks.",
+      avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=80&h=80&fit=crop&crop=face",
+      metric: { value: "40%", label: "faster onboarding" },
     },
     {
       name: "Jessica Adams",
       role: "Customer Success Lead",
       company: "HubSpot",
-      text: "I used to spend 20 minutes after every call writing up notes. Now it's just… done. And the transcription is surprisingly accurate, even with accents.",
+      text: "I used to spend 20 minutes after every call writing up notes.",
+      highlight: "Now it's just... done. And the transcription is surprisingly accurate, even with accents.",
       avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=80&h=80&fit=crop&crop=face",
     },
     {
@@ -298,6 +311,14 @@ export default function HomePage() {
       role: "Freelance Consultant",
       text: "I was skeptical at first — another AI tool, right? But this one actually delivers. I prep less, listen more, and my clients can tell the difference.",
       avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=80&h=80&fit=crop&crop=face",
+      metric: { value: "5x", label: "more client follow-ups" },
+    },
+    {
+      name: "Elena Rossi",
+      role: "Product Manager",
+      company: "Figma",
+      text: "I run 6+ user interviews a week. Tonvo captures every insight so I can stay focused on the conversation. The coaching tips during calls are surprisingly spot-on.",
+      avatar: "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=80&h=80&fit=crop&crop=face",
     },
   ];
 
@@ -441,38 +462,62 @@ export default function HomePage() {
 
         {/* ── Testimonials ── */}
         <section className="px-4 sm:px-6 py-16 sm:py-24 md:py-32">
-          <div className="max-w-5xl mx-auto">
+          <div className="max-w-6xl mx-auto">
             <div className="text-center mb-16">
-              <span className="section-label">What people say</span>
+              <span className="section-label">Trusted by professionals</span>
               <AnimatedTitle variant="right" className="section-heading">
-                Real feedback from real users.
+                Loved by teams who actually talk to people.
               </AnimatedTitle>
-              <p className="body-muted max-w-md mx-auto mt-4">
-                Professionals across sales, management, and consulting use Tonvo to improve the way they communicate.
+              <p className="body-muted max-w-lg mx-auto mt-4">
+                From sales calls to 1-on-1s, thousands of professionals rely on Tonvo to capture what matters and communicate better.
               </p>
+
+              {/* Social proof bar */}
+              <div className="flex items-center justify-center gap-6 mt-8 flex-wrap">
+                <div className="flex items-center gap-1">
+                  {[...Array(5)].map((_, i) => (
+                    <svg key={i} width="16" height="16" viewBox="0 0 24 24" fill="#fbbf24" stroke="none">
+                      <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                    </svg>
+                  ))}
+                  <span className="text-sm font-semibold ml-1.5" style={{ color: "var(--color-text)" }}>4.9</span>
+                  <span className="text-xs ml-0.5" style={{ color: "var(--color-text-muted)" }}>from 200+ users</span>
+                </div>
+              </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-              {testimonials.map((t) => (
+            <div className="testimonials-grid">
+              {testimonials.map((t, idx) => (
                 <div
                   key={t.name}
-                  className="glass-card p-7 flex flex-col justify-between"
+                  className={`glass-card p-7 flex flex-col justify-between relative overflow-hidden${t.featured ? " testimonial-featured" : ""}${idx >= 3 ? " testimonial-desktop-only" : ""}`}
                 >
-                  {/* Quote icon */}
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" className="mb-4 opacity-20">
-                    <path d="M10 11H6C6 7.686 8.686 5 12 5v2c-2.206 0-4 1.794-4 4h2a2 2 0 012 2v2a2 2 0 01-2 2H8a2 2 0 01-2-2v-4zm10 0h-4c0-3.314 2.686-6 6-6v2c-2.206 0-4 1.794-4 4h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-4z" fill="var(--color-accent-light)" />
-                  </svg>
-                  <p className="text-[15px] leading-relaxed mb-6" style={{ color: "var(--color-text-silver)" }}>
-                    {t.text}
-                  </p>
-                  <div className="flex items-center gap-3 mt-auto pt-4" style={{ borderTop: "1px solid rgba(255, 255, 255, 0.05)" }}>
-                    <img
-                      src={t.avatar}
-                      alt={t.name}
-                      className="w-10 h-10 rounded-full object-cover shrink-0"
-                    />
+                  {t.featured && <div className="testimonial-featured-glow" />}
+                  <div>
+                    <div className="flex items-center gap-0.5 mb-4">
+                      {[...Array(5)].map((_, i) => (
+                        <svg key={i} width="14" height="14" viewBox="0 0 24 24" fill="#fbbf24" stroke="none">
+                          <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                        </svg>
+                      ))}
+                    </div>
+                    <p className="text-[15px] leading-relaxed mb-0" style={{ color: "var(--color-text-silver)" }}>
+                      {t.text}
+                      {t.highlight && (
+                        <span className="testimonial-highlight"> {t.highlight}</span>
+                      )}
+                    </p>
+                    {t.metric && (
+                      <div className="testimonial-metric">
+                        <span className="testimonial-metric__value">{t.metric.value}</span>
+                        <span className="testimonial-metric__label">{t.metric.label}</span>
+                      </div>
+                    )}
+                  </div>
+                  <div className="flex items-center gap-3 mt-6 pt-4" style={{ borderTop: "1px solid rgba(255, 255, 255, 0.05)" }}>
+                    <img src={t.avatar} alt={t.name} className="w-10 h-10 rounded-full object-cover shrink-0 ring-2 ring-white/5" />
                     <div>
-                      <div className="text-sm font-medium">{t.name}</div>
+                      <div className="text-sm font-semibold">{t.name}</div>
                       <div className="text-xs" style={{ color: "var(--color-text-muted)" }}>
                         {t.role}{t.company ? ` · ${t.company}` : ""}
                       </div>

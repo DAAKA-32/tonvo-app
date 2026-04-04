@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 import type { SuggestedResponse, DetectedQuestion } from "@/types/analysis";
 import type { Participant } from "@/hooks/useParticipants";
 
@@ -19,6 +19,8 @@ export interface CopilotInlineLabels {
   respondNow: string;
   participantCount: string;
   participantCountPlural: string;
+  paused?: string;
+  askPlaceholder?: string;
 }
 
 interface CopilotInlineProps {
@@ -30,6 +32,11 @@ interface CopilotInlineProps {
   participants?: Participant[];
   labels?: CopilotInlineLabels;
   interimText?: string;
+  paused?: boolean;
+  onTogglePause?: () => void;
+  onAsk?: (question: string) => void;
+  asking?: boolean;
+  answer?: string;
 }
 
 function formatTime(secs: number) {
@@ -47,7 +54,13 @@ export default function CopilotInline({
   participants = [],
   labels,
   interimText = "",
+  paused = false,
+  onTogglePause,
+  onAsk,
+  asking = false,
+  answer = "",
 }: CopilotInlineProps) {
+  const [askInput, setAskInput] = useState("");
   const l = {
     title: labels?.title || "AI Copilot",
     sayThis: labels?.sayThis || "Say This",
@@ -56,6 +69,8 @@ export default function CopilotInline({
     respondNow: labels?.respondNow || "Respond now",
     participantCount: labels?.participantCount || "{{count}} participant",
     participantCountPlural: labels?.participantCountPlural || "{{count}} participants",
+    paused: labels?.paused || "Paused",
+    askPlaceholder: labels?.askPlaceholder || "Ask the copilot...",
   };
 
   const pCount = participants.length > 1
@@ -63,18 +78,34 @@ export default function CopilotInline({
     : l.participantCount.replace("{{count}}", String(participants.length));
 
   const handleCopy = useCallback((text: string) => {
-    navigator.clipboard?.writeText(text);
+    navigator.clipboard?.writeText(text).catch(() => {});
   }, []);
 
+  const handleAskSubmit = useCallback(() => {
+    if (!askInput.trim() || !onAsk) return;
+    onAsk(askInput.trim());
+    setAskInput("");
+  }, [askInput, onAsk]);
+
   return (
-    <div className="copilot-inline">
+    <div className={`copilot-inline ${paused ? "copilot-inline--paused" : ""}`}>
       {/* Header */}
       <div className="copilot-inline__header">
         <div className="copilot-inline__header-left">
-          <div className="copilot-inline__pulse" />
+          <div className={`copilot-inline__pulse ${paused ? "copilot-inline__pulse--paused" : ""}`} />
           <span className="copilot-inline__title">{l.title}</span>
           <span className="copilot-inline__timer">{formatTime(elapsed)}</span>
+          {paused && <span className="copilot-inline__paused-badge">{l.paused}</span>}
         </div>
+        {onTogglePause && (
+          <button className={`copilot-inline__pause-btn ${paused ? "copilot-inline__pause-btn--active" : ""}`} onClick={onTogglePause} type="button">
+            {paused ? (
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3" /></svg>
+            ) : (
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16" /><rect x="14" y="4" width="4" height="16" /></svg>
+            )}
+          </button>
+        )}
       </div>
 
       {/* Detected Question */}
@@ -124,12 +155,12 @@ export default function CopilotInline({
               const color = AVATAR_COLORS[i % AVATAR_COLORS.length];
               return (
                 <div
-                  key={i}
+                  key={p.id}
                   className="copilot-inline__participant-chip"
                   style={{ background: `${color}15`, color }}
                 >
                   <span className="copilot-inline__participant-dot" style={{ background: color }} />
-                  {p.label}
+                  {p.label || "?"}
                 </div>
               );
             })}
@@ -184,6 +215,36 @@ export default function CopilotInline({
             <path d="M2 12l10 5 10-5" />
           </svg>
           <span>{suggestion}</span>
+        </div>
+      )}
+
+      {/* AI Answer */}
+      {answer && (
+        <div className="copilot-inline__answer">
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#818cf8" strokeWidth="2.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" /></svg>
+          <span>{answer}</span>
+        </div>
+      )}
+
+      {/* Ask input bar */}
+      {onAsk && (
+        <div className="copilot-inline__ask">
+          <input
+            className="copilot-inline__ask-input"
+            type="text"
+            value={askInput}
+            onChange={(e) => setAskInput(e.target.value)}
+            onKeyDown={(e) => { if (e.key === "Enter") handleAskSubmit(); }}
+            placeholder={l.askPlaceholder}
+            disabled={asking}
+          />
+          <button className="copilot-inline__ask-btn" onClick={handleAskSubmit} disabled={asking || !askInput.trim()} type="button">
+            {asking ? (
+              <div className="copilot-inline__ask-spinner" />
+            ) : (
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="22" y1="2" x2="11" y2="13" /><polygon points="22 2 15 22 11 13 2 9 22 2" /></svg>
+            )}
+          </button>
         </div>
       )}
 

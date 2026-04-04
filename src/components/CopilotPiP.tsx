@@ -14,6 +14,8 @@ export interface CopilotPiPLabels {
   invisibleBadge: string;
   participantCount: string;
   participantCountPlural: string;
+  paused?: string;
+  askPlaceholder?: string;
 }
 
 interface CopilotPiPProps {
@@ -28,6 +30,11 @@ interface CopilotPiPProps {
   labels?: CopilotPiPLabels;
   /** Live interim transcription text (Web Speech API). */
   interimText?: string;
+  paused?: boolean;
+  onTogglePause?: () => void;
+  onAsk?: (question: string) => void;
+  asking?: boolean;
+  answer?: string;
 }
 
 // TypeScript declarations for Document Picture-in-Picture API (Chrome 116+)
@@ -139,6 +146,44 @@ const PIP_CSS = `
   .participants-items { display: flex; flex-wrap: wrap; gap: 6px; }
   .participant-chip { display: flex; align-items: center; gap: 4px; padding: 3px 8px; border-radius: 8px; font-size: 10px; font-weight: 500; }
   .participant-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+  .pause-btn {
+    display: flex; align-items: center; justify-content: center;
+    width: 28px; height: 28px; border: 1px solid rgba(255,255,255,0.1); border-radius: 8px;
+    background: rgba(255,255,255,0.04); color: #fafafa; cursor: pointer; transition: background 0.15s;
+  }
+  .pause-btn:hover { background: rgba(255,255,255,0.1); }
+  .pause-btn--paused { background: rgba(52,211,153,0.15); border-color: rgba(52,211,153,0.3); color: #34d399; }
+  .paused-badge {
+    font-size: 9px; font-weight: 700; padding: 2px 6px; border-radius: 4px;
+    background: rgba(251,191,36,0.15); color: #fbbf24;
+  }
+  .pulse--paused { background: #fbbf24; animation: none; }
+  .answer {
+    display: flex; align-items: flex-start; gap: 6px; padding: 8px 10px; border-radius: 8px; margin-bottom: 8px;
+    background: rgba(129,140,248,0.06); border: 1px solid rgba(129,140,248,0.15);
+    font-size: 12px; line-height: 1.5; color: #c8c8d8;
+  }
+  .ask-bar {
+    display: flex; gap: 6px; margin-bottom: 6px;
+  }
+  .ask-input {
+    flex: 1; padding: 7px 10px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1);
+    background: rgba(255,255,255,0.04); color: #fafafa; font-size: 11px; outline: none;
+  }
+  .ask-input:focus { border-color: rgba(129,140,248,0.4); }
+  .ask-input::placeholder { color: #8b8b96; }
+  .ask-btn {
+    display: flex; align-items: center; justify-content: center;
+    width: 32px; height: 32px; border: none; border-radius: 8px;
+    background: rgba(129,140,248,0.15); color: #818cf8; cursor: pointer; transition: background 0.15s; flex-shrink: 0;
+  }
+  .ask-btn:hover { background: rgba(129,140,248,0.3); }
+  .ask-btn:disabled { opacity: 0.4; cursor: default; }
+  .ask-spinner {
+    width: 12px; height: 12px; border: 2px solid rgba(129,140,248,0.3); border-top-color: #818cf8;
+    border-radius: 50%; animation: spin 0.6s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
 `;
 
 const AVATAR_COLORS_PIP = ["#818cf8", "#34d399", "#fb923c", "#f87171", "#38bdf8", "#c084fc"];
@@ -149,7 +194,7 @@ const INTENT_ICONS: Record<string, string> = {
 };
 
 function buildBodyContent(props: CopilotPiPProps): string {
-  const { suggestion = "", suggestedResponses = [], detectedQuestion = null, elapsed = 0, participants = [], labels, interimText = "" } = props;
+  const { suggestion = "", suggestedResponses = [], detectedQuestion = null, elapsed = 0, participants = [], labels, interimText = "", paused = false, asking = false, answer = "" } = props;
 
   const l = {
     title: labels?.title || "AI Copilot",
@@ -160,6 +205,8 @@ function buildBodyContent(props: CopilotPiPProps): string {
     invisibleBadge: labels?.invisibleBadge || "Invisible during screen share",
     participantCount: labels?.participantCount || "{{count}} participant",
     participantCountPlural: labels?.participantCountPlural || "{{count}} participants",
+    paused: labels?.paused || "Paused",
+    askPlaceholder: labels?.askPlaceholder || "Ask the copilot...",
   };
 
   const pCount = participants.length > 1
@@ -169,10 +216,17 @@ function buildBodyContent(props: CopilotPiPProps): string {
   return `
   <div class="header">
     <div class="header-left">
-      <div class="pulse"></div>
+      <div class="pulse ${paused ? "pulse--paused" : ""}"></div>
       <span class="title">${escapeHTML(l.title)}</span>
       <span class="timer">${formatTime(elapsed)}</span>
+      ${paused ? `<span class="paused-badge">${escapeHTML(l.paused)}</span>` : ""}
     </div>
+    <button class="pause-btn ${paused ? "pause-btn--paused" : ""}" id="pauseBtn">
+      ${paused
+        ? '<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>'
+        : '<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>'
+      }
+    </button>
   </div>
 
   ${detectedQuestion && detectedQuestion.text ? `
@@ -227,6 +281,22 @@ function buildBodyContent(props: CopilotPiPProps): string {
     <span>${escapeHTML(suggestion)}</span>
   </div>` : ""}
 
+  ${answer ? `
+  <div class="answer">
+    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#818cf8" stroke-width="2.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+    <span>${escapeHTML(answer)}</span>
+  </div>` : ""}
+
+  <div class="ask-bar">
+    <input class="ask-input" id="askInput" type="text" placeholder="${escapeHTML(l.askPlaceholder)}" ${asking ? "disabled" : ""} />
+    <button class="ask-btn" id="askBtn" ${asking ? "disabled" : ""}>
+      ${asking
+        ? '<div class="ask-spinner"></div>'
+        : '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>'
+      }
+    </button>
+  </div>
+
   <button class="stop-btn" id="stopBtn">
     <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><rect x="4" y="4" width="16" height="16" rx="2"/></svg>
     ${escapeHTML(l.stopSession)}
@@ -271,7 +341,7 @@ const CopilotPiP = forwardRef<CopilotPiPHandle, CopilotPiPProps>(function Copilo
   const modeRef = useRef<"documentPiP" | "windowOpen" | null>(null);
 
   const stopWiredRef = useRef<WeakSet<Window>>(new WeakSet());
-  const wireStopButton = useCallback((win: Window) => {
+  const wireButtons = useCallback((win: Window) => {
     // Only wire once per window — prevents duplicate listeners on every PiP content update
     if (stopWiredRef.current.has(win)) return;
     stopWiredRef.current.add(win);
@@ -279,6 +349,23 @@ const CopilotPiP = forwardRef<CopilotPiPHandle, CopilotPiPProps>(function Copilo
       const target = e.target as HTMLElement;
       if (target.id === "stopBtn" || target.closest("#stopBtn")) {
         propsRef.current.onStop();
+      } else if (target.id === "pauseBtn" || target.closest("#pauseBtn")) {
+        propsRef.current.onTogglePause?.();
+      } else if (target.id === "askBtn" || target.closest("#askBtn")) {
+        const input = win.document.getElementById("askInput") as HTMLInputElement | null;
+        if (input?.value.trim()) {
+          propsRef.current.onAsk?.(input.value.trim());
+          input.value = "";
+        }
+      }
+    });
+    win.document.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        const input = win.document.getElementById("askInput") as HTMLInputElement | null;
+        if (win.document.activeElement === input && input?.value.trim()) {
+          propsRef.current.onAsk?.(input.value.trim());
+          input.value = "";
+        }
       }
     });
   }, []);
@@ -305,7 +392,7 @@ const CopilotPiP = forwardRef<CopilotPiPHandle, CopilotPiPProps>(function Copilo
         // Render content
         pipWindow.document.body.innerHTML = buildBodyContent(propsRef.current);
 
-        wireStopButton(pipWindow);
+        wireButtons(pipWindow);
 
         // Listen for PiP window close
         pipWindow.addEventListener("pagehide", () => {
@@ -345,12 +432,13 @@ const CopilotPiP = forwardRef<CopilotPiPHandle, CopilotPiPProps>(function Copilo
     popup.document.write(buildFullHTML(propsRef.current));
     popup.document.close();
 
-    wireStopButton(popup);
+    wireButtons(popup);
 
-    // Clean up reference when popup is closed manually
-    const checkClosed = setInterval(() => {
+    // Clean up reference when popup is closed manually — store interval for cleanup on unmount
+    if (updateTimerRef.current) clearInterval(updateTimerRef.current);
+    updateTimerRef.current = setInterval(() => {
       if (!pipWindowRef.current || (pipWindowRef.current as Window & { closed?: boolean }).closed) {
-        clearInterval(checkClosed);
+        if (updateTimerRef.current) { clearInterval(updateTimerRef.current); updateTimerRef.current = null; }
         pipWindowRef.current = null;
         modeRef.current = null;
         propsRef.current.onPiPStateChange?.(false);
@@ -360,7 +448,7 @@ const CopilotPiP = forwardRef<CopilotPiPHandle, CopilotPiPProps>(function Copilo
     pipWindowRef.current = popup;
     modeRef.current = "windowOpen";
     propsRef.current.onPiPStateChange?.(true, "popup");
-  }, [wireStopButton]);
+  }, [wireButtons]);
 
   // Expose requestOpen to parent — MUST be called from a user gesture (click)
   useImperativeHandle(ref, () => ({
@@ -388,13 +476,13 @@ const CopilotPiP = forwardRef<CopilotPiPHandle, CopilotPiPProps>(function Copilo
       if (modeRef.current === "documentPiP") {
         // Document PiP: update body innerHTML directly (styles persist)
         win.document.body.innerHTML = buildBodyContent(props);
-        wireStopButton(win);
+        wireButtons(win);
       } else if (modeRef.current === "windowOpen") {
         // window.open: rewrite entire document
         win.document.open();
         win.document.write(buildFullHTML(props));
         win.document.close();
-        wireStopButton(win);
+        wireButtons(win);
       }
     } catch {
       pipWindowRef.current = null;
@@ -402,7 +490,7 @@ const CopilotPiP = forwardRef<CopilotPiPHandle, CopilotPiPProps>(function Copilo
     }
   }, [
     props.active, props.suggestion, props.suggestedResponses,
-    props.elapsed, props.participants, wireStopButton,
+    props.elapsed, props.participants, props.paused, props.asking, props.answer, wireButtons,
   ]);
 
   // Close on unmount

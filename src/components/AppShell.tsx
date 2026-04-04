@@ -1,8 +1,9 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/lib/auth-context";
+import { useSwipe } from "@/hooks/useSwipe";
 import Sidebar from "./Sidebar";
 import { TonvoLogoMark } from "@/components/Logo";
 
@@ -14,6 +15,15 @@ export default function AppShell({ children }: AppShellProps) {
   const { user, loading } = useAuth();
   const router = useRouter();
   const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  const openSidebar = useCallback(() => setSidebarOpen(true), []);
+  const closeSidebar = useCallback(() => setSidebarOpen(false), []);
+
+  // Swipe left→right from edge opens sidebar, right→left closes it
+  useSwipe({
+    onSwipeRight: openSidebar,
+    onSwipeLeft: sidebarOpen ? closeSidebar : undefined,
+  });
 
   useEffect(() => {
     if (!loading && !user) {

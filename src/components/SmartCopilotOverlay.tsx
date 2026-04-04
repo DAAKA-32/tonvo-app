@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import type { SuggestedResponse, DetectedQuestion } from "@/types/analysis";
 import type { Participant } from "@/hooks/useParticipants";
@@ -23,6 +23,12 @@ interface SmartCopilotOverlayProps {
   elapsed?: number;
   onStop?: () => void;
   participants?: Participant[];
+  // Pause/resume + ask
+  paused?: boolean;
+  onTogglePause?: () => void;
+  onAsk?: (question: string) => void;
+  asking?: boolean;
+  answer?: string;
   // Prep mode
   prepData?: PrepData | null;
   prepLoading?: boolean;
@@ -63,6 +69,11 @@ export default function SmartCopilotOverlay({
   elapsed = 0,
   onStop,
   participants = [],
+  paused = false,
+  onTogglePause,
+  onAsk,
+  asking = false,
+  answer = "",
   prepData,
   prepLoading = false,
   onStartSession,
@@ -73,6 +84,13 @@ export default function SmartCopilotOverlay({
   const prevResponsesRef = useRef<SuggestedResponse[]>([]);
   const [animatingResponses, setAnimatingResponses] = useState(false);
   const [questionVisible, setQuestionVisible] = useState(false);
+  const [askInput, setAskInput] = useState("");
+
+  const handleAskSubmit = useCallback(() => {
+    if (!askInput.trim() || !onAsk) return;
+    onAsk(askInput.trim());
+    setAskInput("");
+  }, [askInput, onAsk]);
 
   // Animate when responses change
   useEffect(() => {
@@ -99,9 +117,14 @@ export default function SmartCopilotOverlay({
   }, [detectedQuestion?.text]);
 
   const handleCopy = (text: string, idx: number) => {
-    navigator.clipboard.writeText(text).catch(() => {});
-    setCopiedIdx(idx);
-    setTimeout(() => setCopiedIdx(null), 1500);
+    navigator.clipboard.writeText(text).then(() => {
+      setCopiedIdx(idx);
+      setTimeout(() => setCopiedIdx(null), 1500);
+    }).catch(() => {
+      // Fallback: still show copied feedback even if clipboard API fails
+      setCopiedIdx(idx);
+      setTimeout(() => setCopiedIdx(null), 1500);
+    });
   };
 
   // ── COLLAPSED STATE ──
@@ -257,15 +280,25 @@ export default function SmartCopilotOverlay({
 
   // ── LIVE MODE (minimal) ──
   return (
-    <div className="smart-overlay smart-overlay--expanded">
+    <div className={`smart-overlay smart-overlay--expanded ${paused ? "smart-overlay--paused" : ""}`}>
       {/* Header bar */}
       <div className="smart-overlay__header">
         <div className="smart-overlay__header-left">
-          <div className="smart-overlay__pulse" />
+          <div className={`smart-overlay__pulse ${paused ? "smart-overlay__pulse--paused" : ""}`} />
           <span className="smart-overlay__title">{t("copilot.title")}</span>
           <span className="smart-overlay__timer">{formatTime(elapsed)}</span>
+          {paused && <span className="smart-overlay__badge smart-overlay__badge--paused">{t("copilot.paused", "Paused")}</span>}
         </div>
         <div className="smart-overlay__header-right">
+          {onTogglePause && (
+            <button className={`smart-overlay__pause-btn ${paused ? "smart-overlay__pause-btn--paused" : ""}`} onClick={onTogglePause} aria-label={paused ? t("copilot.resume", "Resume") : t("copilot.pause", "Pause")}>
+              {paused ? (
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3" /></svg>
+              ) : (
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16" /><rect x="14" y="4" width="4" height="16" /></svg>
+              )}
+            </button>
+          )}
           <button className="smart-overlay__collapse-btn" onClick={() => setCollapsed(true)} aria-label={t("copilot.collapse")}>
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="5" y1="12" x2="19" y2="12" /></svg>
           </button>
@@ -340,6 +373,36 @@ export default function SmartCopilotOverlay({
           )}
         </div>
       </div>
+
+      {/* AI Answer */}
+      {answer && (
+        <div className="smart-overlay__answer">
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#818cf8" strokeWidth="2.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" /></svg>
+          <span>{answer}</span>
+        </div>
+      )}
+
+      {/* Ask input bar */}
+      {onAsk && (
+        <div className="smart-overlay__ask">
+          <input
+            className="smart-overlay__ask-input"
+            type="text"
+            value={askInput}
+            onChange={(e) => setAskInput(e.target.value)}
+            onKeyDown={(e) => { if (e.key === "Enter") handleAskSubmit(); }}
+            placeholder={t("copilot.askPlaceholder", "Ask the copilot...")}
+            disabled={asking}
+          />
+          <button className="smart-overlay__ask-btn" onClick={handleAskSubmit} disabled={asking || !askInput.trim()}>
+            {asking ? (
+              <div className="smart-overlay__ask-spinner" />
+            ) : (
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="22" y1="2" x2="11" y2="13" /><polygon points="22 2 15 22 11 13 2 9 22 2" /></svg>
+            )}
+          </button>
+        </div>
+      )}
 
       {/* Stop button */}
       {onStop && (

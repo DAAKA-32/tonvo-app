@@ -154,6 +154,7 @@ export default function SessionPage() {
     }
   }, []);
   const [isRecording, setIsRecording] = useState(false);
+  const [sessionStarting, setSessionStarting] = useState(false);
   const [segments, setSegments] = useState<TranscriptSegment[]>([]);
   const [currentTone, setCurrentTone] = useState<Tone>("neutral");
   const [currentSuggestion, setCurrentSuggestion] = useState("");
@@ -197,6 +198,37 @@ export default function SessionPage() {
   // Detected question from other speaker
   const [detectedQuestion, setDetectedQuestion] = useState<DetectedQuestion | null>(null);
 
+  // Copilot pause/resume + user question input
+  const [copilotPaused, setCopilotPaused] = useState(false);
+  const copilotPausedRef = useRef(false);
+  copilotPausedRef.current = copilotPaused;
+  const [copilotAnswer, setCopilotAnswer] = useState("");
+  const [copilotAsking, setCopilotAsking] = useState(false);
+
+  const handleAskCopilot = useCallback(async (question: string) => {
+    if (!question.trim() || copilotAsking) return;
+    setCopilotAsking(true);
+    setCopilotAnswer("");
+    try {
+      const res = await authFetch("/api/copilot-ask", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          question: question.trim(),
+          conversationSummary: conversationSummary.current || undefined,
+          mode: conversationMode,
+          language: i18n.language,
+        }),
+      });
+      const data = await res.json();
+      setCopilotAnswer(data.answer || "No response.");
+    } catch {
+      setCopilotAnswer("Connection error. Try again.");
+    } finally {
+      setCopilotAsking(false);
+    }
+  }, [copilotAsking, conversationMode, i18n.language]);
+
   // Track whether PiP window is open — NO in-page overlay during live sessions (screen-share invisible)
   const [pipOpen, setPipOpen] = useState(false);
   const [copilotMode, setCopilotMode] = useState<"none" | "documentPiP" | "popup" | "failed">("none");
@@ -238,8 +270,6 @@ export default function SessionPage() {
   const [analysisStatus, setAnalysisStatus] = useState<"idle" | "running" | "completed">("idle");
   const screenAnalysisStartTime = useRef<number>(0);
   const consecutiveSilenceCount = useRef(0);
-  const maxSilenceBeforeAutoStop = useRef(8); // 8 consecutive silent chunks (~44s) = auto-stop audio
-  const minSessionDurationBeforeAutoStop = useRef(30_000); // Don't auto-stop before 30s of session
   const stopSessionRef = useRef<(() => void) | null>(null);
 
   useEffect(() => {
@@ -303,7 +333,7 @@ export default function SessionPage() {
   // No auto-stop: the user controls when to end the session (copilot mode).
   // The analysisStatus may reach "completed" but the session keeps running.
 
-  // Cleanup intervals on unmount
+  // Cleanup intervals, services and refs on unmount
   useEffect(() => {
     return () => {
       if (screenAnalysisTimer.current) {
@@ -316,7 +346,16 @@ export default function SessionPage() {
       }
       if (audioService.current) {
         audioService.current.stop();
+        audioService.current = null;
       }
+      if (liveSpeech.current) {
+        liveSpeech.current.stop();
+        liveSpeech.current = null;
+      }
+      conversationSummary.current = "";
+      unsummarizedSegments.current = [];
+      summaryUpdatePending.current = false;
+      screenAnalysisHistory.current = [];
     };
   }, []);
 
@@ -419,7 +458,13 @@ export default function SessionPage() {
   }
 
   const analyzeScreen = useCallback(async () => {
-    if (!audioService.current || !audioService.current.hasVideo || screenAnalysisCompleted) return;
+    if (!audioService.current || screenAnalysisCompleted) return;
+    // Detect screen share ended mid-session
+    if (!audioService.current.hasVideo) {
+      stopScreenAnalysis();
+      toast.show(t("session.screenShareEnded", "Screen share ended — continuing with audio only."), { type: "info", duration: 5000 });
+      return;
+    }
 
     const isScreenOnly = !audioService.current.audioEnabled;
     const frame = await audioService.current.captureFrame();
@@ -512,6 +557,38 @@ export default function SessionPage() {
     finally { setAnalyzingScreen(false); }
   }, [screenAnalysisCompleted, pauseScreenAnalysis, screenAnalysis, generateScreenSummary]);
 
+  // Flush queued segments to rolling summary — re-triggers if more segments arrived during update
+  function flushSummaryQueue() {
+    if (summaryUpdatePending.current || unsummarizedSegments.current.length < 2) return;
+    summaryUpdatePending.current = true;
+    const segsToSummarize = [...unsummarizedSegments.current];
+    unsummarizedSegments.current = [];
+    authFetch("/api/conversation-context", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        previousSummary: conversationSummary.current || null,
+        newSegments: segsToSummarize,
+        language: i18n.language,
+      }),
+    })
+      .then((r) => { if (!r.ok) throw new Error(`Context API: ${r.status}`); return r.json(); })
+      .then((data) => {
+        if (data.summary) conversationSummary.current = data.summary;
+      })
+      .catch((err) => {
+        console.error("Rolling summary error:", err);
+        unsummarizedSegments.current.unshift(...segsToSummarize);
+      })
+      .finally(() => {
+        summaryUpdatePending.current = false;
+        // If more segments queued during this update, flush again
+        if (unsummarizedSegments.current.length >= 2) {
+          flushSummaryQueue();
+        }
+      });
+  }
+
   const processAudioChunk = useCallback(async (blob: Blob) => {
     if (!audioService.current?.audioEnabled) return;
     setProcessing(true);
@@ -570,6 +647,21 @@ export default function SessionPage() {
 
       // Reset silence counter on valid speech
       consecutiveSilenceCount.current = 0;
+
+      // Skip AI analysis when copilot is paused — transcription still recorded
+      if (copilotPausedRef.current) {
+        const pausedTone: ToneResult = {
+          tone: "neutral", confidence: 0.5, suggestion: "", emotions: [],
+          signal: "none", signalLabel: "", qualityScore: 0, classification: "neutral",
+          coachingTip: "", liveInsight: "", engagementScore: 0, responseDelay: "normal",
+        };
+        const dominantSpeaker = speakerSegs.length > 0 ? speakerSegs[speakerSegs.length - 1].speaker : undefined;
+        setSegments((prev) => [...prev, { text, timestamp: Date.now(), tone: pausedTone, speaker: dominantSpeaker, speakerSegments: speakerSegs.length > 0 ? speakerSegs : undefined }]);
+        setProcessing(false);
+        if (processingToastId.current) { toast.update(processingToastId.current, t("session.copilotPausedStatus", "Copilot paused"), { type: "info", duration: 2000 }); processingToastId.current = null; }
+        return;
+      }
+
       toast.update(processingToastId.current!, t("session.analyzing"), { type: "processing" });
 
       // Send rolling summary + last 5 raw segments + copilot memory for richer context
@@ -628,28 +720,7 @@ export default function SessionPage() {
 
       // Update rolling summary every 2 new segments (async, non-blocking)
       if (unsummarizedSegments.current.length >= 2 && !summaryUpdatePending.current) {
-        summaryUpdatePending.current = true;
-        const segsToSummarize = [...unsummarizedSegments.current];
-        unsummarizedSegments.current = [];
-        authFetch("/api/conversation-context", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            previousSummary: conversationSummary.current || null,
-            newSegments: segsToSummarize,
-            language: i18n.language,
-          }),
-        })
-          .then((r) => { if (!r.ok) throw new Error(`Context API: ${r.status}`); return r.json(); })
-          .then((data) => {
-            if (data.summary) conversationSummary.current = data.summary;
-          })
-          .catch((err) => {
-            console.error("Rolling summary error:", err);
-            // Restore segments to queue so they're retried next cycle
-            unsummarizedSegments.current.unshift(...segsToSummarize);
-          })
-          .finally(() => { summaryUpdatePending.current = false; });
+        flushSummaryQueue();
       }
       setCurrentTone(analysis.tone);
       setCurrentSuggestion(analysis.suggestion);
@@ -711,6 +782,10 @@ export default function SessionPage() {
   }, []);
 
   async function startSession() {
+    if (sessionStarting || isRecording) return;
+    setSessionStarting(true);
+
+    try {
     // Block screen-only on free plan — screen analysis requires Pro
     const effectiveScreen = screenEnabled && features.screenAnalysis;
     if (!effectiveScreen && !audioEnabled) {
@@ -746,6 +821,8 @@ export default function SessionPage() {
       setQualityScore(0); setEngagementScore(0); setScreenAnalysis(null); setScreenAnalysisCompleted(false);
       setScreenSummary(null); screenSummaryRef.current = null; screenAnalysisHistory.current = [];
       setClassification("neutral"); setCoachingTip(""); setLiveInsight(""); setResponseDelay("normal"); setSpeakerBalance(undefined);
+      setCopilotPaused(false); setCopilotAnswer(""); setCopilotAsking(false);
+      setSuggestedResponses([]); setDetectedQuestion(null);
       resetParticipants();
       setActiveTab("insights");
       conversationSummary.current = "";
@@ -810,6 +887,9 @@ export default function SessionPage() {
         toast.show(effectiveScreen ? t("session.screenRequired") : t("session.micRequired"), { type: "error", duration: 6000 });
       }
     }
+    } finally {
+      setSessionStarting(false);
+    }
   }
 
   // Handle PiP state changes with mode-specific toasts
@@ -829,6 +909,7 @@ export default function SessionPage() {
   }, [toast, isRecording]);
 
   async function stopSession() {
+    if (!isRecording && !sessionStarting) return;
     if (screenAnalysisTimer.current) { clearTimeout(screenAnalysisTimer.current); screenAnalysisTimer.current = null; }
     // Process final audio chunk before stopping (up to 3s of speech would be lost otherwise)
     let finalBlob: Blob | null = null;
@@ -1046,10 +1127,10 @@ export default function SessionPage() {
                 )}
               </div>
             )}
-            <button onClick={isRecording ? stopSession : startSession} disabled={!isRecording && !screenEnabled && !audioEnabled}
+            <button onClick={isRecording ? stopSession : startSession} disabled={sessionStarting || (!isRecording && !screenEnabled && !audioEnabled)}
               className="w-full sm:w-auto px-6 py-3 rounded-xl font-semibold text-white cursor-pointer border-none transition-all hover:opacity-90 disabled:opacity-40 disabled:cursor-not-allowed"
               style={{ backgroundColor: isRecording ? "var(--color-negative)" : "var(--color-accent)", minHeight: 48 }}>
-              {isRecording ? t("session.stopSession") : t("session.startRecording")}
+              {sessionStarting ? t("session.starting", "Starting...") : isRecording ? t("session.stopSession") : t("session.startRecording")}
             </button>
           </div>
         </div>
@@ -1666,6 +1747,11 @@ export default function SessionPage() {
           elapsed={elapsed}
           participants={participants}
           interimText={interimText}
+          paused={copilotPaused}
+          onTogglePause={() => setCopilotPaused((p) => !p)}
+          onAsk={handleAskCopilot}
+          asking={copilotAsking}
+          answer={copilotAnswer}
           onStop={stopSession}
           onPiPStateChange={handlePiPStateChange}
           labels={{
@@ -1677,6 +1763,8 @@ export default function SessionPage() {
             invisibleBadge: t("copilot.invisibleInScreenShare"),
             participantCount: t("copilot.participantCount", { count: 1 }),
             participantCountPlural: t("copilot.participantCount", { count: 2 }),
+            paused: t("copilot.paused", "Paused"),
+            askPlaceholder: t("copilot.askPlaceholder", "Ask the copilot..."),
           }}
         />
       )}
@@ -1690,6 +1778,11 @@ export default function SessionPage() {
           elapsed={elapsed}
           participants={participants}
           interimText={interimText}
+          paused={copilotPaused}
+          onTogglePause={() => setCopilotPaused((p) => !p)}
+          onAsk={handleAskCopilot}
+          asking={copilotAsking}
+          answer={copilotAnswer}
           onStop={stopSession}
           labels={{
             title: t("copilot.title"),
@@ -1699,6 +1792,8 @@ export default function SessionPage() {
             respondNow: t("copilot.respondNow"),
             participantCount: t("copilot.participantCount", { count: 1 }),
             participantCountPlural: t("copilot.participantCount", { count: 2 }),
+            paused: t("copilot.paused", "Paused"),
+            askPlaceholder: t("copilot.askPlaceholder", "Ask the copilot..."),
           }}
         />
       )}
