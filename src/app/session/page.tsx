@@ -19,6 +19,7 @@ import SmartCopilotOverlay, { type PrepData } from "@/components/SmartCopilotOve
 import CopilotPiP, { type CopilotPiPHandle, type CopilotPiPLabels } from "@/components/CopilotPiP";
 import CopilotInline from "@/components/CopilotInline";
 import UpgradePrompt from "@/components/UpgradePrompt";
+import MeetingLinkInput, { type MeetingPlatform } from "@/components/MeetingLinkInput";
 import { usePlan } from "@/hooks/usePlan";
 import { useParticipants } from "@/hooks/useParticipants";
 import type {
@@ -781,6 +782,20 @@ export default function SessionPage() {
     return processAudioChunkRef.current(blob);
   }, []);
 
+  // Join a meeting via link — opens meeting in new tab + auto-starts Tonvo
+  const handleMeetingJoin = useCallback(async (info: { platform: MeetingPlatform; url: string; label: string }) => {
+    // Open meeting in a new tab so the user can join
+    window.open(info.url, "_blank", "noopener");
+    // Auto-enable screen + audio for full meeting capture
+    if (features.screenAnalysis && !isMobile) setScreenEnabled(true);
+    setAudioEnabled(true);
+    // Brief delay to let the meeting tab open before starting capture
+    toast.show(
+      t("session.meetingOpened", `${info.label} opened — start recording when you're ready to analyze.`),
+      { type: "success", duration: 6000 }
+    );
+  }, [features.screenAnalysis, isMobile, toast, t]);
+
   async function startSession() {
     if (sessionStarting || isRecording) return;
     setSessionStarting(true);
@@ -1169,6 +1184,11 @@ export default function SessionPage() {
               Upgrade
             </a>
           </div>
+        )}
+
+        {/* Meeting link input — desktop only, not during recording */}
+        {!isRecording && !isMobile && (
+          <MeetingLinkInput onJoin={handleMeetingJoin} disabled={sessionStarting} />
         )}
 
         {/* Mode info banner */}
