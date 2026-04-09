@@ -2,24 +2,26 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { useTranslation } from "react-i18next";
 import { useAuth } from "@/lib/auth-context";
 import AnimatedTitle from "@/components/AnimatedTitle";
 import { PRICING_PLANS, ANNUAL_DISCOUNT_PERCENT } from "@/lib/pricing-config";
 
 export default function PricingSection() {
   const { user } = useAuth();
+  const { t } = useTranslation();
   const [annual, setAnnual] = useState(false);
 
   return (
     <section id="pricing" className="px-4 sm:px-6 py-16 sm:py-24 md:py-32" style={{ backgroundColor: "var(--color-surface)" }}>
       <div className="max-w-5xl mx-auto">
         <div className="text-center mb-16">
-          <span className="section-label">Pricing</span>
+          <span className="section-label">{t("landing.nav.pricing")}</span>
           <AnimatedTitle variant="left" className="section-heading text-glow mb-4">
-            Simple, transparent pricing.
+            {t("pricing.title")}
           </AnimatedTitle>
           <p className="body-muted max-w-lg mx-auto mb-8">
-            Start free. Upgrade when you need more power.
+            {t("pricing.subtitle")}
           </p>
 
           {/* Billing toggle */}
@@ -32,7 +34,7 @@ export default function PricingSection() {
                 color: !annual ? "var(--color-text)" : "var(--color-text-muted)",
               }}
             >
-              Monthly
+              {t("pricing.monthly")}
             </button>
             <button
               onClick={() => setAnnual(true)}
@@ -42,7 +44,7 @@ export default function PricingSection() {
                 color: annual ? "var(--color-text)" : "var(--color-text-muted)",
               }}
             >
-              Annual
+              {t("pricing.annual")}
               <span
                 className="text-xs font-semibold px-2 py-0.5 rounded-full"
                 style={{
@@ -86,7 +88,7 @@ export default function PricingSection() {
                     className="absolute -top-3 left-1/2 -translate-x-1/2 text-xs font-semibold px-3.5 py-1 rounded-full"
                     style={{ background: "linear-gradient(135deg, #5c5c6e, #6e6e82)", color: "white" }}
                   >
-                    Most Popular
+                    {t("pricing.mostPopular")}
                   </div>
                 )}
                 <div className="mb-6">
@@ -123,7 +125,7 @@ export default function PricingSection() {
                       className="w-full py-3 rounded-xl font-semibold text-sm text-center"
                       style={{ background: "rgba(52, 211, 153, 0.08)", color: "var(--color-positive)", border: "1px solid rgba(52, 211, 153, 0.2)" }}
                     >
-                      Current Plan
+                      {t("pricing.currentPlan")}
                     </div>
                   ) : (
                     <Link
@@ -138,7 +140,7 @@ export default function PricingSection() {
                     href={user ? "/pricing" : "/login"}
                     className={`${plan.popular ? "btn-primary" : "btn-secondary"} w-full py-3 rounded-xl font-semibold text-sm text-center no-underline block`}
                   >
-                    {user ? plan.cta : "Get Started"}
+                    {user ? plan.cta : t("landing.hero.cta")}
                   </Link>
                 )}
               </div>
@@ -147,7 +149,7 @@ export default function PricingSection() {
         </div>
 
         <p className="text-center text-xs mt-8" style={{ color: "var(--color-text-muted)" }}>
-          All plans include a 7-day money-back guarantee. Cancel anytime.
+          {t("pricing.guarantee")}
         </p>
       </div>
     </section>

@@ -1,12 +1,15 @@
 "use client";
 
 import Link from "next/link";
+import { useTranslation } from "react-i18next";
 import { useAuth } from "@/lib/auth-context";
 import { auth, firebaseSignOut } from "@/lib/firebase";
 import TonvoLogo from "@/components/Logo";
+import LanguageSelector from "@/components/LanguageSelector";
 
 export default function Navbar() {
   const { user } = useAuth();
+  const { t } = useTranslation();
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 border-b"
@@ -17,17 +20,18 @@ export default function Navbar() {
         </Link>
 
         <div className="flex items-center gap-4">
+          <LanguageSelector />
           {user ? (
             <>
               <Link href="/dashboard"
                 className="text-sm no-underline px-3 py-1.5 rounded-md transition-colors hover:opacity-80"
                 style={{ color: "var(--color-text-muted)" }}>
-                Dashboard
+                {t("nav.dashboard")}
               </Link>
               <Link href="/history"
                 className="text-sm no-underline px-3 py-1.5 rounded-md transition-colors hover:opacity-80"
                 style={{ color: "var(--color-text-muted)" }}>
-                History
+                {t("nav.history")}
               </Link>
               <button
                 onClick={() => auth && firebaseSignOut(auth)}
@@ -37,14 +41,14 @@ export default function Navbar() {
                   borderColor: "var(--color-border)",
                   backgroundColor: "transparent",
                 }}>
-                Sign Out
+                {t("nav.signOut")}
               </button>
             </>
           ) : (
             <Link href="/login"
               className="text-sm no-underline px-4 py-2 rounded-lg font-medium text-white transition-colors hover:opacity-90"
               style={{ backgroundColor: "var(--color-accent)" }}>
-              Sign In
+              {t("landing.nav.signIn")}
             </Link>
           )}
         </div>

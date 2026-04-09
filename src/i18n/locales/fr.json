@@ -484,6 +484,116 @@
     "negative": "Négatif",
     "hesitant": "Hésitant"
   },
+  "landing": {
+    "nav": {
+      "features": "Fonctionnalités",
+      "product": "Produit",
+      "useCases": "Cas d'usage",
+      "pricing": "Tarifs",
+      "signIn": "Connexion",
+      "getStarted": "Commencer",
+      "dashboard": "Tableau de bord"
+    },
+    "hero": {
+      "badge": "L'intelligence conversationnelle, réinventée",
+      "headline1": "Lisez entre les lignes.",
+      "headline2": "Avant qu'il ne soit trop tard.",
+      "subtitle": "Tonvo analyse vos conversations en temps réel — détecte le sentiment, propose des suggestions intelligentes et vous aide à naviguer chaque interaction avec confiance.",
+      "cta": "Commencer",
+      "ctaSecondary": "Voir comment ça marche"
+    },
+    "problem": {
+      "label": "Le problème",
+      "heading1": "Les conversations sont complexes.",
+      "heading2": "Les mal interpréter est facile.",
+      "p1": "Vous avez déjà vécu cet appel où tout semblait bien se passer — jusqu'à ce que ça dérape. Un prospect s'est refroidi. Un collègue s'est agacé. Un candidat s'est fermé. Le temps de réaliser, il était déjà trop tard.",
+      "p2": "La plupart des gens ratent les changements subtils de ton et d'émotion qui font ou défont les conversations. Pas par manque d'intérêt, mais parce qu'ils se concentrent sur quoi dire ensuite."
+    },
+    "solution": {
+      "label": "La solution",
+      "heading1": "Un second regard.",
+      "heading2": "Pour chaque conversation.",
+      "desc": "Tonvo fonctionne en parallèle de vos appels et réunions. Il capture l'audio, analyse la dynamique émotionnelle en temps réel et vous donne des suggestions contextuelles discrètes — pour toujours savoir où en est la conversation et quoi faire ensuite.",
+      "step1Title": "Lancez une session",
+      "step1Desc": "Un clic. Tonvo capture l'audio de votre écran ou microphone.",
+      "step2Title": "Recevez du feedback en direct",
+      "step2Desc": "Les indicateurs de ton et les suggestions se mettent à jour au fil de la conversation.",
+      "step3Title": "Consultez les insights",
+      "step3Desc": "Après l'appel, obtenez une analyse complète avec les moments clés et les actions à prendre."
+    },
+    "features": {
+      "label": "Fonctionnalités",
+      "heading1": "Tout ce qu'il faut pour",
+      "heading2": "comprendre les conversations.",
+      "liveTone": "Détection de ton en direct",
+      "liveToneDesc": "Capture l'audio de vos appels ou micro et détecte si la conversation tend vers le positif, le neutre ou le tendu — en temps réel.",
+      "smartSuggestions": "Suggestions intelligentes",
+      "smartSuggestionsDesc": "En fonction de ce qui est dit et comment c'est dit, Tonvo suggère quoi dire ensuite pour garder la conversation sur la bonne voie.",
+      "conversationInsights": "Insights de conversation",
+      "conversationInsightsDesc": "Après chaque session, obtenez une analyse des variations de ton, des moments clés et un résumé avec des actions concrètes.",
+      "textAnalysis": "Analyse de texte",
+      "textAnalysisDesc": "Collez n'importe quel message ou extrait de conversation pour comprendre instantanément le ton sous-jacent et obtenir des suggestions d'amélioration."
+    },
+    "demo": {
+      "label": "AI Copilot",
+      "heading": "Votre coach de réunion invisible",
+      "desc": "Pendant que vous vous concentrez sur la conversation, le Copilot IA flotte à côté de votre fenêtre de réunion — suggérant exactement quoi dire, en temps réel."
+    },
+    "benefits": {
+      "label": "Avantages",
+      "heading": "Conçu pour ceux qui parlent à des gens.",
+      "realtime": "Temps réel",
+      "realtimeDesc": "Feedback pendant les conversations en direct",
+      "threeClicks": "3 clics",
+      "threeClicksDesc": "Pour commencer à analyser une conversation",
+      "actionable": "Actionnable",
+      "actionableDesc": "Des suggestions utilisables immédiatement",
+      "private": "Privé",
+      "privateDesc": "Audio traité localement, jamais stocké"
+    },
+    "useCases": {
+      "label": "Cas d'usage",
+      "heading": "Fonctionne partout où les conversations comptent.",
+      "salesTitle": "Appels commerciaux",
+      "salesDesc": "Sachez quand un prospect est engagé, hésitant ou en train de perdre intérêt. Ajustez votre discours dans l'instant, pas après avoir perdu l'affaire.",
+      "supportTitle": "Support client",
+      "supportDesc": "Détectez la frustration tôt et obtenez des suggestions pour désamorcer. Transformez les interactions difficiles en expériences positives.",
+      "interviewsTitle": "Entretiens d'embauche",
+      "interviewsDesc": "Que vous soyez recruteur ou candidat, comprenez la dynamique émotionnelle et communiquez plus efficacement.",
+      "meetingsTitle": "Réunions d'équipe",
+      "meetingsDesc": "Suivez l'engagement lors des longues réunions. Identifiez quand l'énergie baisse et obtenez des indices pour relancer votre audience."
+    },
+    "testimonials": {
+      "label": "Approuvé par des professionnels",
+      "heading": "Adopté par les équipes qui parlent vraiment aux gens.",
+      "desc": "Des appels commerciaux aux entretiens individuels, des milliers de professionnels comptent sur Tonvo pour capturer ce qui compte et mieux communiquer.",
+      "rating": "4.9",
+      "ratingDesc": "de 200+ utilisateurs"
+    },
+    "cta": {
+      "heading1": "Arrêtez de deviner.",
+      "heading2": "Commencez à comprendre.",
+      "desc": "Votre prochaine conversation importante approche. Ne manquez pas ce qui compte. Gratuit pour commencer, sans carte bancaire.",
+      "button": "Commencer",
+      "note": "Plan gratuit disponible. Évoluez à tout moment."
+    },
+    "faq": {
+      "title": "Questions fréquentes",
+      "subtitle": "Tout ce que vous devez savoir sur Tonvo, le copilote IA de conversation.",
+      "q1": "Qu'est-ce qu'un copilote IA de conversation ?",
+      "a1": "Un copilote IA de conversation est un outil qui analyse vos conversations en temps réel et fournit des conseils de coaching en direct, de la détection de ton, des suggestions intelligentes et des insights actionnables. Tonvo fonctionne pendant les appels sur Discord, Zoom, Google Meet et d'autres plateformes pour vous aider à communiquer plus efficacement.",
+      "q2": "Tonvo fonctionne-t-il pendant les appels en direct ?",
+      "a2": "Oui, Tonvo fonctionne en temps réel pendant les appels en direct. Il capture l'audio de votre microphone et l'audio système (Discord, Zoom, Meet), transcrit la conversation et fournit des conseils de coaching instantanés, une analyse de ton et des suggestions intelligentes pendant que vous parlez.",
+      "q3": "Comment fonctionne l'analyse en temps réel ?",
+      "a3": "Tonvo utilise un pipeline IA multi-étapes : transcription audio en temps réel avec séparation des locuteurs, détection de ton et d'émotion, détection de signaux conversationnels (objections, opportunités, hésitation), suggestions de coaching en direct et score de qualité. Il analyse également le contenu de l'écran pour un contexte supplémentaire.",
+      "q4": "Tonvo est-il gratuit ?",
+      "a4": "Oui, Tonvo propose un plan gratuit avec 3 sessions par mois incluant l'analyse de ton en temps réel et des suggestions basiques. Le plan Pro à 19 $/mois (ou 156 $/an, économisant 30 %) débloque des sessions illimitées, le coaching IA avancé, l'analyse d'écran et l'historique complet des sessions.",
+      "q5": "Les autres peuvent-ils voir le copilote pendant le partage d'écran ?",
+      "a5": "Tonvo ouvre le copilote dans une fenêtre de navigateur séparée. Lorsque vous partagez une fenêtre d'application spécifique (comme Discord ou Zoom) au lieu de votre écran entier, la fenêtre du copilote reste invisible pour les autres participants. Parfait pour les appels commerciaux et les entretiens.",
+      "q6": "Quelles langues Tonvo prend-il en charge ?",
+      "a6": "Tonvo prend en charge 10 langues : anglais, français, espagnol, allemand, portugais, italien, néerlandais, chinois, japonais et coréen. L'interface et l'analyse de conversation fonctionnent dans toutes les langues prises en charge avec détection automatique."
+    }
+  },
   "pricing": {
     "title": "Des tarifs simples et transparents.",
     "subtitle": "Commencez gratuitement. Passez au supérieur quand vous en avez besoin.",

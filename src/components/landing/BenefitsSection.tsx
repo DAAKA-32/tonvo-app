@@ -1,23 +1,26 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { useTranslation } from "react-i18next";
 import AnimatedTitle from "@/components/AnimatedTitle";
 
-const benefits = [
-  { value: "Real-time", label: "Feedback during live conversations" },
-  { value: "3 clicks", label: "To start analyzing any conversation" },
-  { value: "Actionable", label: "Suggestions you can use immediately" },
-  { value: "Private", label: "Audio processed locally, never stored" },
-];
-
 export default function BenefitsSection() {
+  const { t } = useTranslation();
+
+  const benefits = [
+    { value: t("landing.benefits.realtime"), label: t("landing.benefits.realtimeDesc") },
+    { value: t("landing.benefits.threeClicks"), label: t("landing.benefits.threeClicksDesc") },
+    { value: t("landing.benefits.actionable"), label: t("landing.benefits.actionableDesc") },
+    { value: t("landing.benefits.private"), label: t("landing.benefits.privateDesc") },
+  ];
+
   return (
     <section className="px-4 sm:px-6 py-16 sm:py-24 md:py-32" style={{ backgroundColor: "var(--color-surface)" }}>
       <div className="max-w-4xl mx-auto">
         <div className="text-center mb-16">
-          <span className="section-label">Benefits</span>
+          <span className="section-label">{t("landing.benefits.label")}</span>
           <AnimatedTitle variant="soft" className="section-heading">
-            Built for people who talk to people.
+            {t("landing.benefits.heading")}
           </AnimatedTitle>
         </div>
 

@@ -2,6 +2,7 @@
 
 import { ReactNode } from "react";
 import { motion } from "framer-motion";
+import { useTranslation } from "react-i18next";
 import AnimatedTitle from "@/components/AnimatedTitle";
 
 function IconUsers({ className }: { className?: string }) {
@@ -46,37 +47,23 @@ interface UseCase {
   desc: string;
 }
 
-const useCases: UseCase[] = [
-  {
-    icon: <IconUsers className="w-6 h-6" />,
-    title: "Sales Calls",
-    desc: "Know when a prospect is engaged, hesitant, or losing interest. Adjust your pitch in the moment, not after the deal is lost.",
-  },
-  {
-    icon: <IconMessageCircle className="w-6 h-6" />,
-    title: "Customer Support",
-    desc: "Detect frustration early and get suggestions to de-escalate. Turn difficult interactions into positive experiences.",
-  },
-  {
-    icon: <IconShield className="w-6 h-6" />,
-    title: "Job Interviews",
-    desc: "Whether you're the interviewer or the candidate, understand the emotional dynamics and communicate more effectively.",
-  },
-  {
-    icon: <IconZap className="w-6 h-6" />,
-    title: "Team Meetings",
-    desc: "Track engagement across long meetings. Identify when energy drops and get cues to re-engage your audience.",
-  },
-];
-
 export default function UseCasesSection() {
+  const { t } = useTranslation();
+
+  const useCases: UseCase[] = [
+    { icon: <IconUsers className="w-6 h-6" />, title: t("landing.useCases.salesTitle"), desc: t("landing.useCases.salesDesc") },
+    { icon: <IconMessageCircle className="w-6 h-6" />, title: t("landing.useCases.supportTitle"), desc: t("landing.useCases.supportDesc") },
+    { icon: <IconShield className="w-6 h-6" />, title: t("landing.useCases.interviewsTitle"), desc: t("landing.useCases.interviewsDesc") },
+    { icon: <IconZap className="w-6 h-6" />, title: t("landing.useCases.meetingsTitle"), desc: t("landing.useCases.meetingsDesc") },
+  ];
+
   return (
     <section id="use-cases" className="px-4 sm:px-6 py-16 sm:py-24 md:py-32">
       <div className="max-w-5xl mx-auto">
         <div className="text-center mb-16">
-          <span className="section-label">Use Cases</span>
+          <span className="section-label">{t("landing.useCases.label")}</span>
           <AnimatedTitle variant="left" className="section-heading">
-            Works wherever conversations matter.
+            {t("landing.useCases.heading")}
           </AnimatedTitle>
         </div>
 

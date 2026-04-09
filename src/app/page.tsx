@@ -1,4 +1,7 @@
+"use client";
+
 import Link from "next/link";
+import { useTranslation } from "react-i18next";
 import AnimatedTitle from "@/components/AnimatedTitle";
 import TonvoLogo from "@/components/Logo";
 import LandingNavbar from "@/components/landing/LandingNavbar";
@@ -241,32 +244,32 @@ function CopilotMockup() {
 /*  Landing page                                                      */
 /* ------------------------------------------------------------------ */
 export default function HomePage() {
+  const { t } = useTranslation();
   const ctaHref = "/login";
-  const ctaLabel = "Get Started";
 
   const features = [
     {
       icon: <IconMic className="w-5 h-5" />,
-      title: "Live Tone Detection",
-      desc: "Captures audio from your calls or mic and detects whether the conversation is trending positive, neutral, or tense -- in real time.",
+      title: t("landing.features.liveTone"),
+      desc: t("landing.features.liveToneDesc"),
       color: "var(--color-positive)",
     },
     {
       icon: <IconBrain className="w-5 h-5" />,
-      title: "Smart Suggestions",
-      desc: "Based on what's being said and how it's being said, Tonvo suggests what to say next to keep the conversation on track.",
+      title: t("landing.features.smartSuggestions"),
+      desc: t("landing.features.smartSuggestionsDesc"),
       color: "var(--color-accent-light)",
     },
     {
       icon: <IconChart className="w-5 h-5" />,
-      title: "Conversation Insights",
-      desc: "After every session, get a breakdown of tone shifts, key moments, and a summary with actionable takeaways.",
+      title: t("landing.features.conversationInsights"),
+      desc: t("landing.features.conversationInsightsDesc"),
       color: "var(--color-neutral)",
     },
     {
       icon: <IconMessageCircle className="w-5 h-5" />,
-      title: "Text Analysis",
-      desc: "Paste any message or conversation snippet to instantly understand the underlying tone and get improvement suggestions.",
+      title: t("landing.features.textAnalysis"),
+      desc: t("landing.features.textAnalysisDesc"),
       color: "var(--color-text-silver)",
     },
   ];
@@ -337,20 +340,17 @@ export default function HomePage() {
         {/* ── Problem ── */}
         <section className="px-4 sm:px-6 py-16 sm:py-24 md:py-32">
           <div className="max-w-3xl mx-auto text-center">
-            <span className="section-label">The problem</span>
+            <span className="section-label">{t("landing.problem.label")}</span>
             <AnimatedTitle variant="up" className="section-heading text-glow mb-6">
-              Conversations are hard.
+              {t("landing.problem.heading1")}
               <br />
-              <span className="text-silver-gradient">Misreading them is easy.</span>
+              <span className="text-silver-gradient">{t("landing.problem.heading2")}</span>
             </AnimatedTitle>
             <p className="body-muted max-w-2xl mx-auto">
-              You've been on that call where everything seemed fine -- until it wasn't.
-              A prospect went cold. A colleague got frustrated. A candidate shut down.
-              By the time you noticed, it was already too late to fix it.
+              {t("landing.problem.p1")}
             </p>
             <p className="body-muted max-w-2xl mx-auto mt-4">
-              Most people miss the subtle shifts in tone and emotion that make or break conversations.
-              Not because they don't care, but because they're focused on what to say next.
+              {t("landing.problem.p2")}
             </p>
           </div>
         </section>
@@ -358,23 +358,21 @@ export default function HomePage() {
         {/* ── Solution ── */}
         <section className="px-4 sm:px-6 py-16 sm:py-24 md:py-32" style={{ backgroundColor: "var(--color-surface)" }}>
           <div className="max-w-3xl mx-auto text-center">
-            <span className="section-label">The solution</span>
+            <span className="section-label">{t("landing.solution.label")}</span>
             <AnimatedTitle variant="left" className="section-heading text-glow mb-6">
-              A second pair of eyes.
+              {t("landing.solution.heading1")}
               <br />
-              <span className="text-silver-gradient">For every conversation.</span>
+              <span className="text-silver-gradient">{t("landing.solution.heading2")}</span>
             </AnimatedTitle>
             <p className="body-muted max-w-2xl mx-auto">
-              Tonvo runs alongside your calls and meetings. It captures the audio, analyzes the emotional dynamics in real time,
-              and gives you quiet, contextual suggestions -- so you always know where the conversation stands
-              and what to do next.
+              {t("landing.solution.desc")}
             </p>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-16">
               {[
-                { step: "01", title: "Start a session", desc: "One click. Tonvo captures audio from your screen or microphone." },
-                { step: "02", title: "Get live feedback", desc: "Tone indicators and suggestions update as the conversation flows." },
-                { step: "03", title: "Review insights", desc: "After the call, get a full breakdown with key moments and takeaways." },
+                { step: "01", title: t("landing.solution.step1Title"), desc: t("landing.solution.step1Desc") },
+                { step: "02", title: t("landing.solution.step2Title"), desc: t("landing.solution.step2Desc") },
+                { step: "03", title: t("landing.solution.step3Title"), desc: t("landing.solution.step3Desc") },
               ].map((item) => (
                 <div key={item.step} className="text-left">
                   <div className="text-xs font-bold mb-3 text-silver-sweep" style={{ display: "inline-block" }}>
@@ -394,11 +392,11 @@ export default function HomePage() {
         <section id="features" className="py-16 sm:py-24 md:py-32 overflow-hidden">
           <div className="max-w-5xl mx-auto px-4 sm:px-6">
             <div className="text-center mb-16">
-              <span className="section-label">Features</span>
+              <span className="section-label">{t("landing.features.label")}</span>
               <AnimatedTitle variant="right" className="section-heading">
-                Everything you need to
+                {t("landing.features.heading1")}
                 <br />
-                <span className="text-silver-sweep">understand conversations.</span>
+                <span className="text-silver-sweep">{t("landing.features.heading2")}</span>
               </AnimatedTitle>
             </div>
           </div>
@@ -434,12 +432,12 @@ export default function HomePage() {
         <section id="demo" className="px-4 sm:px-6 py-16 sm:py-24 md:py-32">
           <div className="max-w-4xl mx-auto">
             <div className="text-center mb-12">
-              <span className="section-label">AI Copilot</span>
+              <span className="section-label">{t("landing.demo.label")}</span>
               <AnimatedTitle variant="soft" className="section-heading text-glow mb-4">
-                Your invisible meeting coach
+                {t("landing.demo.heading")}
               </AnimatedTitle>
               <p className="body-muted max-w-lg mx-auto">
-                While you focus on the conversation, the AI Copilot floats beside your meeting window — suggesting exactly what to say next, in real time.
+                {t("landing.demo.desc")}
               </p>
             </div>
 
@@ -464,12 +462,12 @@ export default function HomePage() {
         <section className="px-4 sm:px-6 py-16 sm:py-24 md:py-32">
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-16">
-              <span className="section-label">Trusted by professionals</span>
+              <span className="section-label">{t("landing.testimonials.label")}</span>
               <AnimatedTitle variant="right" className="section-heading">
-                Loved by teams who actually talk to people.
+                {t("landing.testimonials.heading")}
               </AnimatedTitle>
               <p className="body-muted max-w-lg mx-auto mt-4">
-                From sales calls to 1-on-1s, thousands of professionals rely on Tonvo to capture what matters and communicate better.
+                {t("landing.testimonials.desc")}
               </p>
 
               {/* Social proof bar */}
@@ -480,8 +478,8 @@ export default function HomePage() {
                       <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
                     </svg>
                   ))}
-                  <span className="text-sm font-semibold ml-1.5" style={{ color: "var(--color-text)" }}>4.9</span>
-                  <span className="text-xs ml-0.5" style={{ color: "var(--color-text-muted)" }}>from 200+ users</span>
+                  <span className="text-sm font-semibold ml-1.5" style={{ color: "var(--color-text)" }}>{t("landing.testimonials.rating")}</span>
+                  <span className="text-xs ml-0.5" style={{ color: "var(--color-text-muted)" }}>{t("landing.testimonials.ratingDesc")}</span>
                 </div>
               </div>
             </div>
@@ -547,26 +545,25 @@ export default function HomePage() {
             </div>
 
             <AnimatedTitle variant="lift" className="hero-heading text-glow mb-6" style={{ fontSize: "clamp(1.875rem, 5vw, 3rem)" }}>
-              Stop guessing.
+              {t("landing.cta.heading1")}
               <br />
-              <span className="text-shimmer">Start understanding.</span>
+              <span className="text-shimmer">{t("landing.cta.heading2")}</span>
             </AnimatedTitle>
 
             <p className="body-muted text-lg mb-10 max-w-lg mx-auto">
-              Your next important conversation is coming.
-              Make sure you don't miss what matters. Free to start, no credit card required.
+              {t("landing.cta.desc")}
             </p>
 
             <Link
               href={ctaHref}
               className="btn-primary inline-flex items-center gap-2 px-10 py-4 text-base no-underline"
             >
-              {ctaLabel}
+              {t("landing.cta.button")}
               <IconArrowRight />
             </Link>
 
             <p className="text-xs mt-6" style={{ color: "var(--color-text-muted)" }}>
-              Free plan available. Upgrade anytime.
+              {t("landing.cta.note")}
             </p>
           </div>
         </section>
@@ -575,38 +572,20 @@ export default function HomePage() {
         <section id="faq" className="py-20 px-6">
           <div className="max-w-3xl mx-auto">
             <h2 className="text-2xl sm:text-3xl font-bold text-center mb-3" style={{ color: "var(--color-text)" }}>
-              Frequently Asked Questions
+              {t("landing.faq.title")}
             </h2>
             <p className="text-sm text-center mb-12" style={{ color: "var(--color-text-muted)" }}>
-              Everything you need to know about Tonvo, the AI conversation copilot.
+              {t("landing.faq.subtitle")}
             </p>
 
             <div className="space-y-4">
               {[
-                {
-                  q: "What is an AI conversation copilot?",
-                  a: "An AI conversation copilot is a tool that analyzes your conversations in real time and provides live coaching tips, tone detection, smart suggestions, and actionable insights. Tonvo works during calls on Discord, Zoom, Google Meet, and other platforms to help you communicate more effectively.",
-                },
-                {
-                  q: "Does Tonvo work during live calls?",
-                  a: "Yes, Tonvo works in real time during live calls. It captures audio from your microphone and system audio (Discord, Zoom, Meet), transcribes the conversation, and provides instant coaching tips, tone analysis, and smart suggestions while you speak.",
-                },
-                {
-                  q: "How does the real-time analysis work?",
-                  a: "Tonvo uses a multi-step AI pipeline: real-time audio transcription with speaker separation, tone and emotion detection, conversation signal detection (objections, opportunities, hesitation), live coaching suggestions, and quality scoring. It also analyzes screen content for additional context.",
-                },
-                {
-                  q: "Is Tonvo free to use?",
-                  a: "Yes, Tonvo offers a free plan with 3 sessions per month including real-time tone analysis and basic suggestions. The Pro plan at $19/month (or $156/year, saving 30%) unlocks unlimited sessions, advanced AI coaching, screen analysis, and full session history.",
-                },
-                {
-                  q: "Can other people see the copilot during screen sharing?",
-                  a: "Tonvo opens the copilot in a separate browser window. When you share a specific application window (like Discord or Zoom) instead of your entire screen, the copilot window remains invisible to other participants. Perfect for sales calls and interviews.",
-                },
-                {
-                  q: "What languages does Tonvo support?",
-                  a: "Tonvo supports 10 languages: English, French, Spanish, German, Portuguese, Italian, Dutch, Chinese, Japanese, and Korean. The interface and conversation analysis work across all supported languages with automatic detection.",
-                },
+                { q: t("landing.faq.q1"), a: t("landing.faq.a1") },
+                { q: t("landing.faq.q2"), a: t("landing.faq.a2") },
+                { q: t("landing.faq.q3"), a: t("landing.faq.a3") },
+                { q: t("landing.faq.q4"), a: t("landing.faq.a4") },
+                { q: t("landing.faq.q5"), a: t("landing.faq.a5") },
+                { q: t("landing.faq.q6"), a: t("landing.faq.a6") },
               ].map((item, i) => (
                 <details
                   key={i}
@@ -670,6 +649,20 @@ export default function HomePage() {
                   <li><Link href="/about" className="text-sm no-underline hover:opacity-80 transition-colors" style={{ color: "var(--color-text-muted)" }}>About</Link></li>
                   <li><Link href="/blog" className="text-sm no-underline hover:opacity-80 transition-colors" style={{ color: "var(--color-text-muted)" }}>Blog</Link></li>
                   <li><a href="mailto:tonvoco.pro@gmail.com" className="text-sm no-underline hover:opacity-80 transition-colors" style={{ color: "var(--color-text-muted)" }}>Contact</a></li>
+                </ul>
+              </div>
+
+              {/* Resources */}
+              <div>
+                <h4 className="footer-heading">
+                  Resources
+                </h4>
+                <ul className="list-none p-0 m-0 space-y-2.5">
+                  <li><Link href="/use-cases" className="text-sm no-underline hover:opacity-80 transition-colors" style={{ color: "var(--color-text-muted)" }}>Use Cases</Link></li>
+                  <li><Link href="/features" className="text-sm no-underline hover:opacity-80 transition-colors" style={{ color: "var(--color-text-muted)" }}>Features</Link></li>
+                  <li><Link href="/industries" className="text-sm no-underline hover:opacity-80 transition-colors" style={{ color: "var(--color-text-muted)" }}>Industries</Link></li>
+                  <li><Link href="/compare" className="text-sm no-underline hover:opacity-80 transition-colors" style={{ color: "var(--color-text-muted)" }}>Comparisons</Link></li>
+                  <li><Link href="/guides" className="text-sm no-underline hover:opacity-80 transition-colors" style={{ color: "var(--color-text-muted)" }}>Guides</Link></li>
                 </ul>
               </div>
 

@@ -2,11 +2,14 @@
 
 import { useState, useEffect, useRef, useCallback } from "react";
 import Link from "next/link";
+import { useTranslation } from "react-i18next";
 import { useAuth } from "@/lib/auth-context";
 import TonvoLogo from "@/components/Logo";
+import LanguageSelector from "@/components/LanguageSelector";
 
 export default function LandingNavbar() {
   const { user } = useAuth();
+  const { t } = useTranslation();
 
   // --- Smart navbar scroll behavior ---
   const [navVisible, setNavVisible] = useState(true);
@@ -22,13 +25,10 @@ export default function LandingNavbar() {
       const heroThreshold = window.innerHeight * 0.4;
 
       if (currentY <= heroThreshold) {
-        // Always show in hero section
         setNavVisible(true);
       } else if (currentY < lastScrollY.current) {
-        // Scrolling up -> show
         setNavVisible(true);
       } else if (currentY > lastScrollY.current + 5) {
-        // Scrolling down (with 5px dead zone to prevent flicker) -> hide
         setNavVisible(false);
       }
 
@@ -41,7 +41,6 @@ export default function LandingNavbar() {
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, [handleScroll]);
-  // --- End smart navbar ---
 
   return (
     <nav
@@ -63,20 +62,21 @@ export default function LandingNavbar() {
         </Link>
 
         <div className="hidden md:flex items-center gap-6 lg:gap-8">
-          <a href="#features" className="text-sm no-underline transition-colors hover:opacity-80" style={{ color: "var(--color-text-muted)" }}>Features</a>
-          <a href="#demo" className="text-sm no-underline transition-colors hover:opacity-80" style={{ color: "var(--color-text-muted)" }}>Product</a>
-          <a href="#use-cases" className="text-sm no-underline transition-colors hover:opacity-80" style={{ color: "var(--color-text-muted)" }}>Use Cases</a>
-          <a href="#pricing" className="text-sm no-underline transition-colors hover:opacity-80" style={{ color: "var(--color-text-muted)" }}>Pricing</a>
+          <a href="#features" className="text-sm no-underline transition-colors hover:opacity-80" style={{ color: "var(--color-text-muted)" }}>{t("landing.nav.features")}</a>
+          <a href="#demo" className="text-sm no-underline transition-colors hover:opacity-80" style={{ color: "var(--color-text-muted)" }}>{t("landing.nav.product")}</a>
+          <a href="#use-cases" className="text-sm no-underline transition-colors hover:opacity-80" style={{ color: "var(--color-text-muted)" }}>{t("landing.nav.useCases")}</a>
+          <a href="#pricing" className="text-sm no-underline transition-colors hover:opacity-80" style={{ color: "var(--color-text-muted)" }}>{t("landing.nav.pricing")}</a>
         </div>
 
         <div className="flex items-center gap-3">
+          <LanguageSelector />
           {user ? (
             <Link
               href="/dashboard"
               className="text-sm no-underline px-5 py-2 rounded-lg font-medium text-white transition-colors hover:opacity-90"
               style={{ backgroundColor: "var(--color-accent)" }}
             >
-              Dashboard
+              {t("landing.nav.dashboard")}
             </Link>
           ) : (
             <>
@@ -85,14 +85,14 @@ export default function LandingNavbar() {
                 className="text-sm no-underline px-4 py-2 rounded-lg transition-colors hover:opacity-80"
                 style={{ color: "var(--color-text-muted)" }}
               >
-                Sign In
+                {t("landing.nav.signIn")}
               </Link>
               <Link
                 href="/login"
                 className="text-sm no-underline px-5 py-2 rounded-lg font-medium text-white transition-colors hover:opacity-90"
                 style={{ backgroundColor: "var(--color-accent)" }}
               >
-                Get Started
+                {t("landing.nav.getStarted")}
               </Link>
             </>
           )}

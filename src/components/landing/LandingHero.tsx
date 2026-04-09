@@ -3,6 +3,7 @@
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { useTranslation } from "react-i18next";
 import { useAuth } from "@/lib/auth-context";
 import CurtainIntro from "@/components/CurtainIntro";
 import TonvoLogo from "@/components/Logo";
@@ -222,6 +223,7 @@ function HeroAppPreview() {
 
 export default function LandingHero() {
   const { user, loading } = useAuth();
+  const { t } = useTranslation();
   const router = useRouter();
 
   useEffect(() => {
@@ -230,11 +232,9 @@ export default function LandingHero() {
     }
   }, [user, loading, router]);
 
-  // While checking auth or redirecting, show nothing
   if (loading || user) return null;
 
   const ctaHref = "/login";
-  const ctaLabel = "Get Started";
 
   return (
     <>
@@ -254,21 +254,19 @@ export default function LandingHero() {
               style={{ background: "rgba(200, 200, 216, 0.06)", border: "1px solid rgba(200, 200, 216, 0.12)", color: "var(--color-accent-light)" }}
             >
               <div className="w-2 h-2 rounded-full pulse-positive" style={{ backgroundColor: "var(--color-positive)" }} />
-              Conversation Intelligence, Reimagined
+              {t("landing.hero.badge")}
             </div>
           </div>
 
           {/* Headline */}
           <h1 className="animate-fade-up animate-delay-100 hero-heading text-glow mb-6">
-            Read the room.
+            {t("landing.hero.headline1")}
             <br />
-            <span className="text-shimmer">Before it reads you.</span>
+            <span className="text-shimmer">{t("landing.hero.headline2")}</span>
           </h1>
 
-          {/* Subtitle */}
           <p className="animate-fade-up animate-delay-200 body-muted text-lg md:text-xl mb-10 max-w-xl mx-auto">
-            Tonvo analyzes your conversations in real time -- detecting sentiment,
-            surfacing smart suggestions, and helping you navigate every interaction with confidence.
+            {t("landing.hero.subtitle")}
           </p>
 
           {/* CTA */}
@@ -277,14 +275,14 @@ export default function LandingHero() {
               href={ctaHref}
               className="btn-primary inline-flex items-center gap-2 px-8 py-3.5 text-base no-underline"
             >
-              {ctaLabel}
+              {t("landing.hero.cta")}
               <IconArrowRight />
             </Link>
             <a
               href="#demo"
               className="btn-secondary inline-flex items-center gap-2 px-8 py-3.5 text-base no-underline"
             >
-              See How It Works
+              {t("landing.hero.ctaSecondary")}
             </a>
           </div>
 

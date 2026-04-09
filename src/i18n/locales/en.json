@@ -479,6 +479,116 @@
     "negative": "Negative",
     "hesitant": "Hesitant"
   },
+  "landing": {
+    "nav": {
+      "features": "Features",
+      "product": "Product",
+      "useCases": "Use Cases",
+      "pricing": "Pricing",
+      "signIn": "Sign In",
+      "getStarted": "Get Started",
+      "dashboard": "Dashboard"
+    },
+    "hero": {
+      "badge": "Conversation Intelligence, Reimagined",
+      "headline1": "Read the room.",
+      "headline2": "Before it reads you.",
+      "subtitle": "Tonvo analyzes your conversations in real time — detecting sentiment, surfacing smart suggestions, and helping you navigate every interaction with confidence.",
+      "cta": "Get Started",
+      "ctaSecondary": "See How It Works"
+    },
+    "problem": {
+      "label": "The problem",
+      "heading1": "Conversations are hard.",
+      "heading2": "Misreading them is easy.",
+      "p1": "You've been on that call where everything seemed fine — until it wasn't. A prospect went cold. A colleague got frustrated. A candidate shut down. By the time you noticed, it was already too late to fix it.",
+      "p2": "Most people miss the subtle shifts in tone and emotion that make or break conversations. Not because they don't care, but because they're focused on what to say next."
+    },
+    "solution": {
+      "label": "The solution",
+      "heading1": "A second pair of eyes.",
+      "heading2": "For every conversation.",
+      "desc": "Tonvo runs alongside your calls and meetings. It captures the audio, analyzes the emotional dynamics in real time, and gives you quiet, contextual suggestions — so you always know where the conversation stands and what to do next.",
+      "step1Title": "Start a session",
+      "step1Desc": "One click. Tonvo captures audio from your screen or microphone.",
+      "step2Title": "Get live feedback",
+      "step2Desc": "Tone indicators and suggestions update as the conversation flows.",
+      "step3Title": "Review insights",
+      "step3Desc": "After the call, get a full breakdown with key moments and takeaways."
+    },
+    "features": {
+      "label": "Features",
+      "heading1": "Everything you need to",
+      "heading2": "understand conversations.",
+      "liveTone": "Live Tone Detection",
+      "liveToneDesc": "Captures audio from your calls or mic and detects whether the conversation is trending positive, neutral, or tense — in real time.",
+      "smartSuggestions": "Smart Suggestions",
+      "smartSuggestionsDesc": "Based on what's being said and how it's being said, Tonvo suggests what to say next to keep the conversation on track.",
+      "conversationInsights": "Conversation Insights",
+      "conversationInsightsDesc": "After every session, get a breakdown of tone shifts, key moments, and a summary with actionable takeaways.",
+      "textAnalysis": "Text Analysis",
+      "textAnalysisDesc": "Paste any message or conversation snippet to instantly understand the underlying tone and get improvement suggestions."
+    },
+    "demo": {
+      "label": "AI Copilot",
+      "heading": "Your invisible meeting coach",
+      "desc": "While you focus on the conversation, the AI Copilot floats beside your meeting window — suggesting exactly what to say next, in real time."
+    },
+    "benefits": {
+      "label": "Benefits",
+      "heading": "Built for people who talk to people.",
+      "realtime": "Real-time",
+      "realtimeDesc": "Feedback during live conversations",
+      "threeClicks": "3 clicks",
+      "threeClicksDesc": "To start analyzing any conversation",
+      "actionable": "Actionable",
+      "actionableDesc": "Suggestions you can use immediately",
+      "private": "Private",
+      "privateDesc": "Audio processed locally, never stored"
+    },
+    "useCases": {
+      "label": "Use Cases",
+      "heading": "Works wherever conversations matter.",
+      "salesTitle": "Sales Calls",
+      "salesDesc": "Know when a prospect is engaged, hesitant, or losing interest. Adjust your pitch in the moment, not after the deal is lost.",
+      "supportTitle": "Customer Support",
+      "supportDesc": "Detect frustration early and get suggestions to de-escalate. Turn difficult interactions into positive experiences.",
+      "interviewsTitle": "Job Interviews",
+      "interviewsDesc": "Whether you're the interviewer or the candidate, understand the emotional dynamics and communicate more effectively.",
+      "meetingsTitle": "Team Meetings",
+      "meetingsDesc": "Track engagement across long meetings. Identify when energy drops and get cues to re-engage your audience."
+    },
+    "testimonials": {
+      "label": "Trusted by professionals",
+      "heading": "Loved by teams who actually talk to people.",
+      "desc": "From sales calls to 1-on-1s, thousands of professionals rely on Tonvo to capture what matters and communicate better.",
+      "rating": "4.9",
+      "ratingDesc": "from 200+ users"
+    },
+    "cta": {
+      "heading1": "Stop guessing.",
+      "heading2": "Start understanding.",
+      "desc": "Your next important conversation is coming. Make sure you don't miss what matters. Free to start, no credit card required.",
+      "button": "Get Started",
+      "note": "Free plan available. Upgrade anytime."
+    },
+    "faq": {
+      "title": "Frequently Asked Questions",
+      "subtitle": "Everything you need to know about Tonvo, the AI conversation copilot.",
+      "q1": "What is an AI conversation copilot?",
+      "a1": "An AI conversation copilot is a tool that analyzes your conversations in real time and provides live coaching tips, tone detection, smart suggestions, and actionable insights. Tonvo works during calls on Discord, Zoom, Google Meet, and other platforms to help you communicate more effectively.",
+      "q2": "Does Tonvo work during live calls?",
+      "a2": "Yes, Tonvo works in real time during live calls. It captures audio from your microphone and system audio (Discord, Zoom, Meet), transcribes the conversation, and provides instant coaching tips, tone analysis, and smart suggestions while you speak.",
+      "q3": "How does the real-time analysis work?",
+      "a3": "Tonvo uses a multi-step AI pipeline: real-time audio transcription with speaker separation, tone and emotion detection, conversation signal detection (objections, opportunities, hesitation), live coaching suggestions, and quality scoring. It also analyzes screen content for additional context.",
+      "q4": "Is Tonvo free to use?",
+      "a4": "Yes, Tonvo offers a free plan with 3 sessions per month including real-time tone analysis and basic suggestions. The Pro plan at $19/month (or $156/year, saving 30%) unlocks unlimited sessions, advanced AI coaching, screen analysis, and full session history.",
+      "q5": "Can other people see the copilot during screen sharing?",
+      "a5": "Tonvo opens the copilot in a separate browser window. When you share a specific application window (like Discord or Zoom) instead of your entire screen, the copilot window remains invisible to other participants. Perfect for sales calls and interviews.",
+      "q6": "What languages does Tonvo support?",
+      "a6": "Tonvo supports 10 languages: English, French, Spanish, German, Portuguese, Italian, Dutch, Chinese, Japanese, and Korean. The interface and conversation analysis work across all supported languages with automatic detection."
+    }
+  },
   "pricing": {
     "title": "Simple, transparent pricing.",
     "subtitle": "Start free. Upgrade when you need more power.",
