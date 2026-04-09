@@ -496,5 +496,15 @@
         "Dedizierter Support"
       ]
     }
+  },
+  "upgrade": {
+    "successTitle": "Alles bereit!",
+    "successSubtitle": "Dein {{plan}}-Plan ist jetzt aktiv. Genieße alle Premium-Funktionen.",
+    "cancelTitle": "Noch am Überlegen?",
+    "cancelSubtitle": "Kein Problem — wähle den Plan, der am besten passt, oder nutze weiter die kostenlose Version.",
+    "nudgeTitle": "Entfalte dein volles Potenzial",
+    "nudgeSubtitle": "Du bist im kostenlosen Plan. Upgrade für unbegrenzte Sitzungen, KI-Coaching und mehr.",
+    "goToDashboard": "Zum Dashboard",
+    "stayFree": "Mit kostenlosem Plan fortfahren"
   }
 }

@@ -496,5 +496,15 @@
         "Soporte dedicado"
       ]
     }
+  },
+  "upgrade": {
+    "successTitle": "¡Todo listo!",
+    "successSubtitle": "Tu plan {{plan}} ya está activo. Disfruta de todas las funciones premium.",
+    "cancelTitle": "¿Aún lo estás pensando?",
+    "cancelSubtitle": "Sin problema — elige el plan que mejor te funcione, o sigue explorando gratis.",
+    "nudgeTitle": "Desbloquea todo tu potencial",
+    "nudgeSubtitle": "Estás en el plan Gratis. Mejora tu plan para sesiones ilimitadas, coaching IA y más.",
+    "goToDashboard": "Ir al panel",
+    "stayFree": "Continuar con el plan gratuito"
   }
 }

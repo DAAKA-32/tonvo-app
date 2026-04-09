@@ -496,5 +496,15 @@
         "Toegewijde ondersteuning"
       ]
     }
+  },
+  "upgrade": {
+    "successTitle": "Helemaal klaar!",
+    "successSubtitle": "Je {{plan}}-plan is nu actief. Geniet van alle premiumfuncties.",
+    "cancelTitle": "Nog aan het nadenken?",
+    "cancelSubtitle": "Geen probleem — kies het plan dat het beste bij je past, of blijf gratis verkennen.",
+    "nudgeTitle": "Ontgrendel je volledige potentieel",
+    "nudgeSubtitle": "Je zit op het Gratis-plan. Upgrade voor onbeperkte sessies, AI-coaching en meer.",
+    "goToDashboard": "Naar het dashboard",
+    "stayFree": "Doorgaan met gratis plan"
   }
 }

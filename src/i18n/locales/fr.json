@@ -647,5 +647,15 @@
         "Support dédié"
       ]
     }
+  },
+  "upgrade": {
+    "successTitle": "C'est tout bon !",
+    "successSubtitle": "Votre plan {{plan}} est maintenant actif. Profitez de toutes les fonctionnalités premium.",
+    "cancelTitle": "Encore en réflexion ?",
+    "cancelSubtitle": "Pas de souci — choisissez le plan qui vous convient, ou continuez gratuitement.",
+    "nudgeTitle": "Libérez tout votre potentiel",
+    "nudgeSubtitle": "Vous êtes sur le plan Gratuit. Passez à un plan supérieur pour des sessions illimitées, le coaching IA, et plus encore.",
+    "goToDashboard": "Aller au tableau de bord",
+    "stayFree": "Continuer avec le plan gratuit"
   }
 }

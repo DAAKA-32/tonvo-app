@@ -642,5 +642,15 @@
         "Dedicated support"
       ]
     }
+  },
+  "upgrade": {
+    "successTitle": "You're all set!",
+    "successSubtitle": "Your {{plan}} plan is now active. Enjoy all premium features.",
+    "cancelTitle": "Still thinking?",
+    "cancelSubtitle": "No worries — pick the plan that works best for you, or keep exploring for free.",
+    "nudgeTitle": "Unlock your full potential",
+    "nudgeSubtitle": "You're on the Free plan. Upgrade to get unlimited sessions, AI coaching, and more.",
+    "goToDashboard": "Go to Dashboard",
+    "stayFree": "Continue with Free plan"
   }
 }

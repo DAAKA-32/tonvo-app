@@ -496,5 +496,15 @@
         "专属支持"
       ]
     }
+  },
+  "upgrade": {
+    "successTitle": "一切就绪！",
+    "successSubtitle": "您的{{plan}}计划现已激活。尽情享受所有高级功能。",
+    "cancelTitle": "还在考虑？",
+    "cancelSubtitle": "没关系——选择最适合您的计划，或继续免费探索。",
+    "nudgeTitle": "释放您的全部潜力",
+    "nudgeSubtitle": "您目前使用的是免费计划。升级即可获得无限会话、AI教练等更多功能。",
+    "goToDashboard": "前往控制面板",
+    "stayFree": "继续使用免费计划"
   }
 }

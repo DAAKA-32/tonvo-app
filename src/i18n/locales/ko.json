@@ -496,5 +496,15 @@
         "전담 지원"
       ]
     }
+  },
+  "upgrade": {
+    "successTitle": "모든 준비가 완료되었습니다!",
+    "successSubtitle": "{{plan}} 플랜이 활성화되었습니다. 모든 프리미엄 기능을 즐겨보세요.",
+    "cancelTitle": "아직 고민 중이신가요?",
+    "cancelSubtitle": "괜찮습니다 — 가장 적합한 플랜을 선택하거나, 무료로 계속 이용하세요.",
+    "nudgeTitle": "잠재력을 최대한 발휘하세요",
+    "nudgeSubtitle": "현재 무료 플랜을 사용 중입니다. 업그레이드하여 무제한 세션, AI 코칭 등을 이용하세요.",
+    "goToDashboard": "대시보드로 이동",
+    "stayFree": "무료 플랜 계속 사용"
   }
 }

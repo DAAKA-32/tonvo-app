@@ -1,12 +1,13 @@
 "use client";
 
-import { useEffect, useState, useMemo } from "react";
+import { Suspense, useEffect, useState, useMemo } from "react";
 import Link from "next/link";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "@/lib/auth-context";
 import { supabase } from "@/lib/supabase";
 import AppShell from "@/components/AppShell";
 import ToneIndicator from "@/components/ToneIndicator";
+import PlanUpgradeModal from "@/components/PlanUpgradeModal";
 import type { Conversation } from "@/types/database";
 import type { Tone } from "@/types/analysis";
 
@@ -114,6 +115,9 @@ export default function DashboardPage() {
 
   return (
     <AppShell>
+      <Suspense>
+        <PlanUpgradeModal />
+      </Suspense>
       <div style={{ maxWidth: 1100 }}>
         {/* Header */}
         <div className="mb-8">

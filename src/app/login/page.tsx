@@ -1,13 +1,14 @@
 "use client";
 
-import { useState, useCallback, useMemo, useRef, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { Suspense, useState, useCallback, useMemo, useRef, useEffect } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { useTranslation } from "react-i18next";
 import TonvoLogo from "@/components/Logo";
 import { useToast } from "@/components/Toast";
 import { useAuth } from "@/lib/auth-context";
 import { getAuthErrorKey } from "@/lib/auth-errors";
+import { authFetch } from "@/lib/api-client";
 import {
   auth,
   googleProvider,
@@ -363,11 +364,16 @@ function ConsentModal({
 /* ------------------------------------------------------------------ */
 /*  Main Page                                                          */
 /* ------------------------------------------------------------------ */
-export default function LoginPage() {
+function LoginPageInner() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const { t } = useTranslation();
   const { show } = useToast();
   const { waitForUser } = useAuth();
+
+  // Plan redirect params from pricing CTA (e.g. ?plan=pro&billing=monthly)
+  const pendingPlan = searchParams.get("plan");
+  const pendingBilling = searchParams.get("billing") || "monthly";
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -398,6 +404,33 @@ export default function LoginPage() {
     show(message, { type: "success", duration: 3000 });
     await waitForUser();
     await new Promise((r) => setTimeout(r, 400));
+
+    // If user came from a paid plan CTA → redirect to Stripe checkout
+    if (pendingPlan && pendingPlan !== "free") {
+      try {
+        const user = auth?.currentUser;
+        if (user) {
+          const res = await authFetch("/api/stripe/checkout", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              planId: pendingPlan,
+              userId: user.uid,
+              userEmail: user.email,
+              billing: pendingBilling,
+            }),
+          });
+          const data = await res.json();
+          if (data.url) {
+            window.location.href = data.url;
+            return;
+          }
+        }
+      } catch {
+        // Fallback to dashboard if checkout fails
+      }
+    }
+
     router.push("/dashboard");
   }
 
@@ -716,5 +749,13 @@ export default function LoginPage() {
         onCancel={handleConsentCancel}
       />
     </div>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense>
+      <LoginPageInner />
+    </Suspense>
   );
 }

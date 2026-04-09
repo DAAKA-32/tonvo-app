@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "@/lib/auth-context";
+import { authFetch } from "@/lib/api-client";
 import AnimatedTitle from "@/components/AnimatedTitle";
 import { PRICING_PLANS, ANNUAL_DISCOUNT_PERCENT } from "@/lib/pricing-config";
 
@@ -11,6 +12,33 @@ export default function PricingSection() {
   const { user } = useAuth();
   const { t } = useTranslation();
   const [annual, setAnnual] = useState(false);
+  const [loadingPlan, setLoadingPlan] = useState<string | null>(null);
+
+  async function handlePaidPlanClick(planId: string) {
+    if (!user) return;
+    setLoadingPlan(planId);
+    try {
+      const res = await authFetch("/api/stripe/checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          planId,
+          userId: user.uid,
+          userEmail: user.email,
+          billing: annual ? "yearly" : "monthly",
+        }),
+      });
+      const data = await res.json();
+      if (data.url) {
+        window.location.href = data.url;
+      }
+    } catch {
+      // Fallback to pricing page on error
+      window.location.href = "/pricing";
+    } finally {
+      setLoadingPlan(null);
+    }
+  }
 
   return (
     <section id="pricing" className="px-4 sm:px-6 py-16 sm:py-24 md:py-32" style={{ backgroundColor: "var(--color-surface)" }}>
@@ -142,16 +170,28 @@ export default function PricingSection() {
                       {plan.cta}
                     </Link>
                   )
+                ) : user ? (
+                  <button
+                    onClick={() => handlePaidPlanClick(plan.id)}
+                    disabled={loadingPlan === plan.id}
+                    className={`pricing-btn ${plan.popular ? "pricing-btn--primary" : "pricing-btn--secondary"} w-full py-3 rounded-xl font-semibold text-sm text-center cursor-pointer border-none disabled:opacity-60 disabled:cursor-wait`}
+                    style={plan.popular
+                      ? { background: "linear-gradient(135deg, #5c5c6e, #6e6e82)", color: "#fff" }
+                      : { background: "transparent", color: "var(--color-text-silver)", border: "1px solid var(--color-border)" }
+                    }
+                  >
+                    {loadingPlan === plan.id ? t("pricing.redirecting") : plan.cta}
+                  </button>
                 ) : (
                   <Link
-                    href={user ? "/pricing" : "/login"}
+                    href={`/login?plan=${plan.id}&billing=${annual ? "yearly" : "monthly"}`}
                     className={`pricing-btn ${plan.popular ? "pricing-btn--primary" : "pricing-btn--secondary"} w-full py-3 rounded-xl font-semibold text-sm text-center no-underline block`}
                     style={plan.popular
                       ? { background: "linear-gradient(135deg, #5c5c6e, #6e6e82)", color: "#fff", border: "none" }
                       : { background: "transparent", color: "var(--color-text-silver)", border: "1px solid var(--color-border)" }
                     }
                   >
-                    {user ? plan.cta : t("landing.hero.cta")}
+                    {t("landing.hero.cta")}
                   </Link>
                 )}
               </div>
