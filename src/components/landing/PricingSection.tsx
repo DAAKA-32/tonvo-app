@@ -59,10 +59,9 @@ export default function PricingSection() {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 items-start">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 items-stretch">
           {PRICING_PLANS.map((plan) => {
             const isFree = plan.monthlyPrice === 0;
-            const isTeam = plan.id === "team";
             const displayPrice = isFree
               ? "$0"
               : annual
@@ -72,15 +71,18 @@ export default function PricingSection() {
             return (
               <div
                 key={plan.id}
-                className="glass-card p-7 flex flex-col relative"
+                className={`pricing-card rounded-xl border p-7 flex flex-col relative ${plan.popular ? "pricing-card--popular" : ""}`}
                 style={{
-                  minHeight: 420,
-                  ...(plan.popular
-                    ? {
-                        borderColor: "rgba(200, 200, 216, 0.25)",
-                        boxShadow: "0 0 60px rgba(200, 200, 216, 0.05), 0 8px 32px rgba(0, 0, 0, 0.3)",
-                      }
-                    : {}),
+                  background: "rgba(17, 17, 20, 0.6)",
+                  backdropFilter: "blur(24px)",
+                  WebkitBackdropFilter: "blur(24px)",
+                  borderColor: plan.popular
+                    ? "rgba(200, 200, 216, 0.25)"
+                    : "rgba(255, 255, 255, 0.06)",
+                  boxShadow: plan.popular
+                    ? "0 0 60px rgba(200, 200, 216, 0.05), 0 8px 32px rgba(0, 0, 0, 0.3)"
+                    : undefined,
+                  ...(plan.popular ? { padding: "2rem 1.75rem 1.75rem" } : {}),
                 }}
               >
                 {plan.popular && (
@@ -130,7 +132,12 @@ export default function PricingSection() {
                   ) : (
                     <Link
                       href="/login"
-                      className="btn-secondary w-full py-3 rounded-xl font-semibold text-sm text-center no-underline block"
+                      className="pricing-btn pricing-btn--secondary w-full py-3 rounded-xl font-semibold text-sm text-center no-underline block"
+                      style={{
+                        background: "transparent",
+                        color: "var(--color-text-silver)",
+                        border: "1px solid var(--color-border)",
+                      }}
                     >
                       {plan.cta}
                     </Link>
@@ -138,7 +145,11 @@ export default function PricingSection() {
                 ) : (
                   <Link
                     href={user ? "/pricing" : "/login"}
-                    className={`${plan.popular ? "btn-primary" : "btn-secondary"} w-full py-3 rounded-xl font-semibold text-sm text-center no-underline block`}
+                    className={`pricing-btn ${plan.popular ? "pricing-btn--primary" : "pricing-btn--secondary"} w-full py-3 rounded-xl font-semibold text-sm text-center no-underline block`}
+                    style={plan.popular
+                      ? { background: "linear-gradient(135deg, #5c5c6e, #6e6e82)", color: "#fff", border: "none" }
+                      : { background: "transparent", color: "var(--color-text-silver)", border: "1px solid var(--color-border)" }
+                    }
                   >
                     {user ? plan.cta : t("landing.hero.cta")}
                   </Link>

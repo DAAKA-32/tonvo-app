@@ -1,7 +1,10 @@
 "use client";
 
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useTranslation } from "react-i18next";
+import { useAuth } from "@/lib/auth-context";
 import AnimatedTitle from "@/components/AnimatedTitle";
 import TonvoLogo from "@/components/Logo";
 import LandingNavbar from "@/components/landing/LandingNavbar";
@@ -245,7 +248,27 @@ function CopilotMockup() {
 /* ------------------------------------------------------------------ */
 export default function HomePage() {
   const { t } = useTranslation();
+  const { user, loading } = useAuth();
+  const router = useRouter();
   const ctaHref = "/login";
+
+  /* Authenticated user → skip landing, go straight to dashboard */
+  useEffect(() => {
+    if (!loading && user) {
+      router.replace("/dashboard");
+    }
+  }, [user, loading, router]);
+
+  /* Disable browser scroll restoration and force scroll to top */
+  useEffect(() => {
+    if ("scrollRestoration" in window.history) {
+      window.history.scrollRestoration = "manual";
+    }
+    window.scrollTo(0, 0);
+  }, []);
+
+  /* Don't render landing content while auth is resolving or user is logged in */
+  if (loading || user) return null;
 
   const features = [
     {

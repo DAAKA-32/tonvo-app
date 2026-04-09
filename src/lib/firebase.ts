@@ -1,6 +1,8 @@
 import { initializeApp, getApps, type FirebaseApp } from "firebase/app";
 import {
   getAuth,
+  browserLocalPersistence,
+  setPersistence,
   GoogleAuthProvider,
   signInWithPopup,
   signInWithEmailAndPassword,
@@ -31,6 +33,8 @@ let googleProvider: GoogleAuthProvider | undefined;
 if (typeof window !== "undefined") {
   app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0];
   auth = getAuth(app);
+  // Persist auth across browser sessions (survives tab/window close)
+  setPersistence(auth, browserLocalPersistence);
   googleProvider = new GoogleAuthProvider();
 }
 

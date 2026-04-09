@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "@/lib/auth-context";
-import CurtainIntro from "@/components/CurtainIntro";
 import TonvoLogo from "@/components/Logo";
 
 function IconArrowRight({ className }: { className?: string }) {
@@ -232,13 +231,13 @@ export default function LandingHero() {
     }
   }, [user, loading, router]);
 
+  /* While checking auth, show nothing briefly; once confirmed no user, render hero */
   if (loading || user) return null;
 
   const ctaHref = "/login";
 
   return (
     <>
-      <CurtainIntro />
       {/* ── Hero ── */}
       <section className="relative min-h-[85vh] sm:min-h-screen flex flex-col items-center justify-center px-4 sm:px-6 pt-28 sm:pt-32 pb-8 overflow-hidden grid-bg">
         {/* Ambient glows */}

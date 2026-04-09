@@ -1,9 +1,10 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback, ReactNode } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTranslation } from "react-i18next";
+import { motion, useAnimationControls } from "framer-motion";
 import { useAuth } from "@/lib/auth-context";
 import { auth, firebaseSignOut } from "@/lib/firebase";
 import { authFetch } from "@/lib/api-client";
@@ -98,6 +99,92 @@ function IconSettings() {
   );
 }
 
+/* ── Desktop-only hover detection ── */
+function useHasHover() {
+  const [hasHover, setHasHover] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia("(hover: hover) and (pointer: fine)");
+    setHasHover(mq.matches);
+    const handler = (e: MediaQueryListEvent) => setHasHover(e.matches);
+    mq.addEventListener("change", handler);
+    return () => mq.removeEventListener("change", handler);
+  }, []);
+  return hasHover;
+}
+
+/* ── Icon hover animations (per-icon personality) ── */
+const iconAnimations: Record<string, { scale: number[]; rotate: number[] }> = {
+  dashboard: { scale: [1, 1.15, 1], rotate: [0, 0, 0] },         // clean pop
+  mic:       { scale: [1, 1.12, 0.95, 1], rotate: [0, 0, 0] },   // bounce (recording pulse)
+  history:   { scale: [1, 1, 1], rotate: [0, -20, 0] },           // clock tick
+  text:      { scale: [1, 1, 1], rotate: [0, -4, 3, 0] },        // subtle tilt (page flip)
+  analytics: { scale: [1, 1.14, 1], rotate: [0, 0, 0] },         // pop (data emphasis)
+  pricing:   { scale: [1, 1, 0.92, 1], rotate: [0, 0, 0] },      // subtle squeeze
+  settings:  { scale: [1, 1, 1], rotate: [0, 45, 0] },            // gear turn
+  profile:   { scale: [1, 1.12, 1], rotate: [0, 0, 0] },         // gentle pop
+  logout:    { scale: [1, 1, 1], rotate: [0, 0, 0] },             // handled via translateX
+};
+
+/* ── Animated sidebar link wrapping icon + label ── */
+function SidebarNavLink({
+  href,
+  icon: Icon,
+  label,
+  isActive,
+  animKey,
+  onClick,
+}: {
+  href: string;
+  icon: () => ReactNode;
+  label: string;
+  isActive: boolean;
+  animKey: string;
+  onClick?: () => void;
+}) {
+  const controls = useAnimationControls();
+  const hasHover = useHasHover();
+
+  const handleEnter = useCallback(() => {
+    if (!hasHover) return;
+    const anim = iconAnimations[animKey] || iconAnimations.dashboard;
+    if (animKey === "logout") {
+      controls.start({
+        x: [0, 3, 0],
+        transition: { duration: 0.35, ease: "easeOut" },
+      });
+    } else {
+      controls.start({
+        scale: anim.scale,
+        rotate: anim.rotate,
+        transition: { duration: 0.4, ease: [0.22, 1, 0.36, 1] },
+      });
+    }
+  }, [hasHover, animKey, controls]);
+
+  const handleLeave = useCallback(() => {
+    controls.stop();
+    controls.set({ scale: 1, rotate: 0, x: 0 });
+  }, [controls]);
+
+  return (
+    <Link
+      href={href}
+      className={`sidebar-link ${isActive ? "active" : ""}`}
+      onClick={onClick}
+      onMouseEnter={handleEnter}
+      onMouseLeave={handleLeave}
+    >
+      <motion.span
+        animate={controls}
+        style={{ display: "inline-flex", willChange: "transform" }}
+      >
+        <Icon />
+      </motion.span>
+      {label}
+    </Link>
+  );
+}
+
 function getInitials(name: string | null | undefined, email: string | null | undefined): string {
   if (name) {
     const parts = name.trim().split(" ");
@@ -109,12 +196,12 @@ function getInitials(name: string | null | undefined, email: string | null | und
 }
 
 const navItems = [
-  { href: "/dashboard", labelKey: "nav.dashboard", icon: IconDashboard },
-  { href: "/session", labelKey: "nav.liveSession", icon: IconMic },
-  { href: "/history", labelKey: "nav.history", icon: IconHistory },
-  { href: "/analyze-text", labelKey: "nav.analyzeText", icon: IconText },
-  { href: "/analytics", labelKey: "nav.analytics", icon: IconAnalytics },
-  { href: "/pricing", labelKey: "nav.pricing", icon: IconPricing },
+  { href: "/dashboard", labelKey: "nav.dashboard", icon: IconDashboard, animKey: "dashboard" },
+  { href: "/session", labelKey: "nav.liveSession", icon: IconMic, animKey: "mic" },
+  { href: "/history", labelKey: "nav.history", icon: IconHistory, animKey: "history" },
+  { href: "/analyze-text", labelKey: "nav.analyzeText", icon: IconText, animKey: "text" },
+  { href: "/analytics", labelKey: "nav.analytics", icon: IconAnalytics, animKey: "analytics" },
+  { href: "/pricing", labelKey: "nav.pricing", icon: IconPricing, animKey: "pricing" },
 ];
 
 interface SidebarProps {
@@ -152,19 +239,17 @@ export default function Sidebar({ open, onClose }: SidebarProps) {
         {/* Navigation */}
         <nav className="sidebar-nav">
           <div className="sidebar-section-label">{t("nav.menu")}</div>
-          {navItems.map((item) => {
-            const isActive = pathname === item.href;
-            return (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={`sidebar-link ${isActive ? "active" : ""}`}
-                onClick={onClose}>
-                <item.icon />
-                {t(item.labelKey)}
-              </Link>
-            );
-          })}
+          {navItems.map((item) => (
+            <SidebarNavLink
+              key={item.href}
+              href={item.href}
+              icon={item.icon}
+              label={t(item.labelKey)}
+              isActive={pathname === item.href}
+              animKey={item.animKey}
+              onClick={onClose}
+            />
+          ))}
         </nav>
 
         {/* Footer */}
@@ -207,13 +292,14 @@ export default function Sidebar({ open, onClose }: SidebarProps) {
               </span>
             </Link>
           )}
-          <Link
+          <SidebarNavLink
             href="/settings"
+            icon={IconSettings}
+            label={t("nav.settings")}
+            isActive={pathname === "/settings"}
+            animKey="settings"
             onClick={onClose}
-            className={`sidebar-link ${pathname === "/settings" ? "active" : ""}`}>
-            <IconSettings />
-            {t("nav.settings")}
-          </Link>
+          />
         </div>
       </aside>
     </>

@@ -648,38 +648,353 @@ body {
   }
 }
 
-/* Login form transition */
-@keyframes authFadeIn {
+/* ------------------------------------------------------------------ */
+/*  Auth pages — Resend-inspired premium SaaS design                   */
+/* ------------------------------------------------------------------ */
+.auth-page {
+  position: relative;
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.25rem 1rem;
+  overflow: hidden;
+}
+
+/* Background — atmospheric light effect inspired by Resend */
+.auth-bg {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+/* Dark base with subtle warm-cool gradient */
+.auth-bg-base {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 80% 60% at 50% -10%, rgba(120, 119, 140, 0.12) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 50% at 80% 110%, rgba(100, 100, 130, 0.06) 0%, transparent 50%),
+    var(--color-bg);
+}
+
+/* Soft light glows — mimics photographic light leaks */
+.auth-bg-glow {
+  position: absolute;
+  border-radius: 50%;
+}
+.auth-bg-glow-1 {
+  width: 900px;
+  height: 600px;
+  top: -25%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: radial-gradient(ellipse, rgba(180, 175, 200, 0.1) 0%, rgba(140, 138, 165, 0.04) 40%, transparent 70%);
+  filter: blur(80px);
+}
+.auth-bg-glow-2 {
+  width: 500px;
+  height: 500px;
+  bottom: -20%;
+  left: -10%;
+  background: radial-gradient(circle, rgba(140, 140, 170, 0.06) 0%, transparent 65%);
+  filter: blur(60px);
+}
+.auth-bg-glow-3 {
+  width: 400px;
+  height: 400px;
+  top: 30%;
+  right: -8%;
+  background: radial-gradient(circle, rgba(160, 155, 180, 0.05) 0%, transparent 60%);
+  filter: blur(70px);
+}
+
+/* Fine dot grid — gives depth and structure */
+.auth-bg-grid {
+  position: absolute;
+  inset: 0;
+  opacity: 0.3;
+  background-image: radial-gradient(circle, rgba(255, 255, 255, 0.07) 1px, transparent 1px);
+  background-size: 24px 24px;
+  mask-image: radial-gradient(ellipse 70% 60% at 50% 40%, black 20%, transparent 70%);
+  -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 40%, black 20%, transparent 70%);
+}
+
+/* Film grain texture */
+.auth-bg-noise {
+  position: absolute;
+  inset: 0;
+  opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 200px 200px;
+  mix-blend-mode: overlay;
+}
+
+/* Edge vignette — draws focus to center */
+.auth-bg-vignette {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 70% 65% at 50% 45%, transparent 40%, rgba(0, 0, 0, 0.4) 100%);
+}
+
+/* Navigation */
+.auth-nav {
+  position: fixed;
+  top: calc(env(safe-area-inset-top, 0px) + 1.25rem);
+  left: 1.5rem;
+  z-index: 20;
+}
+.auth-nav-link {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--color-text-muted);
+  text-decoration: none;
+  padding: 0.375rem 0.75rem;
+  border-radius: 0.5rem;
+  transition: color 0.2s ease, background-color 0.2s ease;
+}
+.auth-nav-link:hover {
+  color: var(--color-text);
+  background-color: rgba(255, 255, 255, 0.04);
+}
+
+/* Main container */
+.auth-container {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  max-width: 380px;
+  margin: 0 auto;
+  transition: max-width 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+}
+.auth-container--signup {
+  max-width: 480px;
+}
+
+/* Typography */
+.auth-heading {
+  font-size: 1.625rem;
+  font-weight: 600;
+  letter-spacing: -0.035em;
+  color: var(--color-text);
+  line-height: 1.2;
+}
+.auth-subheading {
+  margin-top: 0.5rem;
+  font-size: 0.875rem;
+  color: var(--color-text-muted);
+  line-height: 1.5;
+}
+
+/* Labels */
+.auth-label {
+  display: block;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--color-text-silver);
+  letter-spacing: -0.01em;
+}
+
+/* Inputs */
+.auth-input {
+  display: block;
+  width: 100%;
+  padding: 0.5625rem 0.875rem;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: var(--color-text);
+  background-color: var(--color-bg);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 0.625rem;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.auth-input::placeholder {
+  color: rgba(139, 139, 150, 0.45);
+}
+.auth-input:focus {
+  border-color: rgba(200, 200, 216, 0.25);
+  box-shadow: 0 0 0 3px rgba(200, 200, 216, 0.06);
+}
+
+/* Checkbox */
+.auth-checkbox {
+  width: 15px;
+  height: 15px;
+  cursor: pointer;
+  accent-color: var(--color-accent-light);
+  border-radius: 4px;
+}
+
+/* Links */
+.auth-link {
+  color: var(--color-text-silver);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  text-decoration-color: rgba(184, 184, 200, 0.3);
+  transition: color 0.2s ease, text-decoration-color 0.2s ease;
+}
+.auth-link:hover {
+  color: var(--color-text);
+  text-decoration-color: var(--color-text);
+}
+
+/* Form */
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.875rem;
+}
+
+/* Primary button */
+.auth-btn-primary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5625rem 1.25rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #fff;
+  background: linear-gradient(180deg, #6e6e82 0%, #5c5c6e 100%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 0.625rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+/* Secondary button */
+.auth-btn-secondary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 0.625rem;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+/* Google button */
+.auth-btn-google {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  width: 100%;
+  padding: 0.5625rem 1.25rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--color-text);
+  background-color: var(--color-surface);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 0.625rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+/* Divider */
+.auth-divider {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin: 1rem 0;
+}
+.auth-divider-line {
+  flex: 1;
+  height: 1px;
+  background-color: rgba(255, 255, 255, 0.06);
+}
+.auth-divider-text {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--color-text-muted);
+}
+
+/* Error */
+.auth-error {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+  padding: 0.75rem 1rem;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: var(--color-negative);
+  background-color: rgba(248, 113, 113, 0.06);
+  border: 1px solid rgba(248, 113, 113, 0.1);
+  border-radius: 0.625rem;
+}
+
+/* Terms label */
+.auth-terms-label {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.625rem;
+  cursor: pointer;
+  padding: 0.125rem 0;
+}
+
+/* Passive consent (login) */
+.auth-passive-consent {
+  text-align: center;
+  font-size: 0.75rem;
+  line-height: 1.6;
+  color: var(--color-text-muted);
+  margin-top: 0.25rem;
+}
+
+/* Toggle login/signup */
+.auth-toggle {
+  margin-top: 1.75rem;
+  text-align: center;
+  font-size: 0.8125rem;
+  color: var(--color-text-muted);
+}
+.auth-toggle-btn {
+  background: none;
+  border: none;
+  font-weight: 600;
+  color: var(--color-text-silver);
+  cursor: pointer;
+  transition: color 0.2s ease;
+  padding: 0;
+}
+.auth-toggle-btn:hover {
+  color: var(--color-text);
+}
+
+/* Consent modal */
+.auth-modal {
+  animation: authModalIn 0.2s ease-out;
+}
+@keyframes authModalIn {
   from {
     opacity: 0;
-    transform: translateY(8px);
+    transform: scale(0.96) translateY(8px);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
+    transform: scale(1) translateY(0);
   }
 }
-.auth-form-enter {
-  animation: authFadeIn 0.35s cubic-bezier(0.23, 1, 0.32, 1) both;
-}
 
-/* Login page */
-.login-input:focus {
-  border-color: rgba(200, 200, 216, 0.3) !important;
-  box-shadow: 0 0 0 3px rgba(200, 200, 216, 0.06);
+/* Spinner */
+@keyframes authSpin {
+  to { transform: rotate(360deg); }
 }
-.login-input::placeholder {
-  color: rgba(139, 139, 150, 0.5);
-}
-
-/* Back-to-home link on login — CSS hover instead of JS to prevent cursor flicker */
-.login-back-link {
-  color: var(--color-text-muted);
-  border: 1px solid rgba(255, 255, 255, 0.04);
-}
-.login-back-link:hover {
-  color: var(--color-text);
-  border-color: rgba(255, 255, 255, 0.1);
+.auth-spinner {
+  animation: authSpin 0.8s linear infinite;
+  opacity: 0.7;
 }
 
 /* Dashboard conversation list item hover */
@@ -1194,6 +1509,15 @@ body {
   }
 }
 
+/* Auth page — small screens */
+@media (max-width: 480px) {
+  .auth-page { padding: 1rem 1rem; }
+  .auth-heading { font-size: 1.375rem; }
+  .auth-nav { left: 0.75rem; }
+  .auth-container--signup { max-width: 380px; }
+  .auth-form .grid-cols-2 { grid-template-columns: 1fr; }
+}
+
 @keyframes toastSlideUp {
   from {
     opacity: 0;
@@ -1511,6 +1835,38 @@ body {
   .glass-card-glow:hover {
     box-shadow: 0 0 24px rgba(200, 200, 216, 0.06), 0 8px 32px rgba(0, 0, 0, 0.3);
   }
+
+  /* Pricing card — no lift, subtle border glow on hover */
+  .pricing-card {
+    transition: border-color 0.25s ease, box-shadow 0.25s ease;
+  }
+  .pricing-card:hover {
+    border-color: rgba(200, 200, 216, 0.18);
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.25);
+  }
+  .pricing-card.pricing-card--popular:hover {
+    border-color: rgba(200, 200, 216, 0.3);
+    box-shadow: 0 0 48px rgba(200, 200, 216, 0.06), 0 8px 32px rgba(0, 0, 0, 0.3);
+  }
+
+  /* Pricing CTA button — subtle hover, NO lift */
+  .pricing-btn {
+    transition: background 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+  }
+  .pricing-btn:hover:not(:disabled) {
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
+    transform: scale(1.02);
+  }
+  .pricing-btn--primary:hover:not(:disabled) {
+    background: linear-gradient(135deg, #6a6a7e, #7a7a90) !important;
+    box-shadow: 0 2px 16px rgba(110, 110, 130, 0.3);
+  }
+  .pricing-btn--secondary:hover:not(:disabled) {
+    border-color: var(--color-accent-light) !important;
+    color: #fff !important;
+    background: rgba(200, 200, 216, 0.06) !important;
+  }
+
   .btn-primary:hover {
     transform: translateY(-2px);
     background: #6e6e82;
@@ -1523,16 +1879,26 @@ body {
     color: #fff;
     transform: translateY(-2px);
   }
-  .login-btn-primary:hover:not(:disabled) {
-    box-shadow: 0 6px 20px rgba(92, 92, 110, 0.5) !important;
+  .auth-btn-primary:hover:not(:disabled) {
+    background: linear-gradient(180deg, #7a7a90 0%, #6e6e82 100%);
+    box-shadow: 0 4px 16px rgba(92, 92, 110, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1);
     transform: translateY(-1px);
   }
-  .login-btn-primary:active:not(:disabled) {
+  .auth-btn-primary:active:not(:disabled) {
     transform: translateY(0);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
   }
-  .login-btn-google:hover {
-    background-color: rgba(26, 26, 30, 0.8) !important;
-    border-color: rgba(255, 255, 255, 0.1) !important;
+  .auth-btn-secondary:hover {
+    border-color: rgba(255, 255, 255, 0.14);
+    color: var(--color-text);
+  }
+  .auth-btn-google:hover {
+    background-color: var(--color-surface-2);
+    border-color: rgba(255, 255, 255, 0.12);
+  }
+  .auth-btn-google:active {
+    transform: translateY(0);
+    background-color: var(--color-surface-3);
   }
   .sidebar-link:hover {
     color: var(--color-text);
@@ -2868,6 +3234,19 @@ body {
   .curtain-glow {
     width: 240px;
     height: 240px;
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/*  Logo hover animation — desktop only                                */
+/* ------------------------------------------------------------------ */
+.logo-mark {
+  transition: transform 0.28s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+@media (hover: hover) and (min-width: 768px) {
+  .tonvo-logo:hover .logo-mark {
+    transform: rotate(180deg);
   }
 }
 

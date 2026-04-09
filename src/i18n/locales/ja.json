@@ -275,6 +275,7 @@
     "and": "および",
     "privacyPolicy": "プライバシーポリシー",
     "termsConsentSuffix": "（画面コンテンツと会話の分析を含む）。",
+    "signingInConsent": "ログインすることで、以下に同意したものとみなされます：",
     "consentTitle": "続ける前に",
     "consentDescription": "アカウントを作成するには、利用規約とプライバシーポリシーに同意する必要があります。",
     "consentAccept": "アカウントを作成",

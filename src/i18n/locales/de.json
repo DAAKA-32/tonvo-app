@@ -275,6 +275,7 @@
     "and": "und",
     "privacyPolicy": "Datenschutzrichtlinie",
     "termsConsentSuffix": " zu, einschließlich der Analyse von Bildschirminhalten und Gesprächen.",
+    "signingInConsent": "Mit der Anmeldung stimmst du unseren",
     "consentTitle": "Bevor Sie fortfahren",
     "consentDescription": "Um Ihr Konto zu erstellen, müssen Sie unseren Nutzungsbedingungen und der Datenschutzrichtlinie zustimmen.",
     "consentAccept": "Mein Konto erstellen",

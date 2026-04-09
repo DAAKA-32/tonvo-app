@@ -275,6 +275,7 @@
     "and": "y",
     "privacyPolicy": "Política de privacidad",
     "termsConsentSuffix": ", incluyendo el análisis del contenido de la pantalla y las conversaciones.",
+    "signingInConsent": "Al iniciar sesión, aceptas nuestros",
     "consentTitle": "Antes de continuar",
     "consentDescription": "Para crear tu cuenta, debes aceptar nuestros Términos de servicio y Política de privacidad.",
     "consentAccept": "Crear mi cuenta",

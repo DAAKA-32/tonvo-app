@@ -193,7 +193,7 @@ export default function PricingPage() {
           </div>
         )}
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 items-start">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 items-stretch">
           {PRICING_PLANS.map((plan) => {
             const isCurrent = currentPlan === plan.id;
             const isUpgrade = !isCurrent && plan.id !== "free";
@@ -207,7 +207,7 @@ export default function PricingPage() {
             return (
               <div
                 key={plan.id}
-                className="rounded-xl border p-7 flex flex-col relative"
+                className={`pricing-card rounded-xl border p-7 flex flex-col relative ${plan.popular ? "pricing-card--popular" : ""}`}
                 style={{
                   backgroundColor: "var(--color-surface)",
                   borderColor: plan.popular
@@ -216,7 +216,7 @@ export default function PricingPage() {
                   boxShadow: plan.popular
                     ? "0 0 60px rgba(200, 200, 216, 0.05), 0 8px 32px rgba(0, 0, 0, 0.3)"
                     : undefined,
-                  minHeight: 420,
+                  ...(plan.popular ? { padding: "2rem 1.75rem 1.75rem" } : {}),
                 }}
               >
                 {plan.popular && (
@@ -315,7 +315,7 @@ export default function PricingPage() {
                     isUpgrade ? handleUpgrade(plan.id) : undefined
                   }
                   disabled={isCurrent || loading === plan.id}
-                  className="w-full py-3 rounded-xl font-semibold text-sm cursor-pointer border-none transition-all hover:opacity-90 disabled:opacity-40 disabled:cursor-not-allowed"
+                  className={`pricing-btn ${plan.popular ? "pricing-btn--primary" : isCurrent ? "" : "pricing-btn--secondary"} w-full py-3 rounded-xl font-semibold text-sm cursor-pointer border-none disabled:opacity-40 disabled:cursor-not-allowed`}
                   style={{
                     background: plan.popular
                       ? "linear-gradient(135deg, #5c5c6e, #6e6e82)"

@@ -275,6 +275,7 @@
     "and": "및",
     "privacyPolicy": "개인정보 처리방침",
     "termsConsentSuffix": "(화면 콘텐츠 및 대화 분석 포함).",
+    "signingInConsent": "로그인하면 다음에 동의하는 것입니다:",
     "consentTitle": "계속하기 전에",
     "consentDescription": "계정을 만들려면 서비스 약관 및 개인정보 처리방침에 동의해야 합니다.",
     "consentAccept": "내 계정 만들기",

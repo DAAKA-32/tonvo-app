@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback, useMemo, useRef } from "react";
+import { useState, useCallback, useMemo, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useTranslation } from "react-i18next";
@@ -22,7 +22,7 @@ import {
 /* ------------------------------------------------------------------ */
 function IconEye() {
   return (
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
       <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z" />
       <circle cx="12" cy="12" r="3" />
     </svg>
@@ -31,20 +31,11 @@ function IconEye() {
 
 function IconEyeOff() {
   return (
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
       <path d="M9.88 9.88a3 3 0 1 0 4.24 4.24" />
       <path d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68" />
       <path d="M6.61 6.61A13.526 13.526 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61" />
       <line x1="2" x2="22" y1="2" y2="22" />
-    </svg>
-  );
-}
-
-function IconArrowLeft() {
-  return (
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-      <path d="m12 19-7-7 7-7" />
-      <path d="M19 12H5" />
     </svg>
   );
 }
@@ -66,8 +57,28 @@ function IconX() {
   );
 }
 
+function GoogleIcon() {
+  return (
+    <svg width="18" height="18" viewBox="0 0 48 48" aria-hidden="true">
+      <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z" />
+      <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z" />
+      <path fill="#FBBC05" d="M10.53 28.59a14.5 14.5 0 0 1 0-9.18l-7.98-6.19a24.0 24.0 0 0 0 0 21.56l7.98-6.19z" />
+      <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z" />
+      <path fill="none" d="M0 0h48v48H0z" />
+    </svg>
+  );
+}
+
+function SpinnerIcon() {
+  return (
+    <svg className="auth-spinner" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+      <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83" />
+    </svg>
+  );
+}
+
 /* ------------------------------------------------------------------ */
-/*  Collapsible wrapper — animates height via grid trick              */
+/*  Collapse                                                           */
 /* ------------------------------------------------------------------ */
 function Collapse({ open, children, className }: { open: boolean; children: React.ReactNode; className?: string }) {
   return (
@@ -76,17 +87,17 @@ function Collapse({ open, children, className }: { open: boolean; children: Reac
       style={{
         display: "grid",
         gridTemplateRows: open ? "1fr" : "0fr",
-        transition: "grid-template-rows 0.35s cubic-bezier(0.23, 1, 0.32, 1)",
+        transition: "grid-template-rows 0.3s cubic-bezier(0.23, 1, 0.32, 1)",
       }}
     >
       <div style={{ overflow: "hidden" }}>
         <div
           style={{
             opacity: open ? 1 : 0,
-            transform: open ? "translateY(0)" : "translateY(-6px)",
+            transform: open ? "translateY(0)" : "translateY(-4px)",
             transition: open
-              ? "opacity 0.3s ease 0.08s, transform 0.3s cubic-bezier(0.23, 1, 0.32, 1) 0.08s"
-              : "opacity 0.2s ease, transform 0.2s ease",
+              ? "opacity 0.25s ease 0.05s, transform 0.25s cubic-bezier(0.23, 1, 0.32, 1) 0.05s"
+              : "opacity 0.15s ease, transform 0.15s ease",
           }}
         >
           {children}
@@ -122,30 +133,27 @@ function PasswordStrengthBlock({ password, checks, t }: {
   const { level, label, color } = getPasswordStrength(password, t);
 
   return (
-    <div className="flex flex-col gap-2.5 pt-1 pb-1">
-      {/* Strength bars */}
+    <div className="flex flex-col gap-2 pt-1">
       <div className="flex items-center gap-3">
         <div className="flex flex-1 gap-1">
           {[1, 2, 3].map((i) => (
             <div
               key={i}
-              className="h-1 flex-1 rounded-full"
+              className="h-[3px] flex-1 rounded-full"
               style={{
-                backgroundColor: i <= level ? color : "var(--color-surface-3)",
-                transition: "background-color 0.4s ease",
+                backgroundColor: i <= level ? color : "rgba(255, 255, 255, 0.06)",
+                transition: "background-color 0.3s ease",
               }}
             />
           ))}
         </div>
         <span
-          className="text-xs font-medium"
+          className="text-[11px] font-medium tabular-nums"
           style={{ color, transition: "color 0.3s ease", minWidth: 48 }}
         >
           {label}
         </span>
       </div>
-
-      {/* Criteria */}
       <div className="flex gap-4">
         {[
           { ok: checks.minLength, text: t("auth.rule8Chars") },
@@ -156,7 +164,7 @@ function PasswordStrengthBlock({ password, checks, t }: {
             <div
               className="w-3 h-3 rounded-full flex items-center justify-center"
               style={{
-                backgroundColor: rule.ok ? "rgba(52, 211, 153, 0.15)" : "rgba(255, 255, 255, 0.04)",
+                backgroundColor: rule.ok ? "rgba(52, 211, 153, 0.12)" : "rgba(255, 255, 255, 0.04)",
                 transition: "background-color 0.3s ease",
               }}
             >
@@ -179,6 +187,50 @@ function PasswordStrengthBlock({ password, checks, t }: {
 }
 
 /* ------------------------------------------------------------------ */
+/*  Text Input                                                         */
+/* ------------------------------------------------------------------ */
+function AuthInput({
+  id,
+  type = "text",
+  label,
+  placeholder,
+  value,
+  onChange,
+  required,
+  autoComplete,
+  rightLabel,
+}: {
+  id: string;
+  type?: string;
+  label: string;
+  placeholder: string;
+  value: string;
+  onChange: (v: string) => void;
+  required?: boolean;
+  autoComplete?: string;
+  rightLabel?: React.ReactNode;
+}) {
+  return (
+    <div>
+      <div className="flex items-center justify-between mb-1.5">
+        <label htmlFor={id} className="auth-label">{label}</label>
+        {rightLabel}
+      </div>
+      <input
+        id={id}
+        type={type}
+        placeholder={placeholder}
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        required={required}
+        autoComplete={autoComplete}
+        className="auth-input"
+      />
+    </div>
+  );
+}
+
+/* ------------------------------------------------------------------ */
 /*  Password Input                                                     */
 /* ------------------------------------------------------------------ */
 function PasswordInput({
@@ -189,6 +241,7 @@ function PasswordInput({
   onChange,
   required,
   minLength,
+  rightLabel,
 }: {
   id: string;
   label: string;
@@ -197,18 +250,16 @@ function PasswordInput({
   onChange: (v: string) => void;
   required?: boolean;
   minLength?: number;
+  rightLabel?: React.ReactNode;
 }) {
   const [visible, setVisible] = useState(false);
 
   return (
     <div>
-      <label
-        htmlFor={id}
-        className="mb-1.5 block text-xs font-medium"
-        style={{ color: "var(--color-text-muted)" }}
-      >
-        {label}
-      </label>
+      <div className="flex items-center justify-between mb-1.5">
+        <label htmlFor={id} className="auth-label">{label}</label>
+        {rightLabel}
+      </div>
       <div className="relative">
         <input
           id={id}
@@ -218,17 +269,13 @@ function PasswordInput({
           onChange={(e) => onChange(e.target.value)}
           required={required}
           minLength={minLength}
-          className="login-input w-full rounded-lg border px-4 py-3 pr-11 text-sm outline-none transition-all"
-          style={{
-            backgroundColor: "rgba(26, 26, 30, 0.6)",
-            borderColor: "rgba(255, 255, 255, 0.06)",
-            color: "var(--color-text)",
-          }}
+          autoComplete={id === "password" ? "current-password" : "new-password"}
+          className="auth-input pr-10"
         />
         <button
           type="button"
           onClick={() => setVisible((v) => !v)}
-          className="absolute right-3 top-1/2 -translate-y-1/2 border-none bg-transparent cursor-pointer p-0 flex items-center"
+          className="absolute right-3 top-1/2 -translate-y-1/2 border-none bg-transparent cursor-pointer p-0.5 flex items-center rounded transition-colors"
           style={{ color: "var(--color-text-muted)" }}
           tabIndex={-1}
           aria-label={visible ? "Hide password" : "Show password"}
@@ -241,7 +288,7 @@ function PasswordInput({
 }
 
 /* ------------------------------------------------------------------ */
-/*  Consent Modal for Google OAuth new users                          */
+/*  Consent Modal                                                      */
 /* ------------------------------------------------------------------ */
 function ConsentModal({
   open,
@@ -260,28 +307,20 @@ function ConsentModal({
   return (
     <div
       className="fixed inset-0 z-50 flex items-center justify-center px-4"
-      style={{ backgroundColor: "rgba(0, 0, 0, 0.6)", backdropFilter: "blur(8px)" }}
+      style={{ backgroundColor: "rgba(0, 0, 0, 0.7)", backdropFilter: "blur(8px)" }}
     >
       <div
-        className="w-full max-w-md rounded-2xl border p-8"
+        className="auth-modal w-full max-w-md rounded-2xl border p-8"
         style={{
-          background: "rgba(17, 17, 20, 0.92)",
-          backdropFilter: "blur(24px)",
-          borderColor: "rgba(255, 255, 255, 0.08)",
-          boxShadow: "0 24px 64px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.04)",
-          animation: "fadeScaleIn 0.2s ease-out",
+          background: "var(--color-surface)",
+          borderColor: "rgba(255, 255, 255, 0.06)",
+          boxShadow: "0 24px 80px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.03)",
         }}
       >
-        <h2
-          className="text-lg font-bold mb-2"
-          style={{ color: "var(--color-text)" }}
-        >
+        <h2 className="text-lg font-semibold mb-2" style={{ color: "var(--color-text)" }}>
           {t("auth.consentTitle")}
         </h2>
-        <p
-          className="text-sm mb-6 leading-relaxed"
-          style={{ color: "var(--color-text-muted)" }}
-        >
+        <p className="text-sm mb-6 leading-relaxed" style={{ color: "var(--color-text-muted)" }}>
           {t("auth.consentDescription")}
         </p>
 
@@ -290,18 +329,13 @@ function ConsentModal({
             type="checkbox"
             checked={checked}
             onChange={(e) => setChecked(e.target.checked)}
-            className="mt-1 shrink-0 cursor-pointer"
-            style={{ width: 16, height: 16, accentColor: "var(--color-accent-light)" }}
+            className="auth-checkbox mt-0.5 shrink-0"
           />
-          <span className="text-xs leading-relaxed" style={{ color: "var(--color-text-muted)" }}>
+          <span className="text-[13px] leading-relaxed" style={{ color: "var(--color-text-muted)" }}>
             {t("auth.termsConsent")}{" "}
-            <Link href="/terms" target="_blank" style={{ color: "var(--color-accent-light)", textDecoration: "underline", textUnderlineOffset: 2 }}>
-              {t("auth.termsOfService")}
-            </Link>{" "}
+            <Link href="/terms" target="_blank" className="auth-link">{t("auth.termsOfService")}</Link>{" "}
             {t("auth.and")}{" "}
-            <Link href="/privacy" target="_blank" style={{ color: "var(--color-accent-light)", textDecoration: "underline", textUnderlineOffset: 2 }}>
-              {t("auth.privacyPolicy")}
-            </Link>
+            <Link href="/privacy" target="_blank" className="auth-link">{t("auth.privacyPolicy")}</Link>
             {t("auth.termsConsentSuffix")}
           </span>
         </label>
@@ -309,25 +343,14 @@ function ConsentModal({
         <div className="flex gap-3">
           <button
             onClick={onCancel}
-            className="flex-1 cursor-pointer rounded-lg py-3 text-sm font-medium border transition-all"
-            style={{
-              backgroundColor: "transparent",
-              borderColor: "rgba(255, 255, 255, 0.08)",
-              color: "var(--color-text-muted)",
-            }}
+            className="auth-btn-secondary flex-1 py-2.5 text-sm font-medium"
           >
             {t("common.cancel")}
           </button>
           <button
             onClick={onAccept}
             disabled={!checked}
-            className="flex-1 cursor-pointer rounded-lg py-3 text-sm font-semibold text-white transition-all disabled:cursor-not-allowed disabled:opacity-40"
-            style={{
-              background: checked
-                ? "linear-gradient(135deg, #5c5c6e 0%, #6e6e82 100%)"
-                : "rgba(92, 92, 110, 0.3)",
-              boxShadow: checked ? "0 4px 14px rgba(92, 92, 110, 0.35)" : "none",
-            }}
+            className="auth-btn-primary flex-1 py-2.5 text-sm font-semibold disabled:opacity-40 disabled:cursor-not-allowed"
           >
             {t("auth.consentAccept")}
           </button>
@@ -355,8 +378,12 @@ export default function LoginPage() {
   const [showConsent, setShowConsent] = useState(false);
   const [pendingGoogleUser, setPendingGoogleUser] = useState<import("firebase/auth").UserCredential | null>(null);
   const [redirecting, setRedirecting] = useState(false);
-  const [headingFade, setHeadingFade] = useState(false);
+  const [mounted, setMounted] = useState(false);
   const cardRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const passwordChecks = useMemo(() => ({
     minLength: password.length >= 8,
@@ -366,13 +393,10 @@ export default function LoginPage() {
 
   const isPasswordValid = passwordChecks.minLength && passwordChecks.hasLetter && passwordChecks.hasNumber;
 
-  /** Show success toast, wait for auth context to sync, then redirect */
   async function redirectWithFeedback(message: string) {
     setRedirecting(true);
     show(message, { type: "success", duration: 3000 });
-    // Wait for the auth context to have the user before navigating
     await waitForUser();
-    // Small delay for the fade-out animation
     await new Promise((r) => setTimeout(r, 400));
     router.push("/dashboard");
   }
@@ -397,7 +421,6 @@ export default function LoginPage() {
       if (!auth) throw new Error("firebase-not-initialized");
       if (isRegister) {
         const cred = await createUserWithEmailAndPassword(auth, email, password);
-        // Store consent for email signup
         try {
           const { supabase } = await import("@/lib/supabase");
           await supabase.from("user_consent").upsert({
@@ -431,11 +454,8 @@ export default function LoginPage() {
       if (!auth || !googleProvider) throw new Error("firebase-not-initialized");
       const result = await signInWithPopup(auth, googleProvider);
       const u = result.user;
-      // Detect new user: creationTime === lastSignInTime means just created
-      const isNew =
-        u.metadata.creationTime === u.metadata.lastSignInTime;
+      const isNew = u.metadata.creationTime === u.metadata.lastSignInTime;
       if (isNew) {
-        // New user -> show consent modal before proceeding
         setPendingGoogleUser(result);
         setShowConsent(true);
       } else {
@@ -452,7 +472,6 @@ export default function LoginPage() {
 
   async function handleConsentAccept() {
     setShowConsent(false);
-    // Store consent in Supabase
     if (pendingGoogleUser) {
       try {
         const { supabase } = await import("@/lib/supabase");
@@ -463,7 +482,6 @@ export default function LoginPage() {
           privacy_accepted: true,
         });
       } catch {
-        // Non-blocking: consent storage failure shouldn't prevent account creation
         console.error("Failed to store consent");
       }
     }
@@ -472,7 +490,6 @@ export default function LoginPage() {
   }
 
   async function handleConsentCancel() {
-    // User refused terms -> sign them out and reset
     setShowConsent(false);
     setPendingGoogleUser(null);
     try {
@@ -483,287 +500,216 @@ export default function LoginPage() {
   }
 
   const handleToggle = useCallback(() => {
-    setHeadingFade(true);
-    setTimeout(() => {
-      setIsRegister((prev) => !prev);
-      setError("");
-      setPassword("");
-      setConfirmPassword("");
-      setHeadingFade(false);
-    }, 150);
+    setIsRegister((prev) => !prev);
+    setError("");
+    setPassword("");
+    setConfirmPassword("");
+    setAcceptedTerms(false);
   }, []);
 
   return (
-    <div className="relative min-h-screen w-full flex items-center justify-center overflow-hidden px-4 py-8">
-      {/* Background ambient blurs */}
-      <div className="pointer-events-none absolute inset-0" aria-hidden="true">
-        <div
-          className="absolute top-[-20%] left-[-10%] h-150 w-150 rounded-full opacity-30 blur-[120px]"
-          style={{ background: "radial-gradient(circle, rgba(200, 200, 216, 0.6) 0%, transparent 70%)" }}
-        />
-        <div
-          className="absolute bottom-[-15%] right-[-10%] h-125 w-125 rounded-full opacity-20 blur-[100px]"
-          style={{ background: "radial-gradient(circle, rgba(184, 184, 200, 0.6) 0%, transparent 70%)" }}
-        />
-        <div
-          className="absolute top-[40%] right-[20%] h-75 w-75 rounded-full opacity-10 blur-[80px]"
-          style={{ background: "radial-gradient(circle, rgba(200, 200, 216, 0.6) 0%, transparent 70%)" }}
-        />
+    <div className="auth-page">
+      {/* Background */}
+      <div className="auth-bg" aria-hidden="true">
+        <div className="auth-bg-base" />
+        <div className="auth-bg-glow auth-bg-glow-1" />
+        <div className="auth-bg-glow auth-bg-glow-2" />
+        <div className="auth-bg-glow auth-bg-glow-3" />
+        <div className="auth-bg-grid" />
+        <div className="auth-bg-noise" />
+        <div className="auth-bg-vignette" />
       </div>
 
       {/* Back to home */}
-      <Link
-        href="/"
-        className="login-back-link fixed left-6 z-20 flex items-center gap-2 text-sm font-medium no-underline rounded-lg px-3 py-2 transition-all"
-        style={{
-          top: "calc(env(safe-area-inset-top, 0px) + 1rem)",
-          background: "rgba(17, 17, 20, 0.4)",
-          backdropFilter: "blur(12px)",
-        }}
-      >
-        <IconArrowLeft />
-        {t("auth.backBtn")}
-      </Link>
+      <nav className="auth-nav">
+        <Link href="/" className="auth-nav-link">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="m15 18-6-6 6-6" />
+          </svg>
+          {t("auth.backBtn")}
+        </Link>
+      </nav>
 
-      {/* Glass card */}
-      <div
+      {/* Main content */}
+      <main
         ref={cardRef}
-        className="relative z-10 w-full max-w-105 rounded-2xl border p-6 sm:p-8 md:p-10 mx-4 sm:mx-0"
+        className={isRegister ? "auth-container auth-container--signup" : "auth-container"}
         style={{
-          background: "rgba(17, 17, 20, 0.7)",
-          backdropFilter: "blur(24px)",
-          WebkitBackdropFilter: "blur(24px)",
-          borderColor: "rgba(255, 255, 255, 0.06)",
-          boxShadow: "0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.04)",
-          opacity: redirecting ? 0 : 1,
-          transform: redirecting ? "scale(0.97) translateY(-8px)" : "scale(1) translateY(0)",
-          transition: "opacity 0.5s ease, transform 0.5s ease",
+          opacity: mounted && !redirecting ? 1 : 0,
+          transform: mounted && !redirecting ? "translateY(0)" : "translateY(12px)",
+          transition: "opacity 0.5s cubic-bezier(0.23, 1, 0.32, 1), transform 0.5s cubic-bezier(0.23, 1, 0.32, 1)",
           pointerEvents: redirecting ? "none" : "auto",
         }}
       >
-        {/* Logo + Header */}
-        <div className="mb-8 text-center">
-          <div className="flex justify-center mb-5">
-            <TonvoLogo size="lg" showText={false} />
-          </div>
-          <h1
-            className="text-xl sm:text-[26px] font-bold tracking-tight"
-            style={{
-              color: "var(--color-text)",
-              opacity: headingFade ? 0 : 1,
-              transform: headingFade ? "translateY(4px)" : "translateY(0)",
-              transition: "opacity 0.15s ease, transform 0.15s ease",
-            }}
-          >
+        {/* Logo */}
+        <div className="flex justify-center mb-6">
+          <TonvoLogo size="lg" showText={false} />
+        </div>
+
+        {/* Heading */}
+        <div className="text-center mb-7">
+          <h1 className="auth-heading">
             {isRegister ? t("auth.createAccount") : t("auth.welcomeBack")}
           </h1>
-          <p
-            className="mt-2 text-sm"
-            style={{
-              color: "var(--color-text-muted)",
-              opacity: headingFade ? 0 : 1,
-              transform: headingFade ? "translateY(4px)" : "translateY(0)",
-              transition: "opacity 0.15s ease, transform 0.15s ease",
-            }}
-          >
+          <p className="auth-subheading">
             {isRegister ? t("auth.signUpSubtitle") : t("auth.signInSubtitle")}
           </p>
         </div>
 
-        {/* Error — animated */}
+        {/* Google Auth — placed first like Resend */}
+        <button
+          onClick={handleGoogleAuth}
+          className="auth-btn-google"
+          type="button"
+        >
+          <GoogleIcon />
+          {t("auth.continueWithGoogle")}
+        </button>
+
+        {/* Divider */}
+        <div className="auth-divider">
+          <div className="auth-divider-line" />
+          <span className="auth-divider-text">{t("auth.or")}</span>
+          <div className="auth-divider-line" />
+        </div>
+
+        {/* Error */}
         <Collapse open={!!error}>
-          <div
-            className="mb-5 rounded-lg px-4 py-3 text-sm"
-            style={{
-              backgroundColor: "rgba(255, 71, 87, 0.08)",
-              border: "1px solid rgba(255, 71, 87, 0.15)",
-              color: "var(--color-negative)",
-            }}
-          >
-            {error}
+          <div className="auth-error">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="shrink-0 mt-0.5">
+              <circle cx="12" cy="12" r="10" />
+              <line x1="12" y1="8" x2="12" y2="12" />
+              <line x1="12" y1="16" x2="12.01" y2="16" />
+            </svg>
+            <span>{error}</span>
           </div>
         </Collapse>
 
-        {/* Form — single persistent form, no remount */}
-        <form onSubmit={handleEmailAuth} className="flex flex-col gap-4">
-          <div>
-            <label
-              htmlFor="email"
-              className="mb-1.5 block text-xs font-medium"
-              style={{ color: "var(--color-text-muted)" }}
-            >
-              {t("auth.emailLabel")}
-            </label>
-            <input
-              id="email"
-              type="email"
-              placeholder={t("auth.emailPlaceholder")}
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              className="login-input w-full rounded-lg border px-4 py-3 text-sm outline-none transition-all"
-              style={{
-                backgroundColor: "rgba(26, 26, 30, 0.6)",
-                borderColor: "rgba(255, 255, 255, 0.06)",
-                color: "var(--color-text)",
-              }}
-            />
-          </div>
-
-          <PasswordInput
-            id="password"
-            label={t("auth.passwordLabel")}
-            placeholder={isRegister ? t("auth.passwordPlaceholderSignup") : t("auth.passwordPlaceholderLogin")}
-            value={password}
-            onChange={setPassword}
+        {/* Form */}
+        <form onSubmit={handleEmailAuth} className="auth-form">
+          <AuthInput
+            id="email"
+            type="email"
+            label={t("auth.emailLabel")}
+            placeholder={t("auth.emailPlaceholder")}
+            value={email}
+            onChange={setEmail}
             required
-            minLength={isRegister ? 8 : 6}
+            autoComplete="email"
           />
 
-          {/* Password strength + criteria — collapse animated (signup only) */}
-          <Collapse open={isRegister && password.length > 0}>
-            <PasswordStrengthBlock password={password} checks={passwordChecks} t={t} />
-          </Collapse>
+          {/* Password row — side by side in signup, single in login */}
+          <div className={isRegister ? "grid grid-cols-2 gap-3" : ""}>
+            <PasswordInput
+              id="password"
+              label={t("auth.passwordLabel")}
+              placeholder={isRegister ? t("auth.passwordPlaceholderSignup") : t("auth.passwordPlaceholderLogin")}
+              value={password}
+              onChange={setPassword}
+              required
+              minLength={isRegister ? 8 : 6}
+            />
 
-          {/* Confirm password — collapse animated (signup only) */}
-          <Collapse open={isRegister}>
-            <div className="pt-0 pb-0">
+            {isRegister && (
               <PasswordInput
                 id="confirmPassword"
                 label={t("auth.confirmPasswordLabel")}
                 placeholder={t("auth.confirmPasswordPlaceholder")}
                 value={confirmPassword}
                 onChange={setConfirmPassword}
-                required={isRegister}
+                required
                 minLength={8}
               />
+            )}
+          </div>
 
-              {/* Match indicator */}
-              <Collapse open={isRegister && confirmPassword.length > 0}>
-                <div className="flex items-center gap-2 mt-2">
-                  <div
-                    className="w-3 h-3 rounded-full flex items-center justify-center"
-                    style={{
-                      backgroundColor: password === confirmPassword
-                        ? "rgba(52, 211, 153, 0.15)"
-                        : "rgba(248, 113, 113, 0.15)",
-                      transition: "background-color 0.3s ease",
-                    }}
-                  >
-                    {password === confirmPassword ? <IconCheck /> : <IconX />}
-                  </div>
-                  <span
-                    className="text-[11px]"
-                    style={{
-                      color: password === confirmPassword
-                        ? "var(--color-positive)"
-                        : "var(--color-negative)",
-                      transition: "color 0.3s ease",
-                    }}
-                  >
-                    {password === confirmPassword ? t("auth.passwordsMatch") : t("auth.passwordsNoMatch")}
-                  </span>
-                </div>
-              </Collapse>
+          {/* Password strength (signup) */}
+          <Collapse open={isRegister && password.length > 0}>
+            <PasswordStrengthBlock password={password} checks={passwordChecks} t={t} />
+          </Collapse>
+
+          {/* Password match indicator (signup) */}
+          <Collapse open={isRegister && confirmPassword.length > 0}>
+            <div className="flex items-center gap-2">
+              <div
+                className="w-3 h-3 rounded-full flex items-center justify-center"
+                style={{
+                  backgroundColor: password === confirmPassword
+                    ? "rgba(52, 211, 153, 0.12)"
+                    : "rgba(248, 113, 113, 0.12)",
+                  transition: "background-color 0.3s ease",
+                }}
+              >
+                {password === confirmPassword ? <IconCheck /> : <IconX />}
+              </div>
+              <span
+                className="text-[11px]"
+                style={{
+                  color: password === confirmPassword ? "var(--color-positive)" : "var(--color-negative)",
+                  transition: "color 0.3s ease",
+                }}
+              >
+                {password === confirmPassword ? t("auth.passwordsMatch") : t("auth.passwordsNoMatch")}
+              </span>
             </div>
           </Collapse>
 
-          {/* Terms consent — collapse animated (signup only) */}
+          {/* Terms consent — checkbox for signup only */}
           <Collapse open={isRegister}>
-            <label className="flex items-start gap-3 cursor-pointer mt-1" style={{ minHeight: 44 }}>
+            <label className="auth-terms-label">
               <input
                 type="checkbox"
                 checked={acceptedTerms}
                 onChange={(e) => setAcceptedTerms(e.target.checked)}
-                className="mt-1 shrink-0 cursor-pointer"
-                style={{ width: 16, height: 16, accentColor: "var(--color-accent-light)" }}
+                className="auth-checkbox shrink-0"
               />
-              <span className="text-xs leading-relaxed" style={{ color: "var(--color-text-muted)" }}>
+              <span className="text-[13px] leading-relaxed" style={{ color: "var(--color-text-muted)" }}>
                 {t("auth.termsConsent")}{" "}
-                <Link href="/terms" target="_blank" style={{ color: "var(--color-accent-light)", textDecoration: "underline", textUnderlineOffset: 2 }}>
-                  {t("auth.termsOfService")}
-                </Link>{" "}
+                <Link href="/terms" target="_blank" className="auth-link">{t("auth.termsOfService")}</Link>{" "}
                 {t("auth.and")}{" "}
-                <Link href="/privacy" target="_blank" style={{ color: "var(--color-accent-light)", textDecoration: "underline", textUnderlineOffset: 2 }}>
-                  {t("auth.privacyPolicy")}
-                </Link>
+                <Link href="/privacy" target="_blank" className="auth-link">{t("auth.privacyPolicy")}</Link>
                 {t("auth.termsConsentSuffix")}
               </span>
             </label>
           </Collapse>
 
+          {/* Submit */}
           <button
             type="submit"
             disabled={loading || (isRegister && !acceptedTerms)}
-            className="login-btn-primary mt-1 w-full cursor-pointer rounded-lg py-3 text-sm font-semibold text-white transition-all disabled:cursor-not-allowed disabled:opacity-50"
-            style={{
-              background: "linear-gradient(135deg, #5c5c6e 0%, #6e6e82 100%)",
-              boxShadow: "0 4px 14px rgba(92, 92, 110, 0.35)",
-            }}
+            className="auth-btn-primary w-full"
           >
-            {loading
-              ? t("common.loading")
-              : isRegister
-                ? t("auth.createAccountBtn")
-                : t("auth.signIn")}
+            {loading ? (
+              <span className="flex items-center justify-center gap-2">
+                <SpinnerIcon />
+                {t("common.loading")}
+              </span>
+            ) : (
+              isRegister ? t("auth.createAccountBtn") : t("auth.signIn")
+            )}
           </button>
+
+          {/* Passive legal notice — login only */}
+          {!isRegister && (
+            <p className="auth-passive-consent">
+              {t("auth.signingInConsent")}{" "}
+              <Link href="/terms" target="_blank" className="auth-link">{t("auth.termsOfService")}</Link>{" "}
+              {t("auth.and")}{" "}
+              <Link href="/privacy" target="_blank" className="auth-link">{t("auth.privacyPolicy")}</Link>.
+            </p>
+          )}
         </form>
 
-        {/* Separator */}
-        <div className="my-6 flex items-center gap-4">
-          <div
-            className="h-px flex-1"
-            style={{ background: "linear-gradient(to right, transparent, rgba(255,255,255,0.08), transparent)" }}
-          />
-          <span
-            className="text-xs uppercase tracking-wider"
-            style={{ color: "var(--color-text-muted)" }}
-          >
-            {t("auth.or")}
-          </span>
-          <div
-            className="h-px flex-1"
-            style={{ background: "linear-gradient(to right, transparent, rgba(255,255,255,0.08), transparent)" }}
-          />
-        </div>
-
-        {/* Google button */}
-        <button
-          onClick={handleGoogleAuth}
-          className="login-btn-google flex w-full cursor-pointer items-center justify-center gap-3 rounded-lg border py-3 text-sm font-medium transition-all"
-          style={{
-            backgroundColor: "rgba(26, 26, 30, 0.5)",
-            borderColor: "rgba(255, 255, 255, 0.06)",
-            color: "var(--color-text)",
-          }}
-        >
-          <svg width="18" height="18" viewBox="0 0 48 48" aria-hidden="true">
-            <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z" />
-            <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z" />
-            <path fill="#FBBC05" d="M10.53 28.59a14.5 14.5 0 0 1 0-9.18l-7.98-6.19a24.0 24.0 0 0 0 0 21.56l7.98-6.19z" />
-            <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z" />
-            <path fill="none" d="M0 0h48v48H0z" />
-          </svg>
-          {t("auth.continueWithGoogle")}
-        </button>
-
-        {/* Toggle register/login */}
-        <p
-          className="mt-8 text-center text-sm"
-          style={{ color: "var(--color-text-muted)" }}
-        >
+        {/* Toggle mode */}
+        <p className="auth-toggle">
           {isRegister ? t("auth.alreadyHaveAccount") : t("auth.noAccount")}{" "}
-          <button
-            onClick={handleToggle}
-            className="cursor-pointer border-none bg-transparent font-semibold transition-colors"
-            style={{ color: "var(--color-accent-light)" }}
-          >
+          <button onClick={handleToggle} className="auth-toggle-btn" type="button">
             {isRegister ? t("auth.signInLink") : t("auth.signUpLink")}
           </button>
         </p>
-      </div>
+      </main>
 
-      {/* Consent modal for new Google users */}
+      {/* Consent modal */}
       <ConsentModal
         open={showConsent}
         onAccept={handleConsentAccept}

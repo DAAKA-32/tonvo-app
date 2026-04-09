@@ -270,6 +270,7 @@
     "and": "and",
     "privacyPolicy": "Privacy Policy",
     "termsConsentSuffix": ", including the analysis of screen content and conversations.",
+    "signingInConsent": "By signing in, you agree to our",
     "consentTitle": "Before continuing",
     "consentDescription": "To create your account, you must agree to our Terms of Service and Privacy Policy.",
     "consentAccept": "Create my account",

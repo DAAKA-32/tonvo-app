@@ -38,7 +38,7 @@ export function TonvoLogoMark({ size = "md", className }: TonvoLogoMarkProps) {
       alt="Tonvo"
       width={px}
       height={px}
-      className={className}
+      className={`logo-mark ${className || ""}`}
       style={{ flexShrink: 0, objectFit: "contain" }}
       priority
     />
@@ -60,7 +60,7 @@ export default function TonvoLogo({ size = "md", showText = true, textClassName,
 
   return (
     <div
-      className={`flex items-center ${className || ""}`}
+      className={`tonvo-logo flex items-center ${className || ""}`}
       style={{ gap }}
     >
       <TonvoLogoMark size={size} />
