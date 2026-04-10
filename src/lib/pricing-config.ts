@@ -10,6 +10,8 @@
  * ========================================================
  */
 
+import { formatPrice, formatSavings } from "@/lib/currency";
+
 export type PlanId = "free" | "pro" | "team";
 export type BillingCycle = "monthly" | "yearly";
 
@@ -100,16 +102,33 @@ export function getPlan(id: PlanId): PricingPlan {
   return PRICING_PLANS.find((p) => p.id === id) ?? PRICING_PLANS[0];
 }
 
-export function getDisplayPrice(plan: PricingPlan, billing: BillingCycle): string {
-  if (plan.monthlyPrice === 0) return "Free";
-  if (billing === "yearly") return `$${plan.monthlyEquivalent}`;
-  return `$${plan.monthlyPrice}`;
+/**
+ * Get the headline price string for a plan, formatted in the user's
+ * display currency (USD/EUR per locale). Pass `lang` from
+ * useTranslation().i18n.language so the right currency is picked.
+ */
+export function getDisplayPrice(
+  plan: PricingPlan,
+  billing: BillingCycle,
+  lang: string | undefined,
+): string {
+  if (plan.monthlyPrice === 0) return formatPrice(0, lang);
+  const amount = billing === "yearly" ? plan.monthlyEquivalent : plan.monthlyPrice;
+  return formatPrice(amount, lang);
 }
 
-export function getSavingsLabel(plan: PricingPlan, billing: BillingCycle): string | null {
+/**
+ * Yearly savings label, formatted in the user's display currency.
+ * Returns null when the plan is free or the user is on monthly billing.
+ */
+export function getSavingsLabel(
+  plan: PricingPlan,
+  billing: BillingCycle,
+  lang: string | undefined,
+): string | null {
   if (plan.monthlyPrice === 0 || billing !== "yearly") return null;
   const saved = plan.monthlyPrice * 12 - plan.yearlyPrice;
-  return `Save $${saved}/year`;
+  return formatSavings(saved, lang);
 }
 
 export function getPeriodLabel(plan: PricingPlan): string {

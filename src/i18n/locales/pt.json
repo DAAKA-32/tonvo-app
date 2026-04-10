@@ -520,6 +520,7 @@
     "currentPlan": "Plano atual",
     "redirecting": "Redirecionando...",
     "guarantee": "Todos os planos incluem garantia de reembolso de 7 dias. Cancele a qualquer momento.",
+    "billedInUsd": "Cobrado em USD",
     "checkoutError": "Não foi possível iniciar o pagamento. Tente novamente.",
     "networkError": "Erro de rede. Verifique sua conexão e tente novamente.",
     "planFree": {

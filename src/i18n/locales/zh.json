@@ -503,6 +503,7 @@
     "currentPlan": "当前方案",
     "redirecting": "跳转中...",
     "guarantee": "所有方案均享7天退款保证，随时可取消。",
+    "billedInUsd": "以美元计费",
     "checkoutError": "无法启动结账，请重试。",
     "networkError": "网络错误，请检查连接后重试。",
     "planFree": {

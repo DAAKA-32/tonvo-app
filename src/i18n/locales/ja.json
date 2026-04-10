@@ -503,6 +503,7 @@
     "currentPlan": "現在のプラン",
     "redirecting": "リダイレクト中...",
     "guarantee": "すべてのプランに7日間の返金保証が含まれます。いつでもキャンセル可能。",
+    "billedInUsd": "USDで請求",
     "checkoutError": "チェックアウトを開始できません。もう一度お試しください。",
     "networkError": "ネットワークエラー。接続を確認して再試行してください。",
     "planFree": {

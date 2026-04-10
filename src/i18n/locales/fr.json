@@ -665,6 +665,7 @@
     "currentPlan": "Plan actuel",
     "redirecting": "Redirection...",
     "guarantee": "Tous les plans incluent une garantie de remboursement de 7 jours. Annulez à tout moment.",
+    "billedInUsd": "Facturé en USD",
     "checkoutError": "Impossible de lancer le paiement. Veuillez réessayer.",
     "networkError": "Erreur réseau. Vérifiez votre connexion et réessayez.",
     "planFree": {

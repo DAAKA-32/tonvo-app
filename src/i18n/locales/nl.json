@@ -503,6 +503,7 @@
     "currentPlan": "Huidig plan",
     "redirecting": "Doorverwijzen...",
     "guarantee": "Alle plannen bevatten een 7-dagen geld-terug-garantie. Op elk moment opzegbaar.",
+    "billedInUsd": "Gefactureerd in USD",
     "checkoutError": "Kan de betaling niet starten. Probeer het opnieuw.",
     "networkError": "Netwerkfout. Controleer je verbinding en probeer het opnieuw.",
     "planFree": {

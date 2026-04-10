@@ -9,10 +9,10 @@ import {
   PRICING_PLANS,
   ANNUAL_DISCOUNT_PERCENT,
   getDisplayPrice,
-  getSavingsLabel,
   getPeriodLabel,
   type BillingCycle,
 } from "@/lib/pricing-config";
+import { formatPrice, getCurrencyForLanguage } from "@/lib/currency";
 
 const PLAN_I18N_KEY: Record<string, string> = {
   free: "pricing.planFree",
@@ -21,7 +21,9 @@ const PLAN_I18N_KEY: Record<string, string> = {
 };
 
 export default function PricingPage() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const lang = i18n.language;
+  const showBilledInUsd = getCurrencyForLanguage(lang) !== "USD";
   const { user } = useAuth();
   const [currentPlan, setCurrentPlan] = useState("free");
   const [loading, setLoading] = useState<string | null>(null);
@@ -197,9 +199,9 @@ export default function PricingPage() {
           {PRICING_PLANS.map((plan) => {
             const isCurrent = currentPlan === plan.id;
             const isUpgrade = !isCurrent && plan.id !== "free";
-            const savings = getSavingsLabel(plan, billing);
             const isAnnual = billing === "yearly";
-            const price = getDisplayPrice(plan, billing);
+            const price = getDisplayPrice(plan, billing, lang);
+            const oldPrice = formatPrice(plan.monthlyPrice, lang);
             const period = getPeriodLabel(plan);
             const i18nKey = PLAN_I18N_KEY[plan.id];
             const translatedFeatures = t(`${i18nKey}.features`, { returnObjects: true }) as string[];
@@ -253,7 +255,7 @@ export default function PricingPage() {
                         className="text-lg line-through mr-1 transition-opacity duration-200"
                         style={{ color: "var(--color-text-muted)" }}
                       >
-                        ${plan.monthlyPrice}
+                        {oldPrice}
                       </span>
                     )}
                     <span
@@ -344,6 +346,12 @@ export default function PricingPage() {
           style={{ color: "var(--color-text-muted)" }}
         >
           {t("pricing.guarantee")}
+          {showBilledInUsd && (
+            <>
+              {" · "}
+              {t("pricing.billedInUsd")}
+            </>
+          )}
         </p>
       </div>
     </AppShell>

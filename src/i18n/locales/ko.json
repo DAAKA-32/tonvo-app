@@ -503,6 +503,7 @@
     "currentPlan": "현재 플랜",
     "redirecting": "리디렉트 중...",
     "guarantee": "모든 플랜에 7일 환불 보장이 포함됩니다. 언제든지 취소 가능.",
+    "billedInUsd": "USD로 청구",
     "checkoutError": "결제를 시작할 수 없습니다. 다시 시도해 주세요.",
     "networkError": "네트워크 오류. 연결을 확인하고 다시 시도해 주세요.",
     "planFree": {

@@ -7,10 +7,13 @@ import { useAuth } from "@/lib/auth-context";
 import { authFetch } from "@/lib/api-client";
 import AnimatedTitle from "@/components/AnimatedTitle";
 import { PRICING_PLANS, ANNUAL_DISCOUNT_PERCENT } from "@/lib/pricing-config";
+import { formatPrice, getCurrencyForLanguage } from "@/lib/currency";
 
 export default function PricingSection() {
   const { user } = useAuth();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const lang = i18n.language;
+  const showBilledInUsd = getCurrencyForLanguage(lang) !== "USD";
   const [annual, setAnnual] = useState(false);
   const [loadingPlan, setLoadingPlan] = useState<string | null>(null);
 
@@ -91,10 +94,11 @@ export default function PricingSection() {
           {PRICING_PLANS.map((plan) => {
             const isFree = plan.monthlyPrice === 0;
             const displayPrice = isFree
-              ? "$0"
+              ? formatPrice(0, lang)
               : annual
-                ? `$${plan.monthlyEquivalent}`
-                : `$${plan.monthlyPrice}`;
+                ? formatPrice(plan.monthlyEquivalent, lang)
+                : formatPrice(plan.monthlyPrice, lang);
+            const oldPrice = formatPrice(plan.monthlyPrice, lang);
 
             return (
               <div
@@ -130,7 +134,7 @@ export default function PricingSection() {
                         className="text-lg line-through mr-1 transition-opacity duration-200"
                         style={{ color: "var(--color-text-muted)" }}
                       >
-                        ${plan.monthlyPrice}
+                        {oldPrice}
                       </span>
                     )}
                     <span className="text-4xl font-bold" style={{ color: "var(--color-text)", minWidth: 56, display: "inline-block" }}>
@@ -201,6 +205,12 @@ export default function PricingSection() {
 
         <p className="text-center text-xs mt-8" style={{ color: "var(--color-text-muted)" }}>
           {t("pricing.guarantee")}
+          {showBilledInUsd && (
+            <>
+              {" · "}
+              {t("pricing.billedInUsd")}
+            </>
+          )}
         </p>
       </div>
     </section>

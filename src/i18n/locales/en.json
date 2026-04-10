@@ -660,6 +660,7 @@
     "currentPlan": "Current Plan",
     "redirecting": "Redirecting...",
     "guarantee": "All plans include a 7-day money-back guarantee. Cancel anytime.",
+    "billedInUsd": "Billed in USD",
     "checkoutError": "Unable to start checkout. Please try again.",
     "networkError": "Network error. Please check your connection and try again.",
     "planFree": {

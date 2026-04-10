@@ -11,6 +11,7 @@ import {
   ANNUAL_DISCOUNT_PERCENT,
   type BillingCycle,
 } from "@/lib/pricing-config";
+import { formatPrice } from "@/lib/currency";
 
 /* ------------------------------------------------------------------ */
 /*  Trigger logic                                                      */
@@ -82,7 +83,8 @@ function CrownIcon() {
 /*  Component                                                          */
 /* ------------------------------------------------------------------ */
 export default function PlanUpgradeModal() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const lang = i18n.language;
   const { user } = useAuth();
   const searchParams = useSearchParams();
   const { plan: currentPlan, loading: planLoading, refresh } = usePlan();
@@ -257,7 +259,9 @@ export default function PlanUpgradeModal() {
         <div className="upgrade-plans">
           {plansToShow.map((plan) => {
             const isPopular = plan.popular;
-            const price = billing === "yearly" ? plan.monthlyEquivalent : plan.monthlyPrice;
+            const priceAmount = billing === "yearly" ? plan.monthlyEquivalent : plan.monthlyPrice;
+            const price = formatPrice(priceAmount, lang);
+            const oldPrice = formatPrice(plan.monthlyPrice, lang);
             const isCurrent = currentPlan === plan.id;
 
             return (
@@ -282,9 +286,9 @@ export default function PlanUpgradeModal() {
 
                 <div className="upgrade-plan-price">
                   {billing === "yearly" && (
-                    <span className="upgrade-plan-price-old">${plan.monthlyPrice}</span>
+                    <span className="upgrade-plan-price-old">{oldPrice}</span>
                   )}
-                  <span className="upgrade-plan-price-current">${price}</span>
+                  <span className="upgrade-plan-price-current">{price}</span>
                   <span className="upgrade-plan-price-period">{plan.period}</span>
                 </div>
 

@@ -624,6 +624,7 @@
     "currentPlan": "Aktueller Plan",
     "redirecting": "Weiterleitung...",
     "guarantee": "Alle Pläne beinhalten eine 7-Tage-Geld-zurück-Garantie. Jederzeit kündbar.",
+    "billedInUsd": "Abrechnung in USD",
     "checkoutError": "Checkout konnte nicht gestartet werden. Bitte versuche es erneut.",
     "networkError": "Netzwerkfehler. Bitte überprüfe deine Verbindung und versuche es erneut.",
     "planFree": {
