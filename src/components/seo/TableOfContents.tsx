@@ -20,8 +20,7 @@ export default function TableOfContents({ sections }: { sections: GuideSection[]
           <li key={section.id}>
             <a
               href={`#${section.id}`}
-              className="text-sm no-underline hover:opacity-80 transition-opacity"
-              style={{ color: "var(--color-text-muted)" }}
+              className="footer-link"
             >
               {i + 1}. {section.heading}
             </a>

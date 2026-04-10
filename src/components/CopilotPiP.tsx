@@ -168,7 +168,7 @@ const PIP_CSS = `
   }
   .ask-input {
     flex: 1; padding: 7px 10px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1);
-    background: rgba(255,255,255,0.04); color: #fafafa; font-size: 11px; outline: none;
+    background: rgba(255,255,255,0.04); color: #fafafa; font-size: 11px; outline: none; cursor: text;
   }
   .ask-input:focus { border-color: rgba(129,140,248,0.4); }
   .ask-input::placeholder { color: #8b8b96; }

@@ -32,7 +32,7 @@ export default function IndustriesIndex() {
             className="rounded-xl border p-6 no-underline transition-all hover:border-opacity-60 group"
             style={{ backgroundColor: "var(--color-surface)", borderColor: "var(--color-border)", display: "block" }}
           >
-            <h2 className="text-sm font-bold mb-2 group-hover:opacity-80 transition-opacity" style={{ color: "var(--color-text)" }}>
+            <h2 className="text-sm font-bold mb-2 group-hover:text-(--color-text-silver) transition-colors" style={{ color: "var(--color-text)" }}>
               {ind.industryName}
             </h2>
             <p className="text-xs leading-relaxed m-0" style={{ color: "var(--color-text-muted)" }}>

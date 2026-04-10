@@ -33,7 +33,7 @@ export default function Breadcrumbs({ items }: { items: BreadcrumbItem[] }) {
             <span key={i} className="flex items-center gap-3">
               <span className="text-sm" style={{ color: "var(--color-text-muted)" }}>/</span>
               {item.href ? (
-                <Link href={item.href} className="text-sm font-medium no-underline hover:opacity-80 transition-opacity" style={{ color: "var(--color-text-muted)" }}>
+                <Link href={item.href} className="footer-link text-sm font-medium">
                   {item.label}
                 </Link>
               ) : (

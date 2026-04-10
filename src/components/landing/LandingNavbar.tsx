@@ -114,15 +114,13 @@ export default function LandingNavbar() {
             href="/"
             className="flex items-center no-underline"
             style={{
-              transition: "transform 0.2s ease, opacity 0.2s ease",
+              transition: "transform 0.2s ease",
             }}
             onMouseEnter={(e) => {
               e.currentTarget.style.transform = "scale(1.03)";
-              e.currentTarget.style.opacity = "0.9";
             }}
             onMouseLeave={(e) => {
               e.currentTarget.style.transform = "scale(1)";
-              e.currentTarget.style.opacity = "1";
             }}
           >
             <TonvoLogo size="md" />
@@ -137,27 +135,7 @@ export default function LandingNavbar() {
                   key={link.href}
                   href={link.href}
                   className="nav-link-premium relative text-sm no-underline px-3 py-2 rounded-lg"
-                  style={{
-                    color: isActive
-                      ? "var(--color-text)"
-                      : "var(--color-text-muted)",
-                    transition: "color 0.25s ease, background-color 0.25s ease",
-                    backgroundColor: isActive
-                      ? "rgba(255,255,255,0.05)"
-                      : "transparent",
-                  }}
-                  onMouseEnter={(e) => {
-                    if (!isActive) {
-                      e.currentTarget.style.color = "var(--color-text)";
-                      e.currentTarget.style.backgroundColor = "rgba(255,255,255,0.04)";
-                    }
-                  }}
-                  onMouseLeave={(e) => {
-                    if (!isActive) {
-                      e.currentTarget.style.color = "var(--color-text-muted)";
-                      e.currentTarget.style.backgroundColor = "transparent";
-                    }
-                  }}
+                  data-active={isActive ? "true" : undefined}
                 >
                   {link.label}
                   {/* Animated underline indicator */}
@@ -191,19 +169,6 @@ export default function LandingNavbar() {
                 style={{
                   background:
                     "linear-gradient(135deg, var(--color-accent) 0%, #6e6e82 100%)",
-                  transition:
-                    "transform 0.2s ease, box-shadow 0.3s ease, opacity 0.2s ease",
-                  boxShadow: "0 0 0 0 rgba(92, 92, 110, 0)",
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.transform = "translateY(-1px)";
-                  e.currentTarget.style.boxShadow =
-                    "0 4px 16px rgba(92, 92, 110, 0.3)";
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.transform = "translateY(0)";
-                  e.currentTarget.style.boxShadow =
-                    "0 0 0 0 rgba(92, 92, 110, 0)";
                 }}
               >
                 {t("landing.nav.dashboard")}
@@ -212,17 +177,7 @@ export default function LandingNavbar() {
               <>
                 <Link
                   href="/login"
-                  className="hidden sm:inline-flex text-sm no-underline px-4 py-2 rounded-lg"
-                  style={{
-                    color: "var(--color-text-muted)",
-                    transition: "color 0.25s ease",
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.color = "var(--color-text)";
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.color = "var(--color-text-muted)";
-                  }}
+                  className="nav-signin-link hidden sm:inline-flex text-sm no-underline px-4 py-2 rounded-lg"
                 >
                   {t("landing.nav.signIn")}
                 </Link>
@@ -232,19 +187,6 @@ export default function LandingNavbar() {
                   style={{
                     background:
                       "linear-gradient(135deg, var(--color-accent) 0%, #6e6e82 100%)",
-                    transition:
-                      "transform 0.2s ease, box-shadow 0.3s ease, opacity 0.2s ease",
-                    boxShadow: "0 0 0 0 rgba(92, 92, 110, 0)",
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.transform = "translateY(-1px)";
-                    e.currentTarget.style.boxShadow =
-                      "0 4px 16px rgba(92, 92, 110, 0.3)";
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.transform = "translateY(0)";
-                    e.currentTarget.style.boxShadow =
-                      "0 0 0 0 rgba(92, 92, 110, 0)";
                   }}
                 >
                   {t("landing.nav.getStarted")}

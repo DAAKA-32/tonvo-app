@@ -44,7 +44,7 @@ export default function GuidesIndex() {
               </span>
             </div>
             <div>
-              <h2 className="text-sm font-bold mb-1 group-hover:opacity-80 transition-opacity" style={{ color: "var(--color-text)" }}>
+              <h2 className="text-sm font-bold mb-1 group-hover:text-(--color-text-silver) transition-colors" style={{ color: "var(--color-text)" }}>
                 {g.h1}
               </h2>
               <p className="text-xs leading-relaxed m-0" style={{ color: "var(--color-text-muted)" }}>

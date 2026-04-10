@@ -121,7 +121,7 @@ export default async function IndustryPage({ params }: Props) {
               <Link
                 key={ucSlug}
                 href={`/use-cases/${ucSlug}`}
-                className="text-xs font-medium no-underline px-4 py-2 rounded-lg border hover:opacity-80 transition-opacity"
+                className="text-xs font-medium no-underline px-4 py-2 rounded-lg border hover:text-(--color-text) transition-colors"
                 style={{ borderColor: "var(--color-border)", color: "var(--color-accent-light)" }}
               >
                 {ucSlug.replace(/-/g, " ")}

@@ -54,8 +54,7 @@ export default function SEOPageShell({
               <Link
                 key={section.type}
                 href={section.href}
-                className="text-xs no-underline hover:opacity-80 transition-opacity"
-                style={{ color: "var(--color-text-muted)" }}
+                className="footer-link text-xs"
               >
                 {section.label}
               </Link>

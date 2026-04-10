@@ -464,7 +464,7 @@
   },
   "landing": {
     "nav": { "features": "功能", "product": "产品", "useCases": "应用场景", "pricing": "定价", "signIn": "登录", "getStarted": "立即开始", "dashboard": "控制台" },
-    "hero": { "badge": "对话智能，全新定义", "headline1": "洞察全场。", "headline2": "先人一步。", "subtitle": "Tonvo 实时分析您的每一次对话 —— 捕捉情绪变化、提供智能建议，助您从容驾驭每一场沟通。", "cta": "立即开始", "ctaSecondary": "了解工作原理" },
+    "hero": { "badge": "对话智能，全新定义", "headline1": "知道该说什么。", "headline2": "在关键时刻。", "subtitle": "Tonvo 实时分析您的每一次对话 —— 捕捉情绪变化、提供智能建议，助您从容驾驭每一场沟通。", "cta": "立即开始", "ctaSecondary": "了解工作原理" },
     "problem": { "label": "痛点", "heading1": "沟通从来不简单。", "heading2": "误读对方更是常态。", "p1": "你一定经历过这样的场景：通话一切顺利——直到突然不再顺利。潜在客户变得冷淡，同事开始焦躁，候选人不再回应。等你察觉时，已经来不及挽回了。", "p2": "大多数人会错过那些决定对话成败的微妙语气和情绪变化。不是因为不在意，而是因为他们正在想下一句该说什么。" },
     "solution": { "label": "解决方案", "heading1": "为每一次对话", "heading2": "配备第二双慧眼。", "desc": "Tonvo 在您的通话和会议中全程陪伴。它采集音频、实时分析情绪动态，并提供安静而精准的情境建议——让您时刻掌握对话走向，清楚下一步该怎么做。", "step1Title": "开始会话", "step1Desc": "一键启动。Tonvo 自动采集屏幕或麦克风的音频。", "step2Title": "获取实时反馈", "step2Desc": "语气指标和建议随对话推进实时更新。", "step3Title": "查看深度洞察", "step3Desc": "通话结束后，获取包含关键时刻和行动建议的完整分析报告。" },
     "features": { "label": "核心功能", "heading1": "深度理解对话", "heading2": "所需的一切，尽在掌握。", "liveTone": "实时语气检测", "liveToneDesc": "采集通话或麦克风音频，实时判断对话走势——积极、中性还是紧张，一目了然。", "smartSuggestions": "智能建议", "smartSuggestionsDesc": "基于对话内容和表达方式，Tonvo 为您推荐最佳回应策略，让沟通始终在正轨上。", "conversationInsights": "对话洞察", "conversationInsightsDesc": "每次会话后自动生成语气变化、关键时刻和可执行建议的详细报告。", "textAnalysis": "文本分析", "textAnalysisDesc": "粘贴任意消息或对话片段，即刻解读深层语气并获取优化建议。" },
