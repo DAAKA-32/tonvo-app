@@ -73,6 +73,7 @@ function IconArrowRight({ className }: { className?: string }) {
 /*  copilot panel front-and-center with premium glow                  */
 /* ------------------------------------------------------------------ */
 function CopilotMockup() {
+  const { t } = useTranslation();
   return (
     <div
       className="rounded-2xl overflow-hidden relative"
@@ -105,17 +106,17 @@ function CopilotMockup() {
         {/* 2x2 participant grid */}
         <div className="grid grid-cols-2 gap-2 p-2.5" style={{ minHeight: 370 }}>
           {[
-            { name: "You", initial: "E", color: "#818cf8", status: "speaking", wave: true },
-            { name: "Sarah M.", initial: "S", color: "#34d399", status: "Listening", wave: false },
-            { name: "Marc D.", initial: "M", color: "#fbbf24", status: "Muted", wave: false },
-            { name: "Lisa K.", initial: "L", color: "#f87171", status: "Muted", wave: false },
+            { name: t("mockup.you"), initial: "E", color: "#818cf8", status: t("mockup.speaking").toLowerCase(), wave: true },
+            { name: "Sarah M.", initial: "S", color: "#34d399", status: t("mockup.listening"), wave: false },
+            { name: "Marc D.", initial: "M", color: "#fbbf24", status: t("mockup.muted"), wave: false },
+            { name: "Lisa K.", initial: "L", color: "#f87171", status: t("mockup.muted"), wave: false },
           ].map((p) => (
             <div key={p.name} className="rounded-xl flex flex-col items-center justify-center relative" style={{ background: "linear-gradient(160deg, rgba(28,28,36,0.95), rgba(18,18,24,1))", border: "1px solid rgba(255,255,255,0.04)" }}>
               <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full flex items-center justify-center text-lg font-bold mb-2" style={{ background: `linear-gradient(135deg, ${p.color}24, ${p.color}08)`, color: p.color, border: `1px solid ${p.color}1a` }}>{p.initial}</div>
               <span className="text-[11px] font-medium" style={{ color: "var(--color-text)" }}>{p.name}</span>
               <div className="absolute bottom-2 left-2 flex items-center gap-1.5 px-2 py-0.5 rounded-md" style={{ background: "rgba(0,0,0,0.6)" }}>
                 {p.wave && <div className="flex items-end gap-0.5" style={{ height: 10 }}>{[1,2,3].map(i => <div key={i} className="audio-wave-bar" style={{ animationDelay: `${i*0.12}s`, height: 8, width: 2 }} />)}</div>}
-                <span className="text-[8px]" style={{ color: "rgba(255,255,255,0.4)" }}>{p.wave ? "Speaking" : p.status}</span>
+                <span className="text-[8px]" style={{ color: "rgba(255,255,255,0.4)" }}>{p.wave ? t("mockup.speaking") : p.status}</span>
               </div>
             </div>
           ))}
@@ -161,26 +162,26 @@ function CopilotMockup() {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-1.5">
               <div className="w-1.5 h-1.5 rounded-full pulse-positive" style={{ backgroundColor: "#34d399" }} />
-              <span className="text-[9px] font-bold uppercase tracking-wider" style={{ color: "var(--color-text)" }}>AI Copilot</span>
+              <span className="text-[9px] font-bold uppercase tracking-wider" style={{ color: "var(--color-text)" }}>{t("mockup.aiCopilot")}</span>
               <span className="text-[9px] tabular-nums" style={{ color: "var(--color-text-muted)" }}>14:23</span>
             </div>
-            <span className="text-[8px] font-semibold px-1.5 py-0.5 rounded-md" style={{ background: "rgba(52,211,153,0.12)", color: "#34d399" }}>positive</span>
+            <span className="text-[8px] font-semibold px-1.5 py-0.5 rounded-md" style={{ background: "rgba(52,211,153,0.12)", color: "#34d399" }}>{t("mockup.positive").toLowerCase()}</span>
           </div>
 
           {/* Compact scores */}
           <div className="flex items-center justify-center gap-4 py-1.5 border-t border-b" style={{ borderColor: "rgba(255,255,255,0.05)" }}>
             <div className="text-center">
-              <div className="text-[7px] uppercase tracking-wider" style={{ color: "var(--color-text-muted)" }}>Quality</div>
+              <div className="text-[7px] uppercase tracking-wider" style={{ color: "var(--color-text-muted)" }}>{t("mockup.quality")}</div>
               <div className="text-sm font-bold" style={{ color: "#34d399" }}>84</div>
             </div>
             <div style={{ width: 1, height: 18, background: "rgba(255,255,255,0.06)" }} />
             <div className="text-center">
-              <div className="text-[7px] uppercase tracking-wider" style={{ color: "var(--color-text-muted)" }}>Engage</div>
+              <div className="text-[7px] uppercase tracking-wider" style={{ color: "var(--color-text-muted)" }}>{t("mockup.engage")}</div>
               <div className="text-sm font-bold" style={{ color: "#34d399" }}>91</div>
             </div>
             <div style={{ width: 1, height: 18, background: "rgba(255,255,255,0.06)" }} />
             <div className="text-center">
-              <div className="text-[7px] uppercase tracking-wider" style={{ color: "var(--color-text-muted)" }}>Balance</div>
+              <div className="text-[7px] uppercase tracking-wider" style={{ color: "var(--color-text-muted)" }}>{t("mockup.balance")}</div>
               <div className="flex gap-px mt-0.5" style={{ height: 3, width: 32 }}>
                 <div style={{ width: "55%", background: "#818cf8", borderRadius: 2 }} />
                 <div style={{ width: "45%", background: "#c8c8d8", borderRadius: 2 }} />
@@ -192,12 +193,12 @@ function CopilotMockup() {
           <div className="flex gap-1">
             <div className="flex-1 flex items-center justify-center gap-1 py-1 rounded-lg text-[9px] font-semibold" style={{ background: "rgba(255,255,255,0.07)", color: "var(--color-text)" }}>
               <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" /></svg>
-              Say This
+              {t("mockup.sayThis")}
               <span className="text-[7px] font-bold px-1 rounded-full" style={{ background: "rgba(52,211,153,0.2)", color: "#34d399" }}>3</span>
             </div>
             <div className="flex-1 flex items-center justify-center gap-1 py-1 rounded-lg text-[9px]" style={{ color: "var(--color-text-muted)" }}>
               <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 20h9" /><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" /></svg>
-              Coaching
+              {t("mockup.coaching")}
             </div>
           </div>
 
@@ -206,23 +207,23 @@ function CopilotMockup() {
             <div className="rounded-xl p-2" style={{ background: "rgba(52,211,153,0.05)", border: "1px solid rgba(52,211,153,0.15)" }}>
               <div className="flex items-center gap-1 mb-0.5">
                 <span className="text-[8px]">💬</span>
-                <span className="text-[7px] font-bold uppercase tracking-wider" style={{ color: "var(--color-text-muted)" }}>Show empathy</span>
+                <span className="text-[7px] font-bold uppercase tracking-wider" style={{ color: "var(--color-text-muted)" }}>{t("mockup.showEmpathy")}</span>
               </div>
-              <p className="text-[10px] leading-snug m-0" style={{ color: "var(--color-text)" }}>&quot;I completely understand the concern — let&apos;s find a pace that works for everyone.&quot;</p>
+              <p className="text-[10px] leading-snug m-0" style={{ color: "var(--color-text)" }}>{t("mockup.showEmpathyText")}</p>
             </div>
             <div className="rounded-xl p-2" style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.06)" }}>
               <div className="flex items-center gap-1 mb-0.5">
                 <span className="text-[8px]">🎯</span>
-                <span className="text-[7px] font-bold uppercase tracking-wider" style={{ color: "var(--color-text-muted)" }}>Propose action</span>
+                <span className="text-[7px] font-bold uppercase tracking-wider" style={{ color: "var(--color-text-muted)" }}>{t("mockup.proposeAction")}</span>
               </div>
-              <p className="text-[10px] leading-snug m-0" style={{ color: "var(--color-text-silver)" }}>&quot;How about two phases? Ship MVP by March, iterate after.&quot;</p>
+              <p className="text-[10px] leading-snug m-0" style={{ color: "var(--color-text-silver)" }}>{t("mockup.proposeActionText")}</p>
             </div>
             <div className="rounded-xl p-2" style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.06)" }}>
               <div className="flex items-center gap-1 mb-0.5">
                 <span className="text-[8px]">🔍</span>
-                <span className="text-[7px] font-bold uppercase tracking-wider" style={{ color: "var(--color-text-muted)" }}>Probe deeper</span>
+                <span className="text-[7px] font-bold uppercase tracking-wider" style={{ color: "var(--color-text-muted)" }}>{t("mockup.probeDeeper")}</span>
               </div>
-              <p className="text-[10px] leading-snug m-0" style={{ color: "var(--color-text-silver)" }}>&quot;Which milestones feel most at risk?&quot;</p>
+              <p className="text-[10px] leading-snug m-0" style={{ color: "var(--color-text-silver)" }}>{t("mockup.probeDeeperText")}</p>
             </div>
           </div>
 
@@ -230,11 +231,11 @@ function CopilotMockup() {
           <div className="flex items-center gap-1.5">
             <div className="flex items-center gap-1 px-1.5 py-0.5 rounded-md text-[7px] font-medium" style={{ background: "rgba(251,191,36,0.1)", color: "#fbbf24" }}>
               <span className="w-1 h-1 rounded-full" style={{ background: "#fbbf24" }} />
-              Hesitation
+              {t("mockup.hesitation")}
             </div>
             <div className="flex items-center gap-1 px-1.5 py-0.5 rounded-md text-[7px] font-medium" style={{ background: "rgba(52,211,153,0.1)", color: "#34d399" }}>
               <span className="w-1 h-1 rounded-full" style={{ background: "#34d399" }} />
-              Opportunity
+              {t("mockup.opportunity")}
             </div>
           </div>
         </div>

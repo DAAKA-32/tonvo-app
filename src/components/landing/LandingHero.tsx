@@ -20,6 +20,7 @@ function IconArrowRight({ className }: { className?: string }) {
 /*  Hero app preview — realistic full dashboard mockup                */
 /* ------------------------------------------------------------------ */
 function HeroAppPreview() {
+  const { t } = useTranslation();
   return (
     <div className="hero-mockup-wrapper">
       <div
@@ -63,15 +64,15 @@ function HeroAppPreview() {
               <TonvoLogo size="xs" showText={true} />
             </div>
 
-            <div className="text-[9px] font-semibold uppercase tracking-wider px-2.5 mb-2" style={{ color: "var(--color-text-muted)", letterSpacing: "0.08em" }}>Menu</div>
+            <div className="text-[9px] font-semibold uppercase tracking-wider px-2.5 mb-2" style={{ color: "var(--color-text-muted)", letterSpacing: "0.08em" }}>{t("mockup.menu")}</div>
 
             {[
-              { label: "Dashboard", active: false, icon: <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="7" height="7" rx="1" /><rect x="14" y="3" width="7" height="7" rx="1" /><rect x="3" y="14" width="7" height="7" rx="1" /><rect x="14" y="14" width="7" height="7" rx="1" /></svg> },
-              { label: "Live Session", active: true, icon: <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z" /><path d="M19 10v2a7 7 0 0 1-14 0v-2" /><line x1="12" x2="12" y1="19" y2="22" /></svg> },
-              { label: "History", active: false, icon: <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" /><path d="M3 3v5h5" /><path d="M12 7v5l4 2" /></svg> },
-              { label: "Text Analysis", active: false, icon: <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z" /><polyline points="14 2 14 8 20 8" /><line x1="16" x2="8" y1="13" y2="13" /><line x1="16" x2="8" y1="17" y2="17" /></svg> },
-              { label: "Analytics", active: false, icon: <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M3 3v18h18" /><path d="M18.7 8l-5.1 5.2-2.8-2.7L7 14.3" /></svg> },
-              { label: "Pricing", active: false, icon: <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><line x1="12" x2="12" y1="2" y2="22" /><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" /></svg> },
+              { label: t("mockup.sidebar.dashboard"), active: false, icon: <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="7" height="7" rx="1" /><rect x="14" y="3" width="7" height="7" rx="1" /><rect x="3" y="14" width="7" height="7" rx="1" /><rect x="14" y="14" width="7" height="7" rx="1" /></svg> },
+              { label: t("mockup.sidebar.liveSession"), active: true, icon: <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z" /><path d="M19 10v2a7 7 0 0 1-14 0v-2" /><line x1="12" x2="12" y1="19" y2="22" /></svg> },
+              { label: t("mockup.sidebar.history"), active: false, icon: <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" /><path d="M3 3v5h5" /><path d="M12 7v5l4 2" /></svg> },
+              { label: t("mockup.sidebar.textAnalysis"), active: false, icon: <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z" /><polyline points="14 2 14 8 20 8" /><line x1="16" x2="8" y1="13" y2="13" /><line x1="16" x2="8" y1="17" y2="17" /></svg> },
+              { label: t("mockup.sidebar.analytics"), active: false, icon: <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M3 3v18h18" /><path d="M18.7 8l-5.1 5.2-2.8-2.7L7 14.3" /></svg> },
+              { label: t("mockup.sidebar.pricing"), active: false, icon: <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><line x1="12" x2="12" y1="2" y2="22" /><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" /></svg> },
             ].map((item) => (
               <div
                 key={item.label}
@@ -108,7 +109,7 @@ function HeroAppPreview() {
             >
               <div className="flex items-center gap-2.5">
                 <div className="w-2 h-2 rounded-full pulse-positive" style={{ backgroundColor: "var(--color-positive)" }} />
-                <span className="text-xs font-medium" style={{ color: "var(--color-positive)" }}>Live</span>
+                <span className="text-xs font-medium" style={{ color: "var(--color-positive)" }}>{t("mockup.live")}</span>
                 <span className="text-[10px]" style={{ color: "var(--color-text-muted)" }}>02:34</span>
               </div>
               <div className="flex items-center gap-3">
@@ -118,7 +119,7 @@ function HeroAppPreview() {
                   ))}
                 </div>
                 <div className="text-[10px] px-2 py-0.5 rounded-full" style={{ background: "rgba(52, 211, 153, 0.1)", color: "var(--color-positive)", border: "1px solid rgba(52, 211, 153, 0.2)" }}>
-                  Positive
+                  {t("mockup.positive")}
                 </div>
               </div>
             </div>
@@ -128,10 +129,10 @@ function HeroAppPreview() {
               {/* Transcript */}
               <div className="flex-1 px-4 py-3 space-y-2.5 overflow-hidden">
                 {[
-                  { text: "I think the quarterly results look promising, let's discuss next steps.", tone: "positive", speaker: "You", time: "00:32" },
-                  { text: "I'm not sure about the timeline though, it feels aggressive.", tone: "hesitant", speaker: "Alex", time: "01:15" },
-                  { text: "That's fair. Let me adjust the roadmap and share an update by Friday.", tone: "positive", speaker: "You", time: "01:48" },
-                  { text: "That works. Can we also revisit the budget allocation?", tone: "neutral", speaker: "Alex", time: "02:12" },
+                  { text: t("mockup.transcript1"), tone: "positive", speaker: t("mockup.you"), time: "00:32" },
+                  { text: t("mockup.transcript2"), tone: "hesitant", speaker: t("mockup.speaker2"), time: "01:15" },
+                  { text: t("mockup.transcript3"), tone: "positive", speaker: t("mockup.you"), time: "01:48" },
+                  { text: t("mockup.transcript4"), tone: "neutral", speaker: t("mockup.speaker2"), time: "02:12" },
                 ].map((seg, i) => (
                   <div key={i} className="flex items-start gap-2">
                     <div
@@ -157,29 +158,29 @@ function HeroAppPreview() {
                 {/* Copilot header */}
                 <div className="flex items-center gap-1.5 mb-0.5">
                   <div className="w-1.5 h-1.5 rounded-full pulse-positive" style={{ backgroundColor: "var(--color-positive)" }} />
-                  <span className="text-[9px] font-bold uppercase tracking-wider" style={{ color: "var(--color-text)" }}>AI Copilot</span>
+                  <span className="text-[9px] font-bold uppercase tracking-wider" style={{ color: "var(--color-text)" }}>{t("mockup.aiCopilot")}</span>
                 </div>
 
                 {/* Say This — smart response cards */}
                 <div className="rounded-lg p-2.5" style={{ background: "rgba(52, 211, 153, 0.04)", border: "1px solid rgba(52, 211, 153, 0.12)" }}>
                   <div className="flex items-center gap-1 mb-2">
                     <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#34d399" strokeWidth="2.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" /></svg>
-                    <span className="text-[8px] font-bold uppercase tracking-wider" style={{ color: "var(--color-positive)" }}>Say This</span>
+                    <span className="text-[8px] font-bold uppercase tracking-wider" style={{ color: "var(--color-positive)" }}>{t("mockup.sayThis")}</span>
                   </div>
                   <div className="space-y-1.5">
                     <div className="rounded-md p-1.5" style={{ background: "rgba(52, 211, 153, 0.06)", border: "1px solid rgba(52, 211, 153, 0.1)" }}>
                       <div className="flex items-center gap-1 mb-0.5">
                         <span className="text-[8px]">🎯</span>
-                        <span className="text-[7px] font-bold uppercase" style={{ color: "var(--color-text-muted)" }}>Close the deal</span>
+                        <span className="text-[7px] font-bold uppercase" style={{ color: "var(--color-text-muted)" }}>{t("mockup.closeDeal")}</span>
                       </div>
-                      <p className="text-[9px] leading-snug m-0" style={{ color: "var(--color-text)" }}>&quot;Let&apos;s lock the budget review for Monday — I&apos;ll bring updated numbers.&quot;</p>
+                      <p className="text-[9px] leading-snug m-0" style={{ color: "var(--color-text)" }}>{t("mockup.closeDealText")}</p>
                     </div>
                     <div className="rounded-md p-1.5" style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.05)" }}>
                       <div className="flex items-center gap-1 mb-0.5">
                         <span className="text-[8px]">🔍</span>
-                        <span className="text-[7px] font-bold uppercase" style={{ color: "var(--color-text-muted)" }}>Ask deeper</span>
+                        <span className="text-[7px] font-bold uppercase" style={{ color: "var(--color-text-muted)" }}>{t("mockup.askDeeper")}</span>
                       </div>
-                      <p className="text-[9px] leading-snug m-0" style={{ color: "var(--color-text-silver)" }}>&quot;What areas of the budget feel most constrained right now?&quot;</p>
+                      <p className="text-[9px] leading-snug m-0" style={{ color: "var(--color-text-silver)" }}>{t("mockup.askDeeperText")}</p>
                     </div>
                   </div>
                 </div>
@@ -187,7 +188,7 @@ function HeroAppPreview() {
                 {/* Tone chart */}
                 <div className="rounded-lg p-2.5" style={{ background: "rgba(200, 200, 216, 0.04)", border: "1px solid rgba(200, 200, 216, 0.08)" }}>
                   <div className="text-[9px] font-semibold uppercase tracking-wider mb-2" style={{ color: "var(--color-accent-light)" }}>
-                    Tone Flow
+                    {t("mockup.toneFlow")}
                   </div>
                   <div className="flex items-end gap-0.5" style={{ height: 28 }}>
                     {[65, 72, 58, 80, 75, 85, 70, 90, 82, 88].map((h, i) => (
@@ -207,7 +208,7 @@ function HeroAppPreview() {
                 {/* Score */}
                 <div className="rounded-lg p-2 text-center" style={{ background: "rgba(52, 211, 153, 0.04)", border: "1px solid rgba(52, 211, 153, 0.1)" }}>
                   <div className="text-[8px] font-semibold uppercase tracking-wider mb-0.5" style={{ color: "var(--color-text-muted)" }}>
-                    Quality
+                    {t("mockup.quality")}
                   </div>
                   <div className="text-lg font-bold" style={{ color: "var(--color-positive)" }}>87</div>
                 </div>

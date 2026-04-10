@@ -444,6 +444,36 @@
     "negative": "消极",
     "hesitant": "犹豫"
   },
+  "landing": {
+    "nav": { "features": "功能", "product": "产品", "useCases": "应用场景", "pricing": "定价", "signIn": "登录", "getStarted": "立即开始", "dashboard": "控制台" },
+    "hero": { "badge": "对话智能，全新定义", "headline1": "洞察全场。", "headline2": "先人一步。", "subtitle": "Tonvo 实时分析您的每一次对话 —— 捕捉情绪变化、提供智能建议，助您从容驾驭每一场沟通。", "cta": "立即开始", "ctaSecondary": "了解工作原理" },
+    "problem": { "label": "痛点", "heading1": "沟通从来不简单。", "heading2": "误读对方更是常态。", "p1": "你一定经历过这样的场景：通话一切顺利——直到突然不再顺利。潜在客户变得冷淡，同事开始焦躁，候选人不再回应。等你察觉时，已经来不及挽回了。", "p2": "大多数人会错过那些决定对话成败的微妙语气和情绪变化。不是因为不在意，而是因为他们正在想下一句该说什么。" },
+    "solution": { "label": "解决方案", "heading1": "为每一次对话", "heading2": "配备第二双慧眼。", "desc": "Tonvo 在您的通话和会议中全程陪伴。它采集音频、实时分析情绪动态，并提供安静而精准的情境建议——让您时刻掌握对话走向，清楚下一步该怎么做。", "step1Title": "开始会话", "step1Desc": "一键启动。Tonvo 自动采集屏幕或麦克风的音频。", "step2Title": "获取实时反馈", "step2Desc": "语气指标和建议随对话推进实时更新。", "step3Title": "查看深度洞察", "step3Desc": "通话结束后，获取包含关键时刻和行动建议的完整分析报告。" },
+    "features": { "label": "核心功能", "heading1": "深度理解对话", "heading2": "所需的一切，尽在掌握。", "liveTone": "实时语气检测", "liveToneDesc": "采集通话或麦克风音频，实时判断对话走势——积极、中性还是紧张，一目了然。", "smartSuggestions": "智能建议", "smartSuggestionsDesc": "基于对话内容和表达方式，Tonvo 为您推荐最佳回应策略，让沟通始终在正轨上。", "conversationInsights": "对话洞察", "conversationInsightsDesc": "每次会话后自动生成语气变化、关键时刻和可执行建议的详细报告。", "textAnalysis": "文本分析", "textAnalysisDesc": "粘贴任意消息或对话片段，即刻解读深层语气并获取优化建议。" },
+    "demo": { "label": "AI 副驾驶", "heading": "您的隐形会议教练", "desc": "当您专注于对话时，AI 副驾驶悄然浮现在会议窗口旁——实时为您推荐最佳回应策略。" },
+    "benefits": { "label": "核心优势", "heading": "专为与人沟通的你而生。", "realtime": "实时响应", "realtimeDesc": "在线对话中即时获取反馈", "threeClicks": "3 次点击", "threeClicksDesc": "即可开始分析任意对话", "actionable": "即学即用", "actionableDesc": "建议即刻可付诸实践", "private": "隐私至上", "privateDesc": "音频本地处理，绝不存储" },
+    "useCases": { "label": "应用场景", "heading": "对话在哪里发生，Tonvo 就在哪里发挥价值。", "salesTitle": "销售通话", "salesDesc": "精准感知客户是在积极互动、犹豫不决还是正在流失。在成交窗口关闭前调整策略，而非事后复盘。", "supportTitle": "客户支持", "supportDesc": "提前识别客户的不满情绪，获取降温话术建议。将棘手的沟通转化为正面体验。", "interviewsTitle": "求职面试", "interviewsDesc": "无论您是面试官还是候选人，洞察情绪动态，让每一次表达都更有力量。", "meetingsTitle": "团队会议", "meetingsDesc": "追踪长会议中的参与度变化。发现注意力下降的时刻，获取重新激活听众的提示。" },
+    "testimonials": { "label": "专业人士信赖之选", "heading": "深受一线沟通团队的喜爱。", "desc": "从销售通话到一对一会谈，数千名专业人士依靠 Tonvo 捕捉关键信息、提升沟通质量。", "rating": "4.9", "ratingDesc": "来自 200+ 用户的评价" },
+    "cta": { "heading1": "别再靠猜。", "heading2": "开始真正理解。", "desc": "下一场重要对话即将到来。确保您不会错过任何关键信号。免费开始，无需绑定信用卡。", "button": "立即开始", "note": "提供免费版。随时可升级。" },
+    "faq": { "title": "常见问题", "subtitle": "关于 AI 对话副驾驶 Tonvo，您需要了解的一切。", "q1": "什么是 AI 对话副驾驶？", "a1": "AI 对话副驾驶可以实时分析对话，提供沟通指导、语气检测和智能建议。", "q2": "Tonvo 在实时通话中能用吗？", "a2": "可以。支持实时转录、沟通指导和语气分析。", "q3": "实时分析是如何实现的？", "a3": "多阶段 AI 流水线：语音转录、语气检测、信号识别、沟通指导和质量评估。", "q4": "Tonvo 免费吗？", "a4": "免费版每月可使用 3 次会话。升级 Pro 可解锁无限会话和高级功能。", "q5": "屏幕共享时对方能看到副驾驶吗？", "a5": "副驾驶在独立窗口中运行。共享特定应用窗口时，对方完全看不到。", "q6": "Tonvo 支持哪些语言？", "a6": "支持 10 种语言：英语、法语、西班牙语、德语、葡萄牙语、意大利语、荷兰语、中文、日语和韩语。" }
+  },
+  "mockup": {
+    "menu": "菜单",
+    "sidebar": { "dashboard": "控制台", "liveSession": "实时会话", "history": "历史记录", "textAnalysis": "文本分析", "analytics": "数据分析", "pricing": "定价" },
+    "live": "实时", "positive": "积极", "you": "我",
+    "transcript1": "本季度的业绩看起来很有希望，我们来讨论下一步计划吧。",
+    "transcript2": "不过时间线让我有些担心，感觉节奏太紧了。",
+    "transcript3": "理解。我来调整一下路线图，周五之前分享更新版本。",
+    "transcript4": "好的。我们能不能顺便重新审视一下预算分配？",
+    "speaker2": "Alex", "aiCopilot": "AI 副驾驶", "sayThis": "这样说", "coaching": "指导",
+    "closeDeal": "促成交易", "closeDealText": "\"我们把预算评审定在周一吧——我会带上最新的数据。\"",
+    "askDeeper": "深入追问", "askDeeperText": "\"目前预算中哪些方面压力最大？\"",
+    "toneFlow": "语气走势", "quality": "质量", "engage": "参与度", "balance": "平衡",
+    "showEmpathy": "表达共情", "showEmpathyText": "\"完全理解您的顾虑——我们一起找到适合所有人的节奏。\"",
+    "proposeAction": "提议行动", "proposeActionText": "\"分两期怎么样？三月前交付 MVP，之后迭代优化。\"",
+    "probeDeeper": "深度探究", "probeDeeperText": "\"哪些里程碑的风险最大？\"",
+    "hesitation": "犹豫", "opportunity": "机会", "speaking": "发言中", "listening": "聆听中", "muted": "已静音"
+  },
   "pricing": {
     "title": "简单透明的定价。",
     "subtitle": "免费开始。需要更多功能时再升级。",

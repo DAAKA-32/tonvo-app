@@ -444,6 +444,157 @@
     "negative": "Negativ",
     "hesitant": "Zögernd"
   },
+  "landing": {
+    "nav": {
+      "features": "Funktionen",
+      "product": "Produkt",
+      "useCases": "Anwendungsfälle",
+      "pricing": "Preise",
+      "signIn": "Anmelden",
+      "getStarted": "Jetzt starten",
+      "dashboard": "Dashboard"
+    },
+    "hero": {
+      "badge": "Gesprächsintelligenz, neu gedacht",
+      "headline1": "Lies den Raum.",
+      "headline2": "Bevor er dich liest.",
+      "subtitle": "Tonvo analysiert deine Gespräche in Echtzeit — erkennt Stimmungen, liefert smarte Vorschläge und hilft dir, jede Interaktion souverän zu meistern.",
+      "cta": "Jetzt starten",
+      "ctaSecondary": "So funktioniert's"
+    },
+    "problem": {
+      "label": "Das Problem",
+      "heading1": "Gespräche sind schwierig.",
+      "heading2": "Sie falsch zu lesen ist leicht.",
+      "p1": "Du hattest bestimmt schon diesen Call, bei dem alles gut lief — bis es das plötzlich nicht mehr tat. Ein Interessent wurde kalt. Ein Kollege frustriert. Ein Kandidat machte dicht. Als du es gemerkt hast, war es bereits zu spät.",
+      "p2": "Die meisten Menschen übersehen die feinen Veränderungen in Ton und Emotion, die über Erfolg oder Misserfolg eines Gesprächs entscheiden. Nicht weil es ihnen egal ist, sondern weil sie darauf konzentriert sind, was sie als Nächstes sagen."
+    },
+    "solution": {
+      "label": "Die Lösung",
+      "heading1": "Ein zweites Paar Augen.",
+      "heading2": "Für jedes Gespräch.",
+      "desc": "Tonvo läuft parallel zu deinen Calls und Meetings. Es erfasst das Audio, analysiert die emotionale Dynamik in Echtzeit und gibt dir dezente, kontextbezogene Hinweise — damit du immer weißt, wo das Gespräch steht und was als Nächstes zu tun ist.",
+      "step1Title": "Sitzung starten",
+      "step1Desc": "Ein Klick. Tonvo erfasst Audio von deinem Bildschirm oder Mikrofon.",
+      "step2Title": "Live-Feedback erhalten",
+      "step2Desc": "Tonindikatoren und Vorschläge aktualisieren sich, während das Gespräch läuft.",
+      "step3Title": "Erkenntnisse prüfen",
+      "step3Desc": "Nach dem Call erhältst du eine vollständige Auswertung mit Schlüsselmomenten und Handlungsempfehlungen."
+    },
+    "features": {
+      "label": "Funktionen",
+      "heading1": "Alles, was du brauchst, um",
+      "heading2": "Gespräche zu verstehen.",
+      "liveTone": "Live-Tonerkennung",
+      "liveToneDesc": "Erfasst Audio aus deinen Calls oder vom Mikrofon und erkennt, ob das Gespräch positiv, neutral oder angespannt verläuft — in Echtzeit.",
+      "smartSuggestions": "Smarte Vorschläge",
+      "smartSuggestionsDesc": "Basierend auf dem, was gesagt wird und wie es gesagt wird, schlägt Tonvo vor, was du als Nächstes sagen solltest, um das Gespräch auf Kurs zu halten.",
+      "conversationInsights": "Gesprächs-Insights",
+      "conversationInsightsDesc": "Nach jeder Sitzung erhältst du eine Aufschlüsselung der Tonveränderungen, Schlüsselmomente und eine Zusammenfassung mit umsetzbaren Erkenntnissen.",
+      "textAnalysis": "Textanalyse",
+      "textAnalysisDesc": "Füge eine beliebige Nachricht oder einen Gesprächsausschnitt ein, um sofort den zugrunde liegenden Ton zu verstehen und Verbesserungsvorschläge zu erhalten."
+    },
+    "demo": {
+      "label": "KI-Copilot",
+      "heading": "Dein unsichtbarer Meeting-Coach",
+      "desc": "Während du dich auf das Gespräch konzentrierst, schwebt der KI-Copilot neben deinem Meeting-Fenster — und schlägt dir in Echtzeit genau vor, was du als Nächstes sagen solltest."
+    },
+    "benefits": {
+      "label": "Vorteile",
+      "heading": "Gemacht für Menschen, die mit Menschen sprechen.",
+      "realtime": "Echtzeit",
+      "realtimeDesc": "Feedback während laufender Gespräche",
+      "threeClicks": "3 Klicks",
+      "threeClicksDesc": "Um jedes Gespräch zu analysieren",
+      "actionable": "Umsetzbar",
+      "actionableDesc": "Vorschläge, die du sofort anwenden kannst",
+      "private": "Privat",
+      "privateDesc": "Audio wird lokal verarbeitet, nie gespeichert"
+    },
+    "useCases": {
+      "label": "Anwendungsfälle",
+      "heading": "Funktioniert überall, wo Gespräche zählen.",
+      "salesTitle": "Vertriebsgespräche",
+      "salesDesc": "Erkenne, wann ein Interessent engagiert ist, zögert oder das Interesse verliert. Passe deinen Pitch im Moment an, nicht erst nach dem verlorenen Deal.",
+      "supportTitle": "Kundensupport",
+      "supportDesc": "Erkenne Frustration frühzeitig und erhalte Vorschläge zur Deeskalation. Verwandle schwierige Interaktionen in positive Erlebnisse.",
+      "interviewsTitle": "Vorstellungsgespräche",
+      "interviewsDesc": "Ob als Interviewer oder Kandidat — verstehe die emotionale Dynamik und kommuniziere wirkungsvoller.",
+      "meetingsTitle": "Team-Meetings",
+      "meetingsDesc": "Verfolge das Engagement in langen Meetings. Erkenne, wann die Energie nachlässt, und erhalte Hinweise, um dein Publikum wieder zu aktivieren."
+    },
+    "testimonials": {
+      "label": "Vertraut von Profis",
+      "heading": "Beliebt bei Teams, die wirklich mit Menschen sprechen.",
+      "desc": "Von Vertriebscalls bis zu Einzelgesprächen — Tausende Profis vertrauen auf Tonvo, um das Wesentliche zu erfassen und besser zu kommunizieren.",
+      "rating": "4.9",
+      "ratingDesc": "von über 200 Nutzern"
+    },
+    "cta": {
+      "heading1": "Schluss mit Raten.",
+      "heading2": "Anfangen zu verstehen.",
+      "desc": "Dein nächstes wichtiges Gespräch kommt bestimmt. Stell sicher, dass dir nichts Entscheidendes entgeht. Kostenlos starten, keine Kreditkarte nötig.",
+      "button": "Jetzt starten",
+      "note": "Kostenloser Plan verfügbar. Jederzeit upgraden."
+    },
+    "faq": {
+      "title": "Häufig gestellte Fragen",
+      "subtitle": "Alles, was du über Tonvo wissen musst — den KI-Copiloten für Gespräche.",
+      "q1": "Was ist ein KI-Gesprächscopilot?",
+      "a1": "Ein KI-Gesprächscopilot ist ein Tool, das deine Gespräche in Echtzeit analysiert und dir Live-Coaching, Tonerkennung, smarte Vorschläge und umsetzbare Erkenntnisse liefert. Tonvo funktioniert während Calls auf Discord, Zoom, Google Meet und anderen Plattformen, um dir zu helfen, effektiver zu kommunizieren.",
+      "q2": "Funktioniert Tonvo während Live-Calls?",
+      "a2": "Ja, Tonvo funktioniert in Echtzeit während Live-Calls. Es erfasst Audio von deinem Mikrofon und System-Audio (Discord, Zoom, Meet), transkribiert das Gespräch und liefert sofortige Coaching-Tipps, Tonanalyse und smarte Vorschläge, während du sprichst.",
+      "q3": "Wie funktioniert die Echtzeit-Analyse?",
+      "a3": "Tonvo nutzt eine mehrstufige KI-Pipeline: Echtzeit-Audiotranskription mit Sprechertrennung, Ton- und Emotionserkennung, Erkennung von Gesprächssignalen (Einwände, Chancen, Zögern), Live-Coaching-Vorschläge und Qualitätsbewertung.",
+      "q4": "Ist Tonvo kostenlos?",
+      "a4": "Ja, Tonvo bietet einen kostenlosen Plan mit 3 Sitzungen pro Monat, inklusive Echtzeit-Tonanalyse und grundlegenden Vorschlägen. Der Pro-Plan schaltet unbegrenzte Sitzungen, erweitertes KI-Coaching, Bildschirmanalyse und den vollständigen Sitzungsverlauf frei.",
+      "q5": "Können andere Teilnehmer den Copiloten beim Bildschirmteilen sehen?",
+      "a5": "Tonvo öffnet den Copiloten in einem separaten Browserfenster. Wenn du ein bestimmtes Anwendungsfenster statt deines gesamten Bildschirms teilst, bleibt das Copilot-Fenster für andere Teilnehmer unsichtbar.",
+      "q6": "Welche Sprachen unterstützt Tonvo?",
+      "a6": "Tonvo unterstützt 10 Sprachen: Englisch, Französisch, Spanisch, Deutsch, Portugiesisch, Italienisch, Niederländisch, Chinesisch, Japanisch und Koreanisch. Die Benutzeroberfläche und die Gesprächsanalyse funktionieren in allen unterstützten Sprachen."
+    }
+  },
+  "mockup": {
+    "menu": "Menü",
+    "sidebar": {
+      "dashboard": "Dashboard",
+      "liveSession": "Live-Sitzung",
+      "history": "Verlauf",
+      "textAnalysis": "Textanalyse",
+      "analytics": "Analysen",
+      "pricing": "Preise"
+    },
+    "live": "Live",
+    "positive": "Positiv",
+    "you": "Du",
+    "transcript1": "Ich finde, die Quartalsergebnisse sehen vielversprechend aus — lass uns die nächsten Schritte besprechen.",
+    "transcript2": "Beim Zeitplan bin ich mir nicht sicher, der wirkt ziemlich ambitioniert.",
+    "transcript3": "Verstehe ich. Lass mich die Roadmap anpassen und dir bis Freitag ein Update schicken.",
+    "transcript4": "Klingt gut. Können wir auch die Budgetverteilung nochmal durchgehen?",
+    "speaker2": "Alex",
+    "aiCopilot": "KI-Copilot",
+    "sayThis": "Sag das",
+    "coaching": "Coaching",
+    "closeDeal": "Deal abschließen",
+    "closeDealText": "\"Lass uns die Budget-Review für Montag festlegen — ich bringe die aktualisierten Zahlen mit.\"",
+    "askDeeper": "Tiefer nachfragen",
+    "askDeeperText": "\"Welche Bereiche des Budgets fühlen sich gerade am engsten an?\"",
+    "toneFlow": "Tonverlauf",
+    "quality": "Qualität",
+    "engage": "Aktivieren",
+    "balance": "Balance",
+    "showEmpathy": "Empathie zeigen",
+    "showEmpathyText": "\"Ich verstehe die Bedenken vollkommen — lass uns ein Tempo finden, das für alle passt.\"",
+    "proposeAction": "Aktion vorschlagen",
+    "proposeActionText": "\"Wie wäre es mit zwei Phasen? MVP bis März liefern, danach iterieren.\"",
+    "probeDeeper": "Genauer nachforschen",
+    "probeDeeperText": "\"Welche Meilensteine sind am stärksten gefährdet?\"",
+    "hesitation": "Zögern",
+    "opportunity": "Chance",
+    "speaking": "Spricht",
+    "listening": "Hört zu",
+    "muted": "Stumm"
+  },
   "pricing": {
     "title": "Einfache, transparente Preise.",
     "subtitle": "Starte kostenlos. Upgrade, wenn du mehr brauchst.",
