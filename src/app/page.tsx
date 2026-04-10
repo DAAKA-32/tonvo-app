@@ -645,61 +645,61 @@ export default function HomePage() {
                   <TonvoLogo size="sm" />
                 </div>
                 <p className="text-xs leading-relaxed m-0" style={{ color: "var(--color-text-muted)" }}>
-                  Real-time conversation intelligence.
+                  {t("footer.tagline1")}
                   <br />
-                  Understand tone, emotions, and intent.
+                  {t("footer.tagline2")}
                 </p>
               </div>
 
               {/* Product */}
               <div>
                 <h4 className="footer-heading">
-                  Product
+                  {t("footer.product")}
                 </h4>
                 <ul className="list-none p-0 m-0 space-y-2.5">
-                  <li><a href="#features" className="text-sm no-underline hover:opacity-80 transition-colors" style={{ color: "var(--color-text-muted)" }}>Features</a></li>
-                  <li><a href="#demo" className="text-sm no-underline hover:opacity-80 transition-colors" style={{ color: "var(--color-text-muted)" }}>Demo</a></li>
-                  <li><a href="#use-cases" className="text-sm no-underline hover:opacity-80 transition-colors" style={{ color: "var(--color-text-muted)" }}>Use Cases</a></li>
-                  <li><a href="#faq" className="text-sm no-underline hover:opacity-80 transition-colors" style={{ color: "var(--color-text-muted)" }}>FAQ</a></li>
+                  <li><a href="#features" className="footer-link">{t("footer.features")}</a></li>
+                  <li><a href="#demo" className="footer-link">{t("footer.demo")}</a></li>
+                  <li><a href="#use-cases" className="footer-link">{t("footer.useCases")}</a></li>
+                  <li><a href="#faq" className="footer-link">{t("footer.faq")}</a></li>
                 </ul>
               </div>
 
               {/* Company */}
               <div>
                 <h4 className="footer-heading">
-                  Company
+                  {t("footer.company")}
                 </h4>
                 <ul className="list-none p-0 m-0 space-y-2.5">
-                  <li><Link href="/about" className="text-sm no-underline hover:opacity-80 transition-colors" style={{ color: "var(--color-text-muted)" }}>About</Link></li>
-                  <li><Link href="/blog" className="text-sm no-underline hover:opacity-80 transition-colors" style={{ color: "var(--color-text-muted)" }}>Blog</Link></li>
-                  <li><a href="mailto:tonvoco.pro@gmail.com" className="text-sm no-underline hover:opacity-80 transition-colors" style={{ color: "var(--color-text-muted)" }}>Contact</a></li>
+                  <li><Link href="/about" className="footer-link">{t("footer.about")}</Link></li>
+                  <li><Link href="/blog" className="footer-link">{t("footer.blog")}</Link></li>
+                  <li><a href="mailto:tonvoco.pro@gmail.com" className="footer-link">{t("footer.contact")}</a></li>
                 </ul>
               </div>
 
               {/* Resources */}
               <div>
                 <h4 className="footer-heading">
-                  Resources
+                  {t("footer.resources")}
                 </h4>
                 <ul className="list-none p-0 m-0 space-y-2.5">
-                  <li><Link href="/use-cases" className="text-sm no-underline hover:opacity-80 transition-colors" style={{ color: "var(--color-text-muted)" }}>Use Cases</Link></li>
-                  <li><Link href="/features" className="text-sm no-underline hover:opacity-80 transition-colors" style={{ color: "var(--color-text-muted)" }}>Features</Link></li>
-                  <li><Link href="/industries" className="text-sm no-underline hover:opacity-80 transition-colors" style={{ color: "var(--color-text-muted)" }}>Industries</Link></li>
-                  <li><Link href="/compare" className="text-sm no-underline hover:opacity-80 transition-colors" style={{ color: "var(--color-text-muted)" }}>Comparisons</Link></li>
-                  <li><Link href="/guides" className="text-sm no-underline hover:opacity-80 transition-colors" style={{ color: "var(--color-text-muted)" }}>Guides</Link></li>
+                  <li><Link href="/use-cases" className="footer-link">{t("footer.useCases")}</Link></li>
+                  <li><Link href="/features" className="footer-link">{t("footer.features")}</Link></li>
+                  <li><Link href="/industries" className="footer-link">{t("footer.industries")}</Link></li>
+                  <li><Link href="/compare" className="footer-link">{t("footer.comparisons")}</Link></li>
+                  <li><Link href="/guides" className="footer-link">{t("footer.guides")}</Link></li>
                 </ul>
               </div>
 
               {/* Legal */}
               <div>
                 <h4 className="footer-heading">
-                  Legal
+                  {t("footer.legal")}
                 </h4>
                 <ul className="list-none p-0 m-0 space-y-2.5">
-                  <li><Link href="/privacy" className="text-sm no-underline hover:opacity-80 transition-colors" style={{ color: "var(--color-text-muted)" }}>Privacy Policy</Link></li>
-                  <li><Link href="/terms" className="text-sm no-underline hover:opacity-80 transition-colors" style={{ color: "var(--color-text-muted)" }}>Terms of Service</Link></li>
-                  <li><Link href="/cookies" className="text-sm no-underline hover:opacity-80 transition-colors" style={{ color: "var(--color-text-muted)" }}>Cookie Policy</Link></li>
-                  <li><Link href="/legal" className="text-sm no-underline hover:opacity-80 transition-colors" style={{ color: "var(--color-text-muted)" }}>Legal Notice</Link></li>
+                  <li><Link href="/privacy" className="footer-link">{t("footer.privacyPolicy")}</Link></li>
+                  <li><Link href="/terms" className="footer-link">{t("footer.termsOfService")}</Link></li>
+                  <li><Link href="/cookies" className="footer-link">{t("footer.cookiePolicy")}</Link></li>
+                  <li><Link href="/legal" className="footer-link">{t("footer.legalNotice")}</Link></li>
                 </ul>
               </div>
             </div>
@@ -708,7 +708,7 @@ export default function HomePage() {
 
             <div className="flex flex-col md:flex-row items-center justify-between gap-4">
               <p className="text-xs m-0" style={{ color: "var(--color-text-muted)" }}>
-                2026 Tonvo. All rights reserved.
+                {t("footer.copyright")}
               </p>
             </div>
           </div>

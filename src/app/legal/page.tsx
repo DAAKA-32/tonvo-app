@@ -1,9 +1,12 @@
 "use client";
 
 import Link from "next/link";
+import { useTranslation } from "react-i18next";
 import { TonvoLogoMark } from "@/components/Logo";
 
 export default function LegalPage() {
+  const { t } = useTranslation();
+
   return (
     <div style={{ backgroundColor: "var(--color-bg)", minHeight: "100vh" }}>
       <header className="border-b" style={{ borderColor: "var(--color-border)" }}>
@@ -13,71 +16,71 @@ export default function LegalPage() {
             <span className="text-lg font-bold" style={{ color: "var(--color-text)" }}>Tonvo</span>
           </Link>
           <span className="text-sm" style={{ color: "var(--color-text-muted)" }}>/</span>
-          <span className="text-sm font-medium" style={{ color: "var(--color-text-muted)" }}>Legal Notice</span>
+          <span className="text-sm font-medium" style={{ color: "var(--color-text-muted)" }}>{t("legalPage.breadcrumb")}</span>
         </div>
       </header>
 
       <main className="max-w-4xl mx-auto px-4 sm:px-6 py-12 sm:py-16">
         <h1 className="text-2xl sm:text-3xl font-bold mb-2" style={{ color: "var(--color-text)" }}>
-          Legal Notice
+          {t("legalPage.title")}
         </h1>
         <p className="text-sm mb-10" style={{ color: "var(--color-text-muted)" }}>
-          Mentions l&eacute;gales / Legal Information
+          {t("legalPage.subtitle")}
         </p>
 
         <div className="space-y-8" style={{ color: "var(--color-text-silver)" }}>
           <section>
-            <h2 className="text-lg font-semibold mb-3" style={{ color: "var(--color-text)" }}>Publisher</h2>
+            <h2 className="text-lg font-semibold mb-3" style={{ color: "var(--color-text)" }}>{t("legalPage.publisherTitle")}</h2>
             <div className="rounded-xl p-5" style={{ backgroundColor: "var(--color-surface)" }}>
               <div className="space-y-2 text-sm">
-                <p className="m-0"><strong style={{ color: "var(--color-text)" }}>Company:</strong> Tonvo</p>
-                <p className="m-0"><strong style={{ color: "var(--color-text)" }}>Legal form:</strong> Entrepreneur individuel (EI)</p>
-                <p className="m-0"><strong style={{ color: "var(--color-text)" }}>Address:</strong> 42170 Chambles, France</p>
-                <p className="m-0"><strong style={{ color: "var(--color-text)" }}>Registration:</strong> SIREN 101 134 633</p>
-                <p className="m-0"><strong style={{ color: "var(--color-text)" }}>VAT Number:</strong> N/A (micro-entreprise, below VAT threshold)</p>
-                <p className="m-0"><strong style={{ color: "var(--color-text)" }}>Share capital:</strong> N/A (micro-entreprise)</p>
+                <p className="m-0"><strong style={{ color: "var(--color-text)" }}>{t("legalPage.companyLabel")}</strong> Tonvo</p>
+                <p className="m-0"><strong style={{ color: "var(--color-text)" }}>{t("legalPage.legalFormLabel")}</strong> {t("legalPage.legalFormValue")}</p>
+                <p className="m-0"><strong style={{ color: "var(--color-text)" }}>{t("legalPage.addressLabel")}</strong> 42170 Chambles, France</p>
+                <p className="m-0"><strong style={{ color: "var(--color-text)" }}>{t("legalPage.registrationLabel")}</strong> SIREN 101 134 633</p>
+                <p className="m-0"><strong style={{ color: "var(--color-text)" }}>{t("legalPage.vatLabel")}</strong> {t("legalPage.vatValue")}</p>
+                <p className="m-0"><strong style={{ color: "var(--color-text)" }}>{t("legalPage.capitalLabel")}</strong> {t("legalPage.capitalValue")}</p>
               </div>
             </div>
           </section>
 
           <section>
-            <h2 className="text-lg font-semibold mb-3" style={{ color: "var(--color-text)" }}>Publication Director</h2>
+            <h2 className="text-lg font-semibold mb-3" style={{ color: "var(--color-text)" }}>{t("legalPage.directorTitle")}</h2>
             <div className="rounded-xl p-5" style={{ backgroundColor: "var(--color-surface)" }}>
               <p className="text-sm m-0">
-                <strong style={{ color: "var(--color-text)" }}>Name:</strong> Emilien Nepveu<br />
-                <strong style={{ color: "var(--color-text)" }}>Email:</strong> tonvoco.pro@gmail.com
+                <strong style={{ color: "var(--color-text)" }}>{t("legalPage.nameLabel")}</strong> Emilien Nepveu<br />
+                <strong style={{ color: "var(--color-text)" }}>{t("legalPage.emailLabel")}</strong> tonvoco.pro@gmail.com
               </p>
             </div>
           </section>
 
           <section>
-            <h2 className="text-lg font-semibold mb-3" style={{ color: "var(--color-text)" }}>Data Protection Officer</h2>
+            <h2 className="text-lg font-semibold mb-3" style={{ color: "var(--color-text)" }}>{t("legalPage.dpoTitle")}</h2>
             <div className="rounded-xl p-5" style={{ backgroundColor: "var(--color-surface)" }}>
               <p className="text-sm m-0">
-                <strong style={{ color: "var(--color-text)" }}>DPO:</strong> Emilien Nepveu (same as Publication Director)<br />
-                <strong style={{ color: "var(--color-text)" }}>Contact:</strong> tonvoco.pro@gmail.com
+                <strong style={{ color: "var(--color-text)" }}>DPO:</strong> {t("legalPage.dpoDesc")}<br />
+                <strong style={{ color: "var(--color-text)" }}>{t("legalPage.contactLabel")}</strong> tonvoco.pro@gmail.com
               </p>
             </div>
           </section>
 
           <section>
-            <h2 className="text-lg font-semibold mb-3" style={{ color: "var(--color-text)" }}>Hosting</h2>
+            <h2 className="text-lg font-semibold mb-3" style={{ color: "var(--color-text)" }}>{t("legalPage.hostingTitle")}</h2>
             <div className="rounded-xl p-5" style={{ backgroundColor: "var(--color-surface)" }}>
               <div className="space-y-2 text-sm">
-                <p className="m-0"><strong style={{ color: "var(--color-text)" }}>Application hosting:</strong> Vercel Inc., 340 S Lemon Ave #4133, Walnut, CA 91789, USA</p>
-                <p className="m-0"><strong style={{ color: "var(--color-text)" }}>Database hosting:</strong> Supabase Inc., EU (europe-west1)</p>
-                <p className="m-0"><strong style={{ color: "var(--color-text)" }}>Authentication:</strong> Firebase (Google Ireland Ltd), Gordon House, Barrow Street, Dublin 4, Ireland</p>
+                <p className="m-0"><strong style={{ color: "var(--color-text)" }}>{t("legalPage.appHostingLabel")}</strong> Vercel Inc., 340 S Lemon Ave #4133, Walnut, CA 91789, USA</p>
+                <p className="m-0"><strong style={{ color: "var(--color-text)" }}>{t("legalPage.dbHostingLabel")}</strong> Supabase Inc., EU (europe-west1)</p>
+                <p className="m-0"><strong style={{ color: "var(--color-text)" }}>{t("legalPage.authHostingLabel")}</strong> Firebase (Google Ireland Ltd), Gordon House, Barrow Street, Dublin 4, Ireland</p>
               </div>
             </div>
           </section>
 
           <section>
-            <h2 className="text-lg font-semibold mb-3" style={{ color: "var(--color-text)" }}>Related Policies</h2>
+            <h2 className="text-lg font-semibold mb-3" style={{ color: "var(--color-text)" }}>{t("legalPage.relatedTitle")}</h2>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
               {[
-                { href: "/privacy", label: "Privacy Policy", desc: "How we handle your data" },
-                { href: "/terms", label: "Terms of Service", desc: "Rules of using Tonvo" },
-                { href: "/cookies", label: "Cookie Policy", desc: "How we use cookies" },
+                { href: "/privacy", labelKey: "privacyLabel", descKey: "privacyDesc" },
+                { href: "/terms", labelKey: "termsLabel", descKey: "termsDesc" },
+                { href: "/cookies", labelKey: "cookiesLabel", descKey: "cookiesDesc" },
               ].map((link) => (
                 <Link
                   key={link.href}
@@ -87,8 +90,8 @@ export default function LegalPage() {
                     backgroundColor: "var(--color-surface)",
                     border: "1px solid var(--color-border)",
                   }}>
-                  <p className="text-sm font-semibold m-0 mb-1" style={{ color: "var(--color-accent-light)" }}>{link.label}</p>
-                  <p className="text-xs m-0" style={{ color: "var(--color-text-muted)" }}>{link.desc}</p>
+                  <p className="text-sm font-semibold m-0 mb-1" style={{ color: "var(--color-accent-light)" }}>{t(`legalPage.${link.labelKey}`)}</p>
+                  <p className="text-xs m-0" style={{ color: "var(--color-text-muted)" }}>{t(`legalPage.${link.descKey}`)}</p>
                 </Link>
               ))}
             </div>
@@ -97,7 +100,7 @@ export default function LegalPage() {
 
         <div className="mt-12 pt-8 border-t" style={{ borderColor: "var(--color-border)" }}>
           <Link href="/" className="text-sm no-underline font-medium" style={{ color: "var(--color-accent-light)" }}>
-            &larr; Back to home
+            &larr; {t("legalPage.backToHome")}
           </Link>
         </div>
       </main>
