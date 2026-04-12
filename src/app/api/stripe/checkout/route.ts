@@ -147,7 +147,7 @@ export async function POST(req: NextRequest) {
     if (error instanceof Stripe.errors.StripeInvalidRequestError) {
       console.error("Stripe invalid request:", error.message, error.param);
       return NextResponse.json(
-        { error: "Unable to create checkout session. Please contact support if the issue persists.", code: "STRIPE_INVALID" },
+        { error: `Stripe error: ${error.message}`, code: "STRIPE_INVALID", param: error.param },
         { status: 400 },
       );
     }
