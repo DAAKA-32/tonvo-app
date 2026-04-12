@@ -62,8 +62,9 @@ export default function PricingPage() {
       });
       const data = await res.json();
       if (!res.ok) {
-        console.error("Checkout API error:", data);
-        setError(data.error || t("pricing.checkoutError"));
+        const errorKey = data.code ? `pricing.error.${data.code}` : "";
+        const translated = errorKey ? t(errorKey, { defaultValue: "" }) : "";
+        setError(translated || t("pricing.checkoutError"));
         return;
       }
       if (data.url) {

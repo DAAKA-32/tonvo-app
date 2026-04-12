@@ -470,13 +470,13 @@ export default function SettingsPage() {
               <div className="flex items-center gap-2 mb-1">
                 <div style={{ width: 6, height: 6, borderRadius: "50%", background: cancelAtPeriodEnd ? "var(--color-negative)" : "var(--color-positive)" }} />
                 <span className="text-xs font-semibold" style={{ color: cancelAtPeriodEnd ? "var(--color-negative)" : "var(--color-positive)" }}>
-                  {cancelAtPeriodEnd ? "Cancels on" : "Auto-renews on"} {new Date(periodEnd).toLocaleDateString(i18n.language, { year: "numeric", month: "long", day: "numeric" })}
+                  {cancelAtPeriodEnd ? t("settings.cancelsOn") : t("settings.autoRenewsOn")} {new Date(periodEnd).toLocaleDateString(i18n.language, { year: "numeric", month: "long", day: "numeric" })}
                 </span>
               </div>
               <p className="text-xs m-0" style={{ color: "var(--color-text-muted)" }}>
                 {cancelAtPeriodEnd
-                  ? "Your subscription will not renew. You keep access until the date above."
-                  : "Your subscription will automatically renew. You can cancel anytime."}
+                  ? t("settings.cancelDesc")
+                  : t("settings.renewDesc")}
               </p>
             </div>
           )}
@@ -516,8 +516,8 @@ export default function SettingsPage() {
                   {cancelLoading
                     ? t("common.loading")
                     : cancelAtPeriodEnd
-                      ? "Reactivate subscription"
-                      : "Cancel subscription"}
+                      ? t("settings.reactivateSubscription")
+                      : t("settings.cancelSubscription")}
                 </button>
               </>
             )}
