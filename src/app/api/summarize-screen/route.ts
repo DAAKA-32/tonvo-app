@@ -3,6 +3,8 @@ import { z } from "zod/v4";
 import { anthropicClient, CLAUDE_DEEP } from "@/lib/anthropic";
 import { verifyAuth } from "@/lib/auth-server";
 import { checkRateLimit, RATE_LIMITS } from "@/lib/rate-limit";
+import { getUserSubscription } from "@/lib/subscription";
+import { getPlanFeatures } from "@/lib/plan-features";
 
 const ScreenSummarySchema = z.object({
   attractionScore: z.number().min(0).max(100).default(0),
@@ -18,6 +20,13 @@ export async function POST(req: NextRequest) {
   const authUser = await verifyAuth(req);
   if (!authUser) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  // Gate to Team plan only
+  const sub = await getUserSubscription(authUser.uid, authUser.email);
+  const features = getPlanFeatures(sub.plan);
+  if (!features.screenAnalysis) {
+    return NextResponse.json({ error: "Screen analysis requires the Team plan.", upgrade: true }, { status: 403 });
   }
 
   const ip = req.headers.get("x-forwarded-for")?.split(",")[0] || req.headers.get("x-real-ip") || "unknown";

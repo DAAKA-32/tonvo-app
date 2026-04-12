@@ -9,7 +9,7 @@ import { useToast } from "@/components/Toast";
 /* ------------------------------------------------------------------ */
 /*  Types                                                              */
 /* ------------------------------------------------------------------ */
-type InputMode = "images" | "text" | "audio";
+type InputMode = "images" | "text";
 type AnalysisMode = "general" | "sales" | "recruitment" | "support" | "networking" | "dating";
 
 interface AnalysisScore {
@@ -78,15 +78,6 @@ function IconText({ size = 20 }: { size?: number }) {
   );
 }
 
-function IconAudio({ size = 20 }: { size?: number }) {
-  return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z" />
-      <path d="M19 10v2a7 7 0 0 1-14 0v-2" />
-      <line x1="12" x2="12" y1="19" y2="22" />
-    </svg>
-  );
-}
 
 function IconPlus() {
   return (
@@ -178,10 +169,6 @@ export default function AnalyzePage() {
   // Text mode
   const [text, setText] = useState("");
 
-  // Audio mode
-  const [audioFile, setAudioFile] = useState<File | null>(null);
-  const [transcribing, setTranscribing] = useState(false);
-  const [transcript, setTranscript] = useState("");
 
   // Handle shared content from PWA Share Target
   useEffect(() => {
@@ -226,8 +213,6 @@ export default function AnalyzePage() {
     window.history.replaceState({}, "", "/analyze-text");
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  const audioInputRef = useRef<HTMLInputElement>(null);
-
   /* ── Image handlers ── */
   const handleImageSelect = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || []);
@@ -256,40 +241,10 @@ export default function AnalyzePage() {
     setImagePreviews((prev) => prev.filter((_, i) => i !== index));
   }, []);
 
-  /* ── Audio handlers ── */
-  const handleAudioSelect = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    setAudioFile(file);
-    setTranscript("");
-  }, []);
-
-  const transcribeAudio = useCallback(async () => {
-    if (!audioFile) return;
-    setTranscribing(true);
-    try {
-      const formData = new FormData();
-      formData.append("audio", audioFile);
-      const res = await authFetchFormData("/api/transcribe", formData, { method: "POST" });
-      const data = await res.json();
-      if (data.text) {
-        setTranscript(data.text);
-        toast.show(t("analyzePage.transcriptionComplete"), { type: "success", duration: 3000 });
-      } else {
-        toast.show(t("analyzePage.transcriptionFailed"), { type: "error", duration: 4000 });
-      }
-    } catch {
-      toast.show(t("analyzePage.transcriptionFailed"), { type: "error", duration: 4000 });
-    } finally {
-      setTranscribing(false);
-    }
-  }, [audioFile, toast]);
-
   /* ── Analyze ── */
   const canAnalyze =
     (inputMode === "images" && images.length > 0) ||
-    (inputMode === "text" && text.trim().length > 0) ||
-    (inputMode === "audio" && transcript.trim().length > 0);
+    (inputMode === "text" && text.trim().length > 0);
 
   const handleAnalyze = useCallback(async () => {
     if (!canAnalyze) return;
@@ -309,8 +264,6 @@ export default function AnalyzePage() {
         images.forEach((img) => formData.append("images", img));
       } else if (inputMode === "text") {
         formData.append("text", text);
-      } else if (inputMode === "audio") {
-        formData.append("transcript", transcript);
       }
 
       const res = await authFetchFormData("/api/analyze-conversation", formData, { method: "POST" });
@@ -327,15 +280,13 @@ export default function AnalyzePage() {
     } finally {
       setAnalyzing(false);
     }
-  }, [canAnalyze, inputMode, images, text, transcript, context, analysisMode, i18n.language, t, toast]);
+  }, [canAnalyze, inputMode, images, text, context, analysisMode, i18n.language, t, toast]);
 
   const resetAll = useCallback(() => {
     setResult(null);
     setImages([]);
     setImagePreviews([]);
     setText("");
-    setAudioFile(null);
-    setTranscript("");
     setContext("");
   }, []);
 
@@ -371,7 +322,6 @@ export default function AnalyzePage() {
               {([
                 { key: "images" as InputMode, icon: <IconImage size={16} />, label: t("analyzePage.screenshots") },
                 { key: "text" as InputMode, icon: <IconText size={16} />, label: t("analyzePage.text") },
-                { key: "audio" as InputMode, icon: <IconAudio size={16} />, label: t("analyzePage.audio") },
               ]).map((tab) => (
                 <button
                   key={tab.key}
@@ -448,77 +398,6 @@ export default function AnalyzePage() {
                   placeholder={t("analyzePage.textPlaceholder")}
                   rows={8}
                   className="analyze-textarea"
-                />
-              </div>
-            )}
-
-            {/* ── Audio Input ── */}
-            {inputMode === "audio" && (
-              <div className="analyze-section">
-                {!audioFile ? (
-                  <button
-                    onClick={() => audioInputRef.current?.click()}
-                    className="analyze-upload-zone"
-                  >
-                    <IconAudio size={32} />
-                    <span className="text-sm font-medium" style={{ color: "var(--color-text)" }}>
-                      {t("analyzePage.tapAudio")}
-                    </span>
-                    <span className="text-xs" style={{ color: "var(--color-text-muted)" }}>
-                      {t("analyzePage.audioFormats")}
-                    </span>
-                  </button>
-                ) : (
-                  <div>
-                    <div className="glass-card p-4 flex items-center gap-3">
-                      <IconAudio size={20} />
-                      <div className="flex-1 min-w-0">
-                        <p className="text-sm font-medium m-0 truncate" style={{ color: "var(--color-text)" }}>
-                          {audioFile.name}
-                        </p>
-                        <p className="text-xs m-0" style={{ color: "var(--color-text-muted)" }}>
-                          {(audioFile.size / 1024 / 1024).toFixed(1)} MB
-                        </p>
-                      </div>
-                      <button
-                        onClick={() => { setAudioFile(null); setTranscript(""); }}
-                        className="analyze-icon-btn"
-                      >
-                        <IconX size={16} />
-                      </button>
-                    </div>
-
-                    {!transcript && (
-                      <button
-                        onClick={transcribeAudio}
-                        disabled={transcribing}
-                        className="analyze-cta-secondary mt-3"
-                      >
-                        {transcribing ? t("analyzePage.transcribing") : t("analyzePage.transcribeAudio")}
-                      </button>
-                    )}
-
-                    {transcript && (
-                      <div className="mt-3">
-                        <label className="text-xs font-medium mb-1 block" style={{ color: "var(--color-text-muted)" }}>
-                          {t("analyzePage.transcriptEditable")}
-                        </label>
-                        <textarea
-                          value={transcript}
-                          onChange={(e) => setTranscript(e.target.value)}
-                          rows={6}
-                          className="analyze-textarea"
-                        />
-                      </div>
-                    )}
-                  </div>
-                )}
-                <input
-                  ref={audioInputRef}
-                  type="file"
-                  accept="audio/*,.mp3,.wav,.m4a,.ogg,.webm,.flac"
-                  onChange={handleAudioSelect}
-                  style={{ display: "none" }}
                 />
               </div>
             )}

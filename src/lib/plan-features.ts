@@ -48,7 +48,7 @@ export const PLAN_FEATURES: Record<PlanId, PlanFeatures> = {
     maxSessionDurationSec: -1,
     coachingTips: true,
     liveInsight: true,
-    screenAnalysis: true,
+    screenAnalysis: false,
     signalDetection: true,
     speakerBalance: true,
     analyzeText: true,

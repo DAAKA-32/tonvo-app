@@ -259,7 +259,7 @@ export default function SettingsPage() {
 
   return (
     <AppShell>
-      <div style={{ maxWidth: 720, margin: "0 auto" }}>
+      <div style={{ maxWidth: 720 }}>
         {/* Header */}
         <div className="flex items-center gap-3 mb-8">
           <div

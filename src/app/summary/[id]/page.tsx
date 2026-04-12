@@ -220,7 +220,7 @@ export default function SummaryPage() {
   /* ================================================================ */
   return (
     <AppShell>
-      <div style={{ maxWidth: 720 }} className="mx-auto">
+      <div style={{ maxWidth: 720 }}>
         {loadingData ? (
           <div className="space-y-4">
             {[1, 2, 3].map((i) => (

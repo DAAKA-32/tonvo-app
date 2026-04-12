@@ -45,7 +45,7 @@ export async function POST(req: NextRequest) {
     const features = getPlanFeatures(sub.plan);
     if (!features.screenAnalysis) {
       return NextResponse.json(
-        { error: "Screen analysis requires the Pro plan.", upgrade: true },
+        { error: "Screen analysis requires the Team plan.", upgrade: true },
         { status: 403 }
       );
     }
