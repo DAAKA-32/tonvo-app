@@ -29,7 +29,7 @@ const variants: Record<Variant, { initial: Record<string, number>; animate: Reco
   left: {
     initial: { opacity: 0, x: -30 },
     animate: { opacity: 1, x: 0 },
-    duration: 0.65,
+    duration: 0.65, 
   },
   right: {
     initial: { opacity: 0, x: 30 },
@@ -76,3 +76,4 @@ export default function AnimatedTitle({
     </Component>
   );
 }
+

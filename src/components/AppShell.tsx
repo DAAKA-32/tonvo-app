@@ -33,7 +33,10 @@ export default function AppShell({ children }: AppShellProps) {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div
+        className="min-h-screen flex items-center justify-center"
+        style={{ backgroundColor: "var(--color-bg)", color: "var(--color-text)" }}
+      >
         <TonvoLogoMark size="lg" />
       </div>
     );
