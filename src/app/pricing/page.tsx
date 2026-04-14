@@ -325,7 +325,11 @@ export default function PricingPage() {
                       : isCurrent
                         ? "rgba(52, 211, 153, 0.08)"
                         : "var(--color-surface-2)",
-                    color: isCurrent ? "var(--color-positive)" : "white",
+                    color: plan.popular
+                      ? "white"
+                      : isCurrent
+                        ? "var(--color-positive)"
+                        : "var(--color-text)",
                     border: isCurrent
                       ? "1px solid rgba(52, 211, 153, 0.2)"
                       : "none",
