@@ -19,9 +19,9 @@ export default function UpgradePrompt({ feature, plan = "Pro", inline = false }:
         href="/pricing"
         className="inline-flex items-center gap-1.5 text-xs font-medium no-underline px-2.5 py-1 rounded-lg transition-all hover:opacity-80"
         style={{
-          backgroundColor: "rgba(200, 200, 216, 0.08)",
+          backgroundColor: "var(--color-surface-2)",
           color: "var(--color-accent-light)",
-          border: "1px solid rgba(200, 200, 216, 0.1)",
+          border: "1px solid var(--color-border)",
         }}
       >
         <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
@@ -37,14 +37,14 @@ export default function UpgradePrompt({ feature, plan = "Pro", inline = false }:
     <div
       className="rounded-xl border p-5 text-center"
       style={{
-        backgroundColor: "rgba(200, 200, 216, 0.04)",
-        borderColor: "rgba(200, 200, 216, 0.1)",
+        backgroundColor: "var(--color-surface)",
+        borderColor: "var(--color-border)",
       }}
     >
       <div className="flex justify-center mb-3">
         <div
           className="w-10 h-10 rounded-full flex items-center justify-center"
-          style={{ backgroundColor: "rgba(200, 200, 216, 0.08)" }}
+          style={{ backgroundColor: "var(--color-surface-2)" }}
         >
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ color: "var(--color-accent-light)" }}>
             <rect width="18" height="11" x="3" y="11" rx="2" ry="2" />
@@ -62,9 +62,9 @@ export default function UpgradePrompt({ feature, plan = "Pro", inline = false }:
         href="/pricing"
         className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-semibold no-underline transition-all hover:opacity-90"
         style={{
-          background: "linear-gradient(135deg, #5c5c6e 0%, #6e6e82 100%)",
-          color: "white",
-          boxShadow: "0 4px 14px rgba(92, 92, 110, 0.35)",
+          background: "var(--color-text)",
+          color: "var(--color-bg)",
+          boxShadow: "0 4px 14px rgba(0, 0, 0, 0.15)",
         }}
       >
         Upgrade to {plan}

@@ -122,7 +122,7 @@ export default function PricingPage() {
               className="px-5 py-2 rounded-full text-sm font-medium border-none cursor-pointer transition-all"
               style={{
                 background: billing === "monthly"
-                  ? "rgba(200, 200, 216, 0.12)"
+                  ? "var(--color-surface-3)"
                   : "transparent",
                 color: billing === "monthly"
                   ? "var(--color-text)"
@@ -136,7 +136,7 @@ export default function PricingPage() {
               className="px-5 py-2 rounded-full text-sm font-medium border-none cursor-pointer transition-all flex items-center gap-2"
               style={{
                 background: billing === "yearly"
-                  ? "rgba(200, 200, 216, 0.12)"
+                  ? "var(--color-surface-3)"
                   : "transparent",
                 color: billing === "yearly"
                   ? "var(--color-text)"
@@ -214,10 +214,10 @@ export default function PricingPage() {
                 style={{
                   backgroundColor: "var(--color-surface)",
                   borderColor: plan.popular
-                    ? "rgba(200, 200, 216, 0.25)"
+                    ? "var(--color-border-light)"
                     : "var(--color-border)",
                   boxShadow: plan.popular
-                    ? "0 0 60px rgba(200, 200, 216, 0.05), 0 8px 32px rgba(0, 0, 0, 0.3)"
+                    ? "0 8px 32px rgba(0, 0, 0, 0.08)"
                     : undefined,
                   ...(plan.popular ? { padding: "2rem 1.75rem 1.75rem" } : {}),
                 }}

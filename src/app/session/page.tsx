@@ -68,7 +68,7 @@ const SIGNAL_CONFIG: Record<ConversationSignal, { label: string; color: string; 
   opportunity: { label: "Opportunity", color: "var(--color-positive)",     bg: "rgba(52, 211, 153, 0.1)" },
   hesitation:  { label: "Hesitation",  color: "var(--color-neutral)",      bg: "rgba(251, 191, 36, 0.1)" },
   agreement:   { label: "Agreement",   color: "var(--color-positive)",     bg: "rgba(52, 211, 153, 0.1)" },
-  key_point:   { label: "Key Point",   color: "var(--color-accent-light)", bg: "rgba(200, 200, 216, 0.1)" },
+  key_point:   { label: "Key Point",   color: "var(--color-accent-light)", bg: "var(--color-surface-2)" },
   none:        { label: "",            color: "",                          bg: "" },
 };
 
@@ -1175,7 +1175,7 @@ export default function SessionPage() {
               href="/pricing"
               className="text-xs font-semibold px-3 py-1 rounded-md"
               style={{
-                backgroundColor: "rgba(200, 200, 216, 0.1)",
+                backgroundColor: "var(--color-surface-2)",
                 color: "var(--color-accent-light)",
                 textDecoration: "none",
                 whiteSpace: "nowrap",
@@ -1219,7 +1219,7 @@ export default function SessionPage() {
 
         {/* iOS: suggest Analyze Text for screenshots */}
         {!isRecording && isIOS && (
-          <div className="rounded-xl p-4 mb-3 border text-xs flex items-start gap-3" style={{ backgroundColor: "rgba(200, 200, 216, 0.03)", borderColor: "var(--color-border)", color: "var(--color-text-muted)" }}>
+          <div className="rounded-xl p-4 mb-3 border text-xs flex items-start gap-3" style={{ backgroundColor: "var(--color-surface)", borderColor: "var(--color-border)", color: "var(--color-text-muted)" }}>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0, marginTop: 1 }}>
               <rect x="3" y="3" width="18" height="18" rx="2" ry="2" /><circle cx="8.5" cy="8.5" r="1.5" /><polyline points="21 15 16 10 5 21" />
             </svg>
@@ -1240,7 +1240,7 @@ export default function SessionPage() {
         )}
 
         {!isRecording && screenEnabled && !isIOS && (
-          <div className="rounded-xl p-4 mb-3 border text-xs flex items-center gap-3" style={{ backgroundColor: "rgba(200, 200, 216, 0.03)", borderColor: "var(--color-border)", color: "var(--color-text-muted)" }}>
+          <div className="rounded-xl p-4 mb-3 border text-xs flex items-center gap-3" style={{ backgroundColor: "var(--color-surface)", borderColor: "var(--color-border)", color: "var(--color-text-muted)" }}>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0 }}><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z" /></svg>
             Ensure you have the right to analyze the content visible on your screen. By starting a session, you confirm compliance with our <a href="/terms" target="_blank" style={{ color: "var(--color-accent-light)", textDecoration: "underline", textUnderlineOffset: 2 }}>Terms of Service</a>.
           </div>
@@ -1320,7 +1320,7 @@ export default function SessionPage() {
           </div>
         )}
         {isRecording && audioEnabled && can("coachingTips") && (
-          <div className="copilot-inline rounded-2xl border mb-6 segment-enter" style={{ backgroundColor: "rgba(14, 14, 17, 0.6)", backdropFilter: "blur(16px)", WebkitBackdropFilter: "blur(16px)", borderColor: "rgba(255, 255, 255, 0.08)", boxShadow: "0 4px 24px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.03)" }}>
+          <div className="copilot-inline rounded-2xl border mb-6 segment-enter" style={{ backgroundColor: "var(--color-surface)", backdropFilter: "blur(16px)", WebkitBackdropFilter: "blur(16px)", borderColor: "var(--color-border)", boxShadow: "0 4px 24px rgba(0, 0, 0, 0.08)" }}>
             {/* Copilot Header */}
             <div className="flex items-center justify-between px-5 py-3" style={{ borderBottom: "1px solid var(--color-border)" }}>
               <div className="flex items-center gap-2">
@@ -1450,7 +1450,7 @@ export default function SessionPage() {
             {screenAnalysis ? (
               <div className="space-y-3">
                 <div className="flex items-center gap-2">
-                  <span className="text-xs px-2 py-1 rounded-md font-medium" style={{ backgroundColor: "rgba(200, 200, 216, 0.1)", color: "var(--color-accent-light)" }}>{contentTypeLabels[screenAnalysis.contentType] || "Screen"}</span>
+                  <span className="text-xs px-2 py-1 rounded-md font-medium" style={{ backgroundColor: "var(--color-surface-2)", color: "var(--color-accent-light)" }}>{contentTypeLabels[screenAnalysis.contentType] || "Screen"}</span>
                   <span className="text-xs px-2 py-1 rounded-md font-medium capitalize" style={{ backgroundColor: screenAnalysis.mood === "positive" ? "rgba(52, 211, 153, 0.1)" : screenAnalysis.mood === "negative" ? "rgba(248, 113, 113, 0.1)" : "rgba(251, 191, 36, 0.1)", color: screenAnalysis.mood === "positive" ? "var(--color-positive)" : screenAnalysis.mood === "negative" ? "var(--color-negative)" : "var(--color-neutral)" }}>{screenAnalysis.mood}</span>
                 </div>
                 <p className="text-sm m-0" style={{ color: "var(--color-text)" }}>{screenAnalysis.context}</p>

@@ -94,7 +94,7 @@ textarea:disabled {
 
 html {
   background-color: var(--color-bg);
-  color-scheme: dark;
+  color-scheme: dark light;
   touch-action: pan-y;
   -ms-touch-action: pan-y;
   overscroll-behavior-x: none;
@@ -1840,7 +1840,27 @@ body {
 .app-content .pulse-neutral,
 .app-content .pulse-negative { animation: none; }
 
-/* ===== Light Mode (dashboard only — scoped to .app-shell) ===== */
+/* ===== Light Mode — root-level overrides (loaders, body, html) ===== */
+
+html[data-theme="light"] {
+  --color-bg: #fafafa;
+  --color-surface: #ffffff;
+  --color-surface-2: #f4f4f5;
+  --color-surface-3: #e4e4e7;
+  --color-border: #e4e4e7;
+  --color-border-light: #d4d4d8;
+  --color-text: #09090b;
+  --color-text-muted: #71717a;
+  --color-text-silver: #52525b;
+  --color-accent: #52525b;
+  --color-accent-light: #27272a;
+  --color-positive: #059669;
+  --color-neutral: #d97706;
+  --color-negative: #dc2626;
+  color-scheme: light;
+}
+
+/* ===== Light Mode — app shell scoped (keeps specificity for nested overrides) ===== */
 
 html[data-theme="light"] .app-shell {
   --color-bg: #fafafa;
@@ -1979,6 +1999,116 @@ html[data-theme="light"] .analyze-icon-btn:hover {
 
 html[data-theme="light"] .analyze-score-bar-track {
   background: var(--color-surface-3);
+}
+
+/* --- Light: Toast notifications --- */
+html[data-theme="light"] .toast-item {
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid var(--color-border);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08), 0 0 0 1px rgba(0, 0, 0, 0.04) inset;
+  color: var(--color-text);
+}
+
+/* --- Light: Data tables --- */
+html[data-theme="light"] .data-table td {
+  border-bottom: 1px solid var(--color-border);
+}
+
+html[data-theme="light"] .data-table th {
+  border-bottom: 1px solid var(--color-border-light);
+}
+
+/* --- Light: KPI icon --- */
+html[data-theme="light"] .kpi-icon {
+  background: var(--color-surface-2);
+}
+
+html[data-theme="light"] .kpi-card::before {
+  display: none;
+}
+
+/* --- Light: Filter bar --- */
+html[data-theme="light"] .filter-bar {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+}
+
+html[data-theme="light"] .filter-chip.active {
+  background: var(--color-text);
+  color: var(--color-bg);
+}
+
+html[data-theme="light"] .filter-chip:hover:not(.active) {
+  background: rgba(0, 0, 0, 0.04);
+}
+
+/* --- Light: Empty state --- */
+html[data-theme="light"] .empty-state-icon {
+  background: var(--color-surface-2);
+  border: 1px solid var(--color-border);
+}
+
+/* --- Light: Skeleton loaders --- */
+html[data-theme="light"] .skeleton-line {
+  background: var(--color-surface-2);
+}
+
+html[data-theme="light"] .skeleton-pulse {
+  background: linear-gradient(90deg, var(--color-surface-2) 25%, var(--color-surface-3) 50%, var(--color-surface-2) 75%);
+}
+
+/* --- Light: Analyze spinner --- */
+html[data-theme="light"] .analyze-spinner {
+  border-color: var(--color-border);
+  border-top-color: var(--color-text);
+}
+
+/* --- Light: Copilot inline (session page) --- */
+html[data-theme="light"] .copilot-inline {
+  background: var(--color-surface) !important;
+  border-color: var(--color-border) !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06) !important;
+}
+
+html[data-theme="light"] .copilot-inline__header {
+  border-bottom-color: var(--color-border);
+}
+
+html[data-theme="light"] .copilot-inline__response-card {
+  background: var(--color-surface-2);
+  border-color: var(--color-border);
+}
+
+html[data-theme="light"] .copilot-inline__response-card:hover {
+  border-color: var(--color-border-light);
+  background: var(--color-surface-3);
+}
+
+/* --- Light: Copilot status pill --- */
+html[data-theme="light"] .copilot-status-pill {
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid var(--color-border);
+  color: var(--color-text);
+}
+
+/* --- Light: Pricing cards --- */
+html[data-theme="light"] .pricing-btn--secondary:hover:not(:disabled) {
+  color: var(--color-text) !important;
+  background: var(--color-surface-2) !important;
+}
+
+/* --- Light: Logo text gradient --- */
+html[data-theme="light"] .sidebar-logo span {
+  background: linear-gradient(135deg, #09090b 0%, #3f3f46 40%, #52525b 100%) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+}
+
+/* --- Light: Grid background --- */
+html[data-theme="light"] .grid-bg {
+  background-image:
+    linear-gradient(rgba(0, 0, 0, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 0, 0, 0.03) 1px, transparent 1px);
 }
 
 /* ===== Responsive Breakpoints ===== */
@@ -3857,7 +3987,7 @@ html[data-theme="light"] .analyze-score-bar-track {
   align-items: center;
   justify-content: center;
   gap: 40px;
-  background-color: #09090b;
+  background-color: var(--color-bg);
   pointer-events: none;
 }
 
@@ -3866,7 +3996,7 @@ html[data-theme="light"] .analyze-score-bar-track {
   width: 320px;
   height: 320px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(200, 200, 216, 0.06) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(128, 128, 148, 0.06) 0%, transparent 70%);
   pointer-events: none;
   top: 50%;
   left: 50%;
@@ -3892,14 +4022,16 @@ html[data-theme="light"] .analyze-score-bar-track {
   width: 100%;
   height: 2px;
   border-radius: 1px;
-  background: rgba(255, 255, 255, 0.06);
+  background: var(--color-border);
+  opacity: 0.4;
   overflow: hidden;
 }
 
 .curtain-bar-fill {
   height: 100%;
   border-radius: 1px;
-  background: linear-gradient(90deg, rgba(200, 200, 216, 0.25), rgba(200, 200, 216, 0.5));
+  background: linear-gradient(90deg, var(--color-text-muted), var(--color-text-silver));
+  opacity: 0.5;
   transition: width 0.15s cubic-bezier(0.23, 1, 0.32, 1);
 }
 

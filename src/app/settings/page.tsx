@@ -464,9 +464,9 @@ export default function SettingsPage() {
             <span
               className="text-xs font-medium px-2.5 py-1 rounded-full"
               style={{
-                background: plan === "free" ? "rgba(200, 200, 216, 0.08)" : "rgba(52, 211, 153, 0.12)",
+                background: plan === "free" ? "var(--color-surface-2)" : "rgba(52, 211, 153, 0.12)",
                 color: plan === "free" ? "var(--color-text-muted)" : "var(--color-positive)",
-                border: plan === "free" ? "1px solid rgba(200, 200, 216, 0.1)" : "1px solid rgba(52, 211, 153, 0.2)",
+                border: plan === "free" ? "1px solid var(--color-border)" : "1px solid rgba(52, 211, 153, 0.2)",
               }}>
               {plan === "free" ? t("settings.days7") : t("settings.unlimited")}
             </span>
@@ -495,9 +495,9 @@ export default function SettingsPage() {
             <span
               className="text-xs font-bold px-2.5 py-1 rounded-full"
               style={{
-                background: plan === "free" ? "rgba(200, 200, 216, 0.08)" : "rgba(52, 211, 153, 0.12)",
+                background: plan === "free" ? "var(--color-surface-2)" : "rgba(52, 211, 153, 0.12)",
                 color: plan === "free" ? "var(--color-text-muted)" : "var(--color-positive)",
-                border: plan === "free" ? "1px solid rgba(200, 200, 216, 0.1)" : "1px solid rgba(52, 211, 153, 0.2)",
+                border: plan === "free" ? "1px solid var(--color-border)" : "1px solid rgba(52, 211, 153, 0.2)",
               }}>
               {plan === "free" ? t("common.free") : plan === "pro" ? t("common.pro") : t("common.team")}
             </span>

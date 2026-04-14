@@ -110,10 +110,10 @@ export default function ProfilePage() {
     ? "var(--color-text-muted)"
     : "var(--color-positive)";
   const planBg = subscription?.plan === "free"
-    ? "rgba(200, 200, 216, 0.08)"
+    ? "var(--color-surface-2)"
     : "rgba(52, 211, 153, 0.12)";
   const planBorder = subscription?.plan === "free"
-    ? "1px solid rgba(200, 200, 216, 0.1)"
+    ? "1px solid var(--color-border)"
     : "1px solid rgba(52, 211, 153, 0.2)";
 
   const createdAt = user?.metadata?.creationTime
@@ -132,8 +132,8 @@ export default function ProfilePage() {
           <div
             className="w-9 h-9 rounded-xl flex items-center justify-center"
             style={{
-              background: "rgba(200, 200, 216, 0.06)",
-              border: "1px solid rgba(255, 255, 255, 0.04)",
+              background: "var(--color-surface-2)",
+              border: "1px solid var(--color-border)",
             }}>
             <IconUser />
           </div>
@@ -158,9 +158,9 @@ export default function ProfilePage() {
               style={{
                 width: 80,
                 height: 80,
-                background: "linear-gradient(135deg, rgba(200,200,216,0.12) 0%, rgba(200,200,216,0.04) 100%)",
+                background: "var(--color-surface-2)",
                 color: "var(--color-accent-light)",
-                border: "2px solid rgba(255, 255, 255, 0.06)",
+                border: "2px solid var(--color-border)",
               }}>
               {getInitials(user?.displayName, user?.email)}
             </div>
