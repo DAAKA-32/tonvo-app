@@ -50,9 +50,9 @@ export default function AppShell({ children }: AppShellProps) {
           onClick={() => setSidebarOpen(true)}
           className="mb-4 p-2.5 rounded-xl border cursor-pointer"
           style={{
-            backgroundColor: "rgba(17, 17, 20, 0.5)",
+            backgroundColor: "var(--color-surface)",
             backdropFilter: "blur(12px)",
-            borderColor: "rgba(255, 255, 255, 0.06)",
+            borderColor: "var(--color-border)",
             color: "var(--color-text)",
             display: "none",
           }}

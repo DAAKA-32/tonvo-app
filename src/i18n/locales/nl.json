@@ -149,7 +149,12 @@
     "language": "Taal",
     "languageDesc": "Kies je voorkeurstaal voor de interface",
     "languageLabel": "Interfacetaal",
-    "languageSaved": "Taal bijgewerkt"
+    "languageSaved": "Taal bijgewerkt",
+    "appearance": "Weergave",
+    "theme": "Thema",
+    "themeDesc": "Kies het kleurenschema voor het dashboard",
+    "dark": "Donker",
+    "light": "Licht"
   },
   "profile": {
     "title": "Profiel",

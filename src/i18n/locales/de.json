@@ -149,7 +149,12 @@
     "language": "Sprache",
     "languageDesc": "Wählen Sie Ihre bevorzugte Oberflächensprache",
     "languageLabel": "Oberflächensprache",
-    "languageSaved": "Sprache aktualisiert"
+    "languageSaved": "Sprache aktualisiert",
+    "appearance": "Darstellung",
+    "theme": "Design",
+    "themeDesc": "Farbschema für das Dashboard wählen",
+    "dark": "Dunkel",
+    "light": "Hell"
   },
   "profile": {
     "title": "Profil",

@@ -149,7 +149,12 @@
     "language": "言語",
     "languageDesc": "お好みのインターフェース言語を選択",
     "languageLabel": "インターフェース言語",
-    "languageSaved": "言語が更新されました"
+    "languageSaved": "言語が更新されました",
+    "appearance": "外観",
+    "theme": "テーマ",
+    "themeDesc": "ダッシュボードの配色を選択してください",
+    "dark": "ダーク",
+    "light": "ライト"
   },
   "profile": {
     "title": "プロフィール",

@@ -149,7 +149,12 @@
     "language": "Idioma",
     "languageDesc": "Elige tu idioma de interfaz preferido",
     "languageLabel": "Idioma de la interfaz",
-    "languageSaved": "Idioma actualizado"
+    "languageSaved": "Idioma actualizado",
+    "appearance": "Apariencia",
+    "theme": "Tema",
+    "themeDesc": "Elige el esquema de color del panel",
+    "dark": "Oscuro",
+    "light": "Claro"
   },
   "profile": {
     "title": "Perfil",

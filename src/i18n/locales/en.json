@@ -149,7 +149,12 @@
     "language": "Language",
     "languageDesc": "Choose your preferred interface language",
     "languageLabel": "Interface language",
-    "languageSaved": "Language updated"
+    "languageSaved": "Language updated",
+    "appearance": "Appearance",
+    "theme": "Theme",
+    "themeDesc": "Choose your preferred color scheme for the dashboard",
+    "dark": "Dark",
+    "light": "Light"
   },
   "profile": {
     "title": "Profile",

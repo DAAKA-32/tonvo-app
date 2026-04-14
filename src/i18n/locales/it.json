@@ -149,7 +149,12 @@
     "language": "Lingua",
     "languageDesc": "Scegli la lingua dell'interfaccia che preferisci",
     "languageLabel": "Lingua dell'interfaccia",
-    "languageSaved": "Lingua aggiornata"
+    "languageSaved": "Lingua aggiornata",
+    "appearance": "Aspetto",
+    "theme": "Tema",
+    "themeDesc": "Scegli la combinazione di colori della dashboard",
+    "dark": "Scuro",
+    "light": "Chiaro"
   },
   "profile": {
     "title": "Profilo",

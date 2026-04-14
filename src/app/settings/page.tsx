@@ -13,6 +13,7 @@ import {
 import { authFetch } from "@/lib/api-client";
 import AppShell from "@/components/AppShell";
 import { SUPPORTED_LANGUAGES } from "@/i18n/config";
+import { useTheme } from "@/lib/use-theme";
 
 /* ------------------------------------------------------------------ */
 /*  Inline SVG Icons                                                   */
@@ -59,6 +60,15 @@ function IconLogout() {
       <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
       <polyline points="16 17 21 12 16 7" />
       <line x1="21" x2="9" y1="12" y2="12" />
+    </svg>
+  );
+}
+
+function IconAppearance() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="12" cy="12" r="10" />
+      <path d="M12 2a10 10 0 0 0 0 20z" fill="currentColor" />
     </svg>
   );
 }
@@ -118,7 +128,7 @@ function SettingsRow({
     <div
       className="flex items-center justify-between py-3"
       style={{
-        borderBottom: "1px solid rgba(39, 39, 42, 0.5)",
+        borderBottom: "1px solid var(--color-border)",
         gap: 16,
         flexWrap: "wrap",
       }}>
@@ -143,6 +153,7 @@ function SettingsRow({
 export default function SettingsPage() {
   const { t, i18n } = useTranslation();
   const { user } = useAuth();
+  const { theme, setTheme } = useTheme();
   const [plan, setPlan] = useState("free");
   const [periodEnd, setPeriodEnd] = useState<string | null>(null);
   const [cancelAtPeriodEnd, setCancelAtPeriodEnd] = useState(false);
@@ -265,8 +276,8 @@ export default function SettingsPage() {
           <div
             className="w-9 h-9 rounded-xl flex items-center justify-center"
             style={{
-              background: "rgba(200, 200, 216, 0.06)",
-              border: "1px solid rgba(255, 255, 255, 0.04)",
+              background: "var(--color-surface-2)",
+              border: "1px solid var(--color-border)",
             }}>
             <IconSettings />
           </div>
@@ -279,6 +290,34 @@ export default function SettingsPage() {
             </p>
           </div>
         </div>
+
+        {/* ---- Appearance ---- */}
+        <SettingsSection icon={<IconAppearance />} title={t("settings.appearance")}>
+          <SettingsRow
+            label={t("settings.theme")}
+            description={t("settings.themeDesc")}>
+            <div className="flex gap-2">
+              {(["dark", "light"] as const).map((t_) => (
+                <button
+                  key={t_}
+                  onClick={() => setTheme(t_)}
+                  className="cursor-pointer"
+                  style={{
+                    padding: "6px 16px",
+                    fontSize: 12,
+                    fontWeight: 500,
+                    borderRadius: 8,
+                    border: `1px solid ${theme === t_ ? "var(--color-text)" : "var(--color-border)"}`,
+                    background: theme === t_ ? "var(--color-text)" : "transparent",
+                    color: theme === t_ ? "var(--color-bg)" : "var(--color-text-muted)",
+                    transition: "all 0.15s ease",
+                  }}>
+                  {t_ === "dark" ? t("settings.dark") : t("settings.light")}
+                </button>
+              ))}
+            </div>
+          </SettingsRow>
+        </SettingsSection>
 
         {/* ---- Language ---- */}
         <SettingsSection icon={<IconGlobe />} title={t("settings.language")}>
@@ -548,7 +587,7 @@ export default function SettingsPage() {
           </SettingsRow>
           <div
             className="flex items-center gap-4 pt-4 flex-wrap"
-            style={{ borderTop: "1px solid rgba(39, 39, 42, 0.5)" }}>
+            style={{ borderTop: "1px solid var(--color-border)" }}>
             <a href="/privacy" className="text-xs no-underline font-medium" style={{ color: "var(--color-accent-light)" }}>Privacy Policy</a>
             <a href="/terms" className="text-xs no-underline font-medium" style={{ color: "var(--color-accent-light)" }}>Terms of Service</a>
             <a href="/cookies" className="text-xs no-underline font-medium" style={{ color: "var(--color-accent-light)" }}>Cookie Policy</a>

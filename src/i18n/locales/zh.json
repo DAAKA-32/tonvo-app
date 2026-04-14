@@ -149,7 +149,12 @@
     "language": "语言",
     "languageDesc": "选择您偏好的界面语言",
     "languageLabel": "界面语言",
-    "languageSaved": "语言已更新"
+    "languageSaved": "语言已更新",
+    "appearance": "外观",
+    "theme": "主题",
+    "themeDesc": "选择仪表盘的配色方案",
+    "dark": "深色",
+    "light": "浅色"
   },
   "profile": {
     "title": "个人资料",

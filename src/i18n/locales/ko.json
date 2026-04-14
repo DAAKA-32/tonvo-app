@@ -149,7 +149,12 @@
     "language": "언어",
     "languageDesc": "선호하는 인터페이스 언어를 선택하세요",
     "languageLabel": "인터페이스 언어",
-    "languageSaved": "언어가 업데이트되었습니다"
+    "languageSaved": "언어가 업데이트되었습니다",
+    "appearance": "외관",
+    "theme": "테마",
+    "themeDesc": "대시보드 색상 구성을 선택하세요",
+    "dark": "다크",
+    "light": "라이트"
   },
   "profile": {
     "title": "프로필",

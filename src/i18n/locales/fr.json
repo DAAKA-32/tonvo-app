@@ -149,7 +149,12 @@
     "language": "Langue",
     "languageDesc": "Choisissez votre langue d'interface préférée",
     "languageLabel": "Langue de l'interface",
-    "languageSaved": "Langue mise à jour"
+    "languageSaved": "Langue mise à jour",
+    "appearance": "Apparence",
+    "theme": "Thème",
+    "themeDesc": "Choisissez le thème de couleur du tableau de bord",
+    "dark": "Sombre",
+    "light": "Clair"
   },
   "profile": {
     "title": "Profil",

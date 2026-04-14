@@ -1840,6 +1840,65 @@ body {
 .app-content .pulse-neutral,
 .app-content .pulse-negative { animation: none; }
 
+/* ===== Light Mode (dashboard only — scoped to .app-shell) ===== */
+
+html[data-theme="light"] .app-shell {
+  --color-bg: #fafafa;
+  --color-surface: #ffffff;
+  --color-surface-2: #f4f4f5;
+  --color-surface-3: #e4e4e7;
+  --color-border: #e4e4e7;
+  --color-border-light: #d4d4d8;
+  --color-text: #09090b;
+  --color-text-muted: #71717a;
+  --color-text-silver: #52525b;
+  --color-accent: #52525b;
+  --color-accent-light: #27272a;
+  --color-positive: #059669;
+  --color-neutral: #d97706;
+  --color-negative: #dc2626;
+  background-color: var(--color-bg);
+}
+
+html[data-theme="light"] .sidebar {
+  background: var(--color-bg) !important;
+  border-right: 1px solid var(--color-border) !important;
+  box-shadow: none !important;
+}
+
+html[data-theme="light"] .sidebar-link.active {
+  background: rgba(0, 0, 0, 0.05);
+  box-shadow: none;
+}
+
+html[data-theme="light"] .sidebar-link:hover {
+  background: rgba(0, 0, 0, 0.03);
+  color: var(--color-text);
+}
+
+html[data-theme="light"] .sidebar-overlay.open {
+  background: rgba(0, 0, 0, 0.15);
+}
+
+html[data-theme="light"] .app-content > button[aria-label="Open menu"] {
+  background-color: rgba(255, 255, 255, 0.85) !important;
+  border-color: var(--color-border) !important;
+}
+
+html[data-theme="light"] .app-content .btn-secondary {
+  border-color: var(--color-border);
+  color: var(--color-text);
+  background: transparent;
+}
+
+html[data-theme="light"] .app-content .btn-secondary:hover {
+  background: var(--color-surface-2);
+}
+
+html[data-theme="light"] .app-content select {
+  color-scheme: light;
+}
+
 /* ===== Responsive Breakpoints ===== */
 
 /* Mobile: 0 - 640px */
