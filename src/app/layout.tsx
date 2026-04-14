@@ -314,7 +314,7 @@ const webSiteJsonLd = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" dir="ltr" className={inter.variable}>
+    <html lang="en" dir="ltr" className={inter.variable} style={{ backgroundColor: "#09090b" }}>
       <head>
         <script
           type="application/ld+json"
@@ -338,7 +338,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         />
         <script
           dangerouslySetInnerHTML={{
-            __html: `(function(){try{var t=localStorage.getItem('tonvo-theme');if(t==='light'){document.documentElement.setAttribute('data-theme','light');document.documentElement.style.backgroundColor='#fafafa';document.documentElement.style.colorScheme='light';}else{document.documentElement.style.backgroundColor='#09090b';}}catch(e){document.documentElement.style.backgroundColor='#09090b';}})();`,
+            __html: `(function(){try{var t=localStorage.getItem('tonvo-theme');if(t==='light')document.documentElement.setAttribute('data-theme','light');}catch(e){}})();`,
           }}
         />
       </head>

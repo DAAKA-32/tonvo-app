@@ -25,9 +25,6 @@ export function useTheme() {
     setThemeState(t);
     localStorage.setItem("tonvo-theme", t);
     document.documentElement.setAttribute("data-theme", t);
-    document.documentElement.style.backgroundColor =
-      t === "light" ? "#fafafa" : "#09090b";
-    document.documentElement.style.colorScheme = t;
   };
 
   return { theme, setTheme };
