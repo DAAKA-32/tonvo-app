@@ -1840,6 +1840,12 @@ body {
 .app-content .pulse-neutral,
 .app-content .pulse-negative { animation: none; }
 
+/* ===== Light Mode: root-level overrides (loaders, splash screens) ===== */
+html[data-theme="light"] {
+  --color-bg: #fafafa;
+  --color-text: #09090b;
+}
+
 /* ===== Light Mode (dashboard only — scoped to .app-shell) ===== */
 
 html[data-theme="light"] .app-shell {
@@ -2001,6 +2007,7 @@ html[data-theme="light"] .data-table th {
 /* --- Light: KPI icon --- */
 html[data-theme="light"] .kpi-icon {
   background: var(--color-surface-2);
+  color: var(--color-text);
 }
 
 html[data-theme="light"] .kpi-card::before {

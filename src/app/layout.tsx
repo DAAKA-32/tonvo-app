@@ -314,7 +314,7 @@ const webSiteJsonLd = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" dir="ltr" className={inter.variable} style={{ backgroundColor: "#09090b" }}>
+    <html lang="en" dir="ltr" className={inter.variable} style={{ backgroundColor: "#09090b" }} suppressHydrationWarning>
       <head>
         <script
           type="application/ld+json"

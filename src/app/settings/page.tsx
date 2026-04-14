@@ -100,7 +100,7 @@ function SettingsSection({
       <div className="flex items-center gap-3 mb-5">
         <div
           className="kpi-icon"
-          style={{ width: 32, height: 32, borderRadius: 8 }}>
+          style={{ width: 32, height: 32, borderRadius: 8, color: "var(--color-text)" }}>
           {icon}
         </div>
         <h2 className="text-sm font-semibold m-0 uppercase" style={{ color: "var(--color-text-muted)", letterSpacing: "0.04em" }}>
@@ -278,6 +278,7 @@ export default function SettingsPage() {
             style={{
               background: "var(--color-surface-2)",
               border: "1px solid var(--color-border)",
+              color: "var(--color-text)",
             }}>
             <IconSettings />
           </div>

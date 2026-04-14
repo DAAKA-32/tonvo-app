@@ -27,7 +27,7 @@ export default function AppShell({ children }: AppShellProps) {
 
   useEffect(() => {
     if (!loading && !user) {
-      router.push("/login");
+      router.push("/login")
     }
   }, [user, loading, router]);
 
@@ -35,7 +35,10 @@ export default function AppShell({ children }: AppShellProps) {
     return (
       <div
         className="min-h-screen flex items-center justify-center"
-        style={{ backgroundColor: "var(--color-bg)", color: "var(--color-text)" }}
+        style={{
+          backgroundColor: "var(--color-bg)",
+          color: "var(--color-text)",
+        }}
       >
         <TonvoLogoMark size="lg" />
       </div>
