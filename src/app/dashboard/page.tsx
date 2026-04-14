@@ -154,7 +154,7 @@ export default function DashboardPage() {
             className="no-underline glass-card glass-card-hover flex items-center gap-4 p-5">
             <div
               className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0"
-              style={{ backgroundColor: "rgba(200, 200, 216, 0.06)" }}>
+              style={{ backgroundColor: "var(--color-surface-2)" }}>
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{ color: "var(--color-accent-light)" }}>
                 <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z" />
                 <polyline points="14 2 14 8 20 8" />
@@ -330,9 +330,9 @@ export default function DashboardPage() {
                   href="/session"
                   className="inline-flex items-center gap-2 text-xs font-medium no-underline px-4 py-2 rounded-lg"
                   style={{
-                    backgroundColor: "rgba(200, 200, 216, 0.08)",
+                    backgroundColor: "var(--color-surface-2)",
                     color: "var(--color-accent-light)",
-                    border: "1px solid rgba(255, 255, 255, 0.06)",
+                    border: "1px solid var(--color-border)",
                   }}>
                   {t("dashboard.startSessionBtn")}
                   <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -420,11 +420,11 @@ export default function DashboardPage() {
                 <div
                   key={i}
                   className="flex items-start gap-3 p-3 rounded-xl"
-                  style={{ backgroundColor: "rgba(255,255,255,0.02)" }}>
+                  style={{ backgroundColor: "var(--color-surface)" }}>
                   <div
                     className="w-6 h-6 rounded-md flex items-center justify-center shrink-0 text-xs font-bold mt-0.5"
                     style={{
-                      backgroundColor: "rgba(200, 200, 216, 0.08)",
+                      backgroundColor: "var(--color-surface-2)",
                       color: "var(--color-accent-light)",
                     }}>
                     {i + 1}

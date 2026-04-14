@@ -113,7 +113,7 @@ export default function PricingPage() {
           <div
             className="inline-flex items-center gap-3 px-1.5 py-1.5 rounded-full"
             style={{
-              background: "rgba(255, 255, 255, 0.04)",
+              background: "var(--color-surface)",
               border: "1px solid var(--color-border)",
             }}
           >

@@ -1193,7 +1193,7 @@ export default function SessionPage() {
 
         {/* Mode info banner */}
         {!isRecording && (
-          <div className="rounded-xl p-4 mb-6 border text-sm" style={{ backgroundColor: "rgba(200, 200, 216, 0.06)", borderColor: !screenEnabled && !audioEnabled ? "var(--color-negative)" : "var(--color-accent)", color: !screenEnabled && !audioEnabled ? "var(--color-negative)" : "var(--color-accent-light)" }}>
+          <div className="rounded-xl p-4 mb-6 border text-sm" style={{ backgroundColor: "var(--color-surface-2)", borderColor: !screenEnabled && !audioEnabled ? "var(--color-negative)" : "var(--color-accent)", color: !screenEnabled && !audioEnabled ? "var(--color-negative)" : "var(--color-accent-light)" }}>
             {isIOS && !screenEnabled && audioEnabled
               ? "Audio mode: put your call on speaker — Tonvo will capture both sides via microphone for real-time analysis."
               : isMobile && screenEnabled && audioEnabled
@@ -1322,7 +1322,7 @@ export default function SessionPage() {
         {isRecording && audioEnabled && can("coachingTips") && (
           <div className="copilot-inline rounded-2xl border mb-6 segment-enter" style={{ backgroundColor: "rgba(14, 14, 17, 0.6)", backdropFilter: "blur(16px)", WebkitBackdropFilter: "blur(16px)", borderColor: "rgba(255, 255, 255, 0.08)", boxShadow: "0 4px 24px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.03)" }}>
             {/* Copilot Header */}
-            <div className="flex items-center justify-between px-5 py-3" style={{ borderBottom: "1px solid rgba(255, 255, 255, 0.06)" }}>
+            <div className="flex items-center justify-between px-5 py-3" style={{ borderBottom: "1px solid var(--color-border)" }}>
               <div className="flex items-center gap-2">
                 <div className="copilot-pulse-dot" />
                 <span className="text-xs font-bold uppercase tracking-wider" style={{ color: "var(--color-text)" }}>{t("copilot.title")}</span>
@@ -1347,7 +1347,7 @@ export default function SessionPage() {
             {/* Copilot Body — 2-column on desktop */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-0" style={{ minHeight: 80 }}>
               {/* Left: Coaching + Insight */}
-              <div className="p-5 flex flex-col gap-4" style={{ borderRight: "1px solid rgba(255, 255, 255, 0.04)" }}>
+              <div className="p-5 flex flex-col gap-4" style={{ borderRight: "1px solid var(--color-border)" }}>
                 {/* Coaching */}
                 <div>
                   <div className="flex items-center gap-1.5 mb-2">
@@ -1472,14 +1472,14 @@ export default function SessionPage() {
 
             {/* Attraction Score + Tone row */}
             <div className="grid grid-cols-2 gap-4 mb-5">
-              <div className="rounded-xl p-4 text-center" style={{ backgroundColor: "rgba(200, 200, 216, 0.06)" }}>
+              <div className="rounded-xl p-4 text-center" style={{ backgroundColor: "var(--color-surface-2)" }}>
                 <span className="text-xs block mb-2 uppercase tracking-wider" style={{ color: "var(--color-text-muted)" }}>Attraction Score</span>
                 <span className="text-4xl font-bold" style={{ color: screenSummary.attractionScore >= 70 ? "var(--color-positive)" : screenSummary.attractionScore >= 40 ? "var(--color-neutral)" : "var(--color-negative)" }}>
                   {screenSummary.attractionScore}
                 </span>
                 <span className="text-sm" style={{ color: "var(--color-text-muted)" }}>%</span>
               </div>
-              <div className="rounded-xl p-4 text-center" style={{ backgroundColor: "rgba(200, 200, 216, 0.06)" }}>
+              <div className="rounded-xl p-4 text-center" style={{ backgroundColor: "var(--color-surface-2)" }}>
                 <span className="text-xs block mb-2 uppercase tracking-wider" style={{ color: "var(--color-text-muted)" }}>Conversation Tone</span>
                 <span className="text-sm font-bold px-3 py-1.5 rounded-md inline-block" style={{
                   backgroundColor: screenSummary.conversationTone === "very_positive" || screenSummary.conversationTone === "positive" ? "rgba(52, 211, 153, 0.12)" : screenSummary.conversationTone === "negative" ? "rgba(248, 113, 113, 0.12)" : screenSummary.conversationTone === "awkward" ? "rgba(251, 146, 60, 0.12)" : "rgba(251, 191, 36, 0.1)",
@@ -1491,7 +1491,7 @@ export default function SessionPage() {
             </div>
 
             {/* Global Summary */}
-            <div className="rounded-xl p-4 mb-4" style={{ backgroundColor: "rgba(200, 200, 216, 0.06)" }}>
+            <div className="rounded-xl p-4 mb-4" style={{ backgroundColor: "var(--color-surface-2)" }}>
               <span className="text-xs font-medium uppercase tracking-wider block mb-2" style={{ color: "var(--color-accent-light)" }}>Summary</span>
               <p className="text-sm m-0 leading-relaxed" style={{ color: "var(--color-text)" }}>{screenSummary.summary}</p>
             </div>

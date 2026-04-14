@@ -270,7 +270,7 @@ export default function AnalyticsPage() {
         ) : !data || data.totalSessions === 0 ? (
           <div className="glass-card p-12 text-center">
             <div className="w-12 h-12 mx-auto mb-4 rounded-full flex items-center justify-center"
-              style={{ backgroundColor: "rgba(200, 200, 216, 0.06)" }}>
+              style={{ backgroundColor: "var(--color-surface-2)" }}>
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" style={{ color: "var(--color-text-muted)" }}>
                 <path d="M3 3v18h18" />
                 <path d="M18.7 8l-5.1 5.2-2.8-2.7L7 14.3" />
@@ -341,7 +341,7 @@ export default function AnalyticsPage() {
                       onClick={() => setSelectedMetric(m)}
                       className="text-[10px] px-2 py-1 rounded-md border-none cursor-pointer"
                       style={{
-                        backgroundColor: selectedMetric === m ? "rgba(200, 200, 216, 0.12)" : "transparent",
+                        backgroundColor: selectedMetric === m ? "var(--color-surface-3)" : "transparent",
                         color: selectedMetric === m ? "var(--color-text)" : "var(--color-text-muted)",
                       }}
                     >
@@ -481,7 +481,7 @@ export default function AnalyticsPage() {
                       return (
                         <div key={key} className="flex items-center gap-3">
                           <span className="text-xs w-24 shrink-0 capitalize" style={{ color: "var(--color-text-muted)" }}>{label}</span>
-                          <div className="flex-1 h-2 rounded-full overflow-hidden" style={{ backgroundColor: "rgba(200,200,216,0.06)" }}>
+                          <div className="flex-1 h-2 rounded-full overflow-hidden" style={{ backgroundColor: "var(--color-surface-2)" }}>
                             <div className="h-full rounded-full" style={{ width: `${pct}%`, backgroundColor: color }} />
                           </div>
                           <span className="text-xs font-medium w-12 text-right" style={{ color }}>{count} ({pct}%)</span>

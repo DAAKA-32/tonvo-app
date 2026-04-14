@@ -28,7 +28,7 @@ function ScoreRing({ value, size = 96 }: { value: number; size?: number }) {
       <svg width={size} height={size} className="score-ring-svg">
         <circle
           cx={size / 2} cy={size / 2} r={radius}
-          fill="none" stroke="rgba(255,255,255,0.06)" strokeWidth={stroke}
+          fill="none" stroke="var(--color-border)" strokeWidth={stroke}
         />
         <circle
           cx={size / 2} cy={size / 2} r={radius}
@@ -302,7 +302,7 @@ export default function SummaryPage() {
 
               {/* Tone distribution mini-bar */}
               {segments.length > 0 && (
-                <div className="mt-5 pt-4" style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}>
+                <div className="mt-5 pt-4" style={{ borderTop: "1px solid var(--color-border)" }}>
                   <div className="sentiment-bar" style={{ height: 6 }}>
                     {Object.entries(toneCount).map(([tone, count]) => (
                       <div
@@ -370,7 +370,7 @@ export default function SummaryPage() {
                         <div key={i} className="flex items-start gap-2.5">
                           <div
                             className="w-4.5 h-4.5 rounded flex items-center justify-center shrink-0 text-[10px] font-bold"
-                            style={{ backgroundColor: "rgba(200,200,216,0.08)", color: "var(--color-accent-light)" }}>
+                            style={{ backgroundColor: "var(--color-surface-2)", color: "var(--color-accent-light)" }}>
                             {i + 1}
                           </div>
                           <p className="text-sm m-0 leading-relaxed" style={{ color: "var(--color-text)" }}>

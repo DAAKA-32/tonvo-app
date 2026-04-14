@@ -1899,6 +1899,88 @@ html[data-theme="light"] .app-content select {
   color-scheme: light;
 }
 
+/* --- Light: Analyze page --- */
+html[data-theme="light"] .analyze-tabs {
+  background: var(--color-surface-2);
+  border-color: var(--color-border);
+}
+
+html[data-theme="light"] .analyze-tab.active {
+  background: #ffffff;
+  color: var(--color-text);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+html[data-theme="light"] .analyze-tab:hover:not(.active) {
+  background: rgba(0, 0, 0, 0.03);
+  color: var(--color-text);
+}
+
+html[data-theme="light"] .analyze-upload-zone {
+  background: var(--color-surface-2);
+  border-color: var(--color-border-light);
+}
+
+html[data-theme="light"] .analyze-upload-zone:hover {
+  border-color: var(--color-accent);
+  background: var(--color-surface-3);
+}
+
+html[data-theme="light"] .analyze-image-add {
+  background: var(--color-surface-2);
+  border-color: var(--color-border-light);
+}
+
+html[data-theme="light"] .analyze-image-thumb {
+  border-color: var(--color-border);
+}
+
+html[data-theme="light"] .analyze-textarea:focus,
+html[data-theme="light"] .analyze-input:focus {
+  border-color: var(--color-accent);
+}
+
+html[data-theme="light"] .analyze-mode-chip.active {
+  background: var(--color-text);
+  color: var(--color-bg);
+  border-color: var(--color-text);
+}
+
+html[data-theme="light"] .analyze-mode-chip:hover:not(.active) {
+  border-color: var(--color-text-muted);
+  color: var(--color-text);
+}
+
+html[data-theme="light"] .analyze-cta {
+  background: var(--color-text);
+  color: var(--color-bg);
+}
+
+html[data-theme="light"] .analyze-cta:hover:not(:disabled) {
+  background: #27272a;
+}
+
+html[data-theme="light"] .analyze-cta-secondary:hover:not(:disabled) {
+  background: var(--color-surface-2);
+}
+
+html[data-theme="light"] .analyze-back-btn {
+  border-color: var(--color-border);
+}
+
+html[data-theme="light"] .analyze-back-btn:hover {
+  border-color: var(--color-text-muted);
+  color: var(--color-text);
+}
+
+html[data-theme="light"] .analyze-icon-btn:hover {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+html[data-theme="light"] .analyze-score-bar-track {
+  background: var(--color-surface-3);
+}
+
 /* ===== Responsive Breakpoints ===== */
 
 /* Mobile: 0 - 640px */
