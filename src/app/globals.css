@@ -93,8 +93,8 @@ textarea:disabled {
 }
 
 html {
-  background-color: var(--color-bg);
-  color-scheme: dark light;
+  background-color: #09090b;
+  color-scheme: dark;
   touch-action: pan-y;
   -ms-touch-action: pan-y;
   overscroll-behavior-x: none;
@@ -106,8 +106,8 @@ html {
 }
 
 body {
-  background-color: var(--color-bg);
-  color: var(--color-text);
+  background-color: #09090b;
+  color: #fafafa;
   font-family: var(--font-inter), "Inter", system-ui, -apple-system, sans-serif;
   margin: 0;
   overscroll-behavior-x: none;
