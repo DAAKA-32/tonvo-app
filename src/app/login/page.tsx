@@ -1,8 +1,9 @@
 "use client";
 
-import { Suspense, useState, useCallback, useMemo, useRef, useEffect } from "react";
+import { Suspense, useState, useCallback, useMemo, useRef } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { useTranslation } from "react-i18next";
 import TonvoLogo from "@/components/Logo";
 import { useToast } from "@/components/Toast";
@@ -17,6 +18,9 @@ import {
   createUserWithEmailAndPassword,
   firebaseSignOut,
 } from "@/lib/firebase";
+
+const SPRING_TAP = { type: "spring" as const, stiffness: 480, damping: 28 };
+const EASE_SOFT = [0.23, 1, 0.32, 1] as const;
 
 /* ------------------------------------------------------------------ */
 /*  Icons                                                              */
@@ -302,62 +306,85 @@ function ConsentModal({
 }) {
   const { t } = useTranslation();
   const [checked, setChecked] = useState(false);
-
-  if (!open) return null;
+  const reduce = useReducedMotion();
 
   return (
-    <div
-      className="fixed inset-0 z-50 flex items-center justify-center px-4"
-      style={{ backgroundColor: "rgba(0, 0, 0, 0.7)", backdropFilter: "blur(8px)" }}
-    >
-      <div
-        className="auth-modal w-full max-w-md rounded-2xl border p-8"
-        style={{
-          background: "var(--color-surface)",
-          borderColor: "rgba(255, 255, 255, 0.06)",
-          boxShadow: "0 24px 80px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.03)",
-        }}
-      >
-        <h2 className="text-lg font-semibold mb-2" style={{ color: "var(--color-text)" }}>
-          {t("auth.consentTitle")}
-        </h2>
-        <p className="text-sm mb-6 leading-relaxed" style={{ color: "var(--color-text-muted)" }}>
-          {t("auth.consentDescription")}
-        </p>
-
-        <label className="flex items-start gap-3 cursor-pointer mb-6" style={{ minHeight: 44 }}>
-          <input
-            type="checkbox"
-            checked={checked}
-            onChange={(e) => setChecked(e.target.checked)}
-            className="auth-checkbox mt-0.5 shrink-0"
-          />
-          <span className="text-[13px] leading-relaxed" style={{ color: "var(--color-text-muted)" }}>
-            {t("auth.termsConsent")}{" "}
-            <Link href="/terms" target="_blank" className="auth-link">{t("auth.termsOfService")}</Link>{" "}
-            {t("auth.and")}{" "}
-            <Link href="/privacy" target="_blank" className="auth-link">{t("auth.privacyPolicy")}</Link>
-            {t("auth.termsConsentSuffix")}
-          </span>
-        </label>
-
-        <div className="flex gap-3">
-          <button
-            onClick={onCancel}
-            className="auth-btn-secondary flex-1 py-2.5 text-sm font-medium"
+    <AnimatePresence>
+      {open && (
+        <motion.div
+          className="fixed inset-0 z-50 flex items-center justify-center px-4"
+          style={{ backgroundColor: "rgba(0, 0, 0, 0.7)", backdropFilter: "blur(8px)" }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.22 }}
+          onClick={onCancel}
+        >
+          <motion.div
+            className="auth-modal w-full max-w-md rounded-2xl border p-8"
+            style={{
+              background: "var(--color-surface)",
+              borderColor: "rgba(255, 255, 255, 0.06)",
+              boxShadow: "0 24px 80px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.03)",
+            }}
+            initial={reduce ? { opacity: 0 } : { opacity: 0, scale: 0.94, y: 12 }}
+            animate={reduce ? { opacity: 1 } : { opacity: 1, scale: 1, y: 0 }}
+            exit={reduce ? { opacity: 0 } : { opacity: 0, scale: 0.96, y: 8 }}
+            transition={
+              reduce
+                ? { duration: 0.18 }
+                : { type: "spring", stiffness: 320, damping: 30, mass: 0.8 }
+            }
+            onClick={(e) => e.stopPropagation()}
           >
-            {t("common.cancel")}
-          </button>
-          <button
-            onClick={onAccept}
-            disabled={!checked}
-            className="auth-btn-primary flex-1 py-2.5 text-sm font-semibold disabled:opacity-40 disabled:cursor-not-allowed"
-          >
-            {t("auth.consentAccept")}
-          </button>
-        </div>
-      </div>
-    </div>
+            <h2 className="text-lg font-semibold mb-2" style={{ color: "var(--color-text)" }}>
+              {t("auth.consentTitle")}
+            </h2>
+            <p className="text-sm mb-6 leading-relaxed" style={{ color: "var(--color-text-muted)" }}>
+              {t("auth.consentDescription")}
+            </p>
+
+            <label className="flex items-start gap-3 cursor-pointer mb-6" style={{ minHeight: 44 }}>
+              <input
+                type="checkbox"
+                checked={checked}
+                onChange={(e) => setChecked(e.target.checked)}
+                className="auth-checkbox mt-0.5 shrink-0"
+              />
+              <span className="text-[13px] leading-relaxed" style={{ color: "var(--color-text-muted)" }}>
+                {t("auth.termsConsent")}{" "}
+                <Link href="/terms" target="_blank" className="auth-link">{t("auth.termsOfService")}</Link>{" "}
+                {t("auth.and")}{" "}
+                <Link href="/privacy" target="_blank" className="auth-link">{t("auth.privacyPolicy")}</Link>
+                {t("auth.termsConsentSuffix")}
+              </span>
+            </label>
+
+            <div className="flex gap-3">
+              <motion.button
+                onClick={onCancel}
+                className="auth-btn-secondary flex-1 py-2.5 text-sm font-medium"
+                whileHover={reduce ? undefined : { y: -1 }}
+                whileTap={reduce ? undefined : { scale: 0.97 }}
+                transition={SPRING_TAP}
+              >
+                {t("common.cancel")}
+              </motion.button>
+              <motion.button
+                onClick={onAccept}
+                disabled={!checked}
+                className="auth-btn-primary flex-1 py-2.5 text-sm font-semibold disabled:opacity-40 disabled:cursor-not-allowed"
+                whileHover={reduce || !checked ? undefined : { y: -1, scale: 1.01 }}
+                whileTap={reduce || !checked ? undefined : { scale: 0.97 }}
+                transition={SPRING_TAP}
+              >
+                {t("auth.consentAccept")}
+              </motion.button>
+            </div>
+          </motion.div>
+        </motion.div>
+      )}
+    </AnimatePresence>
   );
 }
 
@@ -384,12 +411,8 @@ function LoginPageInner() {
   const [showConsent, setShowConsent] = useState(false);
   const [pendingGoogleUser, setPendingGoogleUser] = useState<import("firebase/auth").UserCredential | null>(null);
   const [redirecting, setRedirecting] = useState(false);
-  const [mounted, setMounted] = useState(false);
-  const cardRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  const cardRef = useRef<HTMLElement>(null);
+  const reduce = useReducedMotion();
 
   const passwordChecks = useMemo(() => ({
     minLength: password.length >= 8,
@@ -564,40 +587,63 @@ function LoginPageInner() {
       </nav>
 
       {/* Main content */}
-      <main
+      <motion.main
         ref={cardRef}
         className={isRegister ? "auth-container auth-container--signup" : "auth-container"}
-        style={{
-          opacity: mounted && !redirecting ? 1 : 0,
-          transform: mounted && !redirecting ? "translateY(0)" : "translateY(12px)",
-          transition: "opacity 0.5s cubic-bezier(0.23, 1, 0.32, 1), transform 0.5s cubic-bezier(0.23, 1, 0.32, 1)",
-          pointerEvents: redirecting ? "none" : "auto",
-        }}
+        initial={reduce ? { opacity: 0 } : { opacity: 0, y: 16 }}
+        animate={
+          redirecting
+            ? reduce
+              ? { opacity: 0 }
+              : { opacity: 0, y: 12 }
+            : reduce
+              ? { opacity: 1 }
+              : { opacity: 1, y: 0 }
+        }
+        transition={{ duration: 0.55, ease: EASE_SOFT }}
+        style={{ pointerEvents: redirecting ? "none" : "auto" }}
       >
         {/* Logo */}
-        <div className="flex justify-center mb-6">
+        <motion.div
+          className="flex justify-center mb-6"
+          whileHover={reduce ? undefined : { scale: 1.04, rotate: -1 }}
+          transition={{ type: "spring", stiffness: 300, damping: 22 }}
+        >
           <TonvoLogo size="lg" showText={false} />
-        </div>
+        </motion.div>
 
-        {/* Heading */}
-        <div className="text-center mb-7">
-          <h1 className="auth-heading">
-            {isRegister ? t("auth.createAccount") : t("auth.welcomeBack")}
-          </h1>
-          <p className="auth-subheading">
-            {isRegister ? t("auth.signUpSubtitle") : t("auth.signInSubtitle")}
-          </p>
+        {/* Heading — animated swap on login ↔ signup */}
+        <div className="text-center mb-7" style={{ minHeight: 70 }}>
+          <AnimatePresence mode="wait" initial={false}>
+            <motion.div
+              key={isRegister ? "signup" : "signin"}
+              initial={reduce ? { opacity: 0 } : { opacity: 0, y: 8 }}
+              animate={reduce ? { opacity: 1 } : { opacity: 1, y: 0 }}
+              exit={reduce ? { opacity: 0 } : { opacity: 0, y: -6 }}
+              transition={{ duration: 0.28, ease: EASE_SOFT }}
+            >
+              <h1 className="auth-heading">
+                {isRegister ? t("auth.createAccount") : t("auth.welcomeBack")}
+              </h1>
+              <p className="auth-subheading">
+                {isRegister ? t("auth.signUpSubtitle") : t("auth.signInSubtitle")}
+              </p>
+            </motion.div>
+          </AnimatePresence>
         </div>
 
         {/* Google Auth — placed first like Resend */}
-        <button
+        <motion.button
           onClick={handleGoogleAuth}
           className="auth-btn-google"
           type="button"
+          whileHover={reduce ? undefined : { y: -1 }}
+          whileTap={reduce ? undefined : { scale: 0.98 }}
+          transition={SPRING_TAP}
         >
           <GoogleIcon />
           {t("auth.continueWithGoogle")}
-        </button>
+        </motion.button>
 
         {/* Divider */}
         <div className="auth-divider">
@@ -707,20 +753,48 @@ function LoginPageInner() {
           </Collapse>
 
           {/* Submit */}
-          <button
+          <motion.button
             type="submit"
             disabled={loading || (isRegister && !acceptedTerms)}
             className="auth-btn-primary w-full"
+            whileHover={
+              reduce || loading || (isRegister && !acceptedTerms)
+                ? undefined
+                : { y: -1, scale: 1.005 }
+            }
+            whileTap={
+              reduce || loading || (isRegister && !acceptedTerms)
+                ? undefined
+                : { scale: 0.98 }
+            }
+            transition={SPRING_TAP}
           >
-            {loading ? (
-              <span className="flex items-center justify-center gap-2">
-                <SpinnerIcon />
-                {t("common.loading")}
-              </span>
-            ) : (
-              isRegister ? t("auth.createAccountBtn") : t("auth.signIn")
-            )}
-          </button>
+            <AnimatePresence mode="wait" initial={false}>
+              {loading ? (
+                <motion.span
+                  key="loading"
+                  className="flex items-center justify-center gap-2"
+                  initial={reduce ? { opacity: 0 } : { opacity: 0, y: 4 }}
+                  animate={reduce ? { opacity: 1 } : { opacity: 1, y: 0 }}
+                  exit={reduce ? { opacity: 0 } : { opacity: 0, y: -4 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  <SpinnerIcon />
+                  {t("common.loading")}
+                </motion.span>
+              ) : (
+                <motion.span
+                  key={isRegister ? "register" : "signin"}
+                  initial={reduce ? { opacity: 0 } : { opacity: 0, y: 4 }}
+                  animate={reduce ? { opacity: 1 } : { opacity: 1, y: 0 }}
+                  exit={reduce ? { opacity: 0 } : { opacity: 0, y: -4 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  {isRegister ? t("auth.createAccountBtn") : t("auth.signIn")}
+                </motion.span>
+              )}
+            </AnimatePresence>
+          </motion.button>
 
           {/* Passive legal notice — login only */}
           {!isRegister && (
@@ -736,11 +810,18 @@ function LoginPageInner() {
         {/* Toggle mode */}
         <p className="auth-toggle">
           {isRegister ? t("auth.alreadyHaveAccount") : t("auth.noAccount")}{" "}
-          <button onClick={handleToggle} className="auth-toggle-btn" type="button">
+          <motion.button
+            onClick={handleToggle}
+            className="auth-toggle-btn"
+            type="button"
+            whileHover={reduce ? undefined : { scale: 1.04 }}
+            whileTap={reduce ? undefined : { scale: 0.96 }}
+            transition={SPRING_TAP}
+          >
             {isRegister ? t("auth.signInLink") : t("auth.signUpLink")}
-          </button>
+          </motion.button>
         </p>
-      </main>
+      </motion.main>
 
       {/* Consent modal */}
       <ConsentModal

@@ -3,11 +3,14 @@
 import { useState, useEffect, ReactNode } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { motion, useReducedMotion } from "framer-motion";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "@/lib/auth-context";
 import { auth, firebaseSignOut } from "@/lib/firebase";
 import { authFetch } from "@/lib/api-client";
 import TonvoLogo from "@/components/Logo";
+
+const SPRING_LAYOUT = { type: "spring" as const, stiffness: 380, damping: 32, mass: 0.8 };
 
 function IconDashboard() {
   return (
@@ -66,18 +69,35 @@ function IconSettings() {
 }
 
 function SidebarNavLink({
-  href, icon: Icon, label, isActive, onClick,
+  href, icon: Icon, label, isActive, onClick, layoutId = "sidebar-active-pill",
 }: {
   href: string;
   icon: () => ReactNode;
   label: string;
   isActive: boolean;
   onClick?: () => void;
+  layoutId?: string;
 }) {
+  const reduce = useReducedMotion();
   return (
-    <Link href={href} className={`sidebar-link ${isActive ? "active" : ""}`} onClick={onClick}>
-      <span style={{ display: "inline-flex" }}><Icon /></span>
-      {label}
+    <Link
+      href={href}
+      className={`sidebar-link ${isActive ? "active" : ""}`}
+      onClick={onClick}
+      style={{ position: "relative" }}
+    >
+      {isActive && !reduce && (
+        <motion.span
+          layoutId={layoutId}
+          aria-hidden
+          className="sidebar-link-pill"
+          transition={SPRING_LAYOUT}
+        />
+      )}
+      <span style={{ display: "inline-flex", position: "relative", zIndex: 1 }}>
+        <Icon />
+      </span>
+      <span style={{ position: "relative", zIndex: 1 }}>{label}</span>
     </Link>
   );
 }

@@ -1,6 +1,6 @@
 {
   "pageTitle": {
-    "default": "Tonvo — AI 대화 코파일럿",
+    "default": "Tonvo — 더 많이 성사, 더 잘 협상.",
     "login": "로그인 또는 계정 만들기",
     "dashboard": "대시보드",
     "session": "라이브 세션",
@@ -10,7 +10,7 @@
     "pricing": "요금제",
     "settings": "설정",
     "profile": "프로필",
-    "about": "Tonvo 소개",
+    "about": "소개",
     "privacy": "개인정보 처리방침",
     "terms": "이용약관",
     "cookies": "쿠키 정책",
@@ -57,11 +57,11 @@
     "greetingMorning": "좋은 아침입니다",
     "greetingAfternoon": "안녕하세요",
     "greetingEvening": "좋은 저녁입니다",
-    "subtitle": "대화 인텔리전스 개요입니다.",
-    "startSession": "라이브 세션 시작",
+    "subtitle": "당신의 성사율을 한눈에.",
+    "startSession": "라이브 진입 — 성사",
     "startSessionDesc": "실시간 대화 분석",
-    "analyzeText": "텍스트 분석",
-    "analyzeTextDesc": "메시지 또는 대화 내용 붙여넣기",
+    "analyzeText": "통화 복기",
+    "analyzeTextDesc": "대화를 붙여넣으세요 — 다음 한 수를 드립니다",
     "sessions": "세션",
     "segments": "세그먼트",
     "avgConfidence": "평균 신뢰도",
@@ -85,7 +85,12 @@
     "noSessions": "아직 세션이 없습니다",
     "noSessionsDesc": "라이브 세션을 시작하여 기록을 확인하세요.",
     "noFilterResults": "{{filter}} 세션이 없습니다",
-    "noFilterResultsDesc": "다른 필터를 사용하여 더 많은 결과를 확인하세요."
+    "noFilterResultsDesc": "다른 필터를 사용하여 더 많은 결과를 확인하세요.",
+    "searchPlaceholder": "제목 또는 요약 검색…",
+    "today": "오늘",
+    "yesterday": "어제",
+    "thisWeek": "이번 주",
+    "thisMonth": "이번 달"
   },
   "analyzeTextPage": {
     "title": "텍스트 분석",
@@ -273,8 +278,8 @@
   "auth": {
     "welcomeBack": "다시 오신 것을 환영합니다",
     "createAccount": "계정 만들기",
-    "signInSubtitle": "Tonvo를 계속 사용하려면 로그인하세요",
-    "signUpSubtitle": "Tonvo 사용을 시작하려면 가입하세요",
+    "signInSubtitle": "로그인하고 성사시키던 그 자리로",
+    "signUpSubtitle": "계정을 만들고 성사율을 올리세요",
     "emailLabel": "이메일 주소",
     "emailPlaceholder": "you@example.com",
     "passwordLabel": "비밀번호",
@@ -475,16 +480,16 @@
   },
   "landing": {
     "nav": { "features": "기능", "product": "제품", "useCases": "활용 사례", "pricing": "요금제", "signIn": "로그인", "getStarted": "시작하기", "dashboard": "대시보드" },
-    "hero": { "badge": "대화 인텔리전스의 새로운 기준", "headline1": "무엇을 말할지.", "headline2": "결정적인 순간에.", "subtitle": "Tonvo는 실시간으로 대화를 분석하여 감정을 감지하고, 스마트한 제안을 제공하며, 모든 대화를 자신 있게 이끌 수 있도록 도와줍니다.", "cta": "시작하기", "ctaSecondary": "작동 방식 보기" },
-    "problem": { "label": "문제", "heading1": "대화는 어렵습니다.", "heading2": "상대의 마음을 읽는 건 더 어렵습니다.", "p1": "모든 게 순조로워 보이던 통화가 있었습니다. 갑자기 잠재 고객이 차가워지고, 동료가 짜증을 내고, 후보자가 마음을 닫았습니다. 눈치챘을 때는 이미 되돌리기엔 너무 늦었습니다.", "p2": "대부분의 사람들은 대화의 성패를 좌우하는 미묘한 어조와 감정의 변화를 놓칩니다. 관심이 없어서가 아니라, 다음에 무슨 말을 할지에 집중하고 있기 때문입니다." },
-    "solution": { "label": "솔루션", "heading1": "모든 대화에", "heading2": "든든한 파트너를.", "desc": "Tonvo는 통화와 회의 중에 함께 작동합니다. 오디오를 캡처하고 실시간으로 감정 역학을 분석하여, 대화의 흐름과 다음 행동을 항상 파악할 수 있도록 조용하고 맥락에 맞는 제안을 제공합니다.", "step1Title": "세션 시작", "step1Desc": "클릭 한 번이면 됩니다. Tonvo가 화면이나 마이크에서 오디오를 캡처합니다.", "step2Title": "실시간 피드백 확인", "step2Desc": "대화가 진행되면서 어조 지표와 제안이 실시간으로 업데이트됩니다.", "step3Title": "인사이트 확인", "step3Desc": "통화 후, 핵심 순간과 요약이 포함된 상세 분석을 확인하세요." },
-    "features": { "label": "기능", "heading1": "대화를 완벽하게 이해하기 위한", "heading2": "모든 것을 갖추었습니다.", "liveTone": "실시간 어조 감지", "liveToneDesc": "통화나 마이크에서 오디오를 캡처하여 대화가 긍정적인지, 중립적인지, 긴장 상태인지를 실시간으로 감지합니다.", "smartSuggestions": "스마트 제안", "smartSuggestionsDesc": "무슨 말을 하고 있는지, 어떤 어조로 하고 있는지를 분석하여 대화를 올바른 방향으로 이끄는 제안을 제공합니다.", "conversationInsights": "대화 인사이트", "conversationInsightsDesc": "매 세션 후 어조 변화, 핵심 순간, 실행 가능한 요약이 포함된 상세 리포트를 제공합니다.", "textAnalysis": "텍스트 분석", "textAnalysisDesc": "메시지나 대화 내용을 붙여넣어 숨겨진 어조를 파악하고 개선 제안을 받으세요." },
-    "demo": { "label": "AI 코파일럿", "heading": "눈에 보이지 않는 회의 코치", "desc": "대화에 집중하는 동안, AI 코파일럿이 회의 창 옆에서 조용히 작동하며 실시간으로 최적의 대응 방법을 제안합니다." },
-    "benefits": { "label": "장점", "heading": "사람과 대화하는 사람을 위해 만들었습니다.", "realtime": "실시간", "realtimeDesc": "라이브 대화 중 즉각적인 피드백", "threeClicks": "3번의 클릭", "threeClicksDesc": "어떤 대화든 분석을 시작하기까지", "actionable": "즉시 활용 가능", "actionableDesc": "바로 적용할 수 있는 제안", "private": "프라이버시 보호", "privateDesc": "오디오는 로컬에서 처리, 저장하지 않음" },
-    "useCases": { "label": "활용 사례", "heading": "대화가 중요한 모든 곳에서 활약합니다.", "salesTitle": "영업 통화", "salesDesc": "잠재 고객이 관심을 보이는지, 망설이는지, 흥미를 잃고 있는지 파악하세요. 거래가 끝난 후가 아니라, 그 순간에 전략을 조정하세요.", "supportTitle": "고객 지원", "supportDesc": "불만을 조기에 감지하고 상황을 진정시키는 제안을 받으세요. 어려운 상호작용을 긍정적인 경험으로 바꿀 수 있습니다.", "interviewsTitle": "채용 면접", "interviewsDesc": "면접관이든 지원자든, 감정의 역학을 이해하고 더 효과적으로 소통할 수 있습니다.", "meetingsTitle": "팀 회의", "meetingsDesc": "긴 회의 동안 참여도를 추적하세요. 에너지가 떨어지는 시점을 파악하고 청중을 다시 집중시키는 신호를 받으세요." },
-    "testimonials": { "label": "전문가들이 신뢰하는", "heading": "실제로 사람과 대화하는 팀들이 사랑합니다.", "desc": "영업 통화부터 1:1 미팅까지, 수천 명의 전문가들이 Tonvo를 사용하여 핵심을 포착하고 더 나은 소통을 하고 있습니다.", "rating": "4.9", "ratingDesc": "200명 이상의 사용자 평가" },
-    "cta": { "heading1": "추측은 그만.", "heading2": "진정한 이해를 시작하세요.", "desc": "다음 중요한 대화가 다가오고 있습니다. 핵심을 놓치지 마세요. 무료로 시작할 수 있으며, 신용카드가 필요 없습니다.", "button": "시작하기", "note": "무료 플랜 제공. 언제든 업그레이드 가능." },
-    "faq": { "title": "자주 묻는 질문", "subtitle": "AI 대화 코파일럿 Tonvo에 대해 알아야 할 모든 것.", "q1": "AI 대화 코파일럿이란 무엇인가요?", "a1": "AI 대화 코파일럿은 실시간으로 대화를 분석하여 코칭 팁, 어조 감지, 스마트 제안을 제공합니다.", "q2": "Tonvo는 라이브 통화 중에도 작동하나요?", "a2": "네, 실시간 텍스트 변환, 코칭 팁, 어조 분석 기능을 제공합니다.", "q3": "실시간 분석은 어떻게 작동하나요?", "a3": "다단계 AI 파이프라인으로 텍스트 변환, 어조 감지, 신호 감지, 코칭, 품질 평가를 수행합니다.", "q4": "Tonvo는 무료로 사용할 수 있나요?", "a4": "무료 플랜은 월 3회 세션을 제공합니다. Pro로 업그레이드하면 무제한 세션과 고급 기능을 이용할 수 있습니다.", "q5": "화면 공유 중에 코파일럿이 상대방에게 보이나요?", "a5": "코파일럿은 별도 창에서 열리므로, 특정 앱 창을 공유할 때는 보이지 않습니다.", "q6": "Tonvo는 어떤 언어를 지원하나요?", "a6": "10개 언어를 지원합니다: 영어, 프랑스어, 스페인어, 독일어, 포르투갈어, 이탈리아어, 네덜란드어, 중국어, 일본어, 한국어." }
+    "hero": { "badge": "협상가를 위한 Growth-as-a-Service", "headline1": "성사율 27 % 상승.", "headline2": "당신의 피치는 그대로.", "subtitle": "컨설턴트와 협상 코치를 위한 실시간 클로징 인텔리전스. 연결. 성사. 복리화.", "cta": "성사율 올리기", "ctaSecondary": "결과 보기" },
+    "problem": { "label": "성사하지 못하는 비용", "heading1": "놓친 딜 하나하나가", "heading2": "매출 누수입니다.", "p1": "놓친 신호 하나. 밋밋한 대답 하나. 다섯 자리 딜이 날아갑니다. 톱 Closer도 10건 중 3건을 잃습니다 — 가격이 아니라 항상 잘못된 타이밍 때문에." },
+    "solution": { "label": "성장 엔진", "heading1": "당신 어깨 위의 Closer.", "heading2": "모든 통화. 모든 딜.", "desc": "Tonvo는 분위기를 읽고 성사 한마디를 정확한 순간에 건넵니다. 분석이 아닙니다. 온디맨드 클로징 파워입니다.", "step1Title": "연결", "step1Desc": "클릭 한 번. Tonvo는 듣습니다 — 상대에게는 보이지 않습니다.", "step2Title": "라이브에서 이기다", "step2Desc": "성사 한마디, 반론 카운터, 앵커 — 필요한 그 순간에.", "step3Title": "우위를 복리화", "step3Desc": "무엇이 통했고 무엇이 날아갔는지, 당신의 트렌드." },
+    "features": { "label": "성사율을 끌어올리는 방법", "heading1": "딜을 앞으로 움직이는", "heading2": "모든 지렛대.", "liveTone": "구매 신호 감지", "liveToneDesc": "창문이 열렸을 때 치고 들어가세요 — 10초 늦으면 끝.", "smartSuggestions": "바로 꺼내는 성사 한마디", "smartSuggestionsDesc": "그들의 반론에 정확히 맞는 한 문장. 방금 한 말에 맞춰서.", "conversationInsights": "딜별 성과", "conversationInsightsDesc": "성사율, 반론 승률, 평균 딜 사이즈. 당신의 대시보드.", "textAnalysis": "통화 후 딜 리뷰", "textAnalysisDesc": "전사를 붙여넣으세요. 무엇이 딜을 이겼는지 — 무엇이 날렸는지." },
+    "demo": { "label": "라이브 우위", "heading": "경쟁자에게 없는 Closer", "desc": "상대가 고민하는 동안 당신은 말합니다. 그에게는 안 보이고, 당신에게는 결정적으로." },
+    "benefits": { "label": "결과", "heading": "통화마다 복리로 쌓이는 결과.", "realtime": "+27 %", "realtimeDesc": "30일 평균 성사율 상승", "threeClicks": "0초", "threeClicksDesc": "성사 한마디 전 생각하는 시간", "actionable": "3.4×", "actionableDesc": "혼자일 때 대비 반론 승률", "private": "조용히", "privateDesc": "상대에게는 언제나 보이지 않음" },
+    "useCases": { "label": "Tonvo로 이기는 사람들", "heading": "성사율로 먹고사는 사람들을 위해.", "salesTitle": "하이티켓 Closer", "salesDesc": "할인 없이 다섯 자리 커미트먼트를 고정 — 리드가 식기 전에.", "supportTitle": "협상 코치", "supportDesc": "통화마다 검증된 패턴 라이브러리가 쌓입니다.", "interviewsTitle": "리테이너 통화 컨설턴트", "interviewsDesc": "앵커와 리프레임 — 가격이나 스코프를 누르는 바로 그 순간에.", "meetingsTitle": "갱신·확장 통화", "meetingsDesc": "체크인을 업셀로. 라이브로, 사흘 후 이메일이 아니라." },
+    "testimonials": { "label": "리뷰보다 결과", "heading": "Closer는 후기를 쓰지 않습니다. 숫자를 냅니다.", "desc": "수백 명의 협상가, 첫 달 성사율이 24 %에서 31 %로 상승.", "rating": "+29 %", "ratingDesc": "Closer당 첫 달 평균 매출 상승" },
+    "cta": { "heading1": "다음 통화는", "heading2": "스스로 성사됩니다.", "desc": "이길 수 있는 딜을 놓치지 마세요. Tonvo를 연결. 금요일엔 더 높은 성사율로.", "button": "성사율 올리기", "note": "무료로 시작. 결과 보장 또는 환불 — 7일." },
+    "faq": { "title": "Closer가 묻는 질문.", "subtitle": "Tonvo로 성사율을 올리기 전에 알아야 할 모든 것.", "q1": "Tonvo는 툴인가요, 성장 시스템인가요?", "a1": "Tonvo는 Growth-as-a-Service 시스템입니다 — 우리는 성사율을 팝니다. 소프트웨어가 아닙니다. 연결하면 측정 가능한 결과가 나옵니다: 성사 건수 증가, 더 큰 딜, 더 적은 반론 손실. 앱은 전달 수단일 뿐입니다.", "q2": "성사율은 실제로 얼마나 빨리 움직이나요?", "a2": "대부분의 Closer가 14일 안에 측정 가능한 상승을 확인합니다 — 피치를 바꿔서가 아니라, 딜을 결정짓는 순간을 놓치지 않아서입니다. 30일 평균 +27 %.", "q3": "통화 중에 정확히 무엇을 받나요?", "a3": "결정적 순간에 해야 할 바로 그 한마디: 반론 카운터, 가격 앵커, 커미트먼트 요청, 리프레임. 라이브로 대시보드를 볼 필요가 없습니다 — 신호가 터지는 순간 다음 수가 떠오릅니다.", "q4": "프로세스나 피치를 바꿔야 하나요?", "a4": "아니요. Tonvo는 기존 프로세스 위에 덧씌워집니다. 피치, 자료, 제안 — 그대로입니다. 바뀌는 건 계약으로 끝나는 비율뿐입니다.", "q5": "제 프로스펙트에게 뭔가 보이나요?", "a5": "절대 안 보입니다. Tonvo는 별도 창에서 실행되고, 화면 공유에서도 상대에게 보이지 않습니다. 당신의 우위는 당신의 우위로 남습니다.", "q6": "결과 보장이 있나요?", "a6": "네. 7일 안에 성사율이 움직이지 않으면 환불해드립니다. 우리는 결과를 팝니다 — 결과가 없으면 돈을 가지고 있지 않습니다." }
   },
   "mockup": {
     "menu": "메뉴",
@@ -504,8 +509,8 @@
     "hesitation": "망설임", "opportunity": "기회", "speaking": "발화 중", "listening": "청취 중", "muted": "음소거"
   },
   "pricing": {
-    "title": "간단하고 투명한 요금제.",
-    "subtitle": "무료로 시작하세요. 더 필요할 때 업그레이드하세요.",
+    "title": "가격은 결과 기준입니다. 소프트웨어가 아닙니다.",
+    "subtitle": "한 달 더 성사하면 1년치를 갚습니다. 무료로 시작 — Tonvo가 딜을 성사시키기 시작하면 업그레이드.",
     "monthly": "월간",
     "annual": "연간",
     "manageSubscription": "구독 관리",
@@ -532,58 +537,58 @@
     "cancelError": "구독을 업데이트할 수 없습니다. 다시 시도해 주세요.",
     "portalError": "결제 포털을 열 수 없습니다. 다시 시도해 주세요.",
     "planFree": {
-      "name": "무료",
-      "description": "Tonvo의 기본 기능을 체험하세요",
-      "cta": "무료로 시작",
+      "name": "Starter",
+      "description": "월 3회의 통화로 상승 체감",
+      "cta": "첫 딜 성사시키기",
       "features": [
-        "월 3회 세션",
-        "실시간 톤 분석",
-        "기본 제안",
-        "세션 기록 (7일)"
+        "월 3회 라이브 클로징 세션",
+        "구매 신호 감지",
+        "코어 성사 한마디",
+        "딜 리뷰 (7일 기록)"
       ]
     },
     "planPro": {
-      "name": "Pro",
-      "description": "경쟁력을 원하는 전문가를 위해",
-      "cta": "Pro로 업그레이드",
+      "name": "Closer",
+      "description": "성사로 먹고사는 사람을 위해",
+      "cta": "내 우위 켜기",
       "features": [
-        "무제한 세션",
-        "고급 대화 인텔리전스",
-        "AI 코칭 팁 및 실시간 인사이트",
-        "전체 세션 기록",
-        "화면 분석",
-        "PDF/CSV 내보내기",
+        "무제한 클로징 세션",
+        "전체 반론 처리 라이브러리",
+        "라이브 성사 한마디와 가격 앵커",
+        "성사율 전체 기록 트렌드",
+        "통화 후 딜 리뷰 (전사)",
+        "딜 리포트 내보내기 (PDF/CSV)",
         "우선 지원"
       ]
     },
     "planTeam": {
-      "name": "Team",
-      "description": "함께 성과를 내는 팀을 위해",
-      "cta": "Team으로 업그레이드",
+      "name": "Sales Team",
+      "description": "팀 전체의 성사율 복리화",
+      "cta": "팀 전체 끌어올리기",
       "features": [
-        "Pro의 모든 기능",
-        "팀 대시보드 및 분석",
-        "매니저 인사이트 및 보고서",
-        "맞춤 코칭 프로필",
+        "Closer의 모든 기능",
+        "팀 성사율 대시보드",
+        "매니저 Win/Loss 인사이트",
+        "담당자별 맞춤 Playbook",
         "API 액세스",
         "SSO 통합",
-        "전담 지원"
+        "전담 Revenue Coach"
       ]
     }
   },
   "upgrade": {
-    "successTitle": "모든 준비가 완료되었습니다!",
-    "successSubtitle": "{{plan}} 플랜이 활성화되었습니다. 모든 프리미엄 기능을 즐겨보세요.",
+    "successTitle": "들어왔습니다. 성사할 시간입니다.",
+    "successSubtitle": "{{plan}} 플랜이 활성화되었습니다. 지금부터 모든 통화가 성사율에 복리로 쌓입니다.",
     "cancelTitle": "아직 고민 중이신가요?",
-    "cancelSubtitle": "괜찮습니다 — 가장 적합한 플랜을 선택하거나, 무료로 계속 이용하세요.",
-    "nudgeTitle": "잠재력을 최대한 발휘하세요",
-    "nudgeSubtitle": "현재 무료 플랜을 사용 중입니다. 업그레이드하여 무제한 세션, AI 코칭 등을 이용하세요.",
+    "cancelSubtitle": "괜찮습니다 — Starter에서 계속 성사하시고, 무제한이 필요할 때 업그레이드하세요.",
+    "nudgeTitle": "성사율에 한도가 걸려 있습니다",
+    "nudgeSubtitle": "현재 Starter — 월 3회. 무제한 성사와 전체 반론 라이브러리를 해제하세요.",
     "goToDashboard": "대시보드로 이동",
-    "stayFree": "무료 플랜 계속 사용"
+    "stayFree": "Starter에 머물기"
   },
   "footer": {
-    "tagline1": "실시간 대화 인텔리전스.",
-    "tagline2": "어조, 감정, 의도를 파악하세요.",
+    "tagline1": "Closer를 위한 Growth-as-a-Service.",
+    "tagline2": "우리가 파는 건 성사율 — 소프트웨어가 아닙니다.",
     "product": "제품",
     "features": "기능",
     "demo": "데모",
@@ -803,5 +808,28 @@
     "cookiesLabel": "쿠키 정책",
     "cookiesDesc": "쿠키 사용 방법",
     "backToHome": "홈으로 돌아가기"
+  },
+  "liveTranslation": {
+    "title": "실시간 번역",
+    "enable": "사용",
+    "live": "실시간",
+    "targetLang": "출력 언어",
+    "mode": "모드",
+    "error": "오류",
+    "disabledHint": "활성화하면 대화를 실시간으로 번역합니다.",
+    "listening": "듣는 중...",
+    "startHint": "세션을 시작하면 실시간 번역이 표시됩니다.",
+    "summary": "요약",
+    "summaryEmpty": "대화가 진행됨에 따라 요약이 표시됩니다.",
+    "modes": {
+      "translate_only": "번역만",
+      "translate_summary": "번역 + 요약",
+      "summary_only": "요약만"
+    },
+    "lang": {
+      "fr": "프랑스어", "en": "영어", "es": "스페인어", "de": "독일어",
+      "it": "이탈리아어", "pt": "포르투갈어", "nl": "네덜란드어",
+      "ja": "일본어", "ko": "한국어", "zh": "중국어"
+    }
   }
 }

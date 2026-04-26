@@ -1,6 +1,6 @@
 {
   "pageTitle": {
-    "default": "Tonvo — Copilota IA per conversazioni",
+    "default": "Tonvo — Chiudi di più. Negozia meglio.",
     "login": "Accedi o crea un account",
     "dashboard": "Dashboard",
     "session": "Sessione dal vivo",
@@ -10,7 +10,7 @@
     "pricing": "Prezzi",
     "settings": "Impostazioni",
     "profile": "Profilo",
-    "about": "Informazioni su Tonvo",
+    "about": "Chi siamo",
     "privacy": "Informativa sulla privacy",
     "terms": "Termini di servizio",
     "cookies": "Informativa sui cookie",
@@ -57,11 +57,11 @@
     "greetingMorning": "Buongiorno",
     "greetingAfternoon": "Buon pomeriggio",
     "greetingEvening": "Buonasera",
-    "subtitle": "Ecco una panoramica della tua intelligenza conversazionale.",
-    "startSession": "Avvia Sessione dal Vivo",
+    "subtitle": "Il tuo tasso di chiusura, a colpo d'occhio.",
+    "startSession": "Vai Live — Chiudi",
     "startSessionDesc": "Analisi delle conversazioni in tempo reale",
-    "analyzeText": "Analizza Testo",
-    "analyzeTextDesc": "Incolla un messaggio o una conversazione",
+    "analyzeText": "Debriefa una Call",
+    "analyzeTextDesc": "Incolla il dialogo — ti diamo la prossima mossa",
     "sessions": "Sessioni",
     "segments": "Segmenti",
     "avgConfidence": "Affidabilità Media",
@@ -85,7 +85,12 @@
     "noSessions": "Nessuna sessione ancora",
     "noSessionsDesc": "Avvia una sessione dal vivo per vedere la tua cronologia qui.",
     "noFilterResults": "Nessuna sessione {{filter}}",
-    "noFilterResultsDesc": "Prova un filtro diverso per vedere più risultati."
+    "noFilterResultsDesc": "Prova un filtro diverso per vedere più risultati.",
+    "searchPlaceholder": "Cerca titolo o riassunto…",
+    "today": "Oggi",
+    "yesterday": "Ieri",
+    "thisWeek": "Questa settimana",
+    "thisMonth": "Questo mese"
   },
   "analyzeTextPage": {
     "title": "Analizza Testo",
@@ -273,8 +278,8 @@
   "auth": {
     "welcomeBack": "Bentornato",
     "createAccount": "Crea il tuo account",
-    "signInSubtitle": "Accedi per continuare su Tonvo",
-    "signUpSubtitle": "Registrati per iniziare a usare Tonvo",
+    "signInSubtitle": "Accedi e riprendi da dove stavi chiudendo",
+    "signUpSubtitle": "Crea il tuo account e alza il tasso di chiusura",
     "emailLabel": "Indirizzo email",
     "emailPlaceholder": "tu@esempio.com",
     "passwordLabel": "Password",
@@ -475,16 +480,16 @@
   },
   "landing": {
     "nav": { "features": "Funzionalità", "product": "Prodotto", "useCases": "Casi d'Uso", "pricing": "Prezzi", "signIn": "Accedi", "getStarted": "Inizia Ora", "dashboard": "Dashboard" },
-    "hero": { "badge": "Intelligenza Conversazionale, Reinventata", "headline1": "Sai cosa dire.", "headline2": "Al momento giusto.", "subtitle": "Tonvo analizza le tue conversazioni in tempo reale — rilevando il sentiment, proponendo suggerimenti intelligenti e aiutandoti a gestire ogni interazione con sicurezza.", "cta": "Inizia Ora", "ctaSecondary": "Scopri Come Funziona" },
-    "problem": { "label": "Il problema", "heading1": "Le conversazioni sono difficili.", "heading2": "Fraintenderle è fin troppo facile.", "p1": "Sei stato in quella call dove tutto sembrava andare bene — finché non è più stato così. Il prospect si è raffreddato. Un collega si è irritato. Un candidato si è chiuso. Quando te ne sei accorto, era ormai troppo tardi.", "p2": "La maggior parte delle persone non coglie i cambiamenti sottili di tono ed emozione che fanno la differenza in una conversazione. Non perché non gli importi, ma perché sono concentrate su cosa dire dopo." },
-    "solution": { "label": "La soluzione", "heading1": "Un secondo paio di occhi.", "heading2": "Per ogni conversazione.", "desc": "Tonvo lavora in parallelo alle tue call e riunioni. Cattura l'audio, analizza le dinamiche emotive in tempo reale e ti offre suggerimenti discreti e contestuali — così sai sempre dove sta andando la conversazione e cosa fare dopo.", "step1Title": "Avvia una sessione", "step1Desc": "Un clic. Tonvo cattura l'audio dal tuo schermo o microfono.", "step2Title": "Ricevi feedback in tempo reale", "step2Desc": "Indicatori di tono e suggerimenti si aggiornano man mano che la conversazione procede.", "step3Title": "Analizza i risultati", "step3Desc": "Dopo la call, ottieni un riepilogo completo con i momenti chiave e i prossimi passi." },
-    "features": { "label": "Funzionalità", "heading1": "Tutto ciò che ti serve per", "heading2": "capire le conversazioni.", "liveTone": "Rilevamento del Tono in Tempo Reale", "liveToneDesc": "Cattura l'audio dalle tue call o dal microfono e rileva se la conversazione è positiva, neutra o tesa — in tempo reale.", "smartSuggestions": "Suggerimenti Intelligenti", "smartSuggestionsDesc": "In base a cosa viene detto e come viene detto, Tonvo ti suggerisce cosa dire dopo per mantenere la conversazione sulla giusta rotta.", "conversationInsights": "Insight sulla Conversazione", "conversationInsightsDesc": "Dopo ogni sessione, ricevi un'analisi dei cambiamenti di tono, dei momenti chiave e un riepilogo con azioni concrete.", "textAnalysis": "Analisi del Testo", "textAnalysisDesc": "Incolla qualsiasi messaggio o estratto di conversazione per capire all'istante il tono sottostante e ricevere suggerimenti di miglioramento." },
-    "demo": { "label": "Copilota IA", "heading": "Il tuo coach invisibile per le riunioni", "desc": "Mentre tu ti concentri sulla conversazione, il Copilota IA appare accanto alla finestra della riunione — suggerendoti esattamente cosa dire dopo, in tempo reale." },
-    "benefits": { "label": "Vantaggi", "heading": "Pensato per chi parla con le persone.", "realtime": "Tempo reale", "realtimeDesc": "Feedback durante le conversazioni dal vivo", "threeClicks": "3 clic", "threeClicksDesc": "Per iniziare ad analizzare qualsiasi conversazione", "actionable": "Concreto", "actionableDesc": "Suggerimenti che puoi usare subito", "private": "Privato", "privateDesc": "Audio elaborato in locale, mai archiviato" },
-    "useCases": { "label": "Casi d'Uso", "heading": "Funziona ovunque le conversazioni contano.", "salesTitle": "Call di Vendita", "salesDesc": "Scopri quando un prospect è coinvolto, esitante o sta perdendo interesse. Adatta il tuo pitch al momento giusto, non dopo aver perso l'affare.", "supportTitle": "Assistenza Clienti", "supportDesc": "Rileva la frustrazione in anticipo e ricevi suggerimenti per de-escalare. Trasforma interazioni difficili in esperienze positive.", "interviewsTitle": "Colloqui di Lavoro", "interviewsDesc": "Che tu sia il selezionatore o il candidato, comprendi le dinamiche emotive e comunica in modo più efficace.", "meetingsTitle": "Riunioni di Team", "meetingsDesc": "Monitora il coinvolgimento nelle riunioni lunghe. Individua quando l'energia cala e ricevi spunti per riconquistare l'attenzione." },
-    "testimonials": { "label": "Scelto dai professionisti", "heading": "Amato dai team che parlano davvero con le persone.", "desc": "Dalle call di vendita agli incontri 1-a-1, migliaia di professionisti si affidano a Tonvo per cogliere ciò che conta e comunicare meglio.", "rating": "4.9", "ratingDesc": "da oltre 200 utenti" },
-    "cta": { "heading1": "Basta indovinare.", "heading2": "Inizia a capire.", "desc": "La tua prossima conversazione importante sta per arrivare. Assicurati di non perdere ciò che conta. Gratis per iniziare, nessuna carta di credito richiesta.", "button": "Inizia Ora", "note": "Piano gratuito disponibile. Aggiorna quando vuoi." },
-    "faq": { "title": "Domande Frequenti", "subtitle": "Tutto quello che devi sapere su Tonvo, il copilota IA per le conversazioni.", "q1": "Cos'è un copilota conversazionale con IA?", "a1": "Un copilota conversazionale con IA è uno strumento che analizza le tue conversazioni in tempo reale e fornisce coaching dal vivo, rilevamento del tono, suggerimenti intelligenti e insight concreti. Tonvo funziona durante le call su Discord, Zoom, Google Meet e altre piattaforme.", "q2": "Tonvo funziona durante le call dal vivo?", "a2": "Sì, Tonvo funziona in tempo reale durante le call dal vivo. Cattura l'audio dal tuo microfono e dal sistema, trascrive la conversazione e fornisce suggerimenti e coaching istantanei.", "q3": "Come funziona l'analisi in tempo reale?", "a3": "Tonvo utilizza una pipeline IA multi-fase: trascrizione audio in tempo reale con separazione dei parlanti, rilevamento di tono ed emozione, identificazione dei segnali nella conversazione, suggerimenti di coaching dal vivo e punteggio di qualità.", "q4": "Tonvo è gratuito?", "a4": "Sì, Tonvo offre un piano gratuito con 3 sessioni al mese. Il piano Pro sblocca sessioni illimitate, coaching avanzato con IA, analisi dello schermo e cronologia completa delle sessioni.", "q5": "Gli altri partecipanti possono vedere il copilota durante la condivisione schermo?", "a5": "Tonvo apre il copilota in una finestra del browser separata. Quando condividi la finestra di un'applicazione specifica anziché l'intero schermo, il copilota resta invisibile agli altri partecipanti.", "q6": "Quali lingue supporta Tonvo?", "a6": "Tonvo supporta 10 lingue: inglese, francese, spagnolo, tedesco, portoghese, italiano, olandese, cinese, giapponese e coreano." }
+    "hero": { "badge": "Growth-as-a-Service per negoziatori", "headline1": "Chiudi il 27 % di deal in più.", "headline2": "Senza cambiare il tuo pitch.", "subtitle": "Closing intelligence in tempo reale per consulenti e coach di negoziazione. Collegati. Vinci. Componi.", "cta": "Alzare il mio tasso di chiusura", "ctaSecondary": "Vedere il risultato" },
+    "problem": { "label": "Il costo di non chiudere", "heading1": "Ogni deal perso", "heading2": "è una perdita di fatturato.", "p1": "Un segnale perso. Una risposta piatta. Un deal a cinque cifre se ne va. I top closer perdono 3 call su 10 — mai per il prezzo, sempre per una mossa fuori tempo." },
+    "solution": { "label": "Il motore di crescita", "heading1": "Un closer sulla tua spalla.", "heading2": "Ogni call. Ogni deal.", "desc": "Tonvo legge la stanza e ti passa la frase che chiude — proprio nel momento giusto. Non analisi. Potere di chiusura a richiesta.", "step1Title": "Collegati", "step1Desc": "Un clic. Tonvo ascolta — invisibile al prospect.", "step2Title": "Vinci live", "step2Desc": "Frase di chiusura, contro-obiezione, ancora — nell'istante esatto.", "step3Title": "Componi il vantaggio", "step3Desc": "Vedi cosa ha funzionato, cosa ti è costato, e la tua curva." },
+    "features": { "label": "Come alziamo il tuo tasso di chiusura", "heading1": "Ogni leva che fa", "heading2": "avanzare un deal.", "liveTone": "Rilevamento dei segnali d'acquisto", "liveToneDesc": "Colpisci quando la finestra si apre — mai dieci secondi troppo tardi.", "smartSuggestions": "Frasi di chiusura pronte all'uso", "smartSuggestionsDesc": "La frase esatta per la loro obiezione. Calibrata su ciò che hanno appena detto.", "conversationInsights": "Performance deal per deal", "conversationInsightsDesc": "Tasso di chiusura, win rate sulle obiezioni, ticket medio. La tua dashboard.", "textAnalysis": "Debrief del deal post-call", "textAnalysisDesc": "Incolla un trascritto. Scopri cosa ha vinto il deal — o cosa l'ha perso." },
+    "demo": { "label": "Vantaggio live", "heading": "Il closer che il tuo concorrente non ha", "desc": "Mentre lui pensa, tu dici. Invisibile a lui. Decisiva per te." },
+    "benefits": { "label": "Il risultato", "heading": "Risultati che compongono, call dopo call.", "realtime": "+27 %", "realtimeDesc": "Uplift medio del tasso di chiusura in 30 giorni", "threeClicks": "0 sec", "threeClicksDesc": "Tempo di pensiero prima della tua mossa di chiusura", "actionable": "3,4×", "actionableDesc": "Win rate sulle obiezioni vs in solitaria", "private": "Silenzioso", "privateDesc": "Invisibile al tuo prospect — sempre" },
+    "useCases": { "label": "Chi vince con Tonvo", "heading": "Per operatori che vivono del loro tasso di chiusura.", "salesTitle": "Closer high-ticket", "salesDesc": "Blocca commitment a cinque cifre senza scontare — prima che il lead si raffreddi.", "supportTitle": "Coach di negoziazione", "supportDesc": "Ogni call compone la tua libreria di pattern provati.", "interviewsTitle": "Consulenti in call di retainer", "interviewsDesc": "Ancora e reframe — proprio quando premono su prezzo o scope.", "meetingsTitle": "Rinnovi ed espansione", "meetingsDesc": "Trasforma un check-in in un upsell. Live, non tre giorni dopo." },
+    "testimonials": { "label": "Risultati più che recensioni", "heading": "I closer non scrivono testimonianze. Consegnano numeri.", "desc": "Su centinaia di negoziatori, il tasso di chiusura è passato dal 24 % al 31 % nel primo mese.", "rating": "+29 %", "ratingDesc": "di fatturato per closer, primo mese" },
+    "cta": { "heading1": "La tua prossima call", "heading2": "si chiude da sola.", "desc": "Smetti di perdere deal vincibili. Collega Tonvo. Tasso di chiusura più alto entro venerdì.", "button": "Alzare il mio tasso di chiusura", "note": "Gratis per iniziare. Risultato garantito o soldi indietro — 7 giorni." },
+    "faq": { "title": "Le domande che fanno i closer.", "subtitle": "Tutto quello che ti serve sapere prima di alzare il tuo tasso di chiusura con Tonvo.", "q1": "Tonvo è uno strumento o un sistema di crescita?", "a1": "Tonvo è un sistema Growth-as-a-Service — vendiamo tasso di chiusura, non software. Ti colleghi e il risultato che consegniamo è misurabile: più deal chiusi, ticket più grandi, meno obiezioni perse. L'app è solo il meccanismo di consegna.", "q2": "Quanto velocemente si muove davvero il tasso di chiusura?", "a2": "La maggior parte dei closer su Tonvo vede un uplift misurabile in meno di 14 giorni — non perché cambiano pitch, ma perché smettono di perdere i momenti che decidono un deal. L'uplift medio a 30 giorni è +27 %.", "q3": "Cosa ricevo esattamente durante una call?", "a3": "La frase esatta da dire quando conta: il contro-obiezione, l'ancora di prezzo, la richiesta di commitment, il reframe. Nessuna dashboard da leggere live — solo la prossima mossa, consegnata nell'istante in cui arriva il segnale.", "q4": "Devo cambiare il mio processo o pitch?", "a4": "No. Tonvo si sovrappone al tuo processo esistente. Il tuo pitch, il tuo deck, la tua offerta — invariati. Ciò che cambia è il tasso con cui finiscono in un deal firmato.", "q5": "Il mio prospect può vedere qualcosa?", "a5": "Mai. Tonvo gira in una finestra separata, invisibile all'altra parte — anche in condivisione schermo. Il tuo vantaggio resta il tuo vantaggio.", "q6": "C'è una garanzia sul risultato?", "a6": "Sì. Se il tuo tasso di chiusura non si muove in 7 giorni, ti rimborsiamo. Vendiamo risultati — se non li ottieni, non teniamo i tuoi soldi." }
   },
   "mockup": {
     "menu": "Menu",
@@ -521,8 +526,8 @@
     "muted": "Mutato"
   },
   "pricing": {
-    "title": "Prezzi semplici e trasparenti.",
-    "subtitle": "Inizia gratis. Passa al piano superiore quando ne hai bisogno.",
+    "title": "Prezzi basati sul risultato, non sul software.",
+    "subtitle": "Un mese in più di chiusure paga l'anno intero. Inizia gratis — passa al piano superiore quando Tonvo inizia a chiudere deal per te.",
     "monthly": "Mensile",
     "annual": "Annuale",
     "manageSubscription": "Gestisci abbonamento",
@@ -549,58 +554,58 @@
     "cancelError": "Impossibile aggiornare il tuo abbonamento. Riprova.",
     "portalError": "Impossibile aprire il portale di fatturazione. Riprova.",
     "planFree": {
-      "name": "Gratuito",
-      "description": "Prova Tonvo con le funzionalità base",
-      "cta": "Inizia gratis",
+      "name": "Starter",
+      "description": "Senti l'uplift su 3 call al mese",
+      "cta": "Chiudere il mio primo deal",
       "features": [
-        "3 sessioni al mese",
-        "Analisi del tono in tempo reale",
-        "Suggerimenti di base",
-        "Cronologia sessioni (7 giorni)"
+        "3 sessioni di chiusura live al mese",
+        "Rilevamento dei segnali d'acquisto",
+        "Frasi di chiusura essenziali",
+        "Debrief del deal (cronologia 7 giorni)"
       ]
     },
     "planPro": {
-      "name": "Pro",
-      "description": "Per i professionisti che vogliono distinguersi",
-      "cta": "Passa a Pro",
+      "name": "Closer",
+      "description": "Per operatori che vivono di chiusure",
+      "cta": "Attivare il mio vantaggio",
       "features": [
-        "Sessioni illimitate",
-        "Intelligenza conversazionale avanzata",
-        "Consigli IA e analisi in diretta",
-        "Cronologia completa delle sessioni",
-        "Analisi dello schermo",
-        "Esportazione PDF/CSV",
+        "Sessioni di chiusura illimitate",
+        "Libreria completa di obiezioni",
+        "Frasi di chiusura e ancore di prezzo live",
+        "Trend del tasso di chiusura, tutto lo storico",
+        "Debrief post-call (trascritti)",
+        "Esporta report deal (PDF/CSV)",
         "Supporto prioritario"
       ]
     },
     "planTeam": {
-      "name": "Team",
-      "description": "Per i team che chiudono affari insieme",
-      "cta": "Passa a Team",
+      "name": "Sales Team",
+      "description": "Componi il tasso di chiusura su tutto il team",
+      "cta": "Alzare tutto il team",
       "features": [
-        "Tutto quello di Pro",
-        "Dashboard del team e statistiche",
-        "Report e analisi per manager",
-        "Profili di coaching personalizzati",
+        "Tutto quello di Closer",
+        "Dashboard tasso di chiusura del team",
+        "Insight manager (win/loss)",
+        "Playbook personalizzato per rep",
         "Accesso API",
         "Integrazione SSO",
-        "Supporto dedicato"
+        "Revenue coach dedicato"
       ]
     }
   },
   "upgrade": {
-    "successTitle": "Tutto pronto!",
-    "successSubtitle": "Il tuo piano {{plan}} è ora attivo. Goditi tutte le funzionalità premium.",
-    "cancelTitle": "Stai ancora pensando?",
-    "cancelSubtitle": "Nessun problema — scegli il piano più adatto a te, o continua a esplorare gratis.",
-    "nudgeTitle": "Sblocca tutto il tuo potenziale",
-    "nudgeSubtitle": "Sei nel piano Gratuito. Passa a un piano superiore per sessioni illimitate, coaching IA e altro.",
+    "successTitle": "Dentro. Ora si chiude.",
+    "successSubtitle": "Il tuo piano {{plan}} è attivo. Da ora in poi, ogni call compone il tuo tasso di chiusura.",
+    "cancelTitle": "Ancora indeciso?",
+    "cancelSubtitle": "Nessuna pressione — continua a chiudere su Starter, passa al piano superiore quando vuoi illimitato.",
+    "nudgeTitle": "Il tuo tasso di chiusura è bloccato",
+    "nudgeSubtitle": "Sei su Starter — 3 call al mese. Sblocca le chiusure illimitate e la libreria completa di obiezioni.",
     "goToDashboard": "Vai alla dashboard",
-    "stayFree": "Continua con il piano gratuito"
+    "stayFree": "Resta su Starter"
   },
   "footer": {
-    "tagline1": "Intelligenza conversazionale in tempo reale.",
-    "tagline2": "Comprendi il tono, le emozioni e le intenzioni.",
+    "tagline1": "Growth-as-a-Service per closer.",
+    "tagline2": "Vendiamo tasso di chiusura — non software.",
     "product": "Prodotto",
     "features": "Funzionalità",
     "demo": "Demo",
@@ -820,5 +825,28 @@
     "cookiesLabel": "Politica sui Cookie",
     "cookiesDesc": "Come utilizziamo i cookie",
     "backToHome": "Torna alla home"
+  },
+  "liveTranslation": {
+    "title": "Traduzione in diretta",
+    "enable": "Attiva",
+    "live": "In diretta",
+    "targetLang": "Lingua di output",
+    "mode": "Modalità",
+    "error": "Errore",
+    "disabledHint": "Attiva per tradurre la conversazione in diretta.",
+    "listening": "In ascolto...",
+    "startHint": "Avvia una sessione per vedere la traduzione in diretta.",
+    "summary": "Riepilogo",
+    "summaryEmpty": "Il riepilogo apparirà man mano che la conversazione procede.",
+    "modes": {
+      "translate_only": "Solo traduzione",
+      "translate_summary": "Traduzione + riepilogo",
+      "summary_only": "Solo riepilogo"
+    },
+    "lang": {
+      "fr": "Francese", "en": "Inglese", "es": "Spagnolo", "de": "Tedesco",
+      "it": "Italiano", "pt": "Portoghese", "nl": "Olandese",
+      "ja": "Giapponese", "ko": "Coreano", "zh": "Cinese"
+    }
   }
 }

@@ -1,6 +1,6 @@
 {
   "pageTitle": {
-    "default": "Tonvo — AI 对话助手",
+    "default": "Tonvo — 成交更多，谈判更赢",
     "login": "登录或创建账户",
     "dashboard": "控制面板",
     "session": "实时会话",
@@ -10,7 +10,7 @@
     "pricing": "定价方案",
     "settings": "设置",
     "profile": "个人资料",
-    "about": "关于 Tonvo",
+    "about": "关于我们",
     "privacy": "隐私政策",
     "terms": "服务条款",
     "cookies": "Cookie 政策",
@@ -57,11 +57,11 @@
     "greetingMorning": "早上好",
     "greetingAfternoon": "下午好",
     "greetingEvening": "晚上好",
-    "subtitle": "以下是您的对话智能概览。",
-    "startSession": "开始实时会话",
+    "subtitle": "您的成交率，一目了然。",
+    "startSession": "上线 — 开始成交",
     "startSessionDesc": "实时对话分析",
-    "analyzeText": "文本分析",
-    "analyzeTextDesc": "粘贴消息或对话内容",
+    "analyzeText": "复盘通话",
+    "analyzeTextDesc": "粘贴对话 — 我们告诉您下一步怎么走",
     "sessions": "会话",
     "segments": "片段",
     "avgConfidence": "平均置信度",
@@ -85,7 +85,12 @@
     "noSessions": "暂无会话",
     "noSessionsDesc": "开始一个实时会话以在此处查看历史记录。",
     "noFilterResults": "没有{{filter}}的会话",
-    "noFilterResultsDesc": "尝试其他筛选条件以查看更多结果。"
+    "noFilterResultsDesc": "尝试其他筛选条件以查看更多结果。",
+    "searchPlaceholder": "搜索标题或摘要…",
+    "today": "今天",
+    "yesterday": "昨天",
+    "thisWeek": "本周",
+    "thisMonth": "本月"
   },
   "analyzeTextPage": {
     "title": "文本分析",
@@ -273,8 +278,8 @@
   "auth": {
     "welcomeBack": "欢迎回来",
     "createAccount": "创建您的账户",
-    "signInSubtitle": "登录以继续使用 Tonvo",
-    "signUpSubtitle": "注册以开始使用 Tonvo",
+    "signInSubtitle": "登录，接着把那一单成交下来",
+    "signUpSubtitle": "创建账号，抬高您的成交率",
     "emailLabel": "邮箱地址",
     "emailPlaceholder": "you@example.com",
     "passwordLabel": "密码",
@@ -475,16 +480,16 @@
   },
   "landing": {
     "nav": { "features": "功能", "product": "产品", "useCases": "应用场景", "pricing": "定价", "signIn": "登录", "getStarted": "立即开始", "dashboard": "控制台" },
-    "hero": { "badge": "对话智能，全新定义", "headline1": "知道该说什么。", "headline2": "在关键时刻。", "subtitle": "Tonvo 实时分析您的每一次对话 —— 捕捉情绪变化、提供智能建议，助您从容驾驭每一场沟通。", "cta": "立即开始", "ctaSecondary": "了解工作原理" },
-    "problem": { "label": "痛点", "heading1": "沟通从来不简单。", "heading2": "误读对方更是常态。", "p1": "你一定经历过这样的场景：通话一切顺利——直到突然不再顺利。潜在客户变得冷淡，同事开始焦躁，候选人不再回应。等你察觉时，已经来不及挽回了。", "p2": "大多数人会错过那些决定对话成败的微妙语气和情绪变化。不是因为不在意，而是因为他们正在想下一句该说什么。" },
-    "solution": { "label": "解决方案", "heading1": "为每一次对话", "heading2": "配备第二双慧眼。", "desc": "Tonvo 在您的通话和会议中全程陪伴。它采集音频、实时分析情绪动态，并提供安静而精准的情境建议——让您时刻掌握对话走向，清楚下一步该怎么做。", "step1Title": "开始会话", "step1Desc": "一键启动。Tonvo 自动采集屏幕或麦克风的音频。", "step2Title": "获取实时反馈", "step2Desc": "语气指标和建议随对话推进实时更新。", "step3Title": "查看深度洞察", "step3Desc": "通话结束后，获取包含关键时刻和行动建议的完整分析报告。" },
-    "features": { "label": "核心功能", "heading1": "深度理解对话", "heading2": "所需的一切，尽在掌握。", "liveTone": "实时语气检测", "liveToneDesc": "采集通话或麦克风音频，实时判断对话走势——积极、中性还是紧张，一目了然。", "smartSuggestions": "智能建议", "smartSuggestionsDesc": "基于对话内容和表达方式，Tonvo 为您推荐最佳回应策略，让沟通始终在正轨上。", "conversationInsights": "对话洞察", "conversationInsightsDesc": "每次会话后自动生成语气变化、关键时刻和可执行建议的详细报告。", "textAnalysis": "文本分析", "textAnalysisDesc": "粘贴任意消息或对话片段，即刻解读深层语气并获取优化建议。" },
-    "demo": { "label": "AI 副驾驶", "heading": "您的隐形会议教练", "desc": "当您专注于对话时，AI 副驾驶悄然浮现在会议窗口旁——实时为您推荐最佳回应策略。" },
-    "benefits": { "label": "核心优势", "heading": "专为与人沟通的你而生。", "realtime": "实时响应", "realtimeDesc": "在线对话中即时获取反馈", "threeClicks": "3 次点击", "threeClicksDesc": "即可开始分析任意对话", "actionable": "即学即用", "actionableDesc": "建议即刻可付诸实践", "private": "隐私至上", "privateDesc": "音频本地处理，绝不存储" },
-    "useCases": { "label": "应用场景", "heading": "对话在哪里发生，Tonvo 就在哪里发挥价值。", "salesTitle": "销售通话", "salesDesc": "精准感知客户是在积极互动、犹豫不决还是正在流失。在成交窗口关闭前调整策略，而非事后复盘。", "supportTitle": "客户支持", "supportDesc": "提前识别客户的不满情绪，获取降温话术建议。将棘手的沟通转化为正面体验。", "interviewsTitle": "求职面试", "interviewsDesc": "无论您是面试官还是候选人，洞察情绪动态，让每一次表达都更有力量。", "meetingsTitle": "团队会议", "meetingsDesc": "追踪长会议中的参与度变化。发现注意力下降的时刻，获取重新激活听众的提示。" },
-    "testimonials": { "label": "专业人士信赖之选", "heading": "深受一线沟通团队的喜爱。", "desc": "从销售通话到一对一会谈，数千名专业人士依靠 Tonvo 捕捉关键信息、提升沟通质量。", "rating": "4.9", "ratingDesc": "来自 200+ 用户的评价" },
-    "cta": { "heading1": "别再靠猜。", "heading2": "开始真正理解。", "desc": "下一场重要对话即将到来。确保您不会错过任何关键信号。免费开始，无需绑定信用卡。", "button": "立即开始", "note": "提供免费版。随时可升级。" },
-    "faq": { "title": "常见问题", "subtitle": "关于 AI 对话副驾驶 Tonvo，您需要了解的一切。", "q1": "什么是 AI 对话副驾驶？", "a1": "AI 对话副驾驶可以实时分析对话，提供沟通指导、语气检测和智能建议。", "q2": "Tonvo 在实时通话中能用吗？", "a2": "可以。支持实时转录、沟通指导和语气分析。", "q3": "实时分析是如何实现的？", "a3": "多阶段 AI 流水线：语音转录、语气检测、信号识别、沟通指导和质量评估。", "q4": "Tonvo 免费吗？", "a4": "免费版每月可使用 3 次会话。升级 Pro 可解锁无限会话和高级功能。", "q5": "屏幕共享时对方能看到副驾驶吗？", "a5": "副驾驶在独立窗口中运行。共享特定应用窗口时，对方完全看不到。", "q6": "Tonvo 支持哪些语言？", "a6": "支持 10 种语言：英语、法语、西班牙语、德语、葡萄牙语、意大利语、荷兰语、中文、日语和韩语。" }
+    "hero": { "badge": "面向谈判者的 Growth-as-a-Service", "headline1": "成交率提升 27 %。", "headline2": "不必改动您的话术。", "subtitle": "面向顾问与谈判教练的实时成交智能。接入。成交。复利。", "cta": "提升我的成交率", "ctaSecondary": "看看结果" },
+    "problem": { "label": "没成交的代价", "heading1": "每一单流失", "heading2": "都是在漏收入。", "p1": "一个漏掉的信号。一句平淡的回应。五位数订单就这样走了。顶尖 Closer 每 10 通可赢的电话会输掉 3 通——不是因为价格，永远是因为时机。" },
+    "solution": { "label": "增长引擎", "heading1": "一位 Closer 在您肩上。", "heading2": "每一次通话。每一单。", "desc": "Tonvo 实时读懂现场，把成交话术在那一刻递给您。不是分析，是按需输出的成交力。", "step1Title": "接入", "step1Desc": "一键启动。Tonvo 全程倾听——客户完全看不到。", "step2Title": "现场赢下", "step2Desc": "成交话术、异议反制、锚点——在那一秒送到。", "step3Title": "让优势复利", "step3Desc": "看哪些奏效、哪些流失，以及您的曲线。" },
+    "features": { "label": "我们如何提升您的成交率", "heading1": "每一条让订单", "heading2": "向前推进的杠杆。", "liveTone": "购买信号识别", "liveToneDesc": "窗口开启时出手——慢十秒就结束。", "smartSuggestions": "即开即用的成交话术", "smartSuggestionsDesc": "针对他们异议的精确话术。基于他们刚说过的话。", "conversationInsights": "单单看业绩", "conversationInsightsDesc": "成交率、异议胜率、客单均值。您的看板。", "textAnalysis": "通话后的订单复盘", "textAnalysisDesc": "粘贴转录稿。我们告诉您这单赢在哪——或输在哪。" },
+    "demo": { "label": "现场优势", "heading": "您对手没有的那位 Closer", "desc": "他在想，您已说。客户看不见，您稳稳拿下。" },
+    "benefits": { "label": "结果", "heading": "每一通都在复利的结果。", "realtime": "+27 %", "realtimeDesc": "30 天内成交率平均提升", "threeClicks": "0 秒", "threeClicksDesc": "成交话术出口前的思考时间", "actionable": "3.4×", "actionableDesc": "异议胜率 vs 单打独斗", "private": "静默", "privateDesc": "对客户始终隐形" },
+    "useCases": { "label": "谁靠 Tonvo 赢", "heading": "为以成交率为生的操盘者而生。", "salesTitle": "高客单 Closer", "salesDesc": "不打折锁定五位数承诺——在线索变冷前。", "supportTitle": "谈判教练", "supportDesc": "每次通话都沉淀为您的验证模式库。", "interviewsTitle": "顾问 Retainer 通话", "interviewsDesc": "锚点与重构——他们在价格或范围施压的那一刻。", "meetingsTitle": "续约与扩展", "meetingsDesc": "把回访变成 Upsell。现场，不是三天后。" },
+    "testimonials": { "label": "结果胜过评价", "heading": "Closer 不写推荐。他们交付数字。", "desc": "数百名谈判者，首月成交率从 24 % 升至 31 %。", "rating": "+29 %", "ratingDesc": "首月 Closer 平均收入提升" },
+    "cta": { "heading1": "您的下一通", "heading2": "自动成交。", "desc": "别再丢掉可赢订单。接入 Tonvo。周五前提升成交率。", "button": "提升我的成交率", "note": "免费起步。结果保证或退款——7 天之内。" },
+    "faq": { "title": "Closer 会问的问题。", "subtitle": "提升成交率之前，您需要知道的一切。", "q1": "Tonvo 是工具还是增长系统？", "a1": "Tonvo 是一套 Growth-as-a-Service 系统 —— 我们卖成交率，不卖软件。您接入，我们交付的是可衡量的结果：更多订单、更大客单、更少失掉的异议。应用只是交付机制。", "q2": "成交率多久会真正提升？", "a2": "多数 Closer 在 14 天内看到可测的提升 —— 不是改了话术，而是不再错过决定成败的时刻。30 天平均提升 +27 %。", "q3": "通话中我具体会收到什么？", "a3": "关键时刻要说的那句话：异议反制、价格锚点、承诺要求、重构话术。不需要实时看看板 —— 信号触发的那一刻，下一步直接递到您眼前。", "q4": "我需要改动流程或话术吗？", "a4": "不需要。Tonvo 叠加在您现有流程之上。话术、PPT、报价 —— 都不变。改变的是这些对话最终签下订单的比例。", "q5": "客户能看到什么吗？", "a5": "永远看不到。Tonvo 运行在独立窗口，对另一方完全隐形 —— 即使共享屏幕也一样。您的优势始终是您的优势。", "q6": "有结果保证吗？", "a6": "有。如果 7 天内成交率没有移动，我们退款。我们卖结果 —— 没有结果，就不留您的钱。" }
   },
   "mockup": {
     "menu": "菜单",
@@ -504,8 +509,8 @@
     "hesitation": "犹豫", "opportunity": "机会", "speaking": "发言中", "listening": "聆听中", "muted": "已静音"
   },
   "pricing": {
-    "title": "简单透明的定价。",
-    "subtitle": "免费开始。需要更多功能时再升级。",
+    "title": "按结果定价，不按软件定价。",
+    "subtitle": "一个多成交的月份就能付清全年。免费开始 —— 当 Tonvo 开始为您成交时再升级。",
     "monthly": "月付",
     "annual": "年付",
     "manageSubscription": "管理订阅",
@@ -532,58 +537,58 @@
     "cancelError": "无法更新您的订阅。请重试。",
     "portalError": "无法打开账单门户。请重试。",
     "planFree": {
-      "name": "免费",
-      "description": "体验 Tonvo 基础功能",
-      "cta": "免费开始",
+      "name": "Starter",
+      "description": "在 3 次通话里感受成交率提升",
+      "cta": "成交我的第一单",
       "features": [
-        "每月 3 次会话",
-        "实时语气分析",
-        "基础建议",
-        "会话历史（7 天）"
+        "每月 3 次实时成交会话",
+        "购买信号识别",
+        "核心成交话术",
+        "订单复盘（7 天历史）"
       ]
     },
     "planPro": {
-      "name": "Pro",
-      "description": "为追求卓越的专业人士打造",
-      "cta": "升级到 Pro",
+      "name": "Closer",
+      "description": "为以成交为生的操盘者打造",
+      "cta": "解锁我的优势",
       "features": [
-        "无限会话",
-        "高级对话智能",
-        "AI 辅导与实时洞察",
-        "完整会话历史",
-        "屏幕分析",
-        "导出 PDF/CSV",
+        "无限成交会话",
+        "完整异议话术库",
+        "现场成交话术与价格锚点",
+        "成交率全历史走势",
+        "通话后订单复盘（转录）",
+        "导出订单报告（PDF/CSV）",
         "优先支持"
       ]
     },
     "planTeam": {
-      "name": "Team",
-      "description": "为协同成交的团队打造",
-      "cta": "升级到 Team",
+      "name": "Sales Team",
+      "description": "让整支团队的成交率复利",
+      "cta": "抬升整支团队",
       "features": [
-        "Pro 的所有功能",
-        "团队仪表盘与分析",
-        "管理者洞察与报告",
-        "自定义辅导档案",
+        "Closer 的全部功能",
+        "团队成交率看板",
+        "经理胜负洞察",
+        "按人定制 Playbook",
         "API 访问",
         "SSO 集成",
-        "专属支持"
+        "专属 Revenue Coach"
       ]
     }
   },
   "upgrade": {
-    "successTitle": "一切就绪！",
-    "successSubtitle": "您的{{plan}}计划现已激活。尽情享受所有高级功能。",
-    "cancelTitle": "还在考虑？",
-    "cancelSubtitle": "没关系——选择最适合您的计划，或继续免费探索。",
-    "nudgeTitle": "释放您的全部潜力",
-    "nudgeSubtitle": "您目前使用的是免费计划。升级即可获得无限会话、AI教练等更多功能。",
-    "goToDashboard": "前往控制面板",
-    "stayFree": "继续使用免费计划"
+    "successTitle": "就位。开始成交。",
+    "successSubtitle": "您的 {{plan}} 方案已激活。从现在起，每通电话都在复利您的成交率。",
+    "cancelTitle": "还在犹豫？",
+    "cancelSubtitle": "不急 —— 先在 Starter 上继续成交，想要无限时再升级。",
+    "nudgeTitle": "您的成交率被封顶了",
+    "nudgeSubtitle": "您在 Starter 方案 —— 每月 3 通。解锁无限成交与完整异议话术库。",
+    "goToDashboard": "前往控制台",
+    "stayFree": "留在 Starter"
   },
   "footer": {
-    "tagline1": "实时对话智能分析。",
-    "tagline2": "洞察语气、情绪与意图。",
+    "tagline1": "为 Closer 打造的 Growth-as-a-Service。",
+    "tagline2": "我们卖成交率 —— 不卖软件。",
     "product": "产品",
     "features": "功能",
     "demo": "演示",
@@ -803,5 +808,28 @@
     "cookiesLabel": "Cookie 政策",
     "cookiesDesc": "我们如何使用 Cookie",
     "backToHome": "返回首页"
+  },
+  "liveTranslation": {
+    "title": "实时翻译",
+    "enable": "启用",
+    "live": "实时",
+    "targetLang": "输出语言",
+    "mode": "模式",
+    "error": "错误",
+    "disabledHint": "启用以实时翻译对话。",
+    "listening": "正在聆听...",
+    "startHint": "开始一个会话以查看实时翻译。",
+    "summary": "摘要",
+    "summaryEmpty": "摘要将随着对话的进展而显示。",
+    "modes": {
+      "translate_only": "仅翻译",
+      "translate_summary": "翻译 + 摘要",
+      "summary_only": "仅摘要"
+    },
+    "lang": {
+      "fr": "法语", "en": "英语", "es": "西班牙语", "de": "德语",
+      "it": "意大利语", "pt": "葡萄牙语", "nl": "荷兰语",
+      "ja": "日语", "ko": "韩语", "zh": "中文"
+    }
   }
 }

@@ -1,9 +1,11 @@
 "use client";
 
 import { ReactNode } from "react";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { useTranslation } from "react-i18next";
 import AnimatedTitle from "@/components/AnimatedTitle";
+import SpotlightCard from "@/components/motion/SpotlightCard";
+import { easeOutExpo, easeOutSoft, VIEWPORT } from "@/components/motion/transitions";
 
 function IconUsers({ className }: { className?: string }) {
   return (
@@ -45,23 +47,66 @@ interface UseCase {
   icon: ReactNode;
   title: string;
   desc: string;
+  spotlight: string;
+  border: string;
+  accent: string;
 }
 
 export default function UseCasesSection() {
   const { t } = useTranslation();
+  const reduce = useReducedMotion();
 
   const useCases: UseCase[] = [
-    { icon: <IconUsers className="w-6 h-6" />, title: t("landing.useCases.salesTitle"), desc: t("landing.useCases.salesDesc") },
-    { icon: <IconMessageCircle className="w-6 h-6" />, title: t("landing.useCases.supportTitle"), desc: t("landing.useCases.supportDesc") },
-    { icon: <IconShield className="w-6 h-6" />, title: t("landing.useCases.interviewsTitle"), desc: t("landing.useCases.interviewsDesc") },
-    { icon: <IconZap className="w-6 h-6" />, title: t("landing.useCases.meetingsTitle"), desc: t("landing.useCases.meetingsDesc") },
+    {
+      icon: <IconUsers className="w-6 h-6" />,
+      title: t("landing.useCases.salesTitle"),
+      desc: t("landing.useCases.salesDesc"),
+      spotlight: "rgba(129, 140, 248, 0.10)",
+      border: "rgba(129, 140, 248, 0.28)",
+      accent: "#818cf8",
+    },
+    {
+      icon: <IconMessageCircle className="w-6 h-6" />,
+      title: t("landing.useCases.supportTitle"),
+      desc: t("landing.useCases.supportDesc"),
+      spotlight: "rgba(52, 211, 153, 0.10)",
+      border: "rgba(52, 211, 153, 0.26)",
+      accent: "#34d399",
+    },
+    {
+      icon: <IconShield className="w-6 h-6" />,
+      title: t("landing.useCases.interviewsTitle"),
+      desc: t("landing.useCases.interviewsDesc"),
+      spotlight: "rgba(200, 200, 216, 0.10)",
+      border: "rgba(200, 200, 216, 0.30)",
+      accent: "#c8c8d8",
+    },
+    {
+      icon: <IconZap className="w-6 h-6" />,
+      title: t("landing.useCases.meetingsTitle"),
+      desc: t("landing.useCases.meetingsDesc"),
+      spotlight: "rgba(251, 191, 36, 0.10)",
+      border: "rgba(251, 191, 36, 0.26)",
+      accent: "#fbbf24",
+    },
   ];
 
+  // Diagonal stagger: row 0 leads, row 1 follows; small horizontal offset within each row
+  const diagonalDelay = (i: number) => (i % 2) * 0.06 + Math.floor(i / 2) * 0.14;
+
   return (
-    <section id="use-cases" className="px-4 sm:px-6 py-16 sm:py-24 md:py-32">
-      <div className="max-w-5xl mx-auto">
+    <section id="use-cases" className="relative px-4 sm:px-6 py-16 sm:py-24 md:py-32 overflow-hidden">
+      <div className="relative z-10 max-w-5xl mx-auto">
         <div className="text-center mb-16">
-          <span className="section-label">{t("landing.useCases.label")}</span>
+          <motion.span
+            className="section-label inline-block"
+            initial={reduce ? { opacity: 0 } : { opacity: 0, y: 10 }}
+            whileInView={reduce ? { opacity: 1 } : { opacity: 1, y: 0 }}
+            viewport={VIEWPORT}
+            transition={{ duration: 0.55, ease: easeOutExpo }}
+          >
+            {t("landing.useCases.label")}
+          </motion.span>
           <AnimatedTitle variant="left" className="section-heading">
             {t("landing.useCases.heading")}
           </AnimatedTitle>
@@ -69,29 +114,71 @@ export default function UseCasesSection() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
           {useCases.map((uc, i) => (
-            <motion.div
+            <SpotlightCard
               key={uc.title}
-              className="glass-card usecase-card p-6"
-              initial={{ opacity: 0, y: 24 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-40px" }}
-              transition={{
-                duration: 0.45,
-                delay: i * 0.1,
-                ease: [0.25, 0.1, 0.25, 1],
-              }}
+              index={0}
+              delay={diagonalDelay(i)}
+              spotlightColor={uc.spotlight}
+              borderGlow={uc.border}
+              className="usecase-card group p-6"
             >
-              <div
-                className="w-12 h-12 rounded-xl flex items-center justify-center mb-4 usecase-icon"
-                style={{ backgroundColor: "var(--color-surface-2)", color: "var(--color-accent-light)" }}
+              {/* Icon container with rotating gradient field — pulses on hover */}
+              <motion.div
+                className="icon-field w-12 h-12 rounded-xl flex items-center justify-center mb-4"
+                style={{
+                  backgroundColor: "var(--color-surface-2)",
+                  color: uc.accent,
+                  border: `1px solid ${uc.border}`,
+                }}
+                initial={reduce ? { opacity: 0 } : { opacity: 0, scale: 0.6, rotate: -8 }}
+                whileInView={reduce ? { opacity: 1 } : { opacity: 1, scale: 1, rotate: 0 }}
+                viewport={VIEWPORT}
+                transition={{
+                  duration: 0.6,
+                  delay: 0.35 + diagonalDelay(i),
+                  ease: easeOutExpo,
+                }}
+                whileHover={reduce ? undefined : { scale: 1.08, rotate: 3 }}
               >
-                {uc.icon}
-              </div>
-              <h3 className="card-title mb-2">{uc.title}</h3>
-              <p className="text-sm leading-relaxed m-0" style={{ color: "var(--color-text-muted)" }}>
+                <motion.div
+                  whileHover={
+                    reduce
+                      ? undefined
+                      : { scale: [1, 1.1, 1], transition: { duration: 0.4 } }
+                  }
+                  style={{ display: "flex" }}
+                >
+                  {uc.icon}
+                </motion.div>
+              </motion.div>
+
+              {/* Title with hover underline reveal — driven by parent .group hover via CSS */}
+              <h3 className="card-title mb-2 flex flex-col items-start">
+                <span>{uc.title}</span>
+                <span
+                  aria-hidden
+                  className="usecase-underline"
+                  style={{
+                    background: `linear-gradient(90deg, ${uc.accent}, transparent)`,
+                  }}
+                />
+              </h3>
+
+              <motion.p
+                className="text-sm leading-relaxed m-0"
+                style={{ color: "var(--color-text-muted)" }}
+                initial={reduce ? { opacity: 0 } : { opacity: 0, y: 8 }}
+                whileInView={reduce ? { opacity: 1 } : { opacity: 1, y: 0 }}
+                viewport={VIEWPORT}
+                transition={{
+                  duration: 0.55,
+                  delay: 0.45 + diagonalDelay(i),
+                  ease: easeOutSoft,
+                }}
+              >
                 {uc.desc}
-              </p>
-            </motion.div>
+              </motion.p>
+            </SpotlightCard>
           ))}
         </div>
       </div>

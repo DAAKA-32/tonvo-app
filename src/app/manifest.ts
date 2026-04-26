@@ -2,10 +2,10 @@ import type { MetadataRoute } from "next";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "Tonvo AI — Real-time Conversation Intelligence",
-    short_name: "Tonvo AI",
+    name: "Tonvo — Close More. Negotiate Better.",
+    short_name: "Tonvo",
     description:
-      "Analyze tone, emotions, and intent in real time. AI-powered coaching tips and smart suggestions for better conversations.",
+      "Growth-as-a-Service for closers. Raise your close rate by 27% in 30 days — exact closing lines, objection counters and price anchors, delivered the moment you need them.",
     start_url: "/",
     display: "standalone",
     background_color: "#09090b",
@@ -52,7 +52,7 @@ export default function manifest(): MetadataRoute.Manifest {
         ],
       },
     },
-    categories: ["business", "productivity", "communication"],
+    categories: ["business", "sales", "productivity"],
     lang: "en",
     dir: "ltr",
   };

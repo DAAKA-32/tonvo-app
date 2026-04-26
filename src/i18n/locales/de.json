@@ -1,6 +1,6 @@
 {
   "pageTitle": {
-    "default": "Tonvo — KI-Gesprächsassistent",
+    "default": "Tonvo — Mehr abschließen. Besser verhandeln.",
     "login": "Anmelden oder Konto erstellen",
     "dashboard": "Dashboard",
     "session": "Live-Sitzung",
@@ -10,7 +10,7 @@
     "pricing": "Preise",
     "settings": "Einstellungen",
     "profile": "Profil",
-    "about": "Über Tonvo",
+    "about": "Über uns",
     "privacy": "Datenschutzrichtlinie",
     "terms": "Nutzungsbedingungen",
     "cookies": "Cookie-Richtlinie",
@@ -57,11 +57,11 @@
     "greetingMorning": "Guten Morgen",
     "greetingAfternoon": "Guten Tag",
     "greetingEvening": "Guten Abend",
-    "subtitle": "Hier ist eine Übersicht Ihrer Gesprächsintelligenz.",
-    "startSession": "Live-Sitzung starten",
-    "startSessionDesc": "Gesprächsanalyse in Echtzeit",
-    "analyzeText": "Text analysieren",
-    "analyzeTextDesc": "Nachricht oder Gespräch einfügen",
+    "subtitle": "Deine Abschlussquote auf einen Blick.",
+    "startSession": "Live gehen — abschließen",
+    "startSessionDesc": "Dein Vorteil während des Calls",
+    "analyzeText": "Call nachbesprechen",
+    "analyzeTextDesc": "Gespräch einfügen — wir liefern den nächsten Zug",
     "sessions": "Sitzungen",
     "segments": "Segmente",
     "avgConfidence": "Durchschn. Konfidenz",
@@ -85,7 +85,12 @@
     "noSessions": "Noch keine Sitzungen",
     "noSessionsDesc": "Starten Sie eine Live-Sitzung, um Ihren Verlauf hier zu sehen.",
     "noFilterResults": "Keine {{filter}}-Sitzungen",
-    "noFilterResultsDesc": "Versuchen Sie einen anderen Filter, um mehr Ergebnisse zu sehen."
+    "noFilterResultsDesc": "Versuchen Sie einen anderen Filter, um mehr Ergebnisse zu sehen.",
+    "searchPlaceholder": "Titel oder Zusammenfassung suchen…",
+    "today": "Heute",
+    "yesterday": "Gestern",
+    "thisWeek": "Diese Woche",
+    "thisMonth": "Diesen Monat"
   },
   "analyzeTextPage": {
     "title": "Text analysieren",
@@ -273,8 +278,8 @@
   "auth": {
     "welcomeBack": "Willkommen zurück",
     "createAccount": "Konto erstellen",
-    "signInSubtitle": "Melden Sie sich an, um mit Tonvo fortzufahren",
-    "signUpSubtitle": "Registrieren Sie sich, um Tonvo zu nutzen",
+    "signInSubtitle": "Einloggen und dort weitermachen, wo du abgeschlossen hast",
+    "signUpSubtitle": "Konto erstellen und Abschlussquote steigern",
     "emailLabel": "E-Mail-Adresse",
     "emailPlaceholder": "du@beispiel.de",
     "passwordLabel": "Passwort",
@@ -484,103 +489,102 @@
       "dashboard": "Dashboard"
     },
     "hero": {
-      "badge": "Gesprächsintelligenz, neu gedacht",
-      "headline1": "Wissen, was zu sagen ist.",
-      "headline2": "Im richtigen Moment.",
-      "subtitle": "Tonvo analysiert deine Gespräche in Echtzeit — erkennt Stimmungen, liefert smarte Vorschläge und hilft dir, jede Interaktion souverän zu meistern.",
-      "cta": "Jetzt starten",
-      "ctaSecondary": "So funktioniert's"
+      "badge": "Growth-as-a-Service für Verhandler",
+      "headline1": "Schließe 27 % mehr Deals ab.",
+      "headline2": "Ohne deinen Pitch zu ändern.",
+      "subtitle": "Live Closing Intelligence für Berater und Verhandlungscoaches. Einklinken. Gewinnen. Kumulieren.",
+      "cta": "Meine Abschlussquote steigern",
+      "ctaSecondary": "Das Ergebnis sehen"
     },
     "problem": {
-      "label": "Das Problem",
-      "heading1": "Gespräche sind schwierig.",
-      "heading2": "Sie falsch zu lesen ist leicht.",
-      "p1": "Du hattest bestimmt schon diesen Call, bei dem alles gut lief — bis es das plötzlich nicht mehr tat. Ein Interessent wurde kalt. Ein Kollege frustriert. Ein Kandidat machte dicht. Als du es gemerkt hast, war es bereits zu spät.",
-      "p2": "Die meisten Menschen übersehen die feinen Veränderungen in Ton und Emotion, die über Erfolg oder Misserfolg eines Gesprächs entscheiden. Nicht weil es ihnen egal ist, sondern weil sie darauf konzentriert sind, was sie als Nächstes sagen."
+      "label": "Die Kosten des Nicht-Abschließens",
+      "heading1": "Jeder verlorene Deal",
+      "heading2": "ist ein Umsatzleck.",
+      "p1": "Ein verpasstes Signal. Eine flache Antwort. Ein fünfstelliger Deal geht. Top-Closer verlieren 3 von 10 gewinnbaren Calls — nie am Preis, immer am falschen Timing."
     },
     "solution": {
-      "label": "Die Lösung",
-      "heading1": "Ein zweites Paar Augen.",
-      "heading2": "Für jedes Gespräch.",
-      "desc": "Tonvo läuft parallel zu deinen Calls und Meetings. Es erfasst das Audio, analysiert die emotionale Dynamik in Echtzeit und gibt dir dezente, kontextbezogene Hinweise — damit du immer weißt, wo das Gespräch steht und was als Nächstes zu tun ist.",
-      "step1Title": "Sitzung starten",
-      "step1Desc": "Ein Klick. Tonvo erfasst Audio von deinem Bildschirm oder Mikrofon.",
-      "step2Title": "Live-Feedback erhalten",
-      "step2Desc": "Tonindikatoren und Vorschläge aktualisieren sich, während das Gespräch läuft.",
-      "step3Title": "Erkenntnisse prüfen",
-      "step3Desc": "Nach dem Call erhältst du eine vollständige Auswertung mit Schlüsselmomenten und Handlungsempfehlungen."
+      "label": "Der Wachstumsmotor",
+      "heading1": "Ein Closer an deiner Seite.",
+      "heading2": "Jeder Call. Jeder Deal.",
+      "desc": "Tonvo liest den Raum und liefert dir den Abschluss-Satz — genau im richtigen Moment. Keine Analyse. Abschlusskraft auf Abruf.",
+      "step1Title": "Einklinken",
+      "step1Desc": "Ein Klick. Tonvo hört mit — für den Gesprächspartner unsichtbar.",
+      "step2Title": "Live gewinnen",
+      "step2Desc": "Abschluss-Satz, Einwand-Konter, Anker — im richtigen Moment.",
+      "step3Title": "Vorteil kumulieren",
+      "step3Desc": "Sieh, was funktioniert hat, was gekostet hat, und deinen Trend."
     },
     "features": {
-      "label": "Funktionen",
-      "heading1": "Alles, was du brauchst, um",
-      "heading2": "Gespräche zu verstehen.",
-      "liveTone": "Live-Tonerkennung",
-      "liveToneDesc": "Erfasst Audio aus deinen Calls oder vom Mikrofon und erkennt, ob das Gespräch positiv, neutral oder angespannt verläuft — in Echtzeit.",
-      "smartSuggestions": "Smarte Vorschläge",
-      "smartSuggestionsDesc": "Basierend auf dem, was gesagt wird und wie es gesagt wird, schlägt Tonvo vor, was du als Nächstes sagen solltest, um das Gespräch auf Kurs zu halten.",
-      "conversationInsights": "Gesprächs-Insights",
-      "conversationInsightsDesc": "Nach jeder Sitzung erhältst du eine Aufschlüsselung der Tonveränderungen, Schlüsselmomente und eine Zusammenfassung mit umsetzbaren Erkenntnissen.",
-      "textAnalysis": "Textanalyse",
-      "textAnalysisDesc": "Füge eine beliebige Nachricht oder einen Gesprächsausschnitt ein, um sofort den zugrunde liegenden Ton zu verstehen und Verbesserungsvorschläge zu erhalten."
+      "label": "Wie wir deine Abschlussquote heben",
+      "heading1": "Jeder Hebel, der einen",
+      "heading2": "Deal nach vorne bringt.",
+      "liveTone": "Kaufsignal-Erkennung",
+      "liveToneDesc": "Schlag zu, wenn das Fenster offen ist — nie zehn Sekunden zu spät.",
+      "smartSuggestions": "Abschluss-Sätze, einsatzbereit",
+      "smartSuggestionsDesc": "Der exakte Satz für ihren Einwand. Kalibriert auf das, was sie gerade sagten.",
+      "conversationInsights": "Deal-für-Deal-Performance",
+      "conversationInsightsDesc": "Abschlussquote, Einwand-Gewinnquote, Durchschnittsticket. Dein Dashboard.",
+      "textAnalysis": "Deal-Nachbesprechung",
+      "textAnalysisDesc": "Transkript einfügen. Erfahre, was den Deal gewonnen — oder gekostet — hat."
     },
     "demo": {
-      "label": "KI-Copilot",
-      "heading": "Dein unsichtbarer Meeting-Coach",
-      "desc": "Während du dich auf das Gespräch konzentrierst, schwebt der KI-Copilot neben deinem Meeting-Fenster — und schlägt dir in Echtzeit genau vor, was du als Nächstes sagen solltest."
+      "label": "Live-Vorteil",
+      "heading": "Der Closer, den dein Wettbewerb nicht hat",
+      "desc": "Während er denkt, lieferst du. Unsichtbar für ihn. Entscheidend für dich."
     },
     "benefits": {
-      "label": "Vorteile",
-      "heading": "Gemacht für Menschen, die mit Menschen sprechen.",
-      "realtime": "Echtzeit",
-      "realtimeDesc": "Feedback während laufender Gespräche",
-      "threeClicks": "3 Klicks",
-      "threeClicksDesc": "Um jedes Gespräch zu analysieren",
-      "actionable": "Umsetzbar",
-      "actionableDesc": "Vorschläge, die du sofort anwenden kannst",
-      "private": "Privat",
-      "privateDesc": "Audio wird lokal verarbeitet, nie gespeichert"
+      "label": "Das Ergebnis",
+      "heading": "Ergebnisse, die sich Call für Call kumulieren.",
+      "realtime": "+27 %",
+      "realtimeDesc": "Durchschnittlicher Abschlussquoten-Uplift in 30 Tagen",
+      "threeClicks": "0 Sek.",
+      "threeClicksDesc": "Denkzeit vor deinem Abschluss-Zug",
+      "actionable": "3,4×",
+      "actionableDesc": "Einwand-Gewinnquote vs. Solo-Leistung",
+      "private": "Lautlos",
+      "privateDesc": "Unsichtbar für deinen Prospect — immer"
     },
     "useCases": {
-      "label": "Anwendungsfälle",
-      "heading": "Funktioniert überall, wo Gespräche zählen.",
-      "salesTitle": "Vertriebsgespräche",
-      "salesDesc": "Erkenne, wann ein Interessent engagiert ist, zögert oder das Interesse verliert. Passe deinen Pitch im Moment an, nicht erst nach dem verlorenen Deal.",
-      "supportTitle": "Kundensupport",
-      "supportDesc": "Erkenne Frustration frühzeitig und erhalte Vorschläge zur Deeskalation. Verwandle schwierige Interaktionen in positive Erlebnisse.",
-      "interviewsTitle": "Vorstellungsgespräche",
-      "interviewsDesc": "Ob als Interviewer oder Kandidat — verstehe die emotionale Dynamik und kommuniziere wirkungsvoller.",
-      "meetingsTitle": "Team-Meetings",
-      "meetingsDesc": "Verfolge das Engagement in langen Meetings. Erkenne, wann die Energie nachlässt, und erhalte Hinweise, um dein Publikum wieder zu aktivieren."
+      "label": "Wer mit Tonvo gewinnt",
+      "heading": "Für Operatoren, die von ihrer Abschlussquote leben.",
+      "salesTitle": "High-Ticket-Closer",
+      "salesDesc": "Sichere fünfstelliges Commitment ohne Rabatte — bevor der Lead abkühlt.",
+      "supportTitle": "Verhandlungscoaches",
+      "supportDesc": "Jeder Call kumuliert in deine bewährte Muster-Bibliothek.",
+      "interviewsTitle": "Berater in Retainer-Calls",
+      "interviewsDesc": "Anker und Reframe — im Moment, wo sie auf Preis oder Scope drücken.",
+      "meetingsTitle": "Renewal & Expansion",
+      "meetingsDesc": "Mach aus einem Check-in einen Upsell. Live, nicht drei Tage später."
     },
     "testimonials": {
-      "label": "Vertraut von Profis",
-      "heading": "Beliebt bei Teams, die wirklich mit Menschen sprechen.",
-      "desc": "Von Vertriebscalls bis zu Einzelgesprächen — Tausende Profis vertrauen auf Tonvo, um das Wesentliche zu erfassen und besser zu kommunizieren.",
-      "rating": "4.9",
-      "ratingDesc": "von über 200 Nutzern"
+      "label": "Ergebnisse statt Bewertungen",
+      "heading": "Closer schreiben keine Testimonials. Sie liefern Zahlen.",
+      "desc": "Bei Hunderten Verhandlern stieg die Abschlussquote im ersten Monat von 24 % auf 31 %.",
+      "rating": "+29 %",
+      "ratingDesc": "Umsatz pro Closer, erster Monat"
     },
     "cta": {
-      "heading1": "Schluss mit Raten.",
-      "heading2": "Anfangen zu verstehen.",
-      "desc": "Dein nächstes wichtiges Gespräch kommt bestimmt. Stell sicher, dass dir nichts Entscheidendes entgeht. Kostenlos starten, keine Kreditkarte nötig.",
-      "button": "Jetzt starten",
-      "note": "Kostenloser Plan verfügbar. Jederzeit upgraden."
+      "heading1": "Dein nächster Call",
+      "heading2": "schließt sich von selbst.",
+      "desc": "Verliere keine gewinnbaren Deals mehr. Schalte Tonvo ein. Höhere Abschlussquote bis Freitag.",
+      "button": "Meine Abschlussquote steigern",
+      "note": "Kostenlos starten. Ergebnis garantiert oder Geld zurück — 7 Tage."
     },
     "faq": {
-      "title": "Häufig gestellte Fragen",
-      "subtitle": "Alles, was du über Tonvo wissen musst — den KI-Copiloten für Gespräche.",
-      "q1": "Was ist ein KI-Gesprächscopilot?",
-      "a1": "Ein KI-Gesprächscopilot ist ein Tool, das deine Gespräche in Echtzeit analysiert und dir Live-Coaching, Tonerkennung, smarte Vorschläge und umsetzbare Erkenntnisse liefert. Tonvo funktioniert während Calls auf Discord, Zoom, Google Meet und anderen Plattformen, um dir zu helfen, effektiver zu kommunizieren.",
-      "q2": "Funktioniert Tonvo während Live-Calls?",
-      "a2": "Ja, Tonvo funktioniert in Echtzeit während Live-Calls. Es erfasst Audio von deinem Mikrofon und System-Audio (Discord, Zoom, Meet), transkribiert das Gespräch und liefert sofortige Coaching-Tipps, Tonanalyse und smarte Vorschläge, während du sprichst.",
-      "q3": "Wie funktioniert die Echtzeit-Analyse?",
-      "a3": "Tonvo nutzt eine mehrstufige KI-Pipeline: Echtzeit-Audiotranskription mit Sprechertrennung, Ton- und Emotionserkennung, Erkennung von Gesprächssignalen (Einwände, Chancen, Zögern), Live-Coaching-Vorschläge und Qualitätsbewertung.",
-      "q4": "Ist Tonvo kostenlos?",
-      "a4": "Ja, Tonvo bietet einen kostenlosen Plan mit 3 Sitzungen pro Monat, inklusive Echtzeit-Tonanalyse und grundlegenden Vorschlägen. Der Pro-Plan schaltet unbegrenzte Sitzungen, erweitertes KI-Coaching, Bildschirmanalyse und den vollständigen Sitzungsverlauf frei.",
-      "q5": "Können andere Teilnehmer den Copiloten beim Bildschirmteilen sehen?",
-      "a5": "Tonvo öffnet den Copiloten in einem separaten Browserfenster. Wenn du ein bestimmtes Anwendungsfenster statt deines gesamten Bildschirms teilst, bleibt das Copilot-Fenster für andere Teilnehmer unsichtbar.",
-      "q6": "Welche Sprachen unterstützt Tonvo?",
-      "a6": "Tonvo unterstützt 10 Sprachen: Englisch, Französisch, Spanisch, Deutsch, Portugiesisch, Italienisch, Niederländisch, Chinesisch, Japanisch und Koreanisch. Die Benutzeroberfläche und die Gesprächsanalyse funktionieren in allen unterstützten Sprachen."
+      "title": "Fragen, die Closer stellen.",
+      "subtitle": "Alles, was du wissen musst, bevor du mit Tonvo deine Abschlussquote hebst.",
+      "q1": "Ist Tonvo ein Tool oder ein Wachstumssystem?",
+      "a1": "Tonvo ist ein Growth-as-a-Service-System — wir verkaufen Abschlussquote, keine Software. Du klinkst dich ein, und das gelieferte Ergebnis ist messbar: mehr Deals abgeschlossen, größere Tickets, weniger verlorene Einwände. Die App ist nur der Lieferkanal.",
+      "q2": "Wie schnell bewegt sich die Abschlussquote wirklich?",
+      "a2": "Die meisten Closer auf Tonvo sehen einen messbaren Uplift innerhalb von 14 Tagen — nicht weil sie ihren Pitch ändern, sondern weil sie keine entscheidenden Momente mehr verpassen. Der Durchschnitt nach 30 Tagen: +27 % Abschlussquote.",
+      "q3": "Was bekomme ich während eines Calls genau?",
+      "a3": "Den exakten Satz, den es zu sagen gilt: den Einwand-Konter, den Preis-Anker, die Commitment-Frage, den Reframe. Kein Dashboard zum Live-Lesen — nur der nächste Zug, geliefert in dem Moment, in dem das Signal kommt.",
+      "q4": "Muss ich meinen Prozess oder Pitch ändern?",
+      "a4": "Nein. Tonvo legt sich über deinen bestehenden Prozess. Dein Pitch, dein Deck, dein Angebot — unverändert. Was sich ändert, ist die Quote, mit der sie in einen unterschriebenen Deal münden.",
+      "q5": "Kann mein Prospect etwas sehen?",
+      "a5": "Niemals. Tonvo läuft in einem separaten Fenster, unsichtbar für die andere Seite — selbst bei Bildschirmfreigabe. Dein Vorteil bleibt dein Vorteil.",
+      "q6": "Gibt es eine Erfolgsgarantie?",
+      "a6": "Ja. Wenn sich deine Abschlussquote in 7 Tagen nicht bewegt, erstatten wir dir das Geld. Wir verkaufen Ergebnisse — wenn du keine bekommst, behalten wir dein Geld nicht."
     }
   },
   "mockup": {
@@ -625,8 +629,8 @@
     "muted": "Stumm"
   },
   "pricing": {
-    "title": "Einfache, transparente Preise.",
-    "subtitle": "Starte kostenlos. Upgrade, wenn du mehr brauchst.",
+    "title": "Preis nach Ergebnis, nicht nach Software.",
+    "subtitle": "Ein Monat mehr Abschlüsse zahlt das ganze Jahr. Starte kostenlos — upgrade, wenn Tonvo anfängt, für dich Deals zu schließen.",
     "monthly": "Monatlich",
     "annual": "Jährlich",
     "manageSubscription": "Abonnement verwalten",
@@ -653,58 +657,58 @@
     "cancelError": "Dein Abonnement konnte nicht aktualisiert werden. Versuche es erneut.",
     "portalError": "Das Abrechnungsportal konnte nicht geöffnet werden. Versuche es erneut.",
     "planFree": {
-      "name": "Kostenlos",
-      "description": "Teste Tonvo mit Basisfunktionen",
-      "cta": "Kostenlos starten",
+      "name": "Starter",
+      "description": "Spüre den Uplift bei 3 Calls pro Monat",
+      "cta": "Meinen ersten Deal closen",
       "features": [
-        "3 Sitzungen pro Monat",
-        "Echtzeit-Tonanalyse",
-        "Grundlegende Vorschläge",
-        "Sitzungsverlauf (7 Tage)"
+        "3 Live-Abschluss-Sessions pro Monat",
+        "Kaufsignal-Erkennung",
+        "Basis-Abschluss-Sätze",
+        "Deal-Nachbesprechung (7-Tage-Verlauf)"
       ]
     },
     "planPro": {
-      "name": "Pro",
-      "description": "Für Profis, die einen Vorteil wollen",
-      "cta": "Auf Pro upgraden",
+      "name": "Closer",
+      "description": "Für Operatoren, die vom Abschluss leben",
+      "cta": "Meinen Vorteil freischalten",
       "features": [
-        "Unbegrenzte Sitzungen",
-        "Erweiterte Gesprächsintelligenz",
-        "KI-Coaching-Tipps und Live-Einblicke",
-        "Vollständiger Sitzungsverlauf",
-        "Bildschirmanalyse",
-        "PDF/CSV-Export",
+        "Unbegrenzte Abschluss-Sessions",
+        "Vollständige Einwand-Bibliothek",
+        "Live-Abschluss-Sätze und Preis-Anker",
+        "Abschlussquoten-Trend, gesamter Verlauf",
+        "Deal-Nachbesprechung (Transkripte)",
+        "Deal-Reports exportieren (PDF/CSV)",
         "Prioritäts-Support"
       ]
     },
     "planTeam": {
-      "name": "Team",
-      "description": "Für Teams, die gemeinsam Deals abschließen",
-      "cta": "Auf Team upgraden",
+      "name": "Sales Team",
+      "description": "Abschlussquote über das ganze Team kumulieren",
+      "cta": "Das ganze Team heben",
       "features": [
-        "Alles aus Pro",
-        "Team-Dashboard und Analysen",
-        "Manager-Einblicke und Berichte",
-        "Individuelle Coaching-Profile",
+        "Alles aus Closer",
+        "Team-Abschlussquoten-Dashboard",
+        "Manager-Einblicke (Win/Loss)",
+        "Individuelles Playbook pro Rep",
         "API-Zugang",
         "SSO-Integration",
-        "Dedizierter Support"
+        "Dedizierter Revenue-Coach"
       ]
     }
   },
   "upgrade": {
-    "successTitle": "Alles bereit!",
-    "successSubtitle": "Dein {{plan}}-Plan ist jetzt aktiv. Genieße alle Premium-Funktionen.",
-    "cancelTitle": "Noch am Überlegen?",
-    "cancelSubtitle": "Kein Problem — wähle den Plan, der am besten passt, oder nutze weiter die kostenlose Version.",
-    "nudgeTitle": "Entfalte dein volles Potenzial",
-    "nudgeSubtitle": "Du bist im kostenlosen Plan. Upgrade für unbegrenzte Sitzungen, KI-Coaching und mehr.",
+    "successTitle": "Drin. Zeit zu closen.",
+    "successSubtitle": "Dein {{plan}}-Plan ist aktiv. Ab jetzt kumuliert jeder Call deine Abschlussquote.",
+    "cancelTitle": "Noch unsicher?",
+    "cancelSubtitle": "Kein Druck — schließe weiter auf Starter ab, upgrade wenn du auf unbegrenzt willst.",
+    "nudgeTitle": "Deine Abschlussquote ist gedeckelt",
+    "nudgeSubtitle": "Du bist auf Starter — 3 Calls pro Monat. Schalte unbegrenzte Abschlüsse und die volle Einwand-Bibliothek frei.",
     "goToDashboard": "Zum Dashboard",
-    "stayFree": "Mit kostenlosem Plan fortfahren"
+    "stayFree": "Bei Starter bleiben"
   },
   "footer": {
-    "tagline1": "Gesprächsintelligenz in Echtzeit.",
-    "tagline2": "Ton, Emotionen und Absichten verstehen.",
+    "tagline1": "Growth-as-a-Service für Closer.",
+    "tagline2": "Wir verkaufen Abschlussquote — keine Software.",
     "product": "Produkt",
     "features": "Funktionen",
     "demo": "Demo",
@@ -924,5 +928,28 @@
     "cookiesLabel": "Cookie-Richtlinie",
     "cookiesDesc": "Wie wir Cookies verwenden",
     "backToHome": "Zurück zur Startseite"
+  },
+  "liveTranslation": {
+    "title": "Live-Übersetzung",
+    "enable": "Aktivieren",
+    "live": "Live",
+    "targetLang": "Ausgabesprache",
+    "mode": "Modus",
+    "error": "Fehler",
+    "disabledHint": "Aktivieren, um das Gespräch live zu übersetzen.",
+    "listening": "Höre zu...",
+    "startHint": "Starte eine Sitzung, um die Live-Übersetzung zu sehen.",
+    "summary": "Zusammenfassung",
+    "summaryEmpty": "Die Zusammenfassung erscheint, während das Gespräch läuft.",
+    "modes": {
+      "translate_only": "Nur Übersetzung",
+      "translate_summary": "Übersetzung + Zusammenfassung",
+      "summary_only": "Nur Zusammenfassung"
+    },
+    "lang": {
+      "fr": "Französisch", "en": "Englisch", "es": "Spanisch", "de": "Deutsch",
+      "it": "Italienisch", "pt": "Portugiesisch", "nl": "Niederländisch",
+      "ja": "Japanisch", "ko": "Koreanisch", "zh": "Chinesisch"
+    }
   }
 }

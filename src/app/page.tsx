@@ -12,6 +12,10 @@ import LandingHero from "@/components/landing/LandingHero";
 import PricingSection from "@/components/landing/PricingSection";
 import BenefitsSection from "@/components/landing/BenefitsSection";
 import UseCasesSection from "@/components/landing/UseCasesSection";
+import SolutionSection from "@/components/landing/SolutionSection";
+import ProblemSection from "@/components/landing/ProblemSection";
+import TestimonialsSection from "@/components/landing/TestimonialsSection";
+import { FadeIn, Stagger, StaggerItem, MotionLink, RevealLine } from "@/components/motion";
 
 /* ------------------------------------------------------------------ */
 /*  Inline SVG icons (no external dependency)                         */
@@ -298,57 +302,6 @@ export default function HomePage() {
     },
   ];
 
-  const testimonials = [
-    {
-      name: "Sarah Mitchell",
-      role: "Account Executive",
-      company: "Salesforce",
-      text: "Honestly, I didn't think I needed this. But after my first week I realized how much I was missing in calls.",
-      highlight: "Now I actually listen instead of scrambling to take notes.",
-      avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&fit=crop&crop=face",
-      metric: { value: "3h", label: "saved per week" },
-      featured: true,
-    },
-    {
-      name: "David Chen",
-      role: "Engineering Manager",
-      company: "Datadog",
-      text: "The summary after each 1-on-1 is a game changer. I caught things I would've completely forgotten.",
-      highlight: "My team even noticed I'm more present during our calls now.",
-      avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&h=80&fit=crop&crop=face",
-    },
-    {
-      name: "Priya Sharma",
-      role: "Head of Sales",
-      company: "Notion",
-      text: "We rolled Tonvo out to our entire SDR team. Ramp time for new hires dropped significantly because they can review real call summaries instead of shadowing for weeks.",
-      avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=80&h=80&fit=crop&crop=face",
-      metric: { value: "40%", label: "faster onboarding" },
-    },
-    {
-      name: "Jessica Adams",
-      role: "Customer Success Lead",
-      company: "HubSpot",
-      text: "I used to spend 20 minutes after every call writing up notes.",
-      highlight: "Now it's just... done. And the transcription is surprisingly accurate, even with accents.",
-      avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=80&h=80&fit=crop&crop=face",
-    },
-    {
-      name: "Marcus Johnson",
-      role: "Freelance Consultant",
-      text: "I was skeptical at first — another AI tool, right? But this one actually delivers. I prep less, listen more, and my clients can tell the difference.",
-      avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=80&h=80&fit=crop&crop=face",
-      metric: { value: "5x", label: "more client follow-ups" },
-    },
-    {
-      name: "Elena Rossi",
-      role: "Product Manager",
-      company: "Figma",
-      text: "I run 6+ user interviews a week. Tonvo captures every insight so I can stay focused on the conversation. The coaching tips during calls are surprisingly spot-on.",
-      avatar: "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=80&h=80&fit=crop&crop=face",
-    },
-  ];
-
   return (
     <>
       {/* ── Navbar (client component: scroll behavior + auth) ── */}
@@ -359,58 +312,13 @@ export default function HomePage() {
         <LandingHero />
 
         {/* ── Divider ── */}
-        <div className="glow-line max-w-2xl mx-auto" />
+        <RevealLine className="glow-line max-w-2xl mx-auto" />
 
-        {/* ── Problem ── */}
-        <section className="px-4 sm:px-6 py-16 sm:py-24 md:py-32">
-          <div className="max-w-3xl mx-auto text-center">
-            <span className="section-label">{t("landing.problem.label")}</span>
-            <AnimatedTitle variant="up" className="section-heading text-glow mb-6">
-              {t("landing.problem.heading1")}
-              <br />
-              <span className="text-silver-gradient">{t("landing.problem.heading2")}</span>
-            </AnimatedTitle>
-            <p className="body-muted max-w-2xl mx-auto">
-              {t("landing.problem.p1")}
-            </p>
-            <p className="body-muted max-w-2xl mx-auto mt-4">
-              {t("landing.problem.p2")}
-            </p>
-          </div>
-        </section>
+        {/* ── Problem / The Cost of Not Winning (client component: scan + word reveal) ── */}
+        <ProblemSection />
 
-        {/* ── Solution ── */}
-        <section className="px-4 sm:px-6 py-16 sm:py-24 md:py-32" style={{ backgroundColor: "var(--color-surface)" }}>
-          <div className="max-w-3xl mx-auto text-center">
-            <span className="section-label">{t("landing.solution.label")}</span>
-            <AnimatedTitle variant="left" className="section-heading text-glow mb-6">
-              {t("landing.solution.heading1")}
-              <br />
-              <span className="text-silver-gradient">{t("landing.solution.heading2")}</span>
-            </AnimatedTitle>
-            <p className="body-muted max-w-2xl mx-auto">
-              {t("landing.solution.desc")}
-            </p>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-16">
-              {[
-                { step: "01", title: t("landing.solution.step1Title"), desc: t("landing.solution.step1Desc") },
-                { step: "02", title: t("landing.solution.step2Title"), desc: t("landing.solution.step2Desc") },
-                { step: "03", title: t("landing.solution.step3Title"), desc: t("landing.solution.step3Desc") },
-              ].map((item) => (
-                <div key={item.step} className="text-left">
-                  <div className="text-xs font-bold mb-3 text-silver-sweep" style={{ display: "inline-block" }}>
-                    {item.step}
-                  </div>
-                  <h3 className="card-title text-lg mb-2">{item.title}</h3>
-                  <p className="text-sm leading-relaxed m-0" style={{ color: "var(--color-text-muted)" }}>
-                    {item.desc}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
+        {/* ── Solution / The Growth Engine (client component: scroll-driven motion) ── */}
+        <SolutionSection />
 
         {/* ── Features ── */}
         <section id="features" className="py-16 sm:py-24 md:py-32 overflow-hidden">
@@ -450,26 +358,28 @@ export default function HomePage() {
         </section>
 
         {/* ── Divider ── */}
-        <div className="glow-line max-w-2xl mx-auto" />
+        <RevealLine className="glow-line max-w-2xl mx-auto" />
 
         {/* ── Product Demo ── */}
         <section id="demo" className="px-4 sm:px-6 py-16 sm:py-24 md:py-32">
           <div className="max-w-4xl mx-auto">
             <div className="text-center mb-12">
-              <span className="section-label">{t("landing.demo.label")}</span>
+              <FadeIn as="span" className="section-label" y={12} duration={0.5}>
+                {t("landing.demo.label")}
+              </FadeIn>
               <AnimatedTitle variant="soft" className="section-heading text-glow mb-4">
                 {t("landing.demo.heading")}
               </AnimatedTitle>
-              <p className="body-muted max-w-lg mx-auto">
+              <FadeIn as="p" className="body-muted max-w-lg mx-auto" delay={0.12}>
                 {t("landing.demo.desc")}
-              </p>
+              </FadeIn>
             </div>
 
-            <div className="mockup-container mockup-enter">
+            <FadeIn className="mockup-container mockup-enter" y={32} duration={0.85} delay={0.05}>
               <div className="mockup-lift">
                 <CopilotMockup />
               </div>
-            </div>
+            </FadeIn>
           </div>
         </section>
 
@@ -480,82 +390,16 @@ export default function HomePage() {
         <UseCasesSection />
 
         {/* ── Divider ── */}
-        <div className="glow-line max-w-2xl mx-auto" />
+        <RevealLine className="glow-line max-w-2xl mx-auto" />
 
-        {/* ── Testimonials ── */}
-        <section className="px-4 sm:px-6 py-16 sm:py-24 md:py-32">
-          <div className="max-w-6xl mx-auto">
-            <div className="text-center mb-16">
-              <span className="section-label">{t("landing.testimonials.label")}</span>
-              <AnimatedTitle variant="right" className="section-heading">
-                {t("landing.testimonials.heading")}
-              </AnimatedTitle>
-              <p className="body-muted max-w-lg mx-auto mt-4">
-                {t("landing.testimonials.desc")}
-              </p>
-
-              {/* Social proof bar */}
-              <div className="flex items-center justify-center gap-6 mt-8 flex-wrap">
-                <div className="flex items-center gap-1">
-                  {[...Array(5)].map((_, i) => (
-                    <svg key={i} width="16" height="16" viewBox="0 0 24 24" fill="#fbbf24" stroke="none">
-                      <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
-                    </svg>
-                  ))}
-                  <span className="text-sm font-semibold ml-1.5" style={{ color: "var(--color-text)" }}>{t("landing.testimonials.rating")}</span>
-                  <span className="text-xs ml-0.5" style={{ color: "var(--color-text-muted)" }}>{t("landing.testimonials.ratingDesc")}</span>
-                </div>
-              </div>
-            </div>
-
-            <div className="testimonials-grid">
-              {testimonials.map((t, idx) => (
-                <div
-                  key={t.name}
-                  className={`glass-card p-7 flex flex-col justify-between relative overflow-hidden${t.featured ? " testimonial-featured" : ""}${idx >= 3 ? " testimonial-desktop-only" : ""}`}
-                >
-                  {t.featured && <div className="testimonial-featured-glow" />}
-                  <div>
-                    <div className="flex items-center gap-0.5 mb-4">
-                      {[...Array(5)].map((_, i) => (
-                        <svg key={i} width="14" height="14" viewBox="0 0 24 24" fill="#fbbf24" stroke="none">
-                          <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
-                        </svg>
-                      ))}
-                    </div>
-                    <p className="text-[15px] leading-relaxed mb-0" style={{ color: "var(--color-text-silver)" }}>
-                      {t.text}
-                      {t.highlight && (
-                        <span className="testimonial-highlight"> {t.highlight}</span>
-                      )}
-                    </p>
-                    {t.metric && (
-                      <div className="testimonial-metric">
-                        <span className="testimonial-metric__value">{t.metric.value}</span>
-                        <span className="testimonial-metric__label">{t.metric.label}</span>
-                      </div>
-                    )}
-                  </div>
-                  <div className="flex items-center gap-3 mt-6 pt-4" style={{ borderTop: "1px solid rgba(255, 255, 255, 0.05)" }}>
-                    <img src={t.avatar} alt={t.name} className="w-10 h-10 rounded-full object-cover shrink-0 ring-2 ring-white/5" />
-                    <div>
-                      <div className="text-sm font-semibold">{t.name}</div>
-                      <div className="text-xs" style={{ color: "var(--color-text-muted)" }}>
-                        {t.role}{t.company ? ` · ${t.company}` : ""}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
+        {/* ── Testimonials / Results-driven proof (client component: KPI counters + spotlight) ── */}
+        <TestimonialsSection />
 
         {/* ── Pricing (client component: billing toggle + auth) ── */}
         <PricingSection />
 
         {/* ── Divider ── */}
-        <div className="glow-line max-w-2xl mx-auto" />
+        <RevealLine className="glow-line max-w-2xl mx-auto" />
 
         {/* ── Final CTA ── */}
         <section className="px-4 sm:px-6 py-16 sm:py-24 md:py-32 relative overflow-hidden">
@@ -578,31 +422,31 @@ export default function HomePage() {
               {t("landing.cta.desc")}
             </p>
 
-            <Link
+            <MotionLink
               href={ctaHref}
               className="btn-primary inline-flex items-center gap-2 px-10 py-4 text-base no-underline"
             >
               {t("landing.cta.button")}
               <IconArrowRight />
-            </Link>
+            </MotionLink>
 
-            <p className="text-xs mt-6" style={{ color: "var(--color-text-muted)" }}>
+            <FadeIn as="p" className="text-xs mt-6" style={{ color: "var(--color-text-muted)" }} delay={0.18} y={8}>
               {t("landing.cta.note")}
-            </p>
+            </FadeIn>
           </div>
         </section>
 
         {/* ── SEO: FAQ Section (for Google Featured Snippets) ── */}
         <section id="faq" className="py-20 px-6">
           <div className="max-w-3xl mx-auto">
-            <h2 className="text-2xl sm:text-3xl font-bold text-center mb-3" style={{ color: "var(--color-text)" }}>
+            <FadeIn as="h2" className="text-2xl sm:text-3xl font-bold text-center mb-3" style={{ color: "var(--color-text)" }}>
               {t("landing.faq.title")}
-            </h2>
-            <p className="text-sm text-center mb-12" style={{ color: "var(--color-text-muted)" }}>
+            </FadeIn>
+            <FadeIn as="p" className="text-sm text-center mb-12" style={{ color: "var(--color-text-muted)" }} delay={0.1}>
               {t("landing.faq.subtitle")}
-            </p>
+            </FadeIn>
 
-            <div className="space-y-4">
+            <Stagger className="space-y-4" stagger={0.06} amount={0.1}>
               {[
                 { q: t("landing.faq.q1"), a: t("landing.faq.a1") },
                 { q: t("landing.faq.q2"), a: t("landing.faq.a2") },
@@ -611,24 +455,25 @@ export default function HomePage() {
                 { q: t("landing.faq.q5"), a: t("landing.faq.a5") },
                 { q: t("landing.faq.q6"), a: t("landing.faq.a6") },
               ].map((item, i) => (
-                <details
-                  key={i}
-                  className="rounded-xl border group"
-                  style={{ backgroundColor: "var(--color-surface)", borderColor: "var(--color-border)" }}
-                >
-                  <summary
-                    className="flex items-center justify-between cursor-pointer px-6 py-4 text-sm font-semibold list-none"
-                    style={{ color: "var(--color-text)" }}
+                <StaggerItem key={i}>
+                  <details
+                    className="rounded-xl border group"
+                    style={{ backgroundColor: "var(--color-surface)", borderColor: "var(--color-border)" }}
                   >
-                    {item.q}
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="shrink-0 ml-4 transition-transform group-open:rotate-180" style={{ color: "var(--color-text-muted)" }}><path d="m6 9 6 6 6-6" /></svg>
-                  </summary>
-                  <p className="px-6 pb-4 pt-0 m-0 text-sm leading-relaxed" style={{ color: "var(--color-text-muted)" }}>
-                    {item.a}
-                  </p>
-                </details>
+                    <summary
+                      className="flex items-center justify-between cursor-pointer px-6 py-4 text-sm font-semibold list-none"
+                      style={{ color: "var(--color-text)" }}
+                    >
+                      {item.q}
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="shrink-0 ml-4 transition-transform group-open:rotate-180" style={{ color: "var(--color-text-muted)" }}><path d="m6 9 6 6 6-6" /></svg>
+                    </summary>
+                    <p className="px-6 pb-4 pt-0 m-0 text-sm leading-relaxed" style={{ color: "var(--color-text-muted)" }}>
+                      {item.a}
+                    </p>
+                  </details>
+                </StaggerItem>
               ))}
-            </div>
+            </Stagger>
           </div>
         </section>
 

@@ -2,14 +2,19 @@
 
 import { Suspense, useEffect, useState, useMemo } from "react";
 import Link from "next/link";
+import { motion, useReducedMotion } from "framer-motion";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "@/lib/auth-context";
 import { supabase } from "@/lib/supabase";
 import AppShell from "@/components/AppShell";
 import ToneIndicator from "@/components/ToneIndicator";
 import PlanUpgradeModal from "@/components/PlanUpgradeModal";
+import CountUp from "@/components/motion/CountUp";
 import type { Conversation } from "@/types/database";
 import type { Tone } from "@/types/analysis";
+
+const SPRING_HOVER = { type: "spring" as const, stiffness: 320, damping: 28 };
+const EASE_OUT = [0.22, 1, 0.36, 1] as const;
 
 interface Stats {
   totalSessions: number;
@@ -39,6 +44,7 @@ function useGreeting() {
 export default function DashboardPage() {
   const { t } = useTranslation();
   const { user } = useAuth();
+  const reduce = useReducedMotion();
   const [conversations, setConversations] = useState<Conversation[]>([]);
   const [stats, setStats] = useState<Stats>({
     totalSessions: 0,
@@ -130,93 +136,145 @@ export default function DashboardPage() {
         </div>
 
         {/* Quick actions */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-8">
-          <Link
-            href="/session"
-            className="no-underline glass-card glass-card-hover flex items-center gap-4 p-5"
-            style={{ borderColor: "rgba(52, 211, 153, 0.2)" }}>
-            <div
-              className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0"
-              style={{ backgroundColor: "rgba(52, 211, 153, 0.1)" }}>
-              <div className="w-2.5 h-2.5 rounded-full pulse-positive" style={{ backgroundColor: "var(--color-positive)" }} />
-            </div>
-            <div>
-              <span className="text-sm font-semibold block" style={{ color: "var(--color-text)" }}>
-                {t("dashboard.startSession")}
-              </span>
-              <span className="text-xs" style={{ color: "var(--color-text-muted)" }}>
-                {t("dashboard.startSessionDesc")}
-              </span>
-            </div>
-          </Link>
-          <Link
-            href="/analyze-text"
-            className="no-underline glass-card glass-card-hover flex items-center gap-4 p-5">
-            <div
-              className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0"
-              style={{ backgroundColor: "var(--color-surface-2)" }}>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{ color: "var(--color-accent-light)" }}>
-                <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z" />
-                <polyline points="14 2 14 8 20 8" />
-              </svg>
-            </div>
-            <div>
-              <span className="text-sm font-semibold block" style={{ color: "var(--color-text)" }}>
-                {t("dashboard.analyzeText")}
-              </span>
-              <span className="text-xs" style={{ color: "var(--color-text-muted)" }}>
-                {t("dashboard.analyzeTextDesc")}
-              </span>
-            </div>
-          </Link>
-        </div>
+        <motion.div
+          className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-8"
+          initial="hidden"
+          animate="show"
+          variants={{
+            hidden: {},
+            show: {
+              transition: reduce ? {} : { staggerChildren: 0.07, delayChildren: 0.05 },
+            },
+          }}
+        >
+          <motion.div
+            variants={{
+              hidden: reduce ? { opacity: 0 } : { opacity: 0, y: 10 },
+              show: reduce ? { opacity: 1 } : { opacity: 1, y: 0, transition: { duration: 0.45, ease: EASE_OUT } },
+            }}
+            whileHover={reduce ? undefined : { y: -2 }}
+            transition={SPRING_HOVER}
+          >
+            <Link
+              href="/session"
+              className="no-underline glass-card glass-card-hover flex items-center gap-4 p-5"
+              style={{ borderColor: "rgba(52, 211, 153, 0.2)" }}>
+              <div
+                className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0"
+                style={{ backgroundColor: "rgba(52, 211, 153, 0.1)" }}>
+                <div className="w-2.5 h-2.5 rounded-full pulse-positive" style={{ backgroundColor: "var(--color-positive)" }} />
+              </div>
+              <div>
+                <span className="text-sm font-semibold block" style={{ color: "var(--color-text)" }}>
+                  {t("dashboard.startSession")}
+                </span>
+                <span className="text-xs" style={{ color: "var(--color-text-muted)" }}>
+                  {t("dashboard.startSessionDesc")}
+                </span>
+              </div>
+            </Link>
+          </motion.div>
+          <motion.div
+            variants={{
+              hidden: reduce ? { opacity: 0 } : { opacity: 0, y: 10 },
+              show: reduce ? { opacity: 1 } : { opacity: 1, y: 0, transition: { duration: 0.45, ease: EASE_OUT } },
+            }}
+            whileHover={reduce ? undefined : { y: -2 }}
+            transition={SPRING_HOVER}
+          >
+            <Link
+              href="/analyze-text"
+              className="no-underline glass-card glass-card-hover flex items-center gap-4 p-5">
+              <div
+                className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0"
+                style={{ backgroundColor: "var(--color-surface-2)" }}>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{ color: "var(--color-accent-light)" }}>
+                  <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z" />
+                  <polyline points="14 2 14 8 20 8" />
+                </svg>
+              </div>
+              <div>
+                <span className="text-sm font-semibold block" style={{ color: "var(--color-text)" }}>
+                  {t("dashboard.analyzeText")}
+                </span>
+                <span className="text-xs" style={{ color: "var(--color-text-muted)" }}>
+                  {t("dashboard.analyzeTextDesc")}
+                </span>
+              </div>
+            </Link>
+          </motion.div>
+        </motion.div>
 
-        {/* KPI cards */}
-        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-3 mb-8">
-          <div className="kpi-card">
-            <div className="kpi-icon">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" style={{ color: "var(--color-accent-light)" }}>
-                <rect x="3" y="3" width="7" height="7" rx="1" />
-                <rect x="14" y="3" width="7" height="7" rx="1" />
-                <rect x="3" y="14" width="7" height="7" rx="1" />
-                <rect x="14" y="14" width="7" height="7" rx="1" />
-              </svg>
-            </div>
-            <p className="text-xs font-medium uppercase tracking-wider m-0 mb-1" style={{ color: "var(--color-text-muted)" }}>
-              {t("dashboard.sessions")}
-            </p>
-            <p className="text-2xl m-0 metric-text">
-              {loadingData ? "--" : stats.totalSessions}
-            </p>
-          </div>
-          <div className="kpi-card">
-            <div className="kpi-icon">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" style={{ color: "var(--color-accent-light)" }}>
-                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
-              </svg>
-            </div>
-            <p className="text-xs font-medium uppercase tracking-wider m-0 mb-1" style={{ color: "var(--color-text-muted)" }}>
-              {t("dashboard.segments")}
-            </p>
-            <p className="text-2xl m-0 metric-text">
-              {loadingData ? "--" : stats.totalSegments}
-            </p>
-          </div>
-          <div className="kpi-card">
-            <div className="kpi-icon">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" style={{ color: "var(--color-accent-light)" }}>
-                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
-                <polyline points="22 4 12 14.01 9 11.01" />
-              </svg>
-            </div>
-            <p className="text-xs font-medium uppercase tracking-wider m-0 mb-1" style={{ color: "var(--color-text-muted)" }}>
-              {t("dashboard.avgConfidence")}
-            </p>
-            <p className="text-2xl m-0 metric-text">
-              {loadingData ? "--" : `${stats.avgConfidence}%`}
-            </p>
-          </div>
-          <div className={`kpi-card ${stats.totalSegments > 0 ? (dominantTone === "positive" ? "kpi-card-positive" : "kpi-card-negative") : ""}`}>
+        {/* KPI cards — staggered entrance + count-up animation */}
+        <motion.div
+          className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-3 mb-8"
+          initial="hidden"
+          animate="show"
+          variants={{
+            hidden: {},
+            show: {
+              transition: reduce ? {} : { staggerChildren: 0.07, delayChildren: 0.15 },
+            },
+          }}
+        >
+          {[
+            {
+              icon: (
+                <>
+                  <rect x="3" y="3" width="7" height="7" rx="1" />
+                  <rect x="14" y="3" width="7" height="7" rx="1" />
+                  <rect x="3" y="14" width="7" height="7" rx="1" />
+                  <rect x="14" y="14" width="7" height="7" rx="1" />
+                </>
+              ),
+              label: t("dashboard.sessions"),
+              value: stats.totalSessions,
+            },
+            {
+              icon: <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />,
+              label: t("dashboard.segments"),
+              value: stats.totalSegments,
+            },
+            {
+              icon: (
+                <>
+                  <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+                  <polyline points="22 4 12 14.01 9 11.01" />
+                </>
+              ),
+              label: t("dashboard.avgConfidence"),
+              value: stats.avgConfidence,
+              suffix: "%",
+            },
+          ].map((kpi, i) => (
+            <motion.div
+              key={i}
+              className="kpi-card"
+              variants={{
+                hidden: reduce ? { opacity: 0 } : { opacity: 0, y: 12 },
+                show: reduce ? { opacity: 1 } : { opacity: 1, y: 0, transition: { duration: 0.5, ease: EASE_OUT } },
+              }}
+            >
+              <div className="kpi-icon">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" style={{ color: "var(--color-accent-light)" }}>
+                  {kpi.icon}
+                </svg>
+              </div>
+              <p className="text-xs font-medium uppercase tracking-wider m-0 mb-1" style={{ color: "var(--color-text-muted)" }}>
+                {kpi.label}
+              </p>
+              <p className="text-2xl m-0 metric-text tabular-nums">
+                {loadingData ? "--" : <CountUp value={kpi.value} suffix={kpi.suffix} duration={1.4} />}
+              </p>
+            </motion.div>
+          ))}
+          <motion.div
+            className={`kpi-card ${stats.totalSegments > 0 ? (dominantTone === "positive" ? "kpi-card-positive" : "kpi-card-negative") : ""}`}
+            variants={{
+              hidden: reduce ? { opacity: 0 } : { opacity: 0, y: 12 },
+              show: reduce ? { opacity: 1 } : { opacity: 1, y: 0, transition: { duration: 0.5, ease: EASE_OUT } },
+            }}
+          >
             <div className="kpi-icon">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" style={{
                 color: stats.totalSegments === 0
@@ -243,8 +301,8 @@ export default function DashboardPage() {
             }}>
               {loadingData ? "--" : stats.totalSegments === 0 ? t("common.na") : t(`common.${dominantTone}`)}
             </p>
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
 
         {/* Main content grid */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">

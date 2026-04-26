@@ -1,13 +1,13 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Pricing - Plans & Features",
+  title: "Pricing — Priced on the Outcome",
   description:
-    "Choose the perfect Tonvo plan for your needs. Free plan with 3 sessions/month, Pro at $19/month for unlimited sessions, AI coaching, and screen analysis. 7-day money-back guarantee.",
+    "Priced on your close rate, not per-seat software. Starter free with 3 closing sessions/month, Closer at $19/month unlocks unlimited closing, full objection library, and deal tracking. One extra deal pays the year. 7-day money-back guarantee.",
   openGraph: {
-    title: "Tonvo Pricing - Conversation Intelligence Plans",
+    title: "Tonvo Pricing — Priced on the Outcome, Not the Software",
     description:
-      "Free, Pro, and Team plans. Unlock unlimited real-time conversation analysis, AI coaching, and advanced insights starting at $19/month.",
+      "Starter, Closer, and Sales Team plans. Unlock unlimited closing sessions, live closing lines, and close-rate tracking — starting at $19/month. One additional closed deal pays the whole year.",
     url: "https://tonvo.co/pricing",
   },
   alternates: {

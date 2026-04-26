@@ -3,11 +3,11 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Sign In or Create Account",
   description:
-    "Sign in to Tonvo or create a free account to start analyzing your conversations in real time with AI-powered tone and emotion detection.",
+    "Sign in to Tonvo or create a free account and start raising your close rate. Live closing lines, objection counters, and price anchors — delivered the moment they matter.",
   openGraph: {
     title: "Sign In to Tonvo",
     description:
-      "Access your conversation intelligence dashboard. Sign in with email or Google.",
+      "Access your close-rate dashboard. Sign in with email or Google.",
     url: "https://tonvo.co/login",
   },
   robots: {

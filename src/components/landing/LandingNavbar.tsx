@@ -2,19 +2,30 @@
 
 import { useState, useEffect, useRef, useCallback } from "react";
 import Link from "next/link";
+import {
+  motion,
+  AnimatePresence,
+  useReducedMotion,
+} from "framer-motion";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "@/lib/auth-context";
 import TonvoLogo from "@/components/Logo";
 import LanguageSelector from "@/components/LanguageSelector";
 
+const SPRING_HOVER = { type: "spring" as const, stiffness: 380, damping: 30, mass: 0.7 };
+const SPRING_LAYOUT = { type: "spring" as const, stiffness: 320, damping: 32, mass: 0.8 };
+const SPRING_TAP = { type: "spring" as const, stiffness: 500, damping: 28 };
+
 export default function LandingNavbar() {
   const { user } = useAuth();
   const { t } = useTranslation();
+  const reduce = useReducedMotion();
 
   const [navVisible, setNavVisible] = useState(true);
   const [scrolled, setScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState("");
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [hoveredHref, setHoveredHref] = useState<string | null>(null);
   const lastScrollY = useRef(0);
   const ticking = useRef(false);
 
@@ -34,7 +45,6 @@ export default function LandingNavbar() {
       const currentY = window.scrollY;
       const heroThreshold = window.innerHeight * 0.4;
 
-      // Visibility
       if (currentY <= heroThreshold) {
         setNavVisible(true);
       } else if (currentY < lastScrollY.current) {
@@ -44,10 +54,8 @@ export default function LandingNavbar() {
         setMobileOpen(false);
       }
 
-      // Scrolled state (triggers visual change)
       setScrolled(currentY > 32);
 
-      // Active section detection
       const sections = ["pricing", "use-cases", "demo", "features"];
       let found = "";
       for (const id of sections) {
@@ -72,270 +80,381 @@ export default function LandingNavbar() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [handleScroll]);
 
-  // Lock body scroll when mobile menu is open
   useEffect(() => {
     document.body.style.overflow = mobileOpen ? "hidden" : "";
-    return () => { document.body.style.overflow = ""; };
+    return () => {
+      document.body.style.overflow = "";
+    };
   }, [mobileOpen]);
 
   return (
     <>
-      <nav
+      <motion.nav
         className="fixed top-0 left-0 right-0 z-50"
         style={{
           paddingTop: "env(safe-area-inset-top)",
-          transform: navVisible ? "translateY(0)" : "translateY(-100%)",
-          opacity: navVisible ? 1 : 0,
-          transition:
-            "transform 0.4s cubic-bezier(0.23, 1, 0.32, 1), opacity 0.3s ease, background-color 0.4s ease, box-shadow 0.4s ease, border-color 0.4s ease",
           willChange: "transform, opacity",
           backgroundColor: scrolled
-            ? "rgba(9, 9, 11, 0.95)"
-            : "rgba(9, 9, 11, 0.6)",
-          backdropFilter: scrolled ? "blur(20px) saturate(1.4)" : "blur(12px)",
-          WebkitBackdropFilter: scrolled ? "blur(20px) saturate(1.4)" : "blur(12px)",
+            ? "rgba(9, 9, 11, 0.92)"
+            : "rgba(9, 9, 11, 0.55)",
+          backdropFilter: scrolled ? "blur(22px) saturate(1.5)" : "blur(12px)",
+          WebkitBackdropFilter: scrolled ? "blur(22px) saturate(1.5)" : "blur(12px)",
           boxShadow: scrolled
-            ? "0 1px 0 rgba(255,255,255,0.04), 0 4px 24px rgba(0,0,0,0.4)"
+            ? "0 1px 0 rgba(255,255,255,0.04), 0 6px 28px rgba(0,0,0,0.45)"
             : "none",
           borderBottom: scrolled
             ? "1px solid rgba(255,255,255,0.06)"
             : "1px solid transparent",
+          transition:
+            "background-color 0.5s ease, backdrop-filter 0.5s ease, box-shadow 0.5s ease, border-color 0.5s ease",
         }}
+        initial={false}
+        animate={{
+          y: navVisible ? 0 : "-100%",
+          opacity: navVisible ? 1 : 0,
+        }}
+        transition={
+          reduce
+            ? { duration: 0 }
+            : { type: "spring", stiffness: 260, damping: 32, mass: 0.9 }
+        }
       >
-        <div
+        <motion.div
           className="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between"
-          style={{
-            height: scrolled ? 56 : 64,
-            transition: "height 0.4s cubic-bezier(0.23, 1, 0.32, 1)",
-          }}
+          animate={{ height: scrolled ? 56 : 64 }}
+          transition={{ type: "spring", stiffness: 220, damping: 30 }}
         >
           {/* Logo */}
-          <Link
-            href="/"
-            className="flex items-center no-underline"
-            style={{
-              transition: "transform 0.2s ease",
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.transform = "scale(1.03)";
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.transform = "scale(1)";
-            }}
+          <motion.div
+            whileHover={reduce ? undefined : { scale: 1.04 }}
+            whileTap={reduce ? undefined : { scale: 0.97 }}
+            transition={SPRING_HOVER}
           >
-            <TonvoLogo size="md" />
-          </Link>
+            <Link href="/" className="flex items-center no-underline">
+              <TonvoLogo size="md" />
+            </Link>
+          </motion.div>
 
-          {/* Desktop nav links */}
-          <div className="hidden md:flex items-center gap-1 lg:gap-2">
+          {/* Desktop nav links — magnetic shared pill */}
+          <div
+            className="hidden md:flex items-center gap-1 lg:gap-2 relative"
+            onMouseLeave={() => setHoveredHref(null)}
+          >
             {navLinks.map((link) => {
               const isActive = activeSection === link.href;
+              const isHovered = hoveredHref === link.href;
               return (
                 <a
                   key={link.href}
                   href={link.href}
+                  onMouseEnter={() => setHoveredHref(link.href)}
                   className="nav-link-premium relative text-sm no-underline px-3 py-2 rounded-lg"
                   data-active={isActive ? "true" : undefined}
                 >
-                  {link.label}
-                  {/* Animated underline indicator */}
-                  <span
-                    style={{
-                      position: "absolute",
-                      bottom: 4,
-                      left: 12,
-                      right: 12,
-                      height: 2,
-                      borderRadius: 1,
-                      background: "var(--color-accent-light)",
-                      transform: isActive ? "scaleX(1)" : "scaleX(0)",
-                      transition: "transform 0.3s cubic-bezier(0.23, 1, 0.32, 1)",
-                      transformOrigin: "center",
-                    }}
-                  />
+                  {/* Magnetic ghost pill — single shared element across links */}
+                  {isHovered && !reduce && (
+                    <motion.span
+                      layoutId="nav-hover-pill"
+                      className="absolute inset-0 rounded-lg"
+                      style={{
+                        background: "rgba(255, 255, 255, 0.05)",
+                        border: "1px solid rgba(255, 255, 255, 0.04)",
+                        zIndex: 0,
+                      }}
+                      transition={SPRING_LAYOUT}
+                    />
+                  )}
+
+                  {/* Label sits above the pill */}
+                  <span className="relative z-10">{link.label}</span>
+
+                  {/* Active underline — also shared via layoutId, slides between active sections */}
+                  {isActive && !reduce && (
+                    <motion.span
+                      layoutId="nav-active-underline"
+                      className="absolute pointer-events-none"
+                      style={{
+                        bottom: 4,
+                        left: 12,
+                        right: 12,
+                        height: 2,
+                        borderRadius: 999,
+                        background:
+                          "linear-gradient(90deg, transparent, var(--color-accent-light), transparent)",
+                        boxShadow: "0 0 8px rgba(200, 200, 216, 0.4)",
+                      }}
+                      transition={SPRING_LAYOUT}
+                    />
+                  )}
+                  {isActive && reduce && (
+                    <span
+                      style={{
+                        position: "absolute",
+                        bottom: 4,
+                        left: 12,
+                        right: 12,
+                        height: 2,
+                        borderRadius: 999,
+                        background: "var(--color-accent-light)",
+                      }}
+                    />
+                  )}
                 </a>
               );
             })}
           </div>
 
-          {/* Right side: language, auth, mobile toggle */}
+          {/* Right side */}
           <div className="flex items-center gap-2 sm:gap-3">
             <LanguageSelector />
 
             {user ? (
-              <Link
-                href="/dashboard"
-                className="nav-cta-btn text-sm no-underline px-5 py-2 rounded-lg font-medium text-white"
-                style={{
-                  background:
-                    "linear-gradient(135deg, var(--color-accent) 0%, #6e6e82 100%)",
-                }}
-              >
+              <NavCTA href="/dashboard" reduce={!!reduce}>
                 {t("landing.nav.dashboard")}
-              </Link>
+              </NavCTA>
             ) : (
               <>
-                <Link
-                  href="/login"
-                  className="nav-signin-link hidden sm:inline-flex text-sm no-underline px-4 py-2 rounded-lg"
+                <motion.div
+                  className="hidden sm:inline-flex"
+                  whileHover={reduce ? undefined : { y: -1 }}
+                  transition={SPRING_HOVER}
                 >
-                  {t("landing.nav.signIn")}
-                </Link>
-                <Link
-                  href="/login"
-                  className="nav-cta-btn text-sm no-underline px-5 py-2 rounded-lg font-medium text-white"
-                  style={{
-                    background:
-                      "linear-gradient(135deg, var(--color-accent) 0%, #6e6e82 100%)",
-                  }}
-                >
+                  <Link
+                    href="/login"
+                    className="nav-signin-link text-sm no-underline px-4 py-2 rounded-lg"
+                  >
+                    {t("landing.nav.signIn")}
+                  </Link>
+                </motion.div>
+                <NavCTA href="/login" reduce={!!reduce}>
                   {t("landing.nav.getStarted")}
-                </Link>
+                </NavCTA>
               </>
             )}
 
             {/* Mobile hamburger */}
-            <button
+            <motion.button
               className="md:hidden flex flex-col justify-center items-center w-10 h-10 rounded-lg"
               style={{
                 background: "transparent",
                 border: "none",
                 cursor: "pointer",
                 padding: 0,
-                transition: "background-color 0.2s ease",
               }}
+              whileHover={reduce ? undefined : { backgroundColor: "rgba(255,255,255,0.06)" }}
+              whileTap={reduce ? undefined : { scale: 0.92 }}
+              transition={SPRING_TAP}
               onClick={() => setMobileOpen((v) => !v)}
               aria-label="Toggle menu"
               aria-expanded={mobileOpen}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = "rgba(255,255,255,0.06)";
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = "transparent";
-              }}
             >
-              <span
+              <motion.span
                 style={{
                   display: "block",
                   width: 18,
                   height: 2,
                   borderRadius: 1,
                   background: "var(--color-text-muted)",
-                  transition: "transform 0.3s ease, opacity 0.2s ease",
-                  transform: mobileOpen
-                    ? "translateY(3px) rotate(45deg)"
-                    : "translateY(-3px) rotate(0deg)",
+                  transformOrigin: "center",
                 }}
+                animate={
+                  mobileOpen
+                    ? { y: 5, rotate: 45 }
+                    : { y: 0, rotate: 0 }
+                }
+                transition={SPRING_HOVER}
               />
-              <span
+              <motion.span
                 style={{
                   display: "block",
                   width: 18,
                   height: 2,
                   borderRadius: 1,
                   background: "var(--color-text-muted)",
-                  transition: "opacity 0.2s ease",
-                  opacity: mobileOpen ? 0 : 1,
                   marginTop: 4,
                 }}
+                animate={{ opacity: mobileOpen ? 0 : 1 }}
+                transition={{ duration: 0.18 }}
               />
-              <span
+              <motion.span
                 style={{
                   display: "block",
                   width: 18,
                   height: 2,
                   borderRadius: 1,
                   background: "var(--color-text-muted)",
-                  transition: "transform 0.3s ease, opacity 0.2s ease",
-                  transform: mobileOpen
-                    ? "translateY(-3px) rotate(-45deg)"
-                    : "translateY(3px) rotate(0deg)",
-                  marginTop: mobileOpen ? 0 : 4,
+                  marginTop: 4,
+                  transformOrigin: "center",
                 }}
+                animate={
+                  mobileOpen
+                    ? { y: -5, rotate: -45 }
+                    : { y: 0, rotate: 0 }
+                }
+                transition={SPRING_HOVER}
               />
-            </button>
+            </motion.button>
           </div>
-        </div>
-      </nav>
+        </motion.div>
+
+        {/* Scroll accent line — gradient pulse at bottom of nav when scrolled */}
+        <AnimatePresence>
+          {scrolled && !reduce && (
+            <motion.div
+              className="absolute bottom-0 left-0 right-0 pointer-events-none"
+              style={{
+                height: 1,
+                background:
+                  "linear-gradient(90deg, transparent 10%, rgba(200, 200, 216, 0.45) 50%, transparent 90%)",
+              }}
+              initial={{ scaleX: 0, opacity: 0 }}
+              animate={{ scaleX: 1, opacity: 1 }}
+              exit={{ scaleX: 0, opacity: 0 }}
+              transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+            />
+          )}
+        </AnimatePresence>
+      </motion.nav>
 
       {/* Mobile overlay menu */}
-      <div
-        className="md:hidden fixed inset-0 z-40"
+      <AnimatePresence>
+        {mobileOpen && (
+          <motion.div
+            className="md:hidden fixed inset-0 z-40"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.25 }}
+          >
+            {/* Backdrop */}
+            <motion.div
+              style={{
+                position: "absolute",
+                inset: 0,
+                backgroundColor: "rgba(0,0,0,0.6)",
+                backdropFilter: "blur(6px)",
+                WebkitBackdropFilter: "blur(6px)",
+              }}
+              onClick={() => setMobileOpen(false)}
+            />
+
+            {/* Menu panel */}
+            <motion.div
+              style={{
+                position: "absolute",
+                top: 0,
+                left: 0,
+                right: 0,
+                paddingTop: "calc(env(safe-area-inset-top) + 72px)",
+                paddingBottom: 32,
+                paddingLeft: 24,
+                paddingRight: 24,
+                backgroundColor: "rgba(9, 9, 11, 0.98)",
+                borderBottom: "1px solid var(--color-border)",
+              }}
+              initial={{ y: -24, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              exit={{ y: -24, opacity: 0 }}
+              transition={{ type: "spring", stiffness: 280, damping: 32 }}
+            >
+              <motion.div
+                className="flex flex-col gap-1"
+                initial="hidden"
+                animate="show"
+                exit="hidden"
+                variants={{
+                  hidden: {},
+                  show: { transition: { staggerChildren: 0.05, delayChildren: 0.08 } },
+                }}
+              >
+                {navLinks.map((link) => (
+                  <motion.a
+                    key={link.href}
+                    href={link.href}
+                    onClick={() => setMobileOpen(false)}
+                    className="text-base no-underline py-3 px-4 rounded-lg"
+                    style={{
+                      color:
+                        activeSection === link.href
+                          ? "var(--color-text)"
+                          : "var(--color-text-muted)",
+                      backgroundColor:
+                        activeSection === link.href
+                          ? "rgba(255,255,255,0.05)"
+                          : "transparent",
+                    }}
+                    variants={{
+                      hidden: { opacity: 0, x: -16 },
+                      show: { opacity: 1, x: 0, transition: { duration: 0.4, ease: [0.22, 1, 0.36, 1] } },
+                    }}
+                    whileHover={
+                      reduce
+                        ? undefined
+                        : { x: 4, backgroundColor: "rgba(255,255,255,0.04)" }
+                    }
+                    transition={SPRING_HOVER}
+                  >
+                    {link.label}
+                  </motion.a>
+                ))}
+              </motion.div>
+
+              {!user && (
+                <motion.div
+                  className="mt-4 pt-4"
+                  style={{ borderTop: "1px solid var(--color-border)" }}
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: 8 }}
+                  transition={{ delay: 0.25, duration: 0.35 }}
+                >
+                  <NavCTA href="/login" reduce={!!reduce} block onClick={() => setMobileOpen(false)}>
+                    {t("landing.nav.getStarted")}
+                  </NavCTA>
+                </motion.div>
+              )}
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
+  );
+}
+
+interface NavCTAProps {
+  href: string;
+  children: React.ReactNode;
+  reduce: boolean;
+  block?: boolean;
+  onClick?: () => void;
+}
+
+/**
+ * Premium CTA — gradient background with subtle sweep on hover, spring scale on tap.
+ * Reduced-motion fallback: static button, no scaling.
+ */
+function NavCTA({ href, children, reduce, block, onClick }: NavCTAProps) {
+  return (
+    <motion.div
+      className={block ? "block" : "inline-block"}
+      whileHover={reduce ? undefined : { scale: 1.03 }}
+      whileTap={reduce ? undefined : { scale: 0.97 }}
+      transition={SPRING_TAP}
+    >
+      <Link
+        href={href}
+        onClick={onClick}
+        className={`nav-cta-btn relative overflow-hidden text-sm no-underline ${
+          block ? "w-full justify-center flex items-center" : ""
+        } px-5 py-2 rounded-lg font-medium text-white`}
         style={{
-          pointerEvents: mobileOpen ? "auto" : "none",
-          opacity: mobileOpen ? 1 : 0,
-          transition: "opacity 0.3s ease",
+          background: "linear-gradient(135deg, var(--color-accent) 0%, #6e6e82 100%)",
+          display: block ? "flex" : "inline-flex",
         }}
       >
-        {/* Backdrop */}
-        <div
-          style={{
-            position: "absolute",
-            inset: 0,
-            backgroundColor: "rgba(0,0,0,0.6)",
-            backdropFilter: "blur(4px)",
-          }}
-          onClick={() => setMobileOpen(false)}
-        />
-        {/* Menu panel */}
-        <div
-          style={{
-            position: "absolute",
-            top: 0,
-            left: 0,
-            right: 0,
-            paddingTop: "calc(env(safe-area-inset-top) + 72px)",
-            paddingBottom: 32,
-            paddingLeft: 24,
-            paddingRight: 24,
-            backgroundColor: "rgba(9, 9, 11, 0.98)",
-            borderBottom: "1px solid var(--color-border)",
-            transform: mobileOpen ? "translateY(0)" : "translateY(-16px)",
-            transition: "transform 0.3s cubic-bezier(0.23, 1, 0.32, 1)",
-          }}
-        >
-          <div className="flex flex-col gap-1">
-            {navLinks.map((link, i) => (
-              <a
-                key={link.href}
-                href={link.href}
-                onClick={() => setMobileOpen(false)}
-                className="text-base no-underline py-3 px-4 rounded-lg"
-                style={{
-                  color:
-                    activeSection === link.href
-                      ? "var(--color-text)"
-                      : "var(--color-text-muted)",
-                  backgroundColor:
-                    activeSection === link.href
-                      ? "rgba(255,255,255,0.05)"
-                      : "transparent",
-                  transition: "color 0.2s ease, background-color 0.2s ease",
-                  animationDelay: `${i * 40}ms`,
-                }}
-              >
-                {link.label}
-              </a>
-            ))}
-          </div>
-
-          {!user && (
-            <div className="mt-4 pt-4" style={{ borderTop: "1px solid var(--color-border)" }}>
-              <Link
-                href="/login"
-                onClick={() => setMobileOpen(false)}
-                className="flex items-center justify-center text-sm no-underline w-full px-5 py-3 rounded-lg font-medium text-white"
-                style={{
-                  background:
-                    "linear-gradient(135deg, var(--color-accent) 0%, #6e6e82 100%)",
-                }}
-              >
-                {t("landing.nav.getStarted")}
-              </Link>
-            </div>
-          )}
-        </div>
-      </div>
-    </>
+        <span className="relative z-10">{children}</span>
+        {!reduce && <span className="nav-cta-sweep" aria-hidden />}
+      </Link>
+    </motion.div>
   );
 }

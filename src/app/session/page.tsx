@@ -18,6 +18,10 @@ import SuggestionCard from "@/components/SuggestionCard";
 import SmartCopilotOverlay, { type PrepData } from "@/components/SmartCopilotOverlay";
 import CopilotPiP, { type CopilotPiPHandle, type CopilotPiPLabels } from "@/components/CopilotPiP";
 import CopilotInline from "@/components/CopilotInline";
+import LiveTranslationStream from "@/components/LiveTranslationStream";
+import LiveCopilotPanel from "@/components/LiveCopilotPanel";
+import { motion, AnimatePresence } from "framer-motion";
+// motion: live-grid + KPI strip entrance; AnimatePresence: tab transitions
 import UpgradePrompt from "@/components/UpgradePrompt";
 import MeetingLinkInput, { type MeetingPlatform } from "@/components/MeetingLinkInput";
 import { usePlan } from "@/hooks/usePlan";
@@ -1041,7 +1045,7 @@ export default function SessionPage() {
 
   return (
     <AppShell>
-      <div style={{ maxWidth: 1100 }}>
+      <div style={{ maxWidth: 1340, margin: "0 auto" }}>
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-8 gap-4">
           <div>
@@ -1253,43 +1257,57 @@ export default function SessionPage() {
           </div>
         )}
 
-        {/* KPI Grid - 6 columns when recording with audio */}
-        <div className={`grid gap-3 sm:gap-4 mb-8 ${isRecording && audioEnabled && segments.length > 0 ? "grid-cols-2 sm:grid-cols-3 lg:grid-cols-6" : "grid-cols-2 sm:grid-cols-2 md:grid-cols-4"}`}>
-          <div className="kpi-card flex flex-col items-center justify-center">
-            <span className="text-xs uppercase tracking-wider mb-3" style={{ color: "var(--color-text-muted)" }}>Tone</span>
-            <ToneIndicator tone={currentTone} size="lg" />
+        {/* KPI Grid — full when idle, slim strip during live session */}
+        {!isRecording ? (
+          <div className="grid gap-3 sm:gap-4 mb-8 grid-cols-2 sm:grid-cols-2 md:grid-cols-4">
+            <div className="kpi-card flex flex-col items-center justify-center">
+              <span className="text-xs uppercase tracking-wider mb-3" style={{ color: "var(--color-text-muted)" }}>Tone</span>
+              <ToneIndicator tone={currentTone} size="lg" />
+            </div>
+            <div className="kpi-card flex flex-col items-center justify-center">
+              <span className="text-xs uppercase tracking-wider mb-3" style={{ color: "var(--color-text-muted)" }}>Idle</span>
+              <AudioWave active={false} />
+            </div>
+            <div className="kpi-card flex flex-col items-center justify-center">
+              <span className="text-xs uppercase tracking-wider mb-3" style={{ color: "var(--color-text-muted)" }}>Quality</span>
+              <span className="text-3xl font-bold" style={{ color: qualityScore > 0 ? getScoreColor(qualityScore) : "var(--color-text-muted)" }}>{qualityScore > 0 ? qualityScore : "--"}</span>
+            </div>
+            <div className="kpi-card flex flex-col items-center justify-center">
+              <span className="text-xs uppercase tracking-wider mb-3" style={{ color: "var(--color-text-muted)" }}>Segments</span>
+              <span className="text-3xl font-bold" style={{ color: "var(--color-accent-light)" }}>{segments.length}</span>
+            </div>
           </div>
-          <div className="kpi-card flex flex-col items-center justify-center">
-            <span className="text-xs uppercase tracking-wider mb-3" style={{ color: analysisStatus === "completed" ? "var(--color-positive)" : "var(--color-text-muted)" }}>
-              {analysisStatus === "completed" ? "Completed" : processing ? "Analyzing..." : isRecording ? (audioService.current?.hasAudio ? "Listening" : "Screen Only") : "Idle"}
-            </span>
-            {analysisStatus === "completed" ? (
-              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ color: "var(--color-positive)" }}><polyline points="20 6 9 17 4 12" /></svg>
-            ) : (
-              <AudioWave active={isRecording && (audioService.current?.hasAudio ?? false)} />
+        ) : (
+          <motion.div
+            className="live-kpi-strip mb-5"
+            initial={{ opacity: 0, y: -4 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+          >
+            <div className="live-kpi-item">
+              <span className="live-kpi-label">Tone</span>
+              <ToneIndicator tone={currentTone} size="sm" showLabel={false} />
+            </div>
+            <div className="live-kpi-item">
+              <span className="live-kpi-label">{analysisStatus === "completed" ? "Done" : processing ? "Analyzing" : audioService.current?.hasAudio ? "Listening" : "Screen"}</span>
+              {analysisStatus === "completed" ? (
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ color: "var(--color-positive)" }}><polyline points="20 6 9 17 4 12" /></svg>
+              ) : (
+                <AudioWave active={isRecording && (audioService.current?.hasAudio ?? false)} />
+              )}
+            </div>
+            <div className="live-kpi-item">
+              <span className="live-kpi-label">Segments</span>
+              <span className="live-kpi-value" style={{ color: "var(--color-accent-light)" }}>{segments.length}</span>
+            </div>
+            {audioEnabled && segments.length > 0 && (
+              <div className="live-kpi-item">
+                <span className="live-kpi-label">Response</span>
+                <span className="live-kpi-value" style={{ color: delayConfig.color, fontSize: 13 }}>{delayConfig.label}</span>
+              </div>
             )}
-          </div>
-          <div className="kpi-card flex flex-col items-center justify-center">
-            <span className="text-xs uppercase tracking-wider mb-3" style={{ color: "var(--color-text-muted)" }}>Quality</span>
-            <span className="text-3xl font-bold" style={{ color: qualityScore > 0 ? getScoreColor(qualityScore) : "var(--color-text-muted)" }}>{qualityScore > 0 ? qualityScore : "--"}</span>
-          </div>
-          <div className="kpi-card flex flex-col items-center justify-center">
-            <span className="text-xs uppercase tracking-wider mb-3" style={{ color: "var(--color-text-muted)" }}>Segments</span>
-            <span className="text-3xl font-bold" style={{ color: "var(--color-accent-light)" }}>{segments.length}</span>
-          </div>
-          {isRecording && audioEnabled && segments.length > 0 && (
-            <>
-              <div className="kpi-card flex flex-col items-center justify-center">
-                <span className="text-xs uppercase tracking-wider mb-3" style={{ color: "var(--color-text-muted)" }}>Engagement</span>
-                <span className="text-3xl font-bold" style={{ color: engagementScore > 0 ? getScoreColor(engagementScore) : "var(--color-text-muted)" }}>{engagementScore > 0 ? engagementScore : "--"}</span>
-              </div>
-              <div className="kpi-card flex flex-col items-center justify-center">
-                <span className="text-xs uppercase tracking-wider mb-3" style={{ color: "var(--color-text-muted)" }}>Response</span>
-                <span className="text-lg font-bold" style={{ color: delayConfig.color }}>{delayConfig.label}</span>
-              </div>
-            </>
-          )}
-        </div>
+          </motion.div>
+        )}
 
         {/* Analysis Ready Banner */}
         {isRecording && analysisStatus === "completed" && (
@@ -1312,119 +1330,69 @@ export default function SessionPage() {
         )}
 
         {/* ============================================================ */}
-        {/*  COPILOT PANEL — inline real-time assistant (Pro+ only)        */}
+        {/*  LIVE COMMAND CENTER — translation stream + copilot sidebar    */}
         {/* ============================================================ */}
         {isRecording && audioEnabled && !can("coachingTips") && (
           <div className="mb-6">
             <UpgradePrompt feature="AI Copilot — Live coaching, insights & signals" plan="Pro" />
           </div>
         )}
+        {/* Idle state: show Live Translation alone so the user can pick a language / mode before starting */}
+        {!isRecording && can("copilotOverlay") && (
+          <motion.div
+            className="mb-6"
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+          >
+            <LiveTranslationStream segments={segments} isRecording={isRecording} />
+          </motion.div>
+        )}
         {isRecording && audioEnabled && can("coachingTips") && (
-          <div className="copilot-inline rounded-2xl border mb-6 segment-enter" style={{ backgroundColor: "var(--color-surface)", backdropFilter: "blur(16px)", WebkitBackdropFilter: "blur(16px)", borderColor: "var(--color-border)", boxShadow: "0 4px 24px rgba(0, 0, 0, 0.08)" }}>
-            {/* Copilot Header */}
-            <div className="flex items-center justify-between px-5 py-3" style={{ borderBottom: "1px solid var(--color-border)" }}>
-              <div className="flex items-center gap-2">
-                <div className="copilot-pulse-dot" />
-                <span className="text-xs font-bold uppercase tracking-wider" style={{ color: "var(--color-text)" }}>{t("copilot.title")}</span>
-                <span className="text-xs" style={{ color: "var(--color-text-muted)" }}>{formatTime(elapsed)}</span>
-              </div>
-              <div className="flex items-center gap-3">
-                {qualityScore > 0 && (
-                  <div className="flex items-center gap-1.5">
-                    <span className="text-[10px] uppercase tracking-wider" style={{ color: "var(--color-text-muted)" }}>Quality</span>
-                    <span className="text-sm font-bold" style={{ color: getScoreColor(qualityScore) }}>{qualityScore}</span>
-                  </div>
-                )}
-                {engagementScore > 0 && (
-                  <div className="flex items-center gap-1.5">
-                    <span className="text-[10px] uppercase tracking-wider" style={{ color: "var(--color-text-muted)" }}>Engagement</span>
-                    <span className="text-sm font-bold" style={{ color: getScoreColor(engagementScore) }}>{engagementScore}</span>
-                  </div>
-                )}
-              </div>
+          <motion.div
+            className="live-grid mb-6"
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+          >
+            <div className="live-grid__main">
+              <LiveTranslationStream segments={segments} isRecording={isRecording} />
             </div>
-
-            {/* Copilot Body — 2-column on desktop */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-0" style={{ minHeight: 80 }}>
-              {/* Left: Coaching + Insight */}
-              <div className="p-5 flex flex-col gap-4" style={{ borderRight: "1px solid var(--color-border)" }}>
-                {/* Coaching */}
-                <div>
-                  <div className="flex items-center gap-1.5 mb-2">
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#818cf8" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 20h9" /><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" /></svg>
-                    <span className="text-[10px] font-bold uppercase tracking-wider" style={{ color: "#818cf8" }}>{t("copilot.coaching")}</span>
-                  </div>
-                  <p className="text-sm m-0 leading-relaxed" style={{ color: coachingTip ? "var(--color-text)" : "var(--color-text-muted)" }}>
-                    {coachingTip || t("copilot.noCoaching")}
-                  </p>
-                </div>
-
-                {/* Insight */}
-                <div>
-                  <div className="flex items-center gap-1.5 mb-2">
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><line x1="12" y1="16" x2="12" y2="12" /><line x1="12" y1="8" x2="12.01" y2="8" /></svg>
-                    <span className="text-[10px] font-bold uppercase tracking-wider" style={{ color: "#38bdf8" }}>{t("copilot.insight")}</span>
-                  </div>
-                  <p className="text-sm m-0 leading-relaxed" style={{ color: liveInsight ? "var(--color-text)" : "var(--color-text-muted)" }}>
-                    {liveInsight || t("copilot.noInsight")}
-                  </p>
-                </div>
-              </div>
-
-              {/* Right: Suggestion + Signals + Speaker Balance */}
-              <div className="p-5 flex flex-col gap-4">
-                {/* Suggestion */}
-                <div>
-                  <div className="flex items-center gap-1.5 mb-2">
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--color-positive)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" /></svg>
-                    <span className="text-[10px] font-bold uppercase tracking-wider" style={{ color: "var(--color-positive)" }}>{t("copilot.suggestion")}</span>
-                  </div>
-                  <p className="text-sm m-0 leading-relaxed" style={{ color: "var(--color-text)" }}>
-                    {currentSuggestion}
-                  </p>
-                </div>
-
-                {/* Speaker Balance */}
-                {speakerBalance != null && (
-                  <div>
-                    <div className="flex items-center gap-1.5 mb-2">
-                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--color-accent-light)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M23 21v-2a4 4 0 0 0-3-3.87" /><path d="M16 3.13a4 4 0 0 1 0 7.75" /></svg>
-                      <span className="text-[10px] font-bold uppercase tracking-wider" style={{ color: "var(--color-accent-light)" }}>{t("copilot.speakerBalance")}</span>
-                    </div>
-                    <div className="flex justify-between text-[10px] mb-1" style={{ color: "var(--color-text-muted)" }}>
-                      <span>{t("copilot.you")} {Math.round(speakerBalance * 100)}%</span>
-                      <span>{t("copilot.them")} {100 - Math.round(speakerBalance * 100)}%</span>
-                    </div>
-                    <div className="copilot-balance-bar">
-                      <div className="copilot-balance-fill copilot-balance-you" style={{ width: `${Math.round(speakerBalance * 100)}%` }} />
-                      <div className="copilot-balance-fill copilot-balance-them" style={{ width: `${100 - Math.round(speakerBalance * 100)}%` }} />
-                    </div>
-                  </div>
-                )}
-
-                {/* Signals */}
-                {signals.length > 0 && (
-                  <div>
-                    <div className="flex items-center gap-1.5 mb-2">
-                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--color-neutral)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" /><line x1="12" y1="9" x2="12" y2="13" /><line x1="12" y1="17" x2="12.01" y2="17" /></svg>
-                      <span className="text-[10px] font-bold uppercase tracking-wider" style={{ color: "var(--color-neutral)" }}>{t("copilot.signals")}</span>
-                    </div>
-                    <div className="flex flex-wrap gap-1.5">
-                      {signals.slice(-6).map((s, i) => {
-                        const cfg = SIGNAL_CONFIG[s.signal];
-                        return (
-                          <div key={i} className="copilot-signal-badge" style={{ backgroundColor: cfg.bg, color: cfg.color }}>
-                            <span className="copilot-signal-dot" style={{ backgroundColor: cfg.color }} />
-                            <span>{s.label}</span>
-                          </div>
-                        );
-                      })}
-                    </div>
-                  </div>
-                )}
-              </div>
+            <div className="live-grid__aside">
+              <LiveCopilotPanel
+                coachingTip={coachingTip}
+                liveInsight={liveInsight}
+                suggestion={currentSuggestion}
+                suggestedResponses={suggestedResponses}
+                signals={signals}
+                speakerBalance={speakerBalance}
+                qualityScore={qualityScore}
+                engagementScore={engagementScore}
+                paused={copilotPaused}
+                onTogglePause={() => setCopilotPaused((p) => !p)}
+                onAsk={handleAskCopilot}
+                asking={copilotAsking}
+                answer={copilotAnswer}
+                labels={{
+                  coaching: t("copilot.coaching"),
+                  insight: t("copilot.insight"),
+                  suggestion: t("copilot.suggestion"),
+                  signals: t("copilot.signals"),
+                  speakerBalance: t("copilot.speakerBalance"),
+                  you: t("copilot.you"),
+                  them: t("copilot.them"),
+                  askPlaceholder: t("copilot.askPlaceholder", "Ask the copilot..."),
+                  paused: t("copilot.paused", "Paused"),
+                  pause: t("session.copilotPause", "Pause"),
+                  resume: t("session.copilotResume", "Resume"),
+                  quality: t("session.kpiQuality", "Quality"),
+                  engagement: t("session.kpiEngagement", "Engagement"),
+                  listening: t("session.listeningInsights"),
+                  suggestedResponses: t("copilot.suggestedResponses", "Suggested replies"),
+                }}
+              />
             </div>
-          </div>
+          </motion.div>
         )}
 
         {/* Screen Analysis Card */}
@@ -1573,9 +1541,15 @@ export default function SessionPage() {
           </div>
         )}
 
-        {/* Insights Tab */}
-        {audioEnabled && activeTab === "insights" && (
-          <div className="space-y-4">
+        {/* Tab content with smooth crossfade */}
+        {audioEnabled && (
+        <AnimatePresence mode="wait">
+        {activeTab === "insights" && (
+          <motion.div key="tab-insights" className="space-y-4"
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -4 }}
+            transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}>
             {/* Conversation Overview */}
             {segments.length > 0 && (
               <div className="glass-card-static rounded-xl p-6">
@@ -1636,12 +1610,16 @@ export default function SessionPage() {
                 )}
               </div>
             )}
-          </div>
+          </motion.div>
         )}
 
         {/* Transcript Tab */}
-        {audioEnabled && activeTab === "transcript" && (
-          <div>
+        {activeTab === "transcript" && (
+          <motion.div key="tab-transcript"
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -4 }}
+            transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}>
             <div className="rounded-xl border overflow-hidden" style={{ backgroundColor: "var(--color-surface)", borderColor: "var(--color-border)" }}>
               {segments.length === 0 && !interimText ? (
                 <div className="p-8 text-center">
@@ -1714,12 +1692,16 @@ export default function SessionPage() {
                 </div>
               )}
             </div>
-          </div>
+          </motion.div>
         )}
 
         {/* Timeline Tab */}
-        {audioEnabled && activeTab === "timeline" && (
-          <div>
+        {activeTab === "timeline" && (
+          <motion.div key="tab-timeline"
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -4 }}
+            transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}>
             {keyMoments.length === 0 ? (
               <div className="glass-card-static rounded-xl p-8 text-center">
                 <p className="text-sm m-0" style={{ color: "var(--color-text-muted)" }}>
@@ -1745,7 +1727,9 @@ export default function SessionPage() {
                 })}
               </div>
             )}
-          </div>
+          </motion.div>
+        )}
+        </AnimatePresence>
         )}
 
         {/* Audio disabled message */}

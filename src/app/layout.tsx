@@ -25,30 +25,30 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: "Tonvo — AI Conversation Copilot | Real-Time Call Insights",
+    default: "Tonvo — Close 27% More Deals | Growth-as-a-Service for Closers",
     template: "%s | Tonvo",
   },
   description:
-    "Analyze conversations in real time with AI. Get live coaching tips, detect tone & emotions, and receive smart suggestions during calls or chats. Works with Discord, Zoom & Meet. Free to start.",
+    "Tonvo is Growth-as-a-Service for consultants, negotiators and high-ticket closers. Raise your close rate by 27% in 30 days — live closing lines, objection counters and price anchors delivered the moment they matter. We sell results, not software.",
   keywords: [
-    "AI conversation copilot",
-    "real-time conversation analysis",
-    "AI sales copilot",
-    "communication AI tool",
-    "live conversation insights",
-    "conversation intelligence",
-    "real-time tone analysis",
-    "emotion detection AI",
-    "AI coaching for calls",
-    "meeting intelligence",
-    "sales coaching AI",
-    "conversation analytics",
-    "tone analyzer",
-    "sentiment analysis tool",
-    "speech analysis AI",
-    "call assistant AI",
-    "Zoom AI assistant",
-    "Discord call analyzer",
+    "growth as a service",
+    "raise close rate",
+    "close more deals",
+    "closing rate coach",
+    "negotiation growth system",
+    "high ticket closing",
+    "live closing assistant",
+    "objection handling live",
+    "sales close rate uplift",
+    "consultant closing edge",
+    "negotiation performance",
+    "revenue per call",
+    "win rate growth",
+    "sales results as a service",
+    "close more sales calls",
+    "GaaS for sales",
+    "outcome-based sales tool",
+    "deal closing growth engine",
     "Tonvo",
   ],
   authors: [{ name: "Tonvo", url: SITE_URL }],
@@ -67,6 +67,7 @@ export const metadata: Metadata = {
   },
   icons: {
     icon: [
+      { url: "/favicon.svg", type: "image/svg+xml" },
       { url: "/icon-192.png", sizes: "192x192", type: "image/png" },
       { url: "/icon-512.png", sizes: "512x512", type: "image/png" },
     ],
@@ -76,7 +77,7 @@ export const metadata: Metadata = {
   appleWebApp: {
     capable: true,
     statusBarStyle: "black-translucent",
-    title: "Tonvo AI",
+    title: "Tonvo",
   },
   other: {
     "mobile-web-app-capable": "yes",
@@ -86,15 +87,15 @@ export const metadata: Metadata = {
     locale: "en_US",
     url: SITE_URL,
     siteName: SITE_NAME,
-    title: "Tonvo — AI Conversation Copilot | Real-Time Call Analysis",
+    title: "Tonvo — Close 27% More Deals | Growth-as-a-Service for Closers",
     description:
-      "Analyze tone, emotions and intent in real time during calls. Get AI coaching tips and smart suggestions on Discord, Zoom and Meet. Free to start.",
+      "We don't sell software — we sell close rate. Tonvo arms consultants and negotiators with the exact closing line, the moment they need it. +27% close rate in 30 days, or your money back.",
     images: [
       {
         url: "/og-image.png",
         width: 1200,
         height: 630,
-        alt: "Tonvo - AI Conversation Copilot for Real-Time Insights",
+        alt: "Tonvo — Growth-as-a-Service that raises your close rate",
         type: "image/png",
       },
     ],
@@ -103,10 +104,10 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     site: "@tonvo",
     creator: "@tonvo",
-    title: "Tonvo - AI Conversation Copilot",
+    title: "Tonvo — Close More. Negotiate Better.",
     description:
-      "Real-time AI suggestions, tone detection & coaching tips to improve your calls and conversations. Free to start.",
-    images: [{ url: "/og-image.png", alt: "Tonvo AI Copilot" }],
+      "Growth-as-a-Service for high-ticket closers. Raise your close rate by 27% in 30 days. We sell the outcome, not the software.",
+    images: [{ url: "/og-image.png", alt: "Tonvo — Close More Deals" }],
   },
   alternates: {
     canonical: SITE_URL,
@@ -138,7 +139,7 @@ const organizationJsonLd = {
   url: SITE_URL,
   logo: `${SITE_URL}/logo-tonvo.png`,
   description:
-    "Tonvo provides real-time conversation intelligence powered by AI. Analyze tone, emotions, and intent during calls and chats.",
+    "Tonvo is Growth-as-a-Service for consultants, negotiators and high-ticket closers. We deliver a measurable close-rate uplift — not software.",
   contactPoint: {
     "@type": "ContactPoint",
     email: "tonvoco.pro@gmail.com",
@@ -149,24 +150,24 @@ const organizationJsonLd = {
 const softwareJsonLd = {
   "@context": "https://schema.org",
   "@type": "SoftwareApplication",
-  name: "Tonvo - AI Conversation Copilot",
+  name: "Tonvo — Growth-as-a-Service for Closers",
   applicationCategory: "BusinessApplication",
-  applicationSubCategory: "Communication",
+  applicationSubCategory: "SalesGrowth",
   operatingSystem: "Web",
   url: SITE_URL,
   description:
-    "An AI-powered copilot that analyzes conversations in real time during calls (Discord, Zoom, Meet). Provides live coaching tips, tone detection, smart suggestions, and conversation signals to improve communication.",
+    "Tonvo delivers a 27% average close-rate uplift in 30 days. Live closing lines, objection counters and price anchors are surfaced the moment a buying signal hits, so consultants and negotiation coaches stop losing winnable deals.",
   featureList: [
-    "Real-time tone & emotion analysis",
-    "AI coaching tips during calls",
-    "Live conversation suggestions",
-    "Speaker diarization (You vs Them)",
-    "Conversation signal detection (objections, opportunities)",
-    "Screen content analysis",
-    "10 language support",
-    "Quality & engagement scoring",
-    "Session history & reports",
-    "Floating copilot overlay",
+    "Live buying-signal detection",
+    "Exact closing lines, delivered the moment you need them",
+    "Objection counters and price anchors",
+    "Speaker separation (you vs prospect)",
+    "Post-call deal review from transcript",
+    "Close-rate and objection win-rate tracking",
+    "10-language coverage for international deals",
+    "Invisible during screen share",
+    "Deal reports and export",
+    "Revenue coach and playbooks",
   ],
   screenshot: `${SITE_URL}/og-image.png`,
   offers: [
@@ -174,15 +175,15 @@ const softwareJsonLd = {
       "@type": "Offer",
       price: "0",
       priceCurrency: "USD",
-      name: "Free Plan",
-      description: "3 sessions per month with real-time tone analysis and basic suggestions",
+      name: "Starter",
+      description: "3 live closing sessions per month with buying-signal detection",
     },
     {
       "@type": "Offer",
       price: "19",
       priceCurrency: "USD",
-      name: "Pro Plan - Monthly",
-      description: "Unlimited sessions with AI coaching, screen analysis, and full history",
+      name: "Closer — Monthly",
+      description: "Unlimited closing sessions, full objection library, close-rate tracking",
       priceSpecification: {
         "@type": "UnitPriceSpecification",
         price: "19",
@@ -192,13 +193,13 @@ const softwareJsonLd = {
     },
     {
       "@type": "Offer",
-      price: "182",
+      price: "156",
       priceCurrency: "USD",
-      name: "Pro Plan - Yearly",
-      description: "Unlimited sessions billed annually (save 20%)",
+      name: "Closer — Yearly",
+      description: "Unlimited closing, billed yearly (30% off — pays back in one closed deal)",
       priceSpecification: {
         "@type": "UnitPriceSpecification",
-        price: "182",
+        price: "156",
         priceCurrency: "USD",
         billingDuration: "P1Y",
       },
@@ -212,66 +213,66 @@ const faqJsonLd = {
   mainEntity: [
     {
       "@type": "Question",
-      name: "What is an AI conversation copilot?",
+      name: "Is Tonvo a tool or a growth system?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "An AI conversation copilot is a tool that analyzes your conversations in real time and provides live coaching tips, tone detection, smart suggestions, and actionable insights. Tonvo works during calls on Discord, Zoom, Google Meet, and other platforms to help you communicate more effectively.",
+        text: "Tonvo is a Growth-as-a-Service system — we sell close rate, not software. You plug in, and the outcome we deliver is measurable: more deals closed, bigger tickets, fewer objections lost. The application is just the delivery mechanism.",
       },
     },
     {
       "@type": "Question",
-      name: "Does Tonvo work during live calls?",
+      name: "How fast does my close rate actually move?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "Yes, Tonvo works in real time during live calls. It captures audio from your microphone and system audio (Discord, Zoom, Meet), transcribes the conversation, and provides instant coaching tips, tone analysis, and smart suggestions while you speak.",
+        text: "Most closers on Tonvo see a measurable close-rate lift inside 14 days — not because they changed their pitch, but because they stopped missing the moments that decide a deal. The average uplift across 30 days is +27% close rate.",
       },
     },
     {
       "@type": "Question",
-      name: "How does Tonvo analyze conversations?",
+      name: "What do I actually get during a call?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "Tonvo uses a multi-step AI pipeline: (1) Real-time audio transcription with speaker separation, (2) Tone and emotion detection using Claude AI, (3) Conversation signal detection (objections, opportunities, hesitation), (4) Live coaching suggestions, (5) Quality and engagement scoring. It also analyzes screen content for additional context.",
+        text: "The exact sentence to say when it matters: the objection-handler, the price anchor, the commitment ask, the reframe. No dashboards to read live — just the next move, surfaced the instant the buying signal hits.",
       },
     },
     {
       "@type": "Question",
-      name: "Is Tonvo free to use?",
+      name: "Do I need to change my sales process or pitch?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "Yes, Tonvo offers a free plan with 3 sessions per month including real-time tone analysis and basic suggestions. The Pro plan at $19/month (or $182/year with 20% off) unlocks unlimited sessions, advanced AI coaching, screen analysis, and full session history.",
+        text: "No. Tonvo layers on top of your existing process. Your pitch, your deck, your offer — unchanged. What changes is the rate at which they end in a signed deal.",
       },
     },
     {
       "@type": "Question",
-      name: "What languages does Tonvo support?",
+      name: "Is there a guarantee on the outcome?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "Tonvo supports 10 languages: English, French, Spanish, German, Portuguese, Italian, Dutch, Chinese, Japanese, and Korean. Both the interface and conversation analysis work across all supported languages with automatic detection.",
+        text: "Yes. If your close rate doesn't move in 7 days, we refund you. We sell results — if you don't get them, we don't keep your money.",
       },
     },
     {
       "@type": "Question",
-      name: "Is my conversation data secure?",
+      name: "Can my prospect see anything during a call?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "Tonvo takes privacy seriously. All conversation data is encrypted in transit and at rest. Audio is processed in real time and not permanently stored. We never sell or share your data with third parties. See our Privacy Policy for full details.",
+        text: "Never. Tonvo runs in a separate window, invisible to the other side — even on screen share. Your edge stays your edge.",
       },
     },
     {
       "@type": "Question",
-      name: "Can other people see the AI copilot during screen sharing?",
+      name: "Who is Tonvo built for?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "Tonvo opens the copilot in a separate browser window. When you share a specific application window (like Discord or Zoom) instead of your entire screen, the copilot window remains invisible to other participants. This makes it perfect for sales calls and interviews.",
+        text: "Consultants, negotiation coaches, high-ticket closers, and client-facing operators whose income depends on their close rate. If you live by the deal, Tonvo compounds your edge.",
       },
     },
     {
       "@type": "Question",
-      name: "What is conversation signal detection?",
+      name: "How much does Tonvo cost versus the revenue it generates?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "Conversation signal detection is Tonvo's AI feature that identifies key moments during a call: objections from the other person, opportunities to close, hesitation, agreement, and important questions. Each signal is highlighted in real time so you can react immediately.",
+        text: "The Closer plan is $19/month (or $156/year — 30% off). One additional deal closed pays for the entire year. Pricing is built around the outcome — we price on the growth you get, not per feature.",
       },
     },
   ],
@@ -280,26 +281,26 @@ const faqJsonLd = {
 const howToJsonLd = {
   "@context": "https://schema.org",
   "@type": "HowTo",
-  name: "How to use Tonvo AI Copilot during a call",
-  description: "Get real-time AI coaching and conversation insights during your calls in 3 simple steps.",
+  name: "How to raise your close rate with Tonvo",
+  description: "Turn every call into a higher-close-rate rep in 3 steps.",
   step: [
     {
       "@type": "HowToStep",
       position: 1,
-      name: "Start a session",
-      text: "Open Tonvo, go to Live Session, enable Screen and Audio capture, then click Start Recording. Select the window or screen you want to analyze.",
+      name: "Plug in before the call",
+      text: "One click. Tonvo joins silently — invisible to your prospect. No workflow change, no extra setup.",
     },
     {
       "@type": "HowToStep",
       position: 2,
-      name: "Get real-time insights",
-      text: "As you speak, Tonvo transcribes the conversation, detects tone and emotions, and shows live coaching tips, suggestions, and conversation signals in the copilot panel.",
+      name: "Win live",
+      text: "The moment a buying signal, objection or price pushback hits, Tonvo surfaces the exact line to say. You deliver it. The deal tips your way.",
     },
     {
       "@type": "HowToStep",
       position: 3,
-      name: "Review your session report",
-      text: "When you stop the session, Tonvo generates a comprehensive report with quality scores, key moments, strengths, improvements, and follow-up actions.",
+      name: "Compound the edge",
+      text: "After the call, review what moved the deal and what cost you. Your close-rate trend climbs, call after call.",
     },
   ],
 };
@@ -309,7 +310,7 @@ const webSiteJsonLd = {
   "@type": "WebSite",
   name: SITE_NAME,
   url: SITE_URL,
-  description: "AI-powered conversation copilot for real-time insights during calls and chats.",
+  description: "Growth-as-a-Service for closers. Raise your close rate by 27% in 30 days — we sell results, not software.",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -338,7 +339,21 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         />
         <script
           dangerouslySetInnerHTML={{
-            __html: `(function(){try{var t=localStorage.getItem('tonvo-theme');if(t==='light')document.documentElement.setAttribute('data-theme','light');}catch(e){}})();`,
+            __html: `(function(){try{
+              // Theme only applies to the in-app dashboard scope, never to public marketing pages.
+              var p = window.location.pathname;
+              var isMarketing = p === '/' || p.indexOf('/login') === 0 || p.indexOf('/about') === 0
+                || p.indexOf('/blog') === 0 || p.indexOf('/pricing') === 0 || p.indexOf('/use-cases') === 0
+                || p.indexOf('/features') === 0 || p.indexOf('/compare') === 0 || p.indexOf('/industries') === 0
+                || p.indexOf('/guides') === 0 || p.indexOf('/terms') === 0 || p.indexOf('/privacy') === 0
+                || p.indexOf('/cookies') === 0 || p.indexOf('/legal') === 0;
+              if (isMarketing) {
+                document.documentElement.removeAttribute('data-theme');
+              } else {
+                var t = localStorage.getItem('tonvo-theme');
+                if (t === 'light') document.documentElement.setAttribute('data-theme','light');
+              }
+            }catch(e){}})();`,
           }}
         />
       </head>

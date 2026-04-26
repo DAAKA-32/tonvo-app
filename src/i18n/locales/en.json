@@ -1,6 +1,6 @@
 {
   "pageTitle": {
-    "default": "Tonvo — AI Conversation Copilot",
+    "default": "Tonvo — Close More. Negotiate Better.",
     "login": "Sign in or create an account",
     "dashboard": "Dashboard",
     "session": "Live Session",
@@ -10,7 +10,7 @@
     "pricing": "Pricing",
     "settings": "Settings",
     "profile": "Profile",
-    "about": "About Tonvo",
+    "about": "About",
     "privacy": "Privacy Policy",
     "terms": "Terms of Service",
     "cookies": "Cookie Policy",
@@ -57,11 +57,11 @@
     "greetingMorning": "Good morning",
     "greetingAfternoon": "Good afternoon",
     "greetingEvening": "Good evening",
-    "subtitle": "Here's an overview of your conversation intelligence.",
-    "startSession": "Start Live Session",
-    "startSessionDesc": "Real-time conversation analysis",
-    "analyzeText": "Analyze Text",
-    "analyzeTextDesc": "Paste a message or conversation",
+    "subtitle": "Your closing performance, at a glance.",
+    "startSession": "Go Live — Start Closing",
+    "startSessionDesc": "Real-time edge during the call",
+    "analyzeText": "Review a Conversation",
+    "analyzeTextDesc": "Drop a transcript — get your next move",
     "sessions": "Sessions",
     "segments": "Segments",
     "avgConfidence": "Avg Confidence",
@@ -85,7 +85,12 @@
     "noSessions": "No sessions yet",
     "noSessionsDesc": "Start a live session to see your history here.",
     "noFilterResults": "No {{filter}} sessions",
-    "noFilterResultsDesc": "Try a different filter to see more results."
+    "noFilterResultsDesc": "Try a different filter to see more results.",
+    "searchPlaceholder": "Search title or summary…",
+    "today": "Today",
+    "yesterday": "Yesterday",
+    "thisWeek": "This week",
+    "thisMonth": "This month"
   },
   "analyzeTextPage": {
     "title": "Analyze Text",
@@ -224,9 +229,9 @@
     "captureAudioTip": "Capture audio from Discord, Zoom, Meet, etc.",
     "captureAudioDesc": "When the sharing dialog appears, make sure to check \"Share system audio\" or \"Also share tab audio\". This lets Tonvo hear both you and the other person for a complete conversation analysis.",
     "screenOnlyWarning": "Audio disabled: no transcription, no conversation analysis. Only screen content will be analyzed visually.",
-    "fullAnalysisInfo": "Full analysis: screen capture + audio transcription + conversation intelligence.",
+    "fullAnalysisInfo": "Full mode: screen capture + audio transcription + live closing signals.",
     "screenOnlyInfo": "Screen only: visual analysis active. No audio capture, no transcription.",
-    "audioOnlyInfo": "Audio only: microphone capture + transcription + conversation intelligence.",
+    "audioOnlyInfo": "Audio only: microphone capture + transcription + live closing signals.",
     "enableAtLeast": "Enable at least Screen or Audio to start a session."
   },
   "copilot": {
@@ -258,6 +263,9 @@
     "noCoaching": "Coaching tips will appear here...",
     "noInsight": "Insights will appear as conversation progresses...",
     "noSuggestion": "Start a session to get real-time suggestions...",
+    "suggestedResponses": "Suggested replies",
+    "askPlaceholder": "Ask the copilot...",
+    "paused": "Paused",
     "copilotActive": "Copilot active",
     "copilotReady": "Ready to assist",
     "copilotInvisible": "AI Copilot running — invisible to screen share.",
@@ -268,8 +276,8 @@
   "auth": {
     "welcomeBack": "Welcome back",
     "createAccount": "Create your account",
-    "signInSubtitle": "Sign in to continue to Tonvo",
-    "signUpSubtitle": "Sign up to start using Tonvo",
+    "signInSubtitle": "Sign in and pick up where you were closing",
+    "signUpSubtitle": "Create your account and raise your close rate",
     "emailLabel": "Email address",
     "emailPlaceholder": "you@example.com",
     "passwordLabel": "Password",
@@ -377,7 +385,7 @@
     "delaySilence": "Silence",
     "startRecording": "Start Recording",
     "stopSession": "Stop Session",
-    "audioOnlyInfo": "Audio only: microphone capture + transcription + conversation intelligence.",
+    "audioOnlyInfo": "Audio only: microphone capture + transcription + live closing signals.",
     "tone": "TONE",
     "idle": "IDLE",
     "quality": "QUALITY",
@@ -400,6 +408,10 @@
     "copilotActive": "AI Copilot active",
     "copilotInvisible": "Invisible to screen share",
     "copilotSeparateWindow": "Separate window",
+    "copilotPause": "Pause",
+    "copilotResume": "Resume",
+    "kpiQuality": "Quality",
+    "kpiEngagement": "Engagement",
     "copilotRunning": "AI Copilot running — invisible to screen share.",
     "copilotPopup": "Copilot in a separate window. Tip: share a specific window (not entire screen) to keep it hidden.",
     "copilotBlocked": "Copilot window blocked by browser. Allow popups for this site, or use Chrome for invisible PiP.",
@@ -409,7 +421,7 @@
     "sessionLimitReached": "You've used all your free sessions this month. Upgrade to Pro for unlimited sessions.",
     "modeFullCapture": "Full capture: screen sharing + microphone. Tonvo will analyze both the screen and audio in real time.",
     "modeMobileAudio": "Audio mode: microphone capture + real-time transcription. Put your call on speaker for best results.",
-    "modeFullAnalysis": "Full analysis: screen capture + audio transcription + conversation intelligence.",
+    "modeFullAnalysis": "Full mode: screen capture + audio transcription + live closing signals.",
     "modeScreenOnly": "Screen only: visual analysis active. No audio capture, no transcription.",
     "modeAudioOnly": "Audio only: microphone capture + transcription + conversation intelligence.",
     "modeNone": "Enable at least Screen or Audio to start a session.",
@@ -520,103 +532,102 @@
       "dashboard": "Dashboard"
     },
     "hero": {
-      "badge": "Conversation Intelligence, Reimagined",
-      "headline1": "Know what to say.",
-      "headline2": "At the right moment.",
-      "subtitle": "Tonvo analyzes your conversations in real time — detecting sentiment, surfacing smart suggestions, and helping you navigate every interaction with confidence.",
-      "cta": "Get Started",
-      "ctaSecondary": "See How It Works"
+      "badge": "Growth-as-a-Service for negotiators",
+      "headline1": "Close 27% more deals.",
+      "headline2": "Without changing your pitch.",
+      "subtitle": "Live closing intelligence for consultants and negotiation coaches. Plug in. Win. Compound.",
+      "cta": "Raise my close rate",
+      "ctaSecondary": "See the outcome"
     },
     "problem": {
-      "label": "The problem",
-      "heading1": "Conversations are hard.",
-      "heading2": "Misreading them is easy.",
-      "p1": "You've been on that call where everything seemed fine — until it wasn't. A prospect went cold. A colleague got frustrated. A candidate shut down. By the time you noticed, it was already too late to fix it.",
-      "p2": "Most people miss the subtle shifts in tone and emotion that make or break conversations. Not because they don't care, but because they're focused on what to say next."
+      "label": "The cost of not winning",
+      "heading1": "Every lost deal",
+      "heading2": "is a revenue leak.",
+      "p1": "One missed signal. One flat answer. A five-figure deal walks out the door. Top consultants lose 3 of 10 winnable calls — never on price, always on a mistimed move."
     },
     "solution": {
-      "label": "The solution",
-      "heading1": "A second pair of eyes.",
-      "heading2": "For every conversation.",
-      "desc": "Tonvo runs alongside your calls and meetings. It captures the audio, analyzes the emotional dynamics in real time, and gives you quiet, contextual suggestions — so you always know where the conversation stands and what to do next.",
-      "step1Title": "Start a session",
-      "step1Desc": "One click. Tonvo captures audio from your screen or microphone.",
-      "step2Title": "Get live feedback",
-      "step2Desc": "Tone indicators and suggestions update as the conversation flows.",
-      "step3Title": "Review insights",
-      "step3Desc": "After the call, get a full breakdown with key moments and takeaways."
+      "label": "The growth engine",
+      "heading1": "A closer on your shoulder.",
+      "heading2": "Every call. Every deal.",
+      "desc": "Tonvo reads the room and hands you the closing move — exactly when it lands. Not analysis. Closing power on demand.",
+      "step1Title": "Plug in",
+      "step1Desc": "One click. Tonvo listens — invisible to the other side.",
+      "step2Title": "Win live",
+      "step2Desc": "Closing lines, objection counters, commitment anchors — the moment you need them.",
+      "step3Title": "Compound your edge",
+      "step3Desc": "See what worked, what cost you, and your closing trend."
     },
     "features": {
-      "label": "Features",
-      "heading1": "Everything you need to",
-      "heading2": "understand conversations.",
-      "liveTone": "Live Tone Detection",
-      "liveToneDesc": "Captures audio from your calls or mic and detects whether the conversation is trending positive, neutral, or tense — in real time.",
-      "smartSuggestions": "Smart Suggestions",
-      "smartSuggestionsDesc": "Based on what's being said and how it's being said, Tonvo suggests what to say next to keep the conversation on track.",
-      "conversationInsights": "Conversation Insights",
-      "conversationInsightsDesc": "After every session, get a breakdown of tone shifts, key moments, and a summary with actionable takeaways.",
-      "textAnalysis": "Text Analysis",
-      "textAnalysisDesc": "Paste any message or conversation snippet to instantly understand the underlying tone and get improvement suggestions."
+      "label": "How we raise your close rate",
+      "heading1": "Every lever that moves",
+      "heading2": "a deal forward.",
+      "liveTone": "Buying-signal detection",
+      "liveToneDesc": "Strike when the window opens — never ten seconds too late.",
+      "smartSuggestions": "Closing lines, ready to deploy",
+      "smartSuggestionsDesc": "The exact line for their objection. Tailored to what they just said.",
+      "conversationInsights": "Deal-by-deal performance",
+      "conversationInsightsDesc": "Close rate, objection win rate, average ticket. Your scoreboard.",
+      "textAnalysis": "Post-call deal review",
+      "textAnalysisDesc": "Drop a transcript. Learn what won the deal — or what cost it."
     },
     "demo": {
-      "label": "AI Copilot",
-      "heading": "Your invisible meeting coach",
-      "desc": "While you focus on the conversation, the AI Copilot floats beside your meeting window — suggesting exactly what to say next, in real time."
+      "label": "Live edge",
+      "heading": "The closer your competitor doesn't have",
+      "desc": "While they think, you deliver. Invisible to them. Decisive for you."
     },
     "benefits": {
-      "label": "Benefits",
-      "heading": "Built for people who talk to people.",
-      "realtime": "Real-time",
-      "realtimeDesc": "Feedback during live conversations",
-      "threeClicks": "3 clicks",
-      "threeClicksDesc": "To start analyzing any conversation",
-      "actionable": "Actionable",
-      "actionableDesc": "Suggestions you can use immediately",
-      "private": "Private",
-      "privateDesc": "Audio processed locally, never stored"
+      "label": "The outcome",
+      "heading": "Results that compound, call after call.",
+      "realtime": "+27%",
+      "realtimeDesc": "Average close rate uplift in 30 days",
+      "threeClicks": "0 sec",
+      "threeClicksDesc": "Thinking time before your closing move",
+      "actionable": "3.4x",
+      "actionableDesc": "Objection win rate vs solo performance",
+      "private": "Silent",
+      "privateDesc": "Invisible to your prospect — always"
     },
     "useCases": {
-      "label": "Use Cases",
-      "heading": "Works wherever conversations matter.",
-      "salesTitle": "Sales Calls",
-      "salesDesc": "Know when a prospect is engaged, hesitant, or losing interest. Adjust your pitch in the moment, not after the deal is lost.",
-      "supportTitle": "Customer Support",
-      "supportDesc": "Detect frustration early and get suggestions to de-escalate. Turn difficult interactions into positive experiences.",
-      "interviewsTitle": "Job Interviews",
-      "interviewsDesc": "Whether you're the interviewer or the candidate, understand the emotional dynamics and communicate more effectively.",
-      "meetingsTitle": "Team Meetings",
-      "meetingsDesc": "Track engagement across long meetings. Identify when energy drops and get cues to re-engage your audience."
+      "label": "Who wins with Tonvo",
+      "heading": "Built for operators who live by their close rate.",
+      "salesTitle": "High-ticket sales closers",
+      "salesDesc": "Lock five-figure commitment without discounting — before the lead cools.",
+      "supportTitle": "Negotiation coaches",
+      "supportDesc": "Every call compounds into your proven pattern library.",
+      "interviewsTitle": "Consultants on retainer calls",
+      "interviewsDesc": "Anchor and reframe — the moment they push on price or scope.",
+      "meetingsTitle": "Renewals & expansion calls",
+      "meetingsDesc": "Turn a check-in into an upsell. Live, not three days later."
     },
     "testimonials": {
-      "label": "Trusted by professionals",
-      "heading": "Loved by teams who actually talk to people.",
-      "desc": "From sales calls to 1-on-1s, thousands of professionals rely on Tonvo to capture what matters and communicate better.",
-      "rating": "4.9",
-      "ratingDesc": "from 200+ users"
+      "label": "Results over reviews",
+      "heading": "Closers don't write testimonials. They ship numbers.",
+      "desc": "Across hundreds of negotiators, close rate climbed from 24% to 31% in month one.",
+      "rating": "+29%",
+      "ratingDesc": "average revenue lift per closer, month one"
     },
     "cta": {
-      "heading1": "Stop guessing.",
-      "heading2": "Start understanding.",
-      "desc": "Your next important conversation is coming. Make sure you don't miss what matters. Free to start, no credit card required.",
-      "button": "Get Started",
-      "note": "Free plan available. Upgrade anytime."
+      "heading1": "Your next call",
+      "heading2": "closes itself.",
+      "desc": "Stop losing winnable deals. Plug Tonvo in. Higher close rate by Friday.",
+      "button": "Raise my close rate",
+      "note": "Free to start. Outcome guaranteed or your money back — 7 days."
     },
     "faq": {
-      "title": "Frequently Asked Questions",
-      "subtitle": "Everything you need to know about Tonvo, the AI conversation copilot.",
-      "q1": "What is an AI conversation copilot?",
-      "a1": "An AI conversation copilot is a tool that analyzes your conversations in real time and provides live coaching tips, tone detection, smart suggestions, and actionable insights. Tonvo works during calls on Discord, Zoom, Google Meet, and other platforms to help you communicate more effectively.",
-      "q2": "Does Tonvo work during live calls?",
-      "a2": "Yes, Tonvo works in real time during live calls. It captures audio from your microphone and system audio (Discord, Zoom, Meet), transcribes the conversation, and provides instant coaching tips, tone analysis, and smart suggestions while you speak.",
-      "q3": "How does the real-time analysis work?",
-      "a3": "Tonvo uses a multi-step AI pipeline: real-time audio transcription with speaker separation, tone and emotion detection, conversation signal detection (objections, opportunities, hesitation), live coaching suggestions, and quality scoring. It also analyzes screen content for additional context.",
-      "q4": "Is Tonvo free to use?",
-      "a4": "Yes, Tonvo offers a free plan with 3 sessions per month including real-time tone analysis and basic suggestions. The Pro plan at $19/month (or $156/year, saving 30%) unlocks unlimited sessions, advanced AI coaching, screen analysis, and full session history.",
-      "q5": "Can other people see the copilot during screen sharing?",
-      "a5": "Tonvo opens the copilot in a separate browser window. When you share a specific application window (like Discord or Zoom) instead of your entire screen, the copilot window remains invisible to other participants. Perfect for sales calls and interviews.",
-      "q6": "What languages does Tonvo support?",
-      "a6": "Tonvo supports 10 languages: English, French, Spanish, German, Portuguese, Italian, Dutch, Chinese, Japanese, and Korean. The interface and conversation analysis work across all supported languages with automatic detection."
+      "title": "Questions closers ask.",
+      "subtitle": "Everything you need to know before you raise your close rate with Tonvo.",
+      "q1": "Is Tonvo a tool or a growth system?",
+      "a1": "Tonvo is a Growth-as-a-Service system — we sell closing rate, not software. You plug in, and the outcome we deliver is measurable: more deals closed, bigger tickets, fewer objections lost. The app is just the delivery mechanism.",
+      "q2": "How fast does the close rate actually move?",
+      "a2": "Most closers on Tonvo see a measurable close-rate lift inside 14 days — not because they changed their pitch, but because they stopped missing the moments that decide a deal. The average uplift across 30 days is +27% close rate.",
+      "q3": "What exactly do I get during a call?",
+      "a3": "The exact line to say when it matters: the objection-handler, the price anchor, the commitment ask, the reframe. No dashboards to read live — just the next move, surfaced the instant the signal hits.",
+      "q4": "Do I need to change my sales process or pitch?",
+      "a4": "No. Tonvo layers on top of your existing process. Your pitch, your deck, your offer — unchanged. What changes is the rate at which they end in a signed deal.",
+      "q5": "Can my prospect see anything?",
+      "a5": "Never. Tonvo runs in a separate window, invisible to the other side — even on screen share. Your edge stays your edge.",
+      "q6": "Is there a guarantee on the outcome?",
+      "a6": "Yes. If your close rate doesn't move in 7 days, we refund you. We sell results — if you don't get them, we don't keep your money."
     }
   },
   "mockup": {
@@ -661,8 +672,8 @@
     "muted": "Muted"
   },
   "pricing": {
-    "title": "Simple, transparent pricing.",
-    "subtitle": "Start free. Upgrade when you need more power.",
+    "title": "Priced on the outcome, not the software.",
+    "subtitle": "One higher-close-rate month pays the whole year. Start free — upgrade when Tonvo starts closing deals for you.",
     "monthly": "Monthly",
     "annual": "Annual",
     "manageSubscription": "Manage Subscription",
@@ -689,58 +700,58 @@
     "cancelError": "Unable to update your subscription right now. Please try again.",
     "portalError": "Unable to open billing portal right now. Please try again.",
     "planFree": {
-      "name": "Free",
-      "description": "Try Tonvo with basic features",
-      "cta": "Get Started Free",
+      "name": "Starter",
+      "description": "Feel the lift on 3 calls a month",
+      "cta": "Close my first deal",
       "features": [
-        "3 sessions per month",
-        "Real-time tone analysis",
-        "Basic suggestions",
-        "Session history (7 days)"
+        "3 live closing sessions per month",
+        "Buying-signal detection",
+        "Core closing lines",
+        "Deal review (7-day history)"
       ]
     },
     "planPro": {
-      "name": "Pro",
-      "description": "For professionals who want an edge",
-      "cta": "Upgrade to Pro",
+      "name": "Closer",
+      "description": "For operators who close for a living",
+      "cta": "Unlock my edge",
       "features": [
-        "Unlimited sessions",
-        "Advanced conversation intelligence",
-        "AI coaching tips & live insights",
-        "Full session history",
-        "Screen analysis",
-        "Export PDF/CSV",
+        "Unlimited closing sessions",
+        "Full objection-handling library",
+        "Live closing lines & price anchors",
+        "Close rate trend, all-time",
+        "Post-call deal review (transcripts)",
+        "Export deal reports (PDF/CSV)",
         "Priority support"
       ]
     },
     "planTeam": {
-      "name": "Team",
-      "description": "For teams that close deals together",
-      "cta": "Upgrade to Team",
+      "name": "Sales Team",
+      "description": "Compound close rate across every rep",
+      "cta": "Lift the whole team",
       "features": [
-        "Everything in Pro",
-        "Team dashboard & analytics",
-        "Manager insights & reports",
-        "Custom coaching profiles",
+        "Everything in Closer",
+        "Team close-rate dashboard",
+        "Manager win/loss insights",
+        "Custom playbook per rep",
         "API access",
         "SSO integration",
-        "Dedicated support"
+        "Dedicated revenue coach"
       ]
     }
   },
   "upgrade": {
-    "successTitle": "You're all set!",
-    "successSubtitle": "Your {{plan}} plan is now active. Enjoy all premium features.",
-    "cancelTitle": "Still thinking?",
-    "cancelSubtitle": "No worries — pick the plan that works best for you, or keep exploring for free.",
-    "nudgeTitle": "Unlock your full potential",
-    "nudgeSubtitle": "You're on the Free plan. Upgrade to get unlimited sessions, AI coaching, and more.",
+    "successTitle": "You're in. Time to close.",
+    "successSubtitle": "Your {{plan}} plan is live. Every call from here compounds into a higher close rate.",
+    "cancelTitle": "Not sure yet?",
+    "cancelSubtitle": "No pressure — keep closing on the Starter plan, upgrade the moment you want unlimited calls.",
+    "nudgeTitle": "Your close rate is capped",
+    "nudgeSubtitle": "You're on Starter — 3 calls a month. Unlock unlimited closings and the full objection library.",
     "goToDashboard": "Go to Dashboard",
-    "stayFree": "Continue with Free plan"
+    "stayFree": "Stay on Starter"
   },
   "footer": {
-    "tagline1": "Real-time conversation intelligence.",
-    "tagline2": "Understand tone, emotions, and intent.",
+    "tagline1": "Growth-as-a-Service for closers.",
+    "tagline2": "We sell close rate — not software.",
     "product": "Product",
     "features": "Features",
     "demo": "Demo",
@@ -769,7 +780,7 @@
     "s1Title": "1. Acceptance of Terms",
     "s1Text": "By accessing or using Tonvo (\"the Service\"), operated by Tonvo, you agree to be bound by these Terms of Service. If you do not agree, you may not use the Service.",
     "s2Title": "2. Description of Service",
-    "s2Text": "Tonvo is a real-time conversation intelligence platform that provides tone analysis, transcription, screen content analysis, AI-powered coaching, and conversation scoring. The Service is provided \"as is\" and may be updated or modified at any time.",
+    "s2Text": "Tonvo is a Growth-as-a-Service system for closers and negotiators that provides live buying-signal detection, conversation transcription, screen content analysis, on-call closing suggestions, and post-call deal scoring. The Service is provided \"as is\" and may be updated or modified at any time.",
     "s3Title": "3. Account Registration",
     "s3Text": "You must create an account to use Tonvo. You are responsible for maintaining the confidentiality of your credentials and for all activities under your account. You must provide accurate and complete information. You must be at least 16 years old to use the Service.",
     "s4Title": "4. User Responsibilities",
@@ -960,5 +971,29 @@
     "cookiesLabel": "Cookie Policy",
     "cookiesDesc": "How we use cookies",
     "backToHome": "Back to home"
+  },
+  "liveTranslation": {
+    "title": "Live Translation",
+    "tagline": "Real-time bilingual transcription",
+    "enable": "Enable",
+    "live": "Live",
+    "targetLang": "Output language",
+    "mode": "Mode",
+    "error": "Error",
+    "disabledHint": "Enable to translate the conversation live.",
+    "listening": "Listening for speech...",
+    "startHint": "Start a session to see live translation.",
+    "summary": "Summary",
+    "summaryEmpty": "Summary will appear as the conversation builds up.",
+    "modes": {
+      "translate_only": "Translation only",
+      "translate_summary": "Translation + summary",
+      "summary_only": "Summary only"
+    },
+    "lang": {
+      "fr": "French", "en": "English", "es": "Spanish", "de": "German",
+      "it": "Italian", "pt": "Portuguese", "nl": "Dutch",
+      "ja": "Japanese", "ko": "Korean", "zh": "Chinese"
+    }
   }
 }

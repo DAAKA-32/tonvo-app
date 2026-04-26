@@ -1,6 +1,6 @@
 {
   "pageTitle": {
-    "default": "Tonvo — AI-gespreksassistent",
+    "default": "Tonvo — Sluit meer. Onderhandel beter.",
     "login": "Inloggen of account aanmaken",
     "dashboard": "Dashboard",
     "session": "Live sessie",
@@ -10,7 +10,7 @@
     "pricing": "Prijzen",
     "settings": "Instellingen",
     "profile": "Profiel",
-    "about": "Over Tonvo",
+    "about": "Over ons",
     "privacy": "Privacybeleid",
     "terms": "Gebruiksvoorwaarden",
     "cookies": "Cookiebeleid",
@@ -57,11 +57,11 @@
     "greetingMorning": "Goedemorgen",
     "greetingAfternoon": "Goedemiddag",
     "greetingEvening": "Goedenavond",
-    "subtitle": "Hier is een overzicht van je gespreksintelligentie.",
-    "startSession": "Live Sessie Starten",
+    "subtitle": "Jouw closing-percentage, in één oogopslag.",
+    "startSession": "Live Gaan — Sluiten",
     "startSessionDesc": "Realtime gespreksanalyse",
-    "analyzeText": "Tekst Analyseren",
-    "analyzeTextDesc": "Plak een bericht of gesprek",
+    "analyzeText": "Call Nabespreken",
+    "analyzeTextDesc": "Plak het gesprek — wij geven je de volgende zet",
     "sessions": "Sessies",
     "segments": "Segmenten",
     "avgConfidence": "Gem. Betrouwbaarheid",
@@ -85,7 +85,12 @@
     "noSessions": "Nog geen sessies",
     "noSessionsDesc": "Start een live sessie om hier je geschiedenis te bekijken.",
     "noFilterResults": "Geen {{filter}} sessies",
-    "noFilterResultsDesc": "Probeer een ander filter om meer resultaten te zien."
+    "noFilterResultsDesc": "Probeer een ander filter om meer resultaten te zien.",
+    "searchPlaceholder": "Zoek in titel of samenvatting…",
+    "today": "Vandaag",
+    "yesterday": "Gisteren",
+    "thisWeek": "Deze week",
+    "thisMonth": "Deze maand"
   },
   "analyzeTextPage": {
     "title": "Tekst Analyseren",
@@ -273,8 +278,8 @@
   "auth": {
     "welcomeBack": "Welkom terug",
     "createAccount": "Maak je account aan",
-    "signInSubtitle": "Log in om verder te gaan met Tonvo",
-    "signUpSubtitle": "Registreer je om Tonvo te gebruiken",
+    "signInSubtitle": "Log in en ga verder waar je aan het sluiten was",
+    "signUpSubtitle": "Maak je account aan en verhoog je closing-percentage",
     "emailLabel": "E-mailadres",
     "emailPlaceholder": "jij@voorbeeld.nl",
     "passwordLabel": "Wachtwoord",
@@ -475,16 +480,16 @@
   },
   "landing": {
     "nav": { "features": "Functies", "product": "Product", "useCases": "Toepassingen", "pricing": "Prijzen", "signIn": "Inloggen", "getStarted": "Aan de slag", "dashboard": "Dashboard" },
-    "hero": { "badge": "Gespreksintelligentie, opnieuw uitgevonden", "headline1": "Weet wat te zeggen.", "headline2": "Op het juiste moment.", "subtitle": "Tonvo analyseert je gesprekken in realtime — detecteert sentiment, geeft slimme suggesties en helpt je elke interactie met vertrouwen te voeren.", "cta": "Aan de slag", "ctaSecondary": "Bekijk hoe het werkt" },
-    "problem": { "label": "Het probleem", "heading1": "Gesprekken zijn complex.", "heading2": "Verkeerd inschatten is menselijk.", "p1": "Je kent het wel: een gesprek dat prima lijkt te verlopen — tot het moment dat het kantelt. Een prospect haakt af. Een collega raakt gefrustreerd. Een kandidaat sluit zich af. Tegen de tijd dat je het doorhebt, is het al te laat.", "p2": "De meeste mensen missen de subtiele verschuivingen in toon en emotie die een gesprek maken of breken. Niet omdat het ze niet uitmaakt, maar omdat ze bezig zijn met wat ze hierna moeten zeggen." },
-    "solution": { "label": "De oplossing", "heading1": "Een extra paar ogen.", "heading2": "Bij elk gesprek.", "desc": "Tonvo draait naast je calls en vergaderingen. Het vangt de audio op, analyseert de emotionele dynamiek in realtime en geeft je discrete, contextuele suggesties — zodat je altijd weet waar het gesprek staat en wat je volgende stap is.", "step1Title": "Start een sessie", "step1Desc": "Eén klik. Tonvo vangt audio op van je scherm of microfoon.", "step2Title": "Ontvang live feedback", "step2Desc": "Toonindicatoren en suggesties worden bijgewerkt terwijl het gesprek vordert.", "step3Title": "Bekijk inzichten", "step3Desc": "Na het gesprek krijg je een volledig overzicht met kernmomenten en actiepunten." },
-    "features": { "label": "Functies", "heading1": "Alles wat je nodig hebt om", "heading2": "gesprekken te begrijpen.", "liveTone": "Live toondetectie", "liveToneDesc": "Vangt audio op van je calls of microfoon en detecteert of het gesprek positief, neutraal of gespannen verloopt — in realtime.", "smartSuggestions": "Slimme suggesties", "smartSuggestionsDesc": "Op basis van wat er gezegd wordt én hoe het gezegd wordt, stelt Tonvo voor wat je kunt zeggen om het gesprek op koers te houden.", "conversationInsights": "Gespreksinzichten", "conversationInsightsDesc": "Na elke sessie krijg je een overzicht van toonverschuivingen, kernmomenten en een samenvatting met concrete actiepunten.", "textAnalysis": "Tekstanalyse", "textAnalysisDesc": "Plak een bericht of gespreksFragment om direct de onderliggende toon te begrijpen en verbetervoorstellen te ontvangen." },
-    "demo": { "label": "AI-Copiloot", "heading": "Je onzichtbare gesprekscoach", "desc": "Terwijl jij je op het gesprek richt, zweeft de AI-Copiloot naast je vergadervenster — en fluistert je in realtime precies in wat je kunt zeggen." },
-    "benefits": { "label": "Voordelen", "heading": "Gebouwd voor mensen die met mensen praten.", "realtime": "Realtime", "realtimeDesc": "Feedback tijdens live gesprekken", "threeClicks": "3 klikken", "threeClicksDesc": "Om elk gesprek te analyseren", "actionable": "Bruikbaar", "actionableDesc": "Suggesties die je direct kunt toepassen", "private": "Privé", "privateDesc": "Audio wordt lokaal verwerkt, nooit opgeslagen" },
-    "useCases": { "label": "Toepassingen", "heading": "Overal waar gesprekken ertoe doen.", "salesTitle": "Verkoopgesprekken", "salesDesc": "Weet wanneer een prospect betrokken is, twijfelt of afhaakt. Pas je pitch aan op het moment zelf — niet nadat de deal verloren is.", "supportTitle": "Klantenservice", "supportDesc": "Detecteer frustratie vroegtijdig en krijg suggesties om te de-escaleren. Maak van lastige interacties positieve ervaringen.", "interviewsTitle": "Sollicitatiegesprekken", "interviewsDesc": "Of je nu de interviewer of de kandidaat bent — begrijp de emotionele dynamiek en communiceer effectiever.", "meetingsTitle": "Teamvergaderingen", "meetingsDesc": "Volg betrokkenheid tijdens lange vergaderingen. Herken wanneer de energie daalt en krijg signalen om je publiek weer te betrekken." },
-    "testimonials": { "label": "Vertrouwd door professionals", "heading": "Geliefd bij teams die écht met mensen praten.", "desc": "Van verkoopgesprekken tot één-op-één's: duizenden professionals vertrouwen op Tonvo om het belangrijke vast te leggen en beter te communiceren.", "rating": "4,9", "ratingDesc": "van 200+ gebruikers" },
-    "cta": { "heading1": "Stop met gissen.", "heading2": "Begin met begrijpen.", "desc": "Je volgende belangrijke gesprek staat voor de deur. Zorg dat je niets mist. Gratis te starten, geen creditcard nodig.", "button": "Aan de slag", "note": "Gratis plan beschikbaar. Op elk moment upgraden." },
-    "faq": { "title": "Veelgestelde vragen", "subtitle": "Alles wat je wilt weten over Tonvo, de AI-gesprekscopiloot.", "q1": "Wat is een AI-gesprekscopiloot?", "a1": "Een AI-gesprekscopiloot is een tool die je gesprekken in realtime analyseert en live coachingtips, toondetectie, slimme suggesties en bruikbare inzichten biedt.", "q2": "Werkt Tonvo tijdens live gesprekken?", "a2": "Ja, Tonvo werkt in realtime tijdens live gesprekken met directe coachingtips en suggesties.", "q3": "Hoe werkt de realtime analyse?", "a3": "Tonvo gebruikt een meerstaps AI-pipeline: transcriptie, toondetectie, signaalherkenning, coaching en kwaliteitsbeoordeling.", "q4": "Is Tonvo gratis te gebruiken?", "a4": "Ja, het gratis plan biedt 3 sessies per maand. Pro ontgrendelt onbeperkte sessies en geavanceerde functies.", "q5": "Kunnen anderen de copiloot zien tijdens scherm delen?", "a5": "De copiloot opent in een apart venster en is onzichtbaar wanneer je een specifiek app-venster deelt.", "q6": "Welke talen ondersteunt Tonvo?", "a6": "10 talen: Engels, Frans, Spaans, Duits, Portugees, Italiaans, Nederlands, Chinees, Japans en Koreaans." }
+    "hero": { "badge": "Growth-as-a-Service voor onderhandelaars", "headline1": "Sluit 27 % meer deals.", "headline2": "Zonder je pitch te veranderen.", "subtitle": "Live closing intelligence voor consultants en onderhandelingscoaches. Plug in. Win. Compoundeer.", "cta": "Mijn closing-percentage verhogen", "ctaSecondary": "Zie het resultaat" },
+    "problem": { "label": "De prijs van niet sluiten", "heading1": "Elke verloren deal", "heading2": "is een omzetlek.", "p1": "Een gemist signaal. Een vlak antwoord. Een vijfcijferige deal loopt weg. Topclosers verliezen 3 van de 10 winbare calls — nooit door de prijs, altijd door verkeerde timing." },
+    "solution": { "label": "De groeimotor", "heading1": "Een closer op je schouder.", "heading2": "Elke call. Elke deal.", "desc": "Tonvo leest de kamer en geeft je de sluitzin — precies op het moment. Geen analyse. Closing-kracht op aanvraag.", "step1Title": "Plug in", "step1Desc": "Eén klik. Tonvo luistert mee — onzichtbaar voor de prospect.", "step2Title": "Win live", "step2Desc": "Sluitzin, bezwaar-counter, anker — op het exacte moment.", "step3Title": "Compoundeer je voorsprong", "step3Desc": "Zie wat werkte, wat je kostte, en je trend." },
+    "features": { "label": "Hoe we je closing-percentage omhoog brengen", "heading1": "Elke hefboom die een deal", "heading2": "vooruit helpt.", "liveTone": "Koopsignaal-detectie", "liveToneDesc": "Sla toe wanneer het raam opengaat — nooit tien seconden te laat.", "smartSuggestions": "Sluitzinnen, klaar om in te zetten", "smartSuggestionsDesc": "De exacte zin voor hun bezwaar. Gekalibreerd op wat ze net zeiden.", "conversationInsights": "Deal-voor-deal performance", "conversationInsightsDesc": "Closing-percentage, bezwaar-winstpercentage, gemiddelde ticket. Jouw dashboard.", "textAnalysis": "Deal-nabespreking", "textAnalysisDesc": "Plak een transcriptie. Ontdek wat de deal won — of wat hem kostte." },
+    "demo": { "label": "Live voorsprong", "heading": "De closer die je concurrent niet heeft", "desc": "Terwijl hij denkt, lever jij. Onzichtbaar voor hem. Beslissend voor jou." },
+    "benefits": { "label": "Het resultaat", "heading": "Resultaten die zich compounden, call na call.", "realtime": "+27 %", "realtimeDesc": "Gemiddelde uplift closing-percentage in 30 dagen", "threeClicks": "0 sec", "threeClicksDesc": "Denktijd vóór je closing-zet", "actionable": "3,4×", "actionableDesc": "Bezwaar-winstpercentage vs solo", "private": "Stil", "privateDesc": "Onzichtbaar voor je prospect — altijd" },
+    "useCases": { "label": "Wie wint met Tonvo", "heading": "Gebouwd voor operators die leven van hun closing-percentage.", "salesTitle": "High-ticket closers", "salesDesc": "Klik vijfcijferig commitment vast zonder korting — voordat de lead afkoelt.", "supportTitle": "Onderhandelingscoaches", "supportDesc": "Elke call compoundeert in je bewezen patronenbibliotheek.", "interviewsTitle": "Consultants in retainer-calls", "interviewsDesc": "Anker en reframe — precies wanneer ze op prijs of scope drukken.", "meetingsTitle": "Verlengingen en upsell", "meetingsDesc": "Maak van een check-in een upsell. Live, niet drie dagen later." },
+    "testimonials": { "label": "Resultaten boven reviews", "heading": "Closers schrijven geen testimonials. Ze leveren cijfers.", "desc": "Over honderden onderhandelaars steeg het closing-percentage in maand één van 24 % naar 31 %.", "rating": "+29 %", "ratingDesc": "gemiddelde omzet per closer, eerste maand" },
+    "cta": { "heading1": "Je volgende call", "heading2": "sluit zichzelf.", "desc": "Stop met winbare deals verliezen. Plug Tonvo in. Hoger closing-percentage tegen vrijdag.", "button": "Mijn closing-percentage verhogen", "note": "Gratis om te starten. Resultaat gegarandeerd of geld terug — 7 dagen." },
+    "faq": { "title": "Vragen die closers stellen.", "subtitle": "Alles wat je moet weten voordat je je closing-percentage met Tonvo verhoogt.", "q1": "Is Tonvo een tool of een groeisysteem?", "a1": "Tonvo is een Growth-as-a-Service-systeem — we verkopen closing-percentage, geen software. Je plugt in en het resultaat dat we leveren is meetbaar: meer deals gesloten, grotere tickets, minder verloren bezwaren. De app is alleen het afleveringsmechanisme.", "q2": "Hoe snel beweegt het closing-percentage echt?", "a2": "De meeste closers op Tonvo zien binnen 14 dagen een meetbare uplift — niet door hun pitch aan te passen, maar door de momenten die een deal bepalen niet meer te missen. De gemiddelde uplift in 30 dagen is +27 %.", "q3": "Wat krijg ik tijdens een call precies?", "a3": "De exacte zin om te zeggen wanneer het telt: de bezwaar-counter, het prijsanker, de commitment-vraag, de reframe. Geen dashboard om live te lezen — alleen de volgende zet, op het moment dat het signaal valt.", "q4": "Moet ik mijn proces of pitch aanpassen?", "a4": "Nee. Tonvo legt zich over je bestaande proces. Je pitch, je deck, je aanbod — onveranderd. Wat verandert is het percentage dat eindigt in een getekende deal.", "q5": "Kan mijn prospect iets zien?", "a5": "Nooit. Tonvo draait in een apart venster, onzichtbaar voor de andere kant — zelfs bij schermdelen. Jouw voorsprong blijft jouw voorsprong.", "q6": "Is er een resultaatgarantie?", "a6": "Ja. Als je closing-percentage niet beweegt in 7 dagen, krijg je je geld terug. We verkopen resultaten — krijg je ze niet, dan houden we je geld niet." }
   },
   "mockup": {
     "menu": "Menu",
@@ -504,8 +509,8 @@
     "hesitation": "Aarzeling", "opportunity": "Kans", "speaking": "Aan het woord", "listening": "Luisterend", "muted": "Gedempt"
   },
   "pricing": {
-    "title": "Eenvoudige, transparante prijzen.",
-    "subtitle": "Start gratis. Upgrade wanneer je meer nodig hebt.",
+    "title": "Prijs op basis van resultaat, niet software.",
+    "subtitle": "Eén extra maand sluiten betaalt het hele jaar. Start gratis — upgrade wanneer Tonvo voor jou begint te sluiten.",
     "monthly": "Maandelijks",
     "annual": "Jaarlijks",
     "manageSubscription": "Abonnement beheren",
@@ -532,58 +537,58 @@
     "cancelError": "Kan je abonnement niet bijwerken. Probeer het opnieuw.",
     "portalError": "Kan het factureringsportaal niet openen. Probeer het opnieuw.",
     "planFree": {
-      "name": "Gratis",
-      "description": "Probeer Tonvo met basisfuncties",
-      "cta": "Gratis starten",
+      "name": "Starter",
+      "description": "Voel de uplift op 3 calls per maand",
+      "cta": "Mijn eerste deal sluiten",
       "features": [
-        "3 sessies per maand",
-        "Realtime toonanalyse",
-        "Basissuggesties",
-        "Sessiegeschiedenis (7 dagen)"
+        "3 live closing-sessies per maand",
+        "Koopsignaal-detectie",
+        "Essentiële sluitzinnen",
+        "Deal-nabespreking (7-daagse geschiedenis)"
       ]
     },
     "planPro": {
-      "name": "Pro",
-      "description": "Voor professionals die voorsprong willen",
-      "cta": "Upgraden naar Pro",
+      "name": "Closer",
+      "description": "Voor operators die leven van closen",
+      "cta": "Mijn voorsprong activeren",
       "features": [
-        "Onbeperkte sessies",
-        "Geavanceerde gespreksintelligentie",
-        "AI-coachingtips en live-inzichten",
-        "Volledige sessiegeschiedenis",
-        "Schermanalyse",
-        "PDF/CSV-export",
+        "Onbeperkte closing-sessies",
+        "Volledige bezwaren-bibliotheek",
+        "Live sluitzinnen en prijsankers",
+        "Closing-percentage trend, volledige historie",
+        "Deal-nabespreking (transcripties)",
+        "Deal-rapporten exporteren (PDF/CSV)",
         "Prioriteitsondersteuning"
       ]
     },
     "planTeam": {
-      "name": "Team",
-      "description": "Voor teams die samen deals sluiten",
-      "cta": "Upgraden naar Team",
+      "name": "Sales Team",
+      "description": "Compoundeer closing-percentage over het hele team",
+      "cta": "Het hele team optillen",
       "features": [
-        "Alles van Pro",
-        "Teamdashboard en analyses",
-        "Managerinzichten en rapporten",
-        "Aangepaste coachingprofielen",
+        "Alles van Closer",
+        "Team closing-percentage dashboard",
+        "Manager win/loss-inzichten",
+        "Aangepast playbook per rep",
         "API-toegang",
         "SSO-integratie",
-        "Toegewijde ondersteuning"
+        "Toegewijde revenue coach"
       ]
     }
   },
   "upgrade": {
-    "successTitle": "Helemaal klaar!",
-    "successSubtitle": "Je {{plan}}-plan is nu actief. Geniet van alle premiumfuncties.",
-    "cancelTitle": "Nog aan het nadenken?",
-    "cancelSubtitle": "Geen probleem — kies het plan dat het beste bij je past, of blijf gratis verkennen.",
-    "nudgeTitle": "Ontgrendel je volledige potentieel",
-    "nudgeSubtitle": "Je zit op het Gratis-plan. Upgrade voor onbeperkte sessies, AI-coaching en meer.",
+    "successTitle": "Binnen. Tijd om te sluiten.",
+    "successSubtitle": "Je {{plan}}-plan is actief. Vanaf nu compoundeert elke call je closing-percentage.",
+    "cancelTitle": "Nog niet zeker?",
+    "cancelSubtitle": "Geen druk — blijf closen op Starter, upgrade wanneer je onbeperkt wilt.",
+    "nudgeTitle": "Je closing-percentage zit op slot",
+    "nudgeSubtitle": "Je zit op Starter — 3 calls per maand. Ontgrendel onbeperkte closings en de volledige bezwaren-bibliotheek.",
     "goToDashboard": "Naar het dashboard",
-    "stayFree": "Doorgaan met gratis plan"
+    "stayFree": "Op Starter blijven"
   },
   "footer": {
-    "tagline1": "Realtime gespreksintelligentie.",
-    "tagline2": "Begrijp toon, emoties en intentie.",
+    "tagline1": "Growth-as-a-Service voor closers.",
+    "tagline2": "We verkopen closing-percentage — geen software.",
     "product": "Product",
     "features": "Functies",
     "demo": "Demo",
@@ -803,5 +808,28 @@
     "cookiesLabel": "Cookiebeleid",
     "cookiesDesc": "Hoe wij cookies gebruiken",
     "backToHome": "Terug naar de startpagina"
+  },
+  "liveTranslation": {
+    "title": "Live vertaling",
+    "enable": "Inschakelen",
+    "live": "Live",
+    "targetLang": "Uitvoertaal",
+    "mode": "Modus",
+    "error": "Fout",
+    "disabledHint": "Schakel in om het gesprek live te vertalen.",
+    "listening": "Luistert...",
+    "startHint": "Start een sessie om de live vertaling te zien.",
+    "summary": "Samenvatting",
+    "summaryEmpty": "De samenvatting verschijnt naarmate het gesprek vordert.",
+    "modes": {
+      "translate_only": "Alleen vertaling",
+      "translate_summary": "Vertaling + samenvatting",
+      "summary_only": "Alleen samenvatting"
+    },
+    "lang": {
+      "fr": "Frans", "en": "Engels", "es": "Spaans", "de": "Duits",
+      "it": "Italiaans", "pt": "Portugees", "nl": "Nederlands",
+      "ja": "Japans", "ko": "Koreaans", "zh": "Chinees"
+    }
   }
 }

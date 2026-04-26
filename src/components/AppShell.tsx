@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useState, useCallback } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { useAuth } from "@/lib/auth-context";
 import { useSwipe } from "@/hooks/useSwipe";
 import Sidebar from "./Sidebar";
@@ -14,6 +15,8 @@ interface AppShellProps {
 export default function AppShell({ children }: AppShellProps) {
   const { user, loading } = useAuth();
   const router = useRouter();
+  const pathname = usePathname();
+  const reduce = useReducedMotion();
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const openSidebar = useCallback(() => setSidebarOpen(true), []);
@@ -69,9 +72,18 @@ export default function AppShell({ children }: AppShellProps) {
             <line x1="3" y1="18" x2="21" y2="18" />
           </svg>
         </button>
-        <div className="page-enter">
-          {children}
-        </div>
+        <AnimatePresence mode="wait" initial={false}>
+          <motion.div
+            key={pathname}
+            className="page-enter"
+            initial={reduce ? { opacity: 0 } : { opacity: 0, y: 8 }}
+            animate={reduce ? { opacity: 1 } : { opacity: 1, y: 0 }}
+            exit={reduce ? { opacity: 0 } : { opacity: 0, y: -4 }}
+            transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
+          >
+            {children}
+          </motion.div>
+        </AnimatePresence>
       </main>
 
       {/* Mobile menu button style override */}
