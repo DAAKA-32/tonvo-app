@@ -8,33 +8,61 @@ interface SuggestionCardProps {
 export default function SuggestionCard({ suggestion, emotions }: SuggestionCardProps) {
   return (
     <div
-      className="rounded-xl p-4 border"
+      className="relative overflow-hidden rounded-2xl p-5"
       style={{
-        backgroundColor: "var(--color-surface-2)",
-        borderColor: "var(--color-border)",
-      }}>
-      <div className="text-xs font-medium uppercase tracking-wider mb-2"
-        style={{ color: "var(--color-accent-light)" }}>
-        Suggestion
-      </div>
-      <p className="text-sm leading-relaxed m-0" style={{ color: "var(--color-text)" }}>
-        {suggestion}
-      </p>
-      {emotions.length > 0 && (
-        <div className="flex gap-2 mt-3 flex-wrap">
-          {emotions.map((emotion) => (
-            <span
-              key={emotion}
-              className="text-xs px-2 py-1 rounded-full"
-              style={{
-                backgroundColor: "var(--color-surface)",
-                color: "var(--color-text-muted)",
-              }}>
-              {emotion}
-            </span>
-          ))}
+        background:
+          "linear-gradient(135deg, rgba(167, 139, 250, 0.05) 0%, rgba(255, 255, 255, 0.01) 100%)",
+        border: "1px solid rgba(167, 139, 250, 0.12)",
+        backdropFilter: "blur(20px)",
+        WebkitBackdropFilter: "blur(20px)",
+      }}
+    >
+      <span
+        aria-hidden
+        className="absolute -top-12 -right-12 w-36 h-36 rounded-full pointer-events-none"
+        style={{
+          background: "radial-gradient(circle, rgba(167, 139, 250, 0.24), transparent 70%)",
+          filter: "blur(28px)",
+          opacity: 0.5,
+        }}
+      />
+      <div className="relative">
+        <div className="flex items-center gap-2 mb-3">
+          <span
+            className="inline-flex w-1.5 h-1.5 rounded-full"
+            style={{ backgroundColor: "#c4b5fd" }}
+          />
+          <span
+            className="text-[10px] font-semibold uppercase tracking-[0.22em]"
+            style={{ color: "var(--color-text-muted)" }}
+          >
+            Suggestion
+          </span>
         </div>
-      )}
+        <p
+          className="text-sm leading-relaxed m-0"
+          style={{ color: "var(--color-text)" }}
+        >
+          {suggestion}
+        </p>
+        {emotions.length > 0 && (
+          <div className="flex gap-2 mt-4 flex-wrap">
+            {emotions.map((emotion) => (
+              <span
+                key={emotion}
+                className="text-[11px] px-2.5 py-1 rounded-full"
+                style={{
+                  background: "rgba(255, 255, 255, 0.04)",
+                  border: "1px solid rgba(255, 255, 255, 0.06)",
+                  color: "var(--color-text-silver)",
+                }}
+              >
+                {emotion}
+              </span>
+            ))}
+          </div>
+        )}
+      </div>
     </div>
   );
 }

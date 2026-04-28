@@ -3,7 +3,7 @@
 import { useState, useEffect, ReactNode } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { motion, useReducedMotion } from "framer-motion";
+import { motion, useAnimation, useReducedMotion } from "framer-motion";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "@/lib/auth-context";
 import { auth, firebaseSignOut } from "@/lib/firebase";
@@ -11,6 +11,51 @@ import { authFetch } from "@/lib/api-client";
 import TonvoLogo from "@/components/Logo";
 
 const SPRING_LAYOUT = { type: "spring" as const, stiffness: 380, damping: 32, mass: 0.8 };
+
+type IconAnim = "pop" | "wobble" | "spinFull" | "tiltLift" | "rise" | "bounce" | "spinHalf";
+
+const SOFT_OUT = [0.32, 0.72, 0, 1] as const;
+const SOFT_SPRING_FULL = { type: "spring" as const, stiffness: 110, damping: 22, mass: 0.8 };
+const SOFT_SPRING_HALF = { type: "spring" as const, stiffness: 130, damping: 20, mass: 0.6 };
+
+function getBounceTarget(anim: IconAnim) {
+  switch (anim) {
+    case "pop":
+      return {
+        scale: [1, 1.07, 1],
+        transition: { duration: 0.42, times: [0, 0.45, 1], ease: SOFT_OUT },
+      };
+    case "wobble":
+      return {
+        rotate: [0, -6, 5, -2, 0],
+        transition: { duration: 0.6, ease: "easeOut" as const },
+      };
+    case "tiltLift":
+      return {
+        y: [0, -2, 0],
+        rotate: [0, 5, -1, 0],
+        transition: { duration: 0.55, ease: SOFT_OUT },
+      };
+    case "rise":
+      return {
+        y: [0, -3, 0],
+        scaleY: [1, 1.08, 1],
+        transition: { duration: 0.5, times: [0, 0.45, 1], ease: SOFT_OUT },
+      };
+    case "bounce":
+      return {
+        y: [0, -2, 0, -1, 0],
+        scale: [1, 1.06, 1, 1.02, 1],
+        transition: { duration: 0.6, ease: "easeOut" as const },
+      };
+    case "spinFull":
+    case "spinHalf":
+      return {
+        scale: [1, 1.04, 1],
+        transition: { duration: 0.5, times: [0, 0.5, 1], ease: SOFT_OUT },
+      };
+  }
+}
 
 function IconDashboard() {
   return (
@@ -69,7 +114,7 @@ function IconSettings() {
 }
 
 function SidebarNavLink({
-  href, icon: Icon, label, isActive, onClick, layoutId = "sidebar-active-pill",
+  href, icon: Icon, label, isActive, onClick, layoutId = "sidebar-active-pill", anim = "pop",
 }: {
   href: string;
   icon: () => ReactNode;
@@ -77,13 +122,33 @@ function SidebarNavLink({
   isActive: boolean;
   onClick?: () => void;
   layoutId?: string;
+  anim?: IconAnim;
 }) {
   const reduce = useReducedMotion();
+  const [canHover, setCanHover] = useState(false);
+  const [spins, setSpins] = useState(0);
+  const bounceControls = useAnimation();
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    setCanHover(window.matchMedia("(hover: hover) and (pointer: fine)").matches);
+  }, []);
+
+  const usesSpin = anim === "spinFull" || anim === "spinHalf";
+  const spinDelta = anim === "spinFull" ? 360 : 180;
+
+  const handleMouseEnter = () => {
+    if (!canHover || reduce) return;
+    if (usesSpin) setSpins((s) => s + 1);
+    bounceControls.start(getBounceTarget(anim));
+  };
+
   return (
     <Link
       href={href}
       className={`sidebar-link ${isActive ? "active" : ""}`}
       onClick={onClick}
+      onMouseEnter={handleMouseEnter}
       style={{ position: "relative" }}
     >
       {isActive && !reduce && (
@@ -94,9 +159,15 @@ function SidebarNavLink({
           transition={SPRING_LAYOUT}
         />
       )}
-      <span style={{ display: "inline-flex", position: "relative", zIndex: 1 }}>
-        <Icon />
-      </span>
+      <motion.span
+        style={{ display: "inline-flex", position: "relative", zIndex: 1 }}
+        animate={usesSpin ? { rotate: spins * spinDelta } : false}
+        transition={anim === "spinHalf" ? SOFT_SPRING_HALF : SOFT_SPRING_FULL}
+      >
+        <motion.span animate={bounceControls} style={{ display: "inline-flex" }}>
+          <Icon />
+        </motion.span>
+      </motion.span>
       <span style={{ position: "relative", zIndex: 1 }}>{label}</span>
     </Link>
   );
@@ -112,13 +183,18 @@ function getInitials(name: string | null | undefined, email: string | null | und
   return "U";
 }
 
-const navItems = [
-  { href: "/dashboard", labelKey: "nav.dashboard", icon: IconDashboard },
-  { href: "/session", labelKey: "nav.liveSession", icon: IconMic },
-  { href: "/history", labelKey: "nav.history", icon: IconHistory },
-  { href: "/analyze-text", labelKey: "nav.analyzeText", icon: IconText },
-  { href: "/analytics", labelKey: "nav.analytics", icon: IconAnalytics },
-  { href: "/pricing", labelKey: "nav.pricing", icon: IconPricing },
+const navItems: Array<{
+  href: string;
+  labelKey: string;
+  icon: () => ReactNode;
+  anim: IconAnim;
+}> = [
+  { href: "/dashboard", labelKey: "nav.dashboard", icon: IconDashboard, anim: "pop" },
+  { href: "/session", labelKey: "nav.liveSession", icon: IconMic, anim: "wobble" },
+  { href: "/history", labelKey: "nav.history", icon: IconHistory, anim: "spinFull" },
+  { href: "/analyze-text", labelKey: "nav.analyzeText", icon: IconText, anim: "tiltLift" },
+  { href: "/analytics", labelKey: "nav.analytics", icon: IconAnalytics, anim: "rise" },
+  { href: "/pricing", labelKey: "nav.pricing", icon: IconPricing, anim: "bounce" },
 ];
 
 interface SidebarProps {
@@ -162,6 +238,7 @@ export default function Sidebar({ open, onClose }: SidebarProps) {
               label={t(item.labelKey)}
               isActive={pathname === item.href}
               onClick={onClose}
+              anim={item.anim}
             />
           ))}
         </nav>
@@ -211,6 +288,7 @@ export default function Sidebar({ open, onClose }: SidebarProps) {
             label={t("nav.settings")}
             isActive={pathname === "/settings"}
             onClick={onClose}
+            anim="spinHalf"
           />
         </div>
       </aside>

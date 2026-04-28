@@ -1,0 +1,141 @@
+{
+  "generated_at": "2026-04-22T19:55:41.539Z",
+  "product": "Tonvo",
+  "url": "tonvo.co",
+  "tagline": "Closez plus. Négociez mieux.",
+  "dimensions": {
+    "width": 1080,
+    "height": 1350
+  },
+  "design_system": {
+    "palette": [
+      "#09090b",
+      "#34d399",
+      "#f87171",
+      "#fbbf24",
+      "#fafafa"
+    ],
+    "fonts": [
+      "Inter",
+      "IBM Plex Mono"
+    ],
+    "logo": "public/logo-tonvo.png",
+    "renderer": "satori + @resvg/resvg-js"
+  },
+  "carousels": [
+    {
+      "id": "carousel-01",
+      "angle": "Douleur / FOMO — closers qui perdent des deals évitables",
+      "hook": "Vous perdez 3 deals sur 10 que vous auriez pu closer.",
+      "cta": "Commencer gratuitement",
+      "slides": [
+        {
+          "index": 1,
+          "type": "hook",
+          "file": "carousel-01/slide-01.png"
+        },
+        {
+          "index": 2,
+          "type": "problem",
+          "file": "carousel-01/slide-02.png"
+        },
+        {
+          "index": 3,
+          "type": "solution",
+          "file": "carousel-01/slide-03.png"
+        },
+        {
+          "index": 4,
+          "type": "usecase",
+          "file": "carousel-01/slide-04.png"
+        },
+        {
+          "index": 5,
+          "type": "benefits",
+          "file": "carousel-01/slide-05.png"
+        },
+        {
+          "index": 6,
+          "type": "cta",
+          "file": "carousel-01/slide-06.png"
+        }
+      ]
+    },
+    {
+      "id": "carousel-02",
+      "angle": "Preuve sociale / ROI chiffré — sceptiques qui veulent des chiffres",
+      "hook": "+27% de taux de closing. En 30 jours. Sans changer le pitch.",
+      "cta": "Activer mon avantage",
+      "slides": [
+        {
+          "index": 1,
+          "type": "hook",
+          "file": "carousel-02/slide-01.png"
+        },
+        {
+          "index": 2,
+          "type": "problem",
+          "file": "carousel-02/slide-02.png"
+        },
+        {
+          "index": 3,
+          "type": "solution",
+          "file": "carousel-02/slide-03.png"
+        },
+        {
+          "index": 4,
+          "type": "usecase",
+          "file": "carousel-02/slide-04.png"
+        },
+        {
+          "index": 5,
+          "type": "benefits",
+          "file": "carousel-02/slide-05.png"
+        },
+        {
+          "index": 6,
+          "type": "cta",
+          "file": "carousel-02/slide-06.png"
+        }
+      ]
+    },
+    {
+      "id": "carousel-03",
+      "angle": "Product / Live advantage — early adopters & FOMO concurrentiel",
+      "hook": "Le closer que votre concurrent n'a pas.",
+      "cta": "Tester maintenant",
+      "slides": [
+        {
+          "index": 1,
+          "type": "hook",
+          "file": "carousel-03/slide-01.png"
+        },
+        {
+          "index": 2,
+          "type": "problem",
+          "file": "carousel-03/slide-02.png"
+        },
+        {
+          "index": 3,
+          "type": "solution",
+          "file": "carousel-03/slide-03.png"
+        },
+        {
+          "index": 4,
+          "type": "usecase",
+          "file": "carousel-03/slide-04.png"
+        },
+        {
+          "index": 5,
+          "type": "benefits",
+          "file": "carousel-03/slide-05.png"
+        },
+        {
+          "index": 6,
+          "type": "cta",
+          "file": "carousel-03/slide-06.png"
+        }
+      ]
+    }
+  ]
+}

@@ -8,3 +8,6 @@ firebase-debug.log
 
 .vercel
 .env*.local
+
+# Local-only autonomous agent system — never push to remote
+agents/

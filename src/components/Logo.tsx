@@ -1,13 +1,5 @@
 /**
  * Tonvo Logo — Uses logo-tonvo-remove.png as the single official logo
- *
- * Size tokens (icon only) — x2 for premium visibility:
- *   xs  = 48px
- *   sm  = 64px
- *   md  = 72px
- *   lg  = 96px
- *   xl  = 240px
- *   sidebar = 72px
  */
 
 import Image from "next/image";
@@ -18,7 +10,7 @@ const SIZE_MAP = {
   md: 48,
   lg: 56,
   xl: 120,
-  sidebar: 44,
+  sidebar: 32,
 } as const;
 
 type LogoSize = keyof typeof SIZE_MAP;
@@ -55,8 +47,9 @@ interface TonvoLogoProps {
 /** Full logo: icon + wordmark */
 export default function TonvoLogo({ size = "md", showText = true, textClassName, className }: TonvoLogoProps) {
   const px = typeof size === "number" ? size : SIZE_MAP[size];
-  const fontSize = Math.max(18, px * 0.45);
-  const gap = Math.max(10, px * 0.22);
+  const isSidebar = size === "sidebar";
+  const fontSize = isSidebar ? 15 : Math.max(18, px * 0.45);
+  const gap = isSidebar ? 8 : Math.max(10, px * 0.22);
 
   return (
     <div
@@ -72,7 +65,7 @@ export default function TonvoLogo({ size = "md", showText = true, textClassName,
             fontWeight: 700,
             letterSpacing: "-0.02em",
             lineHeight: 1,
-            background: "linear-gradient(135deg, #ffffff 0%, #d4d4e0 40%, #b8b8cc 100%)",
+            backgroundImage: "linear-gradient(135deg, #ffffff 0%, #d4d4e0 40%, #b8b8cc 100%)",
             WebkitBackgroundClip: "text",
             WebkitTextFillColor: "transparent",
             backgroundClip: "text",

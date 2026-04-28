@@ -281,20 +281,36 @@ export default function LiveTranslationStream({ segments, isRecording, compact =
 
       <style jsx>{`
         .lts-root {
-          background: var(--color-surface);
-          border: 1px solid var(--color-border);
-          border-radius: 16px;
-          padding: 16px;
-          backdrop-filter: blur(18px);
-          -webkit-backdrop-filter: blur(18px);
+          position: relative;
+          background: linear-gradient(135deg, rgba(167, 139, 250, 0.04) 0%, rgba(255, 255, 255, 0.01) 100%);
+          border: 1px solid rgba(167, 139, 250, 0.12);
+          border-radius: 20px;
+          padding: 20px;
+          backdrop-filter: blur(20px);
+          -webkit-backdrop-filter: blur(20px);
+          overflow: hidden;
+        }
+        .lts-root::before {
+          content: "";
+          position: absolute;
+          top: -48px;
+          right: -48px;
+          width: 180px;
+          height: 180px;
+          border-radius: 50%;
+          background: radial-gradient(circle, rgba(167, 139, 250, 0.18), transparent 70%);
+          filter: blur(28px);
+          pointer-events: none;
+          opacity: 0.55;
         }
 
         .lts-header {
+          position: relative;
           display: flex;
           align-items: center;
           justify-content: space-between;
           gap: 10px;
-          margin-bottom: 12px;
+          margin-bottom: 14px;
         }
         .lts-header-left {
           display: flex;
@@ -303,40 +319,42 @@ export default function LiveTranslationStream({ segments, isRecording, compact =
           min-width: 0;
         }
         .lts-icon {
-          width: 26px;
-          height: 26px;
-          border-radius: 8px;
+          width: 28px;
+          height: 28px;
+          border-radius: 10px;
           display: flex;
           align-items: center;
           justify-content: center;
-          color: var(--color-accent-light);
-          background: linear-gradient(135deg, rgba(129, 140, 248, 0.18), rgba(56, 189, 248, 0.10));
+          color: #c4b5fd;
+          background: rgba(167, 139, 250, 0.12);
+          border: 1px solid rgba(167, 139, 250, 0.2);
         }
         .lts-title {
           margin: 0;
           font-size: 13px;
           font-weight: 600;
-          letter-spacing: 0.02em;
+          letter-spacing: 0.01em;
           color: var(--color-text);
         }
         .lts-live-pill {
           display: inline-flex;
           align-items: center;
           gap: 5px;
-          font-size: 10px;
+          font-size: 9px;
           font-weight: 700;
-          letter-spacing: 0.08em;
+          letter-spacing: 0.18em;
           text-transform: uppercase;
-          padding: 3px 8px;
+          padding: 4px 9px;
           border-radius: 999px;
-          background: rgba(52, 211, 153, 0.12);
-          color: var(--color-positive);
+          background: rgba(239, 68, 68, 0.12);
+          color: #ef4444;
+          border: 1px solid rgba(239, 68, 68, 0.25);
         }
         .lts-live-dot {
           width: 6px;
           height: 6px;
           border-radius: 50%;
-          background: var(--color-positive);
+          background: #ef4444;
           animation: ltsPulse 1.4s ease-in-out infinite;
         }
 
@@ -350,81 +368,88 @@ export default function LiveTranslationStream({ segments, isRecording, compact =
           appearance: none;
           -webkit-appearance: none;
           -moz-appearance: none;
-          padding: 6px 26px 6px 10px;
-          border: 1px solid var(--color-border);
-          background-color: var(--color-surface-2);
-          background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='%23c8c8d8' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9' /></svg>");
+          padding: 7px 28px 7px 12px;
+          border: 1px solid rgba(255, 255, 255, 0.06);
+          background-color: rgba(255, 255, 255, 0.03);
+          background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='%23a1a1aa' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9' /></svg>");
           background-repeat: no-repeat;
-          background-position: right 8px center;
+          background-position: right 10px center;
           color: var(--color-text);
           font-size: 11.5px;
           font-weight: 600;
-          letter-spacing: 0.04em;
-          border-radius: 8px;
+          letter-spacing: 0.02em;
+          border-radius: 999px;
           cursor: pointer;
-          transition: border-color 0.15s ease;
+          transition: border-color 0.2s ease, background 0.2s ease;
           max-width: 160px;
         }
-        .lts-lang-select:hover { border-color: var(--color-accent); }
+        .lts-lang-select:hover {
+          border-color: rgba(167, 139, 250, 0.3);
+          background-color: rgba(167, 139, 250, 0.05);
+        }
         .lts-lang-select:focus {
           outline: none;
-          border-color: var(--color-accent);
+          border-color: rgba(167, 139, 250, 0.4);
         }
         .lts-lang-select option {
-          background: var(--color-surface);
+          background: #111114;
           color: var(--color-text);
         }
 
         .lts-toggle {
-          width: 36px;
-          height: 20px;
+          width: 38px;
+          height: 22px;
           border-radius: 999px;
-          background: var(--color-surface-2);
-          border: 1px solid var(--color-border);
-          padding: 1px;
+          background: rgba(255, 255, 255, 0.04);
+          border: 1px solid rgba(255, 255, 255, 0.08);
+          padding: 2px;
           cursor: pointer;
           position: relative;
-          transition: background 0.2s ease, border-color 0.2s ease;
+          transition: background 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
         }
         .lts-toggle.is-on {
-          background: var(--color-accent);
-          border-color: var(--color-accent);
+          background: linear-gradient(135deg, #34d399, #6ee7b7);
+          border-color: rgba(52, 211, 153, 0.5);
+          box-shadow: 0 8px 20px -8px rgba(52, 211, 153, 0.5);
         }
         .lts-toggle-dot {
           display: block;
           width: 16px;
           height: 16px;
           border-radius: 50%;
-          background: var(--color-text);
-          transition: transform 0.2s cubic-bezier(0.22, 1, 0.36, 1);
+          background: #fafafa;
+          transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
         }
         .lts-toggle.is-on .lts-toggle-dot {
           transform: translateX(16px);
-          background: #fff;
+          background: #0a0a0a;
         }
 
         .lts-mode-row {
           display: flex;
           flex-wrap: wrap;
           gap: 6px;
-          margin-bottom: 12px;
+          margin-bottom: 14px;
         }
         .lts-mode-chip {
-          padding: 5px 10px;
+          padding: 6px 12px;
           font-size: 11px;
-          font-weight: 600;
-          background: transparent;
+          font-weight: 500;
+          background: rgba(255, 255, 255, 0.02);
           color: var(--color-text-muted);
-          border: 1px solid var(--color-border);
+          border: 1px solid rgba(255, 255, 255, 0.04);
           border-radius: 999px;
           cursor: pointer;
-          transition: color 0.15s ease, border-color 0.15s ease, background 0.15s ease;
+          transition: all 0.2s ease;
         }
-        .lts-mode-chip:hover { color: var(--color-text); }
+        .lts-mode-chip:hover {
+          color: var(--color-text);
+          border-color: rgba(255, 255, 255, 0.1);
+        }
         .lts-mode-chip.is-active {
-          color: var(--color-accent-light);
-          border-color: var(--color-accent);
-          background: rgba(129, 140, 248, 0.08);
+          color: var(--color-text);
+          border-color: rgba(255, 255, 255, 0.16);
+          background: rgba(255, 255, 255, 0.08);
         }
 
         .lts-error {
@@ -437,28 +462,33 @@ export default function LiveTranslationStream({ segments, isRecording, compact =
         }
 
         .lts-empty {
-          padding: 28px 18px;
+          padding: 36px 18px;
           text-align: center;
+          position: relative;
         }
         .lts-empty-icon {
-          width: 44px;
-          height: 44px;
-          margin: 0 auto 10px;
+          width: 48px;
+          height: 48px;
+          margin: 0 auto 14px;
           display: flex;
           align-items: center;
           justify-content: center;
-          border-radius: 14px;
-          color: var(--color-accent-light);
-          background: rgba(129, 140, 248, 0.08);
+          border-radius: 16px;
+          color: #c4b5fd;
+          background: rgba(167, 139, 250, 0.10);
+          border: 1px solid rgba(167, 139, 250, 0.18);
         }
         .lts-empty-title {
-          margin: 0 0 4px;
-          font-size: 13.5px;
+          margin: 0 0 6px;
+          font-size: 14px;
+          font-weight: 500;
           color: var(--color-text);
         }
         .lts-empty-sub {
           margin: 0;
-          font-size: 11.5px;
+          font-size: 11px;
+          letter-spacing: 0.18em;
+          text-transform: uppercase;
           color: var(--color-text-muted);
         }
 

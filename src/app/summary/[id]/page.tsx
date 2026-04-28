@@ -3,46 +3,95 @@
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
+import { motion, useReducedMotion } from "framer-motion";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "@/lib/auth-context";
 import { supabase } from "@/lib/supabase";
 import { useTranslateFields } from "@/hooks/useTranslateFields";
 import AppShell from "@/components/AppShell";
 import ToneIndicator from "@/components/ToneIndicator";
+import CountUp from "@/components/motion/CountUp";
 import type { Conversation, AnalysisSegment } from "@/types/database";
 import type { Tone, ConversationClassification } from "@/types/analysis";
 
+const EASE_OUT = [0.22, 1, 0.36, 1] as const;
+
 /* ------------------------------------------------------------------ */
-/*  Score Ring — circular gauge for the hero score                     */
+/*  Score Ring — circular gauge with vibrant glow                     */
 /* ------------------------------------------------------------------ */
-function ScoreRing({ value, size = 96 }: { value: number; size?: number }) {
-  const stroke = 6;
+function ScoreRing({ value, size = 144, reduce }: { value: number; size?: number; reduce?: boolean | null }) {
+  const stroke = 8;
   const radius = (size - stroke) / 2;
   const circumference = 2 * Math.PI * radius;
   const progress = Math.min(Math.max(value, 0), 100);
-  const offset = circumference - (progress / 100) * circumference;
+  const dashLen = (progress / 100) * circumference;
   const color = getScoreColor(value);
+  const rgba = getScoreRgba(value);
 
   return (
     <div className="relative inline-flex items-center justify-center" style={{ width: size, height: size }}>
-      <svg width={size} height={size} className="score-ring-svg">
+      <svg
+        width={size}
+        height={size}
+        viewBox={`0 0 ${size} ${size}`}
+        style={{ transform: "rotate(-90deg)", overflow: "visible" }}
+      >
+        <defs>
+          <filter id={`score-glow-${value}`} x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur stdDeviation="4" result="blur" />
+            <feMerge>
+              <feMergeNode in="blur" />
+              <feMergeNode in="SourceGraphic" />
+            </feMerge>
+          </filter>
+        </defs>
         <circle
-          cx={size / 2} cy={size / 2} r={radius}
-          fill="none" stroke="var(--color-border)" strokeWidth={stroke}
+          cx={size / 2}
+          cy={size / 2}
+          r={radius}
+          fill="none"
+          stroke="rgba(255, 255, 255, 0.05)"
+          strokeWidth={stroke}
         />
-        <circle
-          cx={size / 2} cy={size / 2} r={radius}
-          fill="none" stroke={color} strokeWidth={stroke}
+        <motion.circle
+          cx={size / 2}
+          cy={size / 2}
+          r={radius}
+          fill="none"
+          stroke={color}
+          strokeWidth={stroke}
           strokeLinecap="round"
-          strokeDasharray={circumference}
-          strokeDashoffset={offset}
-          className="score-ring-progress"
-          transform={`rotate(-90 ${size / 2} ${size / 2})`}
+          strokeDashoffset={0}
+          initial={reduce ? undefined : { strokeDasharray: `0 ${circumference}` }}
+          animate={{ strokeDasharray: `${dashLen} ${circumference}` }}
+          transition={{ duration: 1.4, ease: EASE_OUT, delay: 0.3 }}
+          style={{ filter: `url(#score-glow-${value})` }}
         />
       </svg>
       <div className="absolute inset-0 flex flex-col items-center justify-center">
-        <span className="text-3xl font-bold leading-none" style={{ color }}>{value}</span>
-        <span className="text-[10px] mt-0.5" style={{ color: "var(--color-text-muted)" }}>/100</span>
+        <motion.span
+          className="font-extralight tabular-nums leading-none"
+          animate={reduce ? undefined : { opacity: [0.92, 1, 0.92] }}
+          transition={
+            reduce
+              ? undefined
+              : { duration: 3.4, repeat: Infinity, ease: "easeInOut", delay: 1.6 }
+          }
+          style={{
+            fontSize: size > 120 ? "clamp(40px, 5vw, 56px)" : "clamp(28px, 3.4vw, 38px)",
+            color,
+            letterSpacing: "-0.04em",
+            textShadow: `0 0 24px rgba(${rgba}, 0.35), 0 0 4px rgba(${rgba}, 0.4)`,
+          }}
+        >
+          <CountUp value={value} duration={1.4} />
+        </motion.span>
+        <span
+          className="text-[10px] uppercase tracking-[0.18em] mt-1"
+          style={{ color: "var(--color-text-muted)" }}
+        >
+          / 100
+        </span>
       </div>
     </div>
   );
@@ -51,15 +100,38 @@ function ScoreRing({ value, size = 96 }: { value: number; size?: number }) {
 /* ------------------------------------------------------------------ */
 /*  Compact Score Bar                                                  */
 /* ------------------------------------------------------------------ */
-function ScoreBar({ label, value }: { label: string; value: number }) {
+function ScoreBar({ label, value, delay = 0, reduce }: { label: string; value: number; delay?: number; reduce?: boolean | null }) {
   const color = getScoreColor(value);
+  const rgba = getScoreRgba(value);
   return (
-    <div className="flex items-center gap-2 min-w-0">
-      <span className="text-[11px] w-17 shrink-0 truncate" style={{ color: "var(--color-text-muted)" }}>{label}</span>
-      <div className="score-bar-track flex-1">
-        <div className="score-bar-fill" style={{ width: `${value}%`, backgroundColor: color }} />
+    <div className="flex items-center gap-3 min-w-0">
+      <span
+        className="text-[10px] uppercase tracking-[0.16em] shrink-0 truncate"
+        style={{ color: "var(--color-text-muted)", width: 84 }}
+      >
+        {label}
+      </span>
+      <div
+        className="flex-1 relative rounded-full overflow-hidden"
+        style={{ height: 4, background: "rgba(255, 255, 255, 0.04)" }}
+      >
+        <motion.span
+          className="absolute inset-y-0 left-0 rounded-full"
+          initial={reduce ? { width: `${value}%` } : { width: 0 }}
+          animate={{ width: `${value}%` }}
+          transition={{ duration: 1, ease: EASE_OUT, delay: delay + 0.4 }}
+          style={{
+            background: `linear-gradient(90deg, ${color}, rgba(${rgba}, 0.7))`,
+            boxShadow: `0 0 12px rgba(${rgba}, 0.45)`,
+          }}
+        />
       </div>
-      <span className="text-[11px] font-semibold w-6 text-right tabular-nums" style={{ color }}>{value}</span>
+      <span
+        className="text-xs font-medium tabular-nums shrink-0 text-right"
+        style={{ color, width: 28 }}
+      >
+        <CountUp value={value} duration={1} />
+      </span>
     </div>
   );
 }
@@ -68,9 +140,15 @@ function ScoreBar({ label, value }: { label: string; value: number }) {
 /*  Helpers                                                            */
 /* ------------------------------------------------------------------ */
 function getScoreColor(score: number) {
-  if (score >= 70) return "var(--color-positive)";
-  if (score >= 40) return "var(--color-neutral)";
-  return "var(--color-negative)";
+  if (score >= 70) return "#34d399";
+  if (score >= 40) return "#fb923c";
+  return "#ef4444";
+}
+
+function getScoreRgba(score: number) {
+  if (score >= 70) return "52, 211, 153";
+  if (score >= 40) return "251, 146, 60";
+  return "239, 68, 68";
 }
 
 function formatDuration(start: string, end: string | null) {
@@ -93,14 +171,14 @@ function formatDate(dateStr: string) {
 }
 
 /* ------------------------------------------------------------------ */
-/*  Classification config                                              */
+/*  Classification config — vibrant green / orange / red               */
 /* ------------------------------------------------------------------ */
-const CLASSIFICATION_COLORS: Record<ConversationClassification, { color: string; bg: string }> = {
-  very_positive: { color: "var(--color-positive)", bg: "rgba(52, 211, 153, 0.12)" },
-  positive:      { color: "var(--color-positive)", bg: "rgba(52, 211, 153, 0.08)" },
-  neutral:       { color: "var(--color-neutral)",  bg: "rgba(251, 191, 36, 0.08)" },
-  awkward:       { color: "var(--color-neutral)",  bg: "rgba(251, 191, 36, 0.12)" },
-  negative:      { color: "var(--color-negative)", bg: "rgba(248, 113, 113, 0.12)" },
+const CLASSIFICATION_COLORS: Record<ConversationClassification, { color: string; bg: string; border: string }> = {
+  very_positive: { color: "#34d399", bg: "rgba(52, 211, 153, 0.12)", border: "rgba(52, 211, 153, 0.28)" },
+  positive:      { color: "#34d399", bg: "rgba(52, 211, 153, 0.08)", border: "rgba(52, 211, 153, 0.22)" },
+  neutral:       { color: "#fb923c", bg: "rgba(251, 146, 60, 0.08)", border: "rgba(251, 146, 60, 0.22)" },
+  awkward:       { color: "#fb923c", bg: "rgba(251, 146, 60, 0.12)", border: "rgba(251, 146, 60, 0.28)" },
+  negative:      { color: "#ef4444", bg: "rgba(239, 68, 68, 0.12)", border: "rgba(239, 68, 68, 0.28)" },
 };
 
 /* ================================================================== */
@@ -110,6 +188,7 @@ export default function SummaryPage() {
   const { user } = useAuth();
   const params = useParams();
   const { t, i18n } = useTranslation();
+  const reduce = useReducedMotion();
   const id = params.id as string;
   const { translate, translating } = useTranslateFields();
 
@@ -220,304 +299,732 @@ export default function SummaryPage() {
   /* ================================================================ */
   return (
     <AppShell>
-      <div style={{ maxWidth: 720 }}>
-        {loadingData ? (
-          <div className="space-y-4">
-            {[1, 2, 3].map((i) => (
-              <div key={i} className="h-24 rounded-2xl shimmer" style={{ backgroundColor: "var(--color-surface-2)" }} />
-            ))}
-          </div>
-        ) : !conversation ? (
-          <div className="text-center py-20">
-            <h1 className="text-2xl font-bold mb-4">{t("report.notFound")}</h1>
-            <Link href="/dashboard" style={{ color: "var(--color-accent-light)" }}>
-              {t("report.backToDashboard")}
-            </Link>
-          </div>
-        ) : (
-          <>
-            {/* Navigation */}
-            <Link
-              href="/history"
-              className="text-xs mb-8 inline-flex items-center gap-1.5 no-underline transition-colors hover:opacity-80"
-              style={{ color: "var(--color-text-muted)" }}>
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <polyline points="15 18 9 12 15 6" />
-              </svg>
-              {t("report.backToHistory")}
-            </Link>
+      <div style={{ position: "relative", maxWidth: 880, margin: "0 auto", paddingBottom: 80 }}>
+        {/* Ambient orb */}
+        <motion.div
+          aria-hidden
+          style={{
+            position: "absolute",
+            top: -130,
+            right: -120,
+            width: 480,
+            height: 480,
+            borderRadius: "50%",
+            background: "radial-gradient(circle, rgba(255, 255, 255, 0.05), transparent 65%)",
+            filter: "blur(70px)",
+            pointerEvents: "none",
+            zIndex: 0,
+          }}
+          animate={reduce ? undefined : { x: [-15, 15, -15], y: [-12, 12, -12] }}
+          transition={reduce ? undefined : { duration: 22, repeat: Infinity, ease: "easeInOut" }}
+        />
 
-            {/* Page header */}
-            <div className="mb-8">
-              <h1 className="text-xl font-bold mb-1" style={{ color: "var(--color-text)" }}>
-                {t("report.title")}
-              </h1>
-              <p className="text-xs m-0" style={{ color: "var(--color-text-muted)" }}>
-                {conversation.title} &middot; {formatDate(conversation.created_at)}
-              </p>
+        <div style={{ position: "relative", zIndex: 1 }}>
+          {loadingData ? (
+            <div className="space-y-3">
+              {[1, 2, 3].map((i) => (
+                <div key={i} className="h-24 rounded-2xl shimmer" style={{ backgroundColor: "rgba(255, 255, 255, 0.02)" }} />
+              ))}
             </div>
+          ) : !conversation ? (
+            <div className="text-center py-20">
+              <h1 className="text-2xl font-light mb-4" style={{ color: "var(--color-text)" }}>{t("report.notFound")}</h1>
+              <Link
+                href="/dashboard"
+                className="inline-flex items-center gap-1.5 text-sm no-underline px-4 py-2 rounded-full"
+                style={{
+                  background: "rgba(255, 255, 255, 0.04)",
+                  border: "1px solid rgba(255, 255, 255, 0.08)",
+                  color: "var(--color-text)",
+                }}
+              >
+                {t("report.backToDashboard")}
+              </Link>
+            </div>
+          ) : (
+            <>
+              {/* Back link */}
+              <Link
+                href="/history"
+                className="inline-flex items-center gap-1.5 mb-6 text-[11px] uppercase tracking-[0.18em] no-underline group"
+                style={{ color: "var(--color-text-muted)" }}
+              >
+                <svg
+                  width="12"
+                  height="12"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  className="transition-transform group-hover:-translate-x-0.5"
+                >
+                  <polyline points="15 18 9 12 15 6" />
+                </svg>
+                {t("report.backToHistory")}
+              </Link>
 
-            {/* ============================================ */}
-            {/*  BLOCK 1 — Overview                          */}
-            {/* ============================================ */}
-            <div className="glass-card p-6 mb-5">
-              <div className="flex items-start gap-6">
-                {/* Score ring */}
-                {score && (
-                  <div className="shrink-0">
-                    <ScoreRing value={score.overall} />
-                  </div>
-                )}
+              {/* ========== HERO ========== */}
+              <motion.div
+                initial={reduce ? { opacity: 0 } : { opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, ease: EASE_OUT }}
+                className="mb-8"
+              >
+                <div className="flex items-center gap-2.5 mb-4 flex-wrap">
+                  <span className="relative inline-flex w-1.5 h-1.5">
+                    <span
+                      className="absolute inset-0 rounded-full"
+                      style={{
+                        backgroundColor: "rgba(255, 255, 255, 0.85)",
+                        opacity: 0.5,
+                        animation: "pulseRing 2.4s ease-in-out infinite",
+                      }}
+                    />
+                    <span
+                      className="relative w-1.5 h-1.5 rounded-full"
+                      style={{ backgroundColor: "rgba(255, 255, 255, 0.9)" }}
+                    />
+                  </span>
+                  <span
+                    className="text-[10px] font-semibold uppercase tracking-[0.22em]"
+                    style={{ color: "var(--color-text-muted)" }}
+                  >
+                    {t("report.title")} · {formatDate(conversation.created_at)} · {duration}
+                  </span>
+                </div>
 
-                {/* Meta + bars */}
-                <div className="flex-1 min-w-0">
-                  {/* Quick meta row */}
-                  <div className="flex flex-wrap items-center gap-3 mb-4">
-                    {classColors && classLabel && (
-                      <span
-                        className="text-xs font-semibold px-2.5 py-1 rounded-md"
-                        style={{ backgroundColor: classColors.bg, color: classColors.color }}>
-                        {classLabel}
-                      </span>
-                    )}
-                    {conversation.overall_tone && (
-                      <ToneIndicator tone={conversation.overall_tone as Tone} size="sm" />
-                    )}
-                    <span className="text-xs" style={{ color: "var(--color-text-muted)" }}>
-                      {duration}
+                <motion.h1
+                  className="m-0 break-words"
+                  animate={reduce ? undefined : { backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"] }}
+                  transition={
+                    reduce
+                      ? undefined
+                      : { duration: 9, repeat: Infinity, ease: "easeInOut", delay: 1 }
+                  }
+                  style={{
+                    fontSize: "clamp(28px, 4.4vw, 44px)",
+                    fontWeight: 200,
+                    letterSpacing: "-0.035em",
+                    lineHeight: 1.08,
+                    background:
+                      "linear-gradient(115deg, #fafafa 0%, #fafafa 30%, #d4d4d8 50%, #fafafa 70%, #fafafa 100%)",
+                    backgroundSize: "240% 100%",
+                    WebkitBackgroundClip: "text",
+                    WebkitTextFillColor: "transparent",
+                    backgroundClip: "text",
+                  }}
+                >
+                  {conversation.title}
+                </motion.h1>
+
+                {/* meta row */}
+                <div className="flex items-center gap-2 mt-4 flex-wrap">
+                  {classColors && classLabel && (
+                    <span
+                      className="text-[10px] uppercase tracking-[0.18em] font-semibold px-2.5 py-1 rounded-full"
+                      style={{
+                        backgroundColor: classColors.bg,
+                        color: classColors.color,
+                        border: `1px solid ${classColors.border}`,
+                      }}
+                    >
+                      {classLabel}
                     </span>
-                  </div>
+                  )}
+                  {conversation.overall_tone && (
+                    <span
+                      className="inline-flex items-center gap-1.5 text-[10px] uppercase tracking-[0.18em] font-semibold px-2.5 py-1 rounded-full"
+                      style={{
+                        background: "rgba(255, 255, 255, 0.04)",
+                        border: "1px solid rgba(255, 255, 255, 0.06)",
+                        color: "var(--color-text-silver)",
+                      }}
+                    >
+                      <ToneIndicator tone={conversation.overall_tone as Tone} size="sm" showLabel={false} />
+                      {conversation.overall_tone}
+                    </span>
+                  )}
+                </div>
+              </motion.div>
 
-                  {/* Score bars — compact 2-column grid */}
+              {/* ============================================ */}
+              {/*  BLOCK 1 — Overview                          */}
+              {/* ============================================ */}
+              <motion.div
+                initial={reduce ? { opacity: 0 } : { opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, ease: EASE_OUT, delay: 0.15 }}
+                className="relative overflow-hidden rounded-2xl p-5 sm:p-6 mb-4"
+                style={{
+                  background:
+                    "linear-gradient(135deg, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0.01) 100%)",
+                  border: "1px solid rgba(255, 255, 255, 0.06)",
+                  backdropFilter: "blur(20px)",
+                  WebkitBackdropFilter: "blur(20px)",
+                }}
+              >
+                <span
+                  aria-hidden
+                  className="absolute -top-12 -right-12 w-44 h-44 rounded-full pointer-events-none"
+                  style={{
+                    background: score
+                      ? `radial-gradient(circle, rgba(${getScoreRgba(score.overall)}, 0.20), transparent 70%)`
+                      : "radial-gradient(circle, rgba(255, 255, 255, 0.10), transparent 70%)",
+                    filter: "blur(28px)",
+                    opacity: 0.6,
+                  }}
+                />
+
+                <div className="relative flex flex-col sm:flex-row items-center sm:items-start gap-6 sm:gap-8">
+                  {/* Score ring */}
                   {score && (
-                    <div className="grid grid-cols-2 gap-x-5 gap-y-2">
-                      <ScoreBar label={t("report.engagement")} value={score.engagement} />
-                      <ScoreBar label={t("report.toneScore")} value={score.tone} />
-                      <ScoreBar label={t("report.fluidity")} value={score.fluidity} />
-                      <ScoreBar label={t("report.interest")} value={score.interest} />
+                    <div className="shrink-0">
+                      <ScoreRing value={score.overall} reduce={reduce} />
+                    </div>
+                  )}
+
+                  {/* Score bars */}
+                  {score && (
+                    <div className="flex-1 min-w-0 w-full grid gap-3 self-center">
+                      <ScoreBar label={t("report.engagement")} value={score.engagement} delay={0.0} reduce={reduce} />
+                      <ScoreBar label={t("report.toneScore")} value={score.tone} delay={0.05} reduce={reduce} />
+                      <ScoreBar label={t("report.fluidity")} value={score.fluidity} delay={0.1} reduce={reduce} />
+                      <ScoreBar label={t("report.interest")} value={score.interest} delay={0.15} reduce={reduce} />
                     </div>
                   )}
                 </div>
-              </div>
 
-              {/* Tone distribution mini-bar */}
-              {segments.length > 0 && (
-                <div className="mt-5 pt-4" style={{ borderTop: "1px solid var(--color-border)" }}>
-                  <div className="sentiment-bar" style={{ height: 6 }}>
-                    {Object.entries(toneCount).map(([tone, count]) => (
-                      <div
-                        key={tone}
+                {/* Tone distribution ribbon */}
+                {segments.length > 0 && (
+                  <div className="relative mt-6 pt-5" style={{ borderTop: "1px solid rgba(255, 255, 255, 0.05)" }}>
+                    <div className="flex items-center gap-3 mb-3">
+                      <span
+                        className="text-[10px] uppercase tracking-[0.22em] font-semibold"
+                        style={{ color: "var(--color-text-muted)" }}
+                      >
+                        Tone distribution
+                      </span>
+                      <span
+                        aria-hidden
+                        className="flex-1 h-px"
                         style={{
-                          width: `${(count / total) * 100}%`,
-                          backgroundColor:
-                            tone === "positive" ? "var(--color-positive)"
-                            : tone === "negative" ? "var(--color-negative)"
-                            : "var(--color-neutral)",
+                          background: "linear-gradient(90deg, rgba(255, 255, 255, 0.06), transparent 80%)",
                         }}
                       />
-                    ))}
+                    </div>
+                    <div
+                      className="relative rounded-full overflow-hidden flex"
+                      style={{ height: 6, background: "rgba(255, 255, 255, 0.04)" }}
+                    >
+                      {Object.entries(toneCount).map(([tone, count]) => {
+                        const c =
+                          tone === "positive"
+                            ? "#34d399"
+                            : tone === "negative"
+                              ? "#ef4444"
+                              : "#fb923c";
+                        const rgba =
+                          tone === "positive"
+                            ? "52, 211, 153"
+                            : tone === "negative"
+                              ? "239, 68, 68"
+                              : "251, 146, 60";
+                        return (
+                          <motion.span
+                            key={tone}
+                            initial={reduce ? { width: `${(count / total) * 100}%` } : { width: 0 }}
+                            animate={{ width: `${(count / total) * 100}%` }}
+                            transition={{ duration: 0.9, ease: EASE_OUT, delay: 0.6 }}
+                            style={{
+                              backgroundColor: c,
+                              boxShadow: `0 0 12px rgba(${rgba}, 0.45)`,
+                              display: "block",
+                              height: "100%",
+                            }}
+                          />
+                        );
+                      })}
+                    </div>
+                    <div className="flex flex-wrap gap-x-5 gap-y-2 mt-3">
+                      {Object.entries(toneCount).map(([tone, count]) => {
+                        const c =
+                          tone === "positive"
+                            ? "#34d399"
+                            : tone === "negative"
+                              ? "#ef4444"
+                              : "#fb923c";
+                        return (
+                          <div key={tone} className="flex items-center gap-1.5">
+                            <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: c }} />
+                            <span
+                              className="text-[10px] uppercase tracking-[0.14em]"
+                              style={{ color: "var(--color-text-muted)" }}
+                            >
+                              {toneLabel(tone)}
+                            </span>
+                            <span className="text-[10px] tabular-nums" style={{ color: "var(--color-text)" }}>
+                              {Math.round((count / total) * 100)}%
+                            </span>
+                          </div>
+                        );
+                      })}
+                    </div>
                   </div>
-                  <div className="flex gap-4 mt-2">
-                    {Object.entries(toneCount).map(([tone, count]) => (
-                      <div key={tone} className="flex items-center gap-1.5">
-                        <div
-                          className="w-1.5 h-1.5 rounded-full"
+                )}
+              </motion.div>
+
+              {/* ============================================ */}
+              {/*  BLOCK 2 — Analysis                          */}
+              {/* ============================================ */}
+              {hasAnalysis && (
+                <motion.div
+                  initial={reduce ? { opacity: 0 } : { opacity: 0, y: 12 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, ease: EASE_OUT, delay: 0.25 }}
+                  className="relative overflow-hidden rounded-2xl p-5 sm:p-6 mb-4"
+                  style={{
+                    background:
+                      "linear-gradient(135deg, rgba(167, 139, 250, 0.05) 0%, rgba(255, 255, 255, 0.01) 100%)",
+                    border: "1px solid rgba(167, 139, 250, 0.14)",
+                    backdropFilter: "blur(20px)",
+                    WebkitBackdropFilter: "blur(20px)",
+                  }}
+                >
+                  <span
+                    aria-hidden
+                    className="absolute -top-12 -right-12 w-40 h-40 rounded-full pointer-events-none"
+                    style={{
+                      background: "radial-gradient(circle, rgba(167, 139, 250, 0.22), transparent 70%)",
+                      filter: "blur(28px)",
+                      opacity: 0.55,
+                    }}
+                  />
+
+                  <div className="relative">
+                    <div className="flex items-center gap-2 mb-4">
+                      <span
+                        className="inline-flex w-1.5 h-1.5 rounded-full"
+                        style={{ backgroundColor: "#c4b5fd" }}
+                      />
+                      <span
+                        className="text-[10px] font-semibold uppercase tracking-[0.22em]"
+                        style={{ color: "var(--color-text-muted)" }}
+                      >
+                        {t("report.analysis")}
+                      </span>
+                    </div>
+
+                    {diagnosis && (
+                      <p
+                        className="text-sm m-0 leading-relaxed mb-5"
+                        style={{ color: "var(--color-text)" }}
+                      >
+                        {diagnosis}
+                        {translating && (
+                          <span className="text-xs ml-2" style={{ color: "var(--color-text-muted)" }}>
+                            …
+                          </span>
+                        )}
+                      </p>
+                    )}
+
+                    {insights.length > 0 && (
+                      <div className="mb-5">
+                        <span
+                          className="text-[10px] uppercase tracking-[0.22em] font-semibold block mb-3"
+                          style={{ color: "var(--color-text-muted)" }}
+                        >
+                          {t("report.keyTakeaways")}
+                        </span>
+                        <div className="grid gap-3">
+                          {insights.map((insight, i) => (
+                            <motion.div
+                              key={i}
+                              initial={reduce ? { opacity: 0 } : { opacity: 0, x: -8 }}
+                              animate={{ opacity: 1, x: 0 }}
+                              transition={{ duration: 0.4, ease: EASE_OUT, delay: 0.3 + i * 0.06 }}
+                              className="flex items-start gap-4"
+                            >
+                              <span
+                                className="text-2xl font-extralight tabular-nums shrink-0 leading-none -mt-0.5"
+                                style={{
+                                  background: "linear-gradient(180deg, #c4b5fd 0%, rgba(167, 139, 250, 0.5) 100%)",
+                                  WebkitBackgroundClip: "text",
+                                  WebkitTextFillColor: "transparent",
+                                  backgroundClip: "text",
+                                  letterSpacing: "-0.03em",
+                                }}
+                              >
+                                {String(i + 1).padStart(2, "0")}
+                              </span>
+                              <p
+                                className="text-sm leading-relaxed m-0"
+                                style={{ color: "var(--color-text-silver)" }}
+                              >
+                                {insight}
+                              </p>
+                            </motion.div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Recommendation callout */}
+                    {summary && (
+                      <div
+                        className="relative overflow-hidden rounded-2xl p-4 mt-1"
+                        style={{
+                          background: "linear-gradient(135deg, rgba(52, 211, 153, 0.08) 0%, rgba(255, 255, 255, 0.01) 100%)",
+                          border: "1px solid rgba(52, 211, 153, 0.22)",
+                        }}
+                      >
+                        <span
+                          aria-hidden
+                          className="absolute -top-10 -right-10 w-32 h-32 rounded-full pointer-events-none"
                           style={{
-                            backgroundColor:
-                              tone === "positive" ? "var(--color-positive)"
-                              : tone === "negative" ? "var(--color-negative)"
-                              : "var(--color-neutral)",
+                            background: "radial-gradient(circle, rgba(52, 211, 153, 0.25), transparent 70%)",
+                            filter: "blur(24px)",
+                            opacity: 0.5,
                           }}
                         />
-                        <span className="text-[10px]" style={{ color: "var(--color-text-muted)" }}>
-                          {toneLabel(tone)} {Math.round((count / total) * 100)}%
-                        </span>
+                        <div className="relative flex items-start gap-3">
+                          <span
+                            className="inline-flex items-center justify-center w-7 h-7 rounded-full shrink-0"
+                            style={{
+                              background: "rgba(52, 211, 153, 0.15)",
+                              border: "1px solid rgba(52, 211, 153, 0.3)",
+                            }}
+                          >
+                            <svg
+                              width="13"
+                              height="13"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="#34d399"
+                              strokeWidth="2"
+                            >
+                              <path d="M12 2L2 7l10 5 10-5-10-5z" />
+                              <path d="M2 17l10 5 10-5" />
+                              <path d="M2 12l10 5 10-5" />
+                            </svg>
+                          </span>
+                          <p
+                            className="text-sm m-0 leading-relaxed"
+                            style={{ color: "var(--color-text)" }}
+                          >
+                            {summary}
+                          </p>
+                        </div>
                       </div>
-                    ))}
+                    )}
                   </div>
-                </div>
+                </motion.div>
               )}
-            </div>
 
-            {/* ============================================ */}
-            {/*  BLOCK 2 — Analysis                          */}
-            {/*  (diagnosis + insights + recommendation)     */}
-            {/* ============================================ */}
-            {hasAnalysis && (
-              <div className="glass-card p-6 mb-5">
-                <span className="text-[11px] font-semibold uppercase tracking-wider block mb-4"
-                  style={{ color: "var(--color-accent-light)" }}>
-                  {t("report.analysis")}
-                </span>
-
-                {/* Diagnosis paragraph */}
-                {diagnosis && (
-                  <p className="text-sm m-0 leading-relaxed mb-4" style={{ color: "var(--color-text)" }}>
-                    {diagnosis}
-                    {translating && <span className="text-xs ml-2" style={{ color: "var(--color-text-muted)" }}>...</span>}
-                  </p>
-                )}
-
-                {/* Key takeaways */}
-                {insights.length > 0 && (
-                  <div className="mb-4">
-                    <span className="text-[11px] font-medium uppercase tracking-wider block mb-3"
-                      style={{ color: "var(--color-text-muted)" }}>
-                      {t("report.keyTakeaways")}
-                    </span>
-                    <div className="space-y-2.5">
-                      {insights.map((insight, i) => (
-                        <div key={i} className="flex items-start gap-2.5">
-                          <div
-                            className="w-4.5 h-4.5 rounded flex items-center justify-center shrink-0 text-[10px] font-bold"
-                            style={{ backgroundColor: "var(--color-surface-2)", color: "var(--color-accent-light)" }}>
-                            {i + 1}
+              {/* ============================================ */}
+              {/*  BLOCK 3 — Strengths / Improvements          */}
+              {/* ============================================ */}
+              {hasActions && (
+                <div className="mb-4">
+                  {(strengths.length > 0 || improvements.length > 0) && (
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+                      {strengths.length > 0 && (
+                        <motion.div
+                          initial={reduce ? { opacity: 0 } : { opacity: 0, y: 12 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ duration: 0.5, ease: EASE_OUT, delay: 0.3 }}
+                          className="relative overflow-hidden rounded-2xl p-5"
+                          style={{
+                            background:
+                              "linear-gradient(135deg, rgba(52, 211, 153, 0.06) 0%, rgba(255, 255, 255, 0.01) 100%)",
+                            border: "1px solid rgba(52, 211, 153, 0.18)",
+                            backdropFilter: "blur(20px)",
+                            WebkitBackdropFilter: "blur(20px)",
+                          }}
+                        >
+                          <span
+                            aria-hidden
+                            className="absolute -top-10 -right-10 w-32 h-32 rounded-full pointer-events-none"
+                            style={{
+                              background: "radial-gradient(circle, rgba(52, 211, 153, 0.22), transparent 70%)",
+                              filter: "blur(24px)",
+                              opacity: 0.55,
+                            }}
+                          />
+                          <div className="relative">
+                            <div className="flex items-center gap-2 mb-4">
+                              <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: "#34d399" }} />
+                              <span
+                                className="text-[10px] font-semibold uppercase tracking-[0.22em]"
+                                style={{ color: "#34d399" }}
+                              >
+                                {t("report.strengths")}
+                              </span>
+                            </div>
+                            <div className="space-y-3">
+                              {strengths.map((s, i) => (
+                                <div key={i} className="flex items-start gap-2.5">
+                                  <span
+                                    className="inline-flex items-center justify-center w-5 h-5 rounded-full shrink-0 mt-0.5"
+                                    style={{
+                                      background: "rgba(52, 211, 153, 0.12)",
+                                      border: "1px solid rgba(52, 211, 153, 0.25)",
+                                    }}
+                                  >
+                                    <svg
+                                      width="10"
+                                      height="10"
+                                      viewBox="0 0 24 24"
+                                      fill="none"
+                                      stroke="#34d399"
+                                      strokeWidth="2.5"
+                                    >
+                                      <polyline points="20 6 9 17 4 12" />
+                                    </svg>
+                                  </span>
+                                  <p className="text-sm m-0 leading-relaxed" style={{ color: "var(--color-text)" }}>
+                                    {s}
+                                  </p>
+                                </div>
+                              ))}
+                            </div>
                           </div>
-                          <p className="text-sm m-0 leading-relaxed" style={{ color: "var(--color-text)" }}>
-                            {insight}
-                          </p>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
-
-                {/* Recommendation callout */}
-                {summary && (
-                  <div className="rounded-xl p-4" style={{ backgroundColor: "rgba(52,211,153,0.06)", border: "1px solid rgba(52,211,153,0.1)" }}>
-                    <div className="flex items-start gap-2.5">
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--color-positive)" strokeWidth="2" className="shrink-0 mt-0.5">
-                        <path d="M12 2L2 7l10 5 10-5-10-5z" /><path d="M2 17l10 5 10-5" /><path d="M2 12l10 5 10-5" />
-                      </svg>
-                      <p className="text-sm m-0 leading-relaxed" style={{ color: "var(--color-text)" }}>
-                        {summary}
-                      </p>
-                    </div>
-                  </div>
-                )}
-              </div>
-            )}
-
-            {/* ============================================ */}
-            {/*  BLOCK 3 — Strengths / Improvements / Next   */}
-            {/* ============================================ */}
-            {hasActions && (
-              <div className="mb-5">
-                {/* Strengths + Improvements side by side */}
-                {(strengths.length > 0 || improvements.length > 0) && (
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
-                    {strengths.length > 0 && (
-                      <div className="glass-card p-5" style={{ borderLeft: "3px solid var(--color-positive)" }}>
-                        <span className="text-[11px] font-semibold uppercase tracking-wider block mb-3"
-                          style={{ color: "var(--color-positive)" }}>
-                          {t("report.strengths")}
-                        </span>
-                        <div className="space-y-2">
-                          {strengths.map((s, i) => (
-                            <div key={i} className="flex items-start gap-2">
-                              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"
-                                className="shrink-0 mt-0.5" style={{ color: "var(--color-positive)" }}>
-                                <polyline points="20 6 9 17 4 12" />
-                              </svg>
-                              <p className="text-sm m-0" style={{ color: "var(--color-text)" }}>{s}</p>
+                        </motion.div>
+                      )}
+                      {improvements.length > 0 && (
+                        <motion.div
+                          initial={reduce ? { opacity: 0 } : { opacity: 0, y: 12 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ duration: 0.5, ease: EASE_OUT, delay: 0.35 }}
+                          className="relative overflow-hidden rounded-2xl p-5"
+                          style={{
+                            background:
+                              "linear-gradient(135deg, rgba(251, 146, 60, 0.06) 0%, rgba(255, 255, 255, 0.01) 100%)",
+                            border: "1px solid rgba(251, 146, 60, 0.20)",
+                            backdropFilter: "blur(20px)",
+                            WebkitBackdropFilter: "blur(20px)",
+                          }}
+                        >
+                          <span
+                            aria-hidden
+                            className="absolute -top-10 -right-10 w-32 h-32 rounded-full pointer-events-none"
+                            style={{
+                              background: "radial-gradient(circle, rgba(251, 146, 60, 0.22), transparent 70%)",
+                              filter: "blur(24px)",
+                              opacity: 0.55,
+                            }}
+                          />
+                          <div className="relative">
+                            <div className="flex items-center gap-2 mb-4">
+                              <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: "#fb923c" }} />
+                              <span
+                                className="text-[10px] font-semibold uppercase tracking-[0.22em]"
+                                style={{ color: "#fb923c" }}
+                              >
+                                {t("report.toImprove")}
+                              </span>
                             </div>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-                    {improvements.length > 0 && (
-                      <div className="glass-card p-5" style={{ borderLeft: "3px solid var(--color-neutral)" }}>
-                        <span className="text-[11px] font-semibold uppercase tracking-wider block mb-3"
-                          style={{ color: "var(--color-neutral)" }}>
-                          {t("report.toImprove")}
-                        </span>
-                        <div className="space-y-2">
-                          {improvements.map((imp, i) => (
-                            <div key={i} className="flex items-start gap-2">
-                              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
-                                className="shrink-0 mt-0.5" style={{ color: "var(--color-neutral)" }}>
-                                <path d="M12 20h9" /><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" />
-                              </svg>
-                              <p className="text-sm m-0" style={{ color: "var(--color-text)" }}>{imp}</p>
+                            <div className="space-y-3">
+                              {improvements.map((imp, i) => (
+                                <div key={i} className="flex items-start gap-2.5">
+                                  <span
+                                    className="inline-flex items-center justify-center w-5 h-5 rounded-full shrink-0 mt-0.5"
+                                    style={{
+                                      background: "rgba(251, 146, 60, 0.12)",
+                                      border: "1px solid rgba(251, 146, 60, 0.28)",
+                                    }}
+                                  >
+                                    <svg
+                                      width="10"
+                                      height="10"
+                                      viewBox="0 0 24 24"
+                                      fill="none"
+                                      stroke="#fb923c"
+                                      strokeWidth="2"
+                                    >
+                                      <path d="M12 20h9" />
+                                      <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" />
+                                    </svg>
+                                  </span>
+                                  <p className="text-sm m-0 leading-relaxed" style={{ color: "var(--color-text)" }}>
+                                    {imp}
+                                  </p>
+                                </div>
+                              ))}
                             </div>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                )}
-
-                {/* Next Steps */}
-                {followUp.length > 0 && (
-                  <div className="glass-card p-5">
-                    <span className="text-[11px] font-semibold uppercase tracking-wider block mb-3"
-                      style={{ color: "var(--color-accent-light)" }}>
-                      {t("report.nextSteps")}
-                    </span>
-                    <div className="space-y-2">
-                      {followUp.map((action, i) => (
-                        <div key={i} className="flex items-start gap-2.5">
-                          <div className="w-4 h-4 rounded border shrink-0 mt-0.5"
-                            style={{ borderColor: "rgba(200,200,216,0.2)" }} />
-                          <p className="text-sm m-0 leading-relaxed" style={{ color: "var(--color-text)" }}>
-                            {action}
-                          </p>
-                        </div>
-                      ))}
+                          </div>
+                        </motion.div>
+                      )}
                     </div>
-                  </div>
-                )}
-              </div>
-            )}
+                  )}
 
-            {/* ============================================ */}
-            {/*  BLOCK 4 — Transcript (collapsible)          */}
-            {/* ============================================ */}
-            <button
-              onClick={() => setTranscriptOpen(!transcriptOpen)}
-              className="w-full text-left glass-card p-4 flex items-center justify-between cursor-pointer border-0 bg-transparent transition-all hover:opacity-80"
-              style={{ color: "var(--color-text-muted)" }}>
-              <span className="text-xs font-medium">
-                {t("report.fullTranscript")} ({segments.length})
-              </span>
-              <svg
-                width="16" height="16" viewBox="0 0 24 24" fill="none"
-                stroke="currentColor" strokeWidth="2"
-                className="transition-transform"
-                style={{ transform: transcriptOpen ? "rotate(180deg)" : "rotate(0deg)" }}>
-                <polyline points="6 9 12 15 18 9" />
-              </svg>
-            </button>
-
-            {transcriptOpen && (
-              <div className="glass-card overflow-hidden mt-1 mb-5">
-                {segments.length === 0 ? (
-                  <div className="p-8 text-center">
-                    <p className="text-sm m-0" style={{ color: "var(--color-text-muted)" }}>
-                      {t("report.noTranscript")}
-                    </p>
-                  </div>
-                ) : (
-                  <div className="divide-y" style={{ borderColor: "rgba(39,39,42,0.5)" }}>
-                    {segments.map((seg) => (
-                      <div key={seg.id} className="p-3.5 flex items-start gap-3">
-                        <ToneIndicator tone={seg.tone} size="sm" showLabel={false} />
-                        <div className="flex-1 min-w-0">
-                          <p className="text-sm m-0 leading-relaxed" style={{ color: "var(--color-text)" }}>
-                            {seg.transcript}
-                          </p>
-                          <span className="text-[10px] mt-1 block" style={{ color: "var(--color-text-muted)" }}>
-                            {new Date(seg.timestamp).toLocaleTimeString()}
+                  {followUp.length > 0 && (
+                    <motion.div
+                      initial={reduce ? { opacity: 0 } : { opacity: 0, y: 12 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.5, ease: EASE_OUT, delay: 0.4 }}
+                      className="relative overflow-hidden rounded-2xl p-5"
+                      style={{
+                        background:
+                          "linear-gradient(135deg, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0.01) 100%)",
+                        border: "1px solid rgba(255, 255, 255, 0.06)",
+                        backdropFilter: "blur(20px)",
+                        WebkitBackdropFilter: "blur(20px)",
+                      }}
+                    >
+                      <span
+                        aria-hidden
+                        className="absolute -top-10 -right-10 w-32 h-32 rounded-full pointer-events-none"
+                        style={{
+                          background: "radial-gradient(circle, rgba(255, 255, 255, 0.14), transparent 70%)",
+                          filter: "blur(24px)",
+                          opacity: 0.4,
+                        }}
+                      />
+                      <div className="relative">
+                        <div className="flex items-center gap-2 mb-4">
+                          <span
+                            className="w-1.5 h-1.5 rounded-full"
+                            style={{ backgroundColor: "rgba(255, 255, 255, 0.85)" }}
+                          />
+                          <span
+                            className="text-[10px] font-semibold uppercase tracking-[0.22em]"
+                            style={{ color: "var(--color-text-muted)" }}
+                          >
+                            {t("report.nextSteps")}
                           </span>
                         </div>
+                        <div className="space-y-3">
+                          {followUp.map((action, i) => (
+                            <div key={i} className="flex items-start gap-2.5">
+                              <span
+                                className="inline-flex items-center justify-center w-5 h-5 rounded-md shrink-0 mt-0.5 text-[10px] tabular-nums"
+                                style={{
+                                  background: "rgba(255, 255, 255, 0.05)",
+                                  border: "1px solid rgba(255, 255, 255, 0.08)",
+                                  color: "var(--color-text-muted)",
+                                }}
+                              >
+                                {String(i + 1).padStart(2, "0")}
+                              </span>
+                              <p
+                                className="text-sm m-0 leading-relaxed"
+                                style={{ color: "var(--color-text)" }}
+                              >
+                                {action}
+                              </p>
+                            </div>
+                          ))}
+                        </div>
                       </div>
-                    ))}
+                    </motion.div>
+                  )}
+                </div>
+              )}
+
+              {/* ============================================ */}
+              {/*  BLOCK 4 — Transcript (collapsible)          */}
+              {/* ============================================ */}
+              <button
+                onClick={() => setTranscriptOpen(!transcriptOpen)}
+                className="w-full text-left flex items-center justify-between cursor-pointer rounded-2xl px-5 py-4 mb-1"
+                style={{
+                  background: transcriptOpen ? "rgba(255, 255, 255, 0.04)" : "rgba(255, 255, 255, 0.02)",
+                  border: "1px solid rgba(255, 255, 255, 0.06)",
+                  color: "var(--color-text)",
+                  transition: "background 0.2s ease",
+                }}
+              >
+                <span className="flex items-center gap-2">
+                  <span
+                    className="text-[10px] font-semibold uppercase tracking-[0.22em]"
+                    style={{ color: "var(--color-text-muted)" }}
+                  >
+                    {t("report.fullTranscript")}
+                  </span>
+                  <span
+                    className="text-[10px] tabular-nums px-2 py-0.5 rounded-full"
+                    style={{
+                      background: "rgba(255, 255, 255, 0.04)",
+                      border: "1px solid rgba(255, 255, 255, 0.06)",
+                      color: "var(--color-text-muted)",
+                    }}
+                  >
+                    {segments.length}
+                  </span>
+                </span>
+                <motion.svg
+                  width="14"
+                  height="14"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  animate={{ rotate: transcriptOpen ? 180 : 0 }}
+                  transition={{ type: "spring", stiffness: 400, damping: 28 }}
+                  style={{ color: "var(--color-text-muted)" }}
+                >
+                  <polyline points="6 9 12 15 18 9" />
+                </motion.svg>
+              </button>
+
+              {transcriptOpen && (
+                <motion.div
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: "auto" }}
+                  transition={{ duration: 0.32, ease: EASE_OUT }}
+                  style={{ overflow: "hidden" }}
+                  className="rounded-2xl mb-5"
+                >
+                  <div
+                    className="rounded-2xl overflow-hidden"
+                    style={{
+                      background: "rgba(255, 255, 255, 0.02)",
+                      border: "1px solid rgba(255, 255, 255, 0.05)",
+                    }}
+                  >
+                    {segments.length === 0 ? (
+                      <div className="p-8 text-center">
+                        <p className="text-sm m-0" style={{ color: "var(--color-text-muted)" }}>
+                          {t("report.noTranscript")}
+                        </p>
+                      </div>
+                    ) : (
+                      <div>
+                        {segments.map((seg, idx) => (
+                          <div
+                            key={seg.id}
+                            className="p-4 flex items-start gap-3"
+                            style={{
+                              borderTop:
+                                idx === 0 ? "none" : "1px solid rgba(255, 255, 255, 0.04)",
+                            }}
+                          >
+                            <ToneIndicator tone={seg.tone} size="sm" showLabel={false} />
+                            <div className="flex-1 min-w-0">
+                              <p
+                                className="text-sm m-0 leading-relaxed"
+                                style={{ color: "var(--color-text)" }}
+                              >
+                                {seg.transcript}
+                              </p>
+                              <span
+                                className="text-[10px] mt-1 block tabular-nums"
+                                style={{ color: "var(--color-text-muted)" }}
+                              >
+                                {new Date(seg.timestamp).toLocaleTimeString()}
+                              </span>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
                   </div>
-                )}
-              </div>
-            )}
-          </>
-        )}
+                </motion.div>
+              )}
+            </>
+          )}
+        </div>
       </div>
     </AppShell>
   );

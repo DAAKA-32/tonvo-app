@@ -6,19 +6,27 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "agents:start": "tsx agents/scheduler/index.ts",
+    "agents:run-once": "tsx agents/scheduler/run-once.ts",
+    "tiktok:list": "tsx agents/pipelines/tiktok/publish.ts list",
+    "tiktok:publish": "tsx agents/pipelines/tiktok/publish.ts publish"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.78.0",
+    "@remotion/bundler": "^4.0.451",
     "@remotion/cli": "^4.0.441",
     "@remotion/player": "^4.0.441",
+    "@remotion/renderer": "^4.0.451",
     "@stripe/stripe-js": "^8.9.0",
     "@supabase/supabase-js": "^2.98.0",
     "@upstash/ratelimit": "^2.0.8",
     "@upstash/redis": "^1.37.0",
+    "dotenv": "^16.4.5",
     "firebase": "^12.10.0",
     "framer-motion": "^12.35.2",
     "i18next": "^25.8.18",
+    "msedge-tts": "^2.0.5",
     "next": "^16.1.6",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
@@ -37,6 +45,7 @@
     "puppeteer": "^24.42.0",
     "satori": "^0.26.0",
     "tailwindcss": "^4.2.1",
+    "tsx": "^4.19.2",
     "typescript": "^5.9.3"
   }
 }

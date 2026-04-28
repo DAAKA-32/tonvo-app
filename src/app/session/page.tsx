@@ -1045,144 +1045,524 @@ export default function SessionPage() {
 
   return (
     <AppShell>
-      <div style={{ maxWidth: 1340, margin: "0 auto" }}>
-        {/* Header */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-8 gap-4">
-          <div>
-            <h1 className="section-heading text-glow mb-1">{t("session.title")}</h1>
-            {isRecording && (
-              <div className="flex items-center gap-3">
-                <span className="text-sm" style={{ color: "var(--color-text-muted)" }}>{formatTime(elapsed)}</span>
-                {analysisStatus === "completed" ? (
-                  <span className="text-xs px-2 py-1 rounded-md font-semibold" style={{ backgroundColor: "rgba(52, 211, 153, 0.12)", color: "var(--color-positive)" }}>
-                    Analysis Ready
-                  </span>
-                ) : (
-                  <div className="recording-pulse" />
-                )}
-                {audioEnabled && segments.length > 0 && (
-                  <span className="text-xs px-2 py-1 rounded-md font-medium" style={{ backgroundColor: classConfig.bg, color: classConfig.color }}>
-                    {classConfig.label}
-                  </span>
-                )}
-                {/* Free plan session countdown timer */}
-                {hasSessionTimeLimit && timeRemaining !== null && (
-                  <span
-                    className="text-xs px-2.5 py-1 rounded-md font-semibold"
+      <div style={{ maxWidth: 1340, margin: "0 auto", position: "relative" }}>
+        {/* Ambient orb — state-tinted */}
+        <motion.div
+          aria-hidden
+          style={{
+            position: "absolute",
+            top: -130,
+            right: -130,
+            width: 520,
+            height: 520,
+            borderRadius: "50%",
+            background: isRecording
+              ? "radial-gradient(circle, rgba(239, 68, 68, 0.12), transparent 65%)"
+              : "radial-gradient(circle, rgba(255, 255, 255, 0.05), transparent 65%)",
+            filter: "blur(70px)",
+            pointerEvents: "none",
+            zIndex: 0,
+            transition: "background 0.7s ease",
+          }}
+          animate={{ x: [-15, 15, -15], y: [-12, 12, -12] }}
+          transition={{ duration: 22, repeat: Infinity, ease: "easeInOut" }}
+        />
+
+        {/* ========== HEADER ========== */}
+        <div className="relative mb-7 sm:mb-9" style={{ zIndex: 1 }}>
+          {/* Status eyebrow */}
+          <div className="flex items-center gap-2.5 mb-4 flex-wrap">
+            <span className="relative inline-flex w-1.5 h-1.5">
+              <span
+                className="absolute inset-0 rounded-full"
+                style={{
+                  backgroundColor: isRecording ? "#ef4444" : "rgba(255, 255, 255, 0.85)",
+                  opacity: 0.5,
+                  animation: "pulseRing 1.8s ease-in-out infinite",
+                }}
+              />
+              <span
+                className="relative w-1.5 h-1.5 rounded-full"
+                style={{ backgroundColor: isRecording ? "#ef4444" : "rgba(255, 255, 255, 0.9)" }}
+              />
+            </span>
+            <span
+              className="text-[10px] font-semibold uppercase tracking-[0.22em]"
+              style={{ color: isRecording ? "#fca5a5" : "var(--color-text-muted)" }}
+            >
+              {isRecording ? "Live · in progress" : t("session.title")}
+            </span>
+
+            {/* Recording-state extra chips */}
+            {isRecording && analysisStatus === "completed" && (
+              <span
+                className="text-[9px] uppercase tracking-[0.18em] px-2 py-0.5 rounded-full"
+                style={{
+                  backgroundColor: "rgba(52, 211, 153, 0.12)",
+                  color: "#34d399",
+                  border: "1px solid rgba(52, 211, 153, 0.25)",
+                }}
+              >
+                Analysis Ready
+              </span>
+            )}
+            {isRecording && audioEnabled && segments.length > 0 && (
+              <span
+                className="text-[9px] uppercase tracking-[0.18em] px-2 py-0.5 rounded-full"
+                style={{ backgroundColor: classConfig.bg, color: classConfig.color }}
+              >
+                {classConfig.label}
+              </span>
+            )}
+            {isRecording && hasSessionTimeLimit && timeRemaining !== null && (
+              <span
+                className="text-[10px] tabular-nums px-2.5 py-0.5 rounded-full font-semibold"
+                style={{
+                  backgroundColor: timeRemaining <= 60
+                    ? "rgba(239, 68, 68, 0.15)"
+                    : "rgba(251, 146, 60, 0.10)",
+                  color: timeRemaining <= 60 ? "#ef4444" : "#fb923c",
+                  transition: "background-color 0.3s ease, color 0.3s ease",
+                }}
+              >
+                {Math.floor(timeRemaining / 60)}:{(timeRemaining % 60).toString().padStart(2, "0")}
+              </span>
+            )}
+          </div>
+
+          {/* Title block + broadcast launch button */}
+          <div className="flex flex-col sm:flex-row items-start sm:items-end gap-5 sm:gap-8 sm:justify-between">
+            <div className="min-w-0 flex-1">
+              {isRecording ? (
+                <motion.h1
+                  className="m-0 tabular-nums"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6 }}
+                  style={{
+                    fontSize: "clamp(48px, 9vw, 88px)",
+                    fontWeight: 200,
+                    letterSpacing: "-0.05em",
+                    lineHeight: 0.95,
+                    color: "var(--color-text)",
+                    textShadow: "0 0 40px rgba(239, 68, 68, 0.22)",
+                  }}
+                >
+                  {formatTime(elapsed)}
+                </motion.h1>
+              ) : (
+                <motion.h1
+                  className="m-0"
+                  animate={{ backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"] }}
+                  transition={{ duration: 9, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+                  style={{
+                    fontSize: "clamp(36px, 5.4vw, 60px)",
+                    fontWeight: 200,
+                    letterSpacing: "-0.035em",
+                    lineHeight: 1.05,
+                    background:
+                      "linear-gradient(115deg, #fafafa 0%, #fafafa 30%, #d4d4d8 50%, #fafafa 70%, #fafafa 100%)",
+                    backgroundSize: "240% 100%",
+                    WebkitBackgroundClip: "text",
+                    WebkitTextFillColor: "transparent",
+                    backgroundClip: "text",
+                  }}
+                >
+                  {t("session.title")}
+                </motion.h1>
+              )}
+              <p
+                className="text-sm mt-2 m-0"
+                style={{ color: "var(--color-text-muted)", maxWidth: 460 }}
+              >
+                {isRecording
+                  ? "Tonvo écoute. Reste focus sur la conversation, l'analyse arrive en temps réel."
+                  : "Configure la capture et appuie pour passer en live."}
+              </p>
+            </div>
+
+            {/* Broadcast launch button */}
+            <motion.button
+              onClick={isRecording ? stopSession : startSession}
+              disabled={sessionStarting || (!isRecording && !screenEnabled && !audioEnabled)}
+              whileHover={{ y: -3 }}
+              whileTap={{ scale: 0.97 }}
+              transition={{ type: "spring", stiffness: 320, damping: 26 }}
+              className="relative flex items-center gap-3 sm:gap-4 px-5 py-4 sm:pl-5 sm:pr-7 sm:py-5 rounded-[28px] overflow-hidden disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer w-full sm:w-auto"
+              style={{
+                background: isRecording
+                  ? "linear-gradient(135deg, rgba(239, 68, 68, 0.18) 0%, rgba(239, 68, 68, 0.04) 100%)"
+                  : "linear-gradient(135deg, rgba(52, 211, 153, 0.20) 0%, rgba(255, 255, 255, 0.04) 100%)",
+                border: isRecording
+                  ? "1px solid rgba(239, 68, 68, 0.4)"
+                  : "1px solid rgba(52, 211, 153, 0.4)",
+                boxShadow: isRecording
+                  ? "0 30px 70px -25px rgba(239, 68, 68, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.08)"
+                  : "0 30px 70px -25px rgba(52, 211, 153, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.08)",
+                color: "var(--color-text)",
+                minWidth: 240,
+                minHeight: 80,
+              }}
+            >
+              {/* concentric rings */}
+              <span
+                className="relative shrink-0 inline-flex items-center justify-center"
+                style={{ width: 56, height: 56 }}
+              >
+                {[0, 1, 2].map((i) => (
+                  <motion.span
+                    key={i}
+                    aria-hidden
+                    className="absolute rounded-full"
                     style={{
-                      backgroundColor: timeRemaining <= 60
-                        ? "rgba(248, 113, 113, 0.15)"
-                        : "rgba(251, 191, 36, 0.1)",
-                      color: timeRemaining <= 60
-                        ? "var(--color-negative)"
-                        : "var(--color-neutral)",
-                      transition: "background-color 0.3s ease, color 0.3s ease",
+                      width: 56,
+                      height: 56,
+                      border: isRecording
+                        ? "1px solid rgba(239, 68, 68, 0.6)"
+                        : "1px solid rgba(52, 211, 153, 0.6)",
+                    }}
+                    animate={{ scale: [0.35, 1.15], opacity: [0.6, 0] }}
+                    transition={{ duration: 2.2, repeat: Infinity, ease: "easeOut", delay: i * 0.7 }}
+                  />
+                ))}
+                <span
+                  aria-hidden
+                  className="absolute rounded-full"
+                  style={{
+                    width: 28,
+                    height: 28,
+                    background: isRecording
+                      ? "radial-gradient(circle, rgba(239, 68, 68, 0.5) 0%, rgba(239, 68, 68, 0.1) 60%, transparent 100%)"
+                      : "radial-gradient(circle, rgba(52, 211, 153, 0.5) 0%, rgba(52, 211, 153, 0.1) 60%, transparent 100%)",
+                    filter: "blur(2px)",
+                  }}
+                />
+                <span
+                  aria-hidden
+                  className="relative rounded-full"
+                  style={{
+                    width: 14,
+                    height: 14,
+                    background: isRecording
+                      ? "linear-gradient(180deg, #ef4444 0%, #b91c1c 100%)"
+                      : "linear-gradient(180deg, #34d399 0%, #059669 100%)",
+                    boxShadow: isRecording
+                      ? "0 0 16px rgba(239, 68, 68, 0.7), inset 0 -1px 2px rgba(0, 0, 0, 0.2)"
+                      : "0 0 16px rgba(52, 211, 153, 0.7), inset 0 -1px 2px rgba(0, 0, 0, 0.2)",
+                  }}
+                />
+              </span>
+
+              <span className="flex flex-col items-start gap-0.5 min-w-0">
+                <span
+                  className="text-[10px] uppercase tracking-[0.22em]"
+                  style={{ color: isRecording ? "#fca5a5" : "rgba(110, 231, 183, 0.85)" }}
+                >
+                  {isRecording ? "Recording" : "Ready"}
+                </span>
+                <span className="text-base sm:text-lg font-medium leading-tight">
+                  {sessionStarting
+                    ? t("session.starting", "Starting...")
+                    : isRecording
+                      ? t("session.stopSession")
+                      : t("session.startRecording")}
+                </span>
+              </span>
+            </motion.button>
+          </div>
+
+          {/* Setup row — pre-recording: segmented mode picker + capture toggles */}
+          {!isRecording && (
+            <div className="flex items-center gap-3 mt-7 flex-wrap">
+              {/* Segmented mode picker — sliding magnetic indicator */}
+              <div
+                className="relative inline-flex items-center p-1 rounded-full overflow-x-auto"
+                style={{
+                  background: "rgba(255, 255, 255, 0.025)",
+                  border: "1px solid rgba(255, 255, 255, 0.06)",
+                  scrollbarWidth: "none",
+                }}
+              >
+                {[
+                  { value: "general", label: "General" },
+                  { value: "sales", label: "Sales" },
+                  { value: "recruitment", label: "Recruitment" },
+                  { value: "support", label: "Support" },
+                  { value: "networking", label: "Networking" },
+                ].map((m) => {
+                  const active = conversationMode === m.value;
+                  return (
+                    <button
+                      key={m.value}
+                      onClick={() => setConversationMode(m.value as ConversationMode)}
+                      className="relative text-[11px] font-medium px-3.5 py-1.5 rounded-full cursor-pointer whitespace-nowrap"
+                      style={{
+                        color: active ? "var(--color-text)" : "var(--color-text-muted)",
+                        transition: "color 0.2s ease",
+                        zIndex: 1,
+                      }}
+                    >
+                      {active && (
+                        <motion.span
+                          layoutId="session-mode-active"
+                          aria-hidden
+                          className="absolute inset-0 rounded-full"
+                          style={{
+                            background:
+                              "linear-gradient(135deg, rgba(255, 255, 255, 0.10), rgba(255, 255, 255, 0.04))",
+                            border: "1px solid rgba(255, 255, 255, 0.14)",
+                            boxShadow: "0 6px 20px -8px rgba(0, 0, 0, 0.5)",
+                            zIndex: -1,
+                          }}
+                          transition={{ type: "spring", stiffness: 380, damping: 32 }}
+                        />
+                      )}
+                      <span className="relative">{m.label}</span>
+                    </button>
+                  );
+                })}
+              </div>
+
+              {/* Capture toggles — proper switches */}
+              {!isIOS && (
+                <button
+                  onClick={() => {
+                    if (!features.screenAnalysis) {
+                      toast.show(
+                        t(
+                          "session.screenProOnly",
+                          "Screen analysis is available on the Pro plan. Upgrade to unlock this feature!",
+                        ),
+                        { type: "info", duration: 5000 },
+                      );
+                      return;
+                    }
+                    setScreenEnabled((p) => !p);
+                  }}
+                  className="flex items-center gap-2.5 px-3.5 py-1.5 rounded-full text-[11px] font-medium cursor-pointer"
+                  style={{
+                    background: "rgba(255, 255, 255, 0.025)",
+                    border: "1px solid rgba(255, 255, 255, 0.06)",
+                    color:
+                      screenEnabled && features.screenAnalysis ? "var(--color-text)" : "var(--color-text-muted)",
+                    opacity: !features.screenAnalysis ? 0.5 : 1,
+                    minHeight: 32,
+                    transition: "all 0.2s ease",
+                  }}
+                  aria-pressed={screenEnabled && features.screenAnalysis}
+                >
+                  <svg
+                    width="13"
+                    height="13"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke={screenEnabled && features.screenAnalysis ? "#34d399" : "currentColor"}
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <rect x="2" y="3" width="20" height="14" rx="2" />
+                    <line x1="8" y1="21" x2="16" y2="21" />
+                    <line x1="12" y1="17" x2="12" y2="21" />
+                  </svg>
+                  <span>Screen</span>
+                  <span
+                    className="relative inline-flex shrink-0 items-center rounded-full"
+                    style={{
+                      width: 26,
+                      height: 14,
+                      padding: 1,
+                      background:
+                        screenEnabled && features.screenAnalysis
+                          ? "linear-gradient(135deg, #34d399, #6ee7b7)"
+                          : "rgba(255, 255, 255, 0.08)",
+                      border: "1px solid rgba(255, 255, 255, 0.04)",
+                      boxShadow:
+                        screenEnabled && features.screenAnalysis
+                          ? "0 4px 12px -4px rgba(52, 211, 153, 0.5)"
+                          : "none",
+                      transition: "background 0.25s ease, box-shadow 0.25s ease",
                     }}
                   >
-                    {Math.floor(timeRemaining / 60)}:{(timeRemaining % 60).toString().padStart(2, "0")} remaining
+                    <motion.span
+                      aria-hidden
+                      className="rounded-full block"
+                      animate={{
+                        x: screenEnabled && features.screenAnalysis ? 12 : 0,
+                      }}
+                      transition={{ type: "spring", stiffness: 500, damping: 32 }}
+                      style={{
+                        width: 10,
+                        height: 10,
+                        background: screenEnabled && features.screenAnalysis ? "#0a0a0a" : "#fafafa",
+                      }}
+                    />
                   </span>
-                )}
-              </div>
-            )}
-          </div>
-          <div className="flex items-center gap-3 flex-wrap">
-            {!isRecording && (
-              <select
-                value={conversationMode}
-                onChange={(e) => setConversationMode(e.target.value as ConversationMode)}
-                className="px-3 py-2 rounded-lg text-xs font-medium border cursor-pointer"
-                style={{ backgroundColor: "var(--color-surface)", borderColor: "var(--color-border)", color: "var(--color-text)" }}>
-                <option value="general">General</option>
-                <option value="sales">Sales</option>
-                <option value="recruitment">Recruitment</option>
-                <option value="support">Support</option>
-                <option value="networking">Networking</option>
-              </select>
-            )}
-            {!isRecording && !isIOS && (
+                </button>
+              )}
+
               <button
-                onClick={() => {
-                  if (!features.screenAnalysis) {
-                    toast.show(t("session.screenProOnly", "Screen analysis is available on the Pro plan. Upgrade to unlock this feature!"), { type: "info", duration: 5000 });
-                    return;
-                  }
-                  setScreenEnabled((p) => !p);
+                onClick={() => setAudioEnabled((p) => !p)}
+                className="flex items-center gap-2.5 px-3.5 py-1.5 rounded-full text-[11px] font-medium cursor-pointer"
+                style={{
+                  background: "rgba(255, 255, 255, 0.025)",
+                  border: "1px solid rgba(255, 255, 255, 0.06)",
+                  color: audioEnabled ? "var(--color-text)" : "var(--color-text-muted)",
+                  minHeight: 32,
+                  transition: "all 0.2s ease",
                 }}
-                className="mic-toggle"
-                data-active={screenEnabled && features.screenAnalysis}
-                style={!features.screenAnalysis ? { opacity: 0.5 } : undefined}
+                aria-pressed={audioEnabled}
               >
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" /><line x1="8" y1="21" x2="16" y2="21" /><line x1="12" y1="17" x2="12" y2="21" /></svg>
-                <span className="mic-toggle-label">{screenEnabled && features.screenAnalysis ? t("session.screenOn") : !features.screenAnalysis ? t("session.screenOffPro") : t("session.screenOff")}</span>
-              </button>
-            )}
-            {!isRecording && (
-              <button onClick={() => setAudioEnabled((p) => !p)} className="mic-toggle" data-active={audioEnabled}>
                 {audioEnabled ? (
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="9" y="1" width="6" height="12" rx="3" /><path d="M19 10v1a7 7 0 0 1-14 0v-1" /><line x1="12" y1="19" x2="12" y2="23" /><line x1="8" y1="23" x2="16" y2="23" /></svg>
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#34d399" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <rect x="9" y="1" width="6" height="12" rx="3" />
+                    <path d="M19 10v1a7 7 0 0 1-14 0v-1" />
+                    <line x1="12" y1="19" x2="12" y2="23" />
+                    <line x1="8" y1="23" x2="16" y2="23" />
+                  </svg>
                 ) : (
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="1" y1="1" x2="23" y2="23" /><path d="M9 9v3a3 3 0 0 0 5.12 2.12M15 9.34V4a3 3 0 0 0-5.94-.6" /><path d="M17 16.95A7 7 0 0 1 5 12v-2m14 0v2c0 .76-.12 1.5-.35 2.18" /><line x1="12" y1="19" x2="12" y2="23" /><line x1="8" y1="23" x2="16" y2="23" /></svg>
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <line x1="1" y1="1" x2="23" y2="23" />
+                    <path d="M9 9v3a3 3 0 0 0 5.12 2.12M15 9.34V4a3 3 0 0 0-5.94-.6" />
+                    <path d="M17 16.95A7 7 0 0 1 5 12v-2m14 0v2c0 .76-.12 1.5-.35 2.18" />
+                    <line x1="12" y1="19" x2="12" y2="23" />
+                    <line x1="8" y1="23" x2="16" y2="23" />
+                  </svg>
                 )}
-                <span className="mic-toggle-label">{audioEnabled ? t("session.audioOn") : t("session.audioOff")}</span>
+                <span>Audio</span>
+                <span
+                  className="relative inline-flex shrink-0 items-center rounded-full"
+                  style={{
+                    width: 26,
+                    height: 14,
+                    padding: 1,
+                    background: audioEnabled
+                      ? "linear-gradient(135deg, #34d399, #6ee7b7)"
+                      : "rgba(255, 255, 255, 0.08)",
+                    border: "1px solid rgba(255, 255, 255, 0.04)",
+                    boxShadow: audioEnabled ? "0 4px 12px -4px rgba(52, 211, 153, 0.5)" : "none",
+                    transition: "background 0.25s ease, box-shadow 0.25s ease",
+                  }}
+                >
+                  <motion.span
+                    aria-hidden
+                    className="rounded-full block"
+                    animate={{ x: audioEnabled ? 12 : 0 }}
+                    transition={{ type: "spring", stiffness: 500, damping: 32 }}
+                    style={{
+                      width: 10,
+                      height: 10,
+                      background: audioEnabled ? "#0a0a0a" : "#fafafa",
+                    }}
+                  />
+                </span>
               </button>
-            )}
-            {isRecording && (
-              <div className="flex items-center gap-2">
-                {audioService.current?.hasVideo && (
-                  <div className="mic-status-badge" data-active={!screenAnalysisCompleted}>
-                    <span className="mic-status-dot" />
-                    <span className="text-xs font-medium">{screenAnalysisCompleted ? "Screen Done" : "Screen"}</span>
-                  </div>
-                )}
-                <div className="mic-status-badge" data-active={audioService.current?.hasAudio ?? false}>
-                  <span className="mic-status-dot" />
-                  <span className="text-xs font-medium">{audioService.current?.audioEnabled ? audioService.current?.hasAudio ? "Mic" : "No Signal" : "Audio Off"}</span>
+            </div>
+          )}
+
+          {/* Recording-state status badges */}
+          {isRecording && (
+            <div className="flex items-center gap-2 mt-5 flex-wrap">
+              {audioService.current?.hasVideo && (
+                <div
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11px]"
+                  style={{
+                    background: !screenAnalysisCompleted ? "rgba(52, 211, 153, 0.10)" : "rgba(255, 255, 255, 0.04)",
+                    border: !screenAnalysisCompleted
+                      ? "1px solid rgba(52, 211, 153, 0.25)"
+                      : "1px solid rgba(255, 255, 255, 0.06)",
+                    color: !screenAnalysisCompleted ? "#34d399" : "var(--color-text-muted)",
+                  }}
+                >
+                  <span
+                    className="w-1.5 h-1.5 rounded-full"
+                    style={{ backgroundColor: !screenAnalysisCompleted ? "#34d399" : "var(--color-text-muted)" }}
+                  />
+                  <span>{screenAnalysisCompleted ? "Screen Done" : "Screen"}</span>
                 </div>
-                {audioService.current?.hasSystemAudio && (
-                  <div className="mic-status-badge" data-active={true}>
-                    <span className="mic-status-dot" />
-                    <span className="text-xs font-medium">System Audio</span>
-                  </div>
-                )}
+              )}
+              <div
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11px]"
+                style={{
+                  background: (audioService.current?.hasAudio ?? false)
+                    ? "rgba(52, 211, 153, 0.10)"
+                    : "rgba(255, 255, 255, 0.04)",
+                  border: (audioService.current?.hasAudio ?? false)
+                    ? "1px solid rgba(52, 211, 153, 0.25)"
+                    : "1px solid rgba(255, 255, 255, 0.06)",
+                  color: (audioService.current?.hasAudio ?? false) ? "#34d399" : "var(--color-text-muted)",
+                }}
+              >
+                <span
+                  className="w-1.5 h-1.5 rounded-full"
+                  style={{ backgroundColor: (audioService.current?.hasAudio ?? false) ? "#34d399" : "var(--color-text-muted)" }}
+                />
+                <span>
+                  {audioService.current?.audioEnabled
+                    ? audioService.current?.hasAudio
+                      ? "Mic"
+                      : "No Signal"
+                    : "Audio Off"}
+                </span>
               </div>
-            )}
-            <button onClick={isRecording ? stopSession : startSession} disabled={sessionStarting || (!isRecording && !screenEnabled && !audioEnabled)}
-              className="w-full sm:w-auto px-6 py-3 rounded-xl font-semibold text-white cursor-pointer border-none transition-all hover:opacity-90 disabled:opacity-40 disabled:cursor-not-allowed"
-              style={{ backgroundColor: isRecording ? "var(--color-negative)" : "var(--color-accent)", minHeight: 48 }}>
-              {sessionStarting ? t("session.starting", "Starting...") : isRecording ? t("session.stopSession") : t("session.startRecording")}
-            </button>
-          </div>
+              {audioService.current?.hasSystemAudio && (
+                <div
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11px]"
+                  style={{
+                    background: "rgba(52, 211, 153, 0.10)",
+                    border: "1px solid rgba(52, 211, 153, 0.25)",
+                    color: "#34d399",
+                  }}
+                >
+                  <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: "#34d399" }} />
+                  <span>System Audio</span>
+                </div>
+              )}
+            </div>
+          )}
         </div>
 
         {/* Free plan time limit banner */}
         {isRecording && hasSessionTimeLimit && timeRemaining !== null && (
           <div
-            className="rounded-xl p-3 mb-4 border text-xs flex items-center justify-between"
+            className="relative overflow-hidden rounded-2xl p-3 mb-4 text-xs flex items-center justify-between gap-3"
             style={{
-              backgroundColor: timeRemaining <= 60 ? "rgba(248, 113, 113, 0.06)" : "rgba(251, 191, 36, 0.04)",
-              borderColor: timeRemaining <= 60 ? "rgba(248, 113, 113, 0.25)" : "rgba(251, 191, 36, 0.15)",
-              color: timeRemaining <= 60 ? "var(--color-negative)" : "var(--color-text-muted)",
-              transition: "background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease",
+              background: timeRemaining <= 60
+                ? "linear-gradient(135deg, rgba(239, 68, 68, 0.08) 0%, rgba(255, 255, 255, 0.01) 100%)"
+                : "linear-gradient(135deg, rgba(251, 146, 60, 0.06) 0%, rgba(255, 255, 255, 0.01) 100%)",
+              border: timeRemaining <= 60
+                ? "1px solid rgba(239, 68, 68, 0.3)"
+                : "1px solid rgba(251, 146, 60, 0.22)",
+              color: timeRemaining <= 60 ? "#fca5a5" : "var(--color-text-silver)",
+              transition: "background 0.4s ease, border-color 0.4s ease, color 0.4s ease",
             }}
           >
-            <div className="flex items-center gap-2">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0 }}>
+            <div className="flex items-center gap-2.5">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke={timeRemaining <= 60 ? "#ef4444" : "#fb923c"} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0 }}>
                 <circle cx="12" cy="12" r="10" />
                 <polyline points="12 6 12 12 16 14" />
               </svg>
               <span>
-                Free plan: <strong>{Math.floor(timeRemaining / 60)}:{(timeRemaining % 60).toString().padStart(2, "0")}</strong> remaining
-                {timeRemaining <= 60 ? " — session ending soon" : ` of ${Math.floor(features.maxSessionDurationSec / 60)} min limit`}
+                <span className="text-[10px] uppercase tracking-[0.18em] font-semibold mr-2" style={{ color: timeRemaining <= 60 ? "#ef4444" : "#fb923c" }}>
+                  Free plan
+                </span>
+                <strong className="tabular-nums" style={{ color: timeRemaining <= 60 ? "#ef4444" : "#fb923c" }}>
+                  {Math.floor(timeRemaining / 60)}:{(timeRemaining % 60).toString().padStart(2, "0")}
+                </strong>
+                <span style={{ color: "var(--color-text-muted)" }}>
+                  {" "}restantes
+                  {timeRemaining <= 60 ? " — fin imminente" : ` / ${Math.floor(features.maxSessionDurationSec / 60)} min`}
+                </span>
               </span>
             </div>
             <a
               href="/pricing"
-              className="text-xs font-semibold px-3 py-1 rounded-md"
+              className="text-[11px] font-semibold px-3 py-1.5 rounded-full no-underline whitespace-nowrap"
               style={{
-                backgroundColor: "var(--color-surface-2)",
-                color: "var(--color-accent-light)",
-                textDecoration: "none",
-                whiteSpace: "nowrap",
+                background: "rgba(255, 255, 255, 0.06)",
+                border: "1px solid rgba(255, 255, 255, 0.12)",
+                color: "var(--color-text)",
+                transition: "all 0.2s ease",
               }}
             >
               Upgrade
@@ -1195,88 +1575,299 @@ export default function SessionPage() {
           <MeetingLinkInput onJoin={handleMeetingJoin} disabled={sessionStarting} />
         )}
 
-        {/* Mode info banner */}
+        {/* Mode info — subtle inline hint */}
         {!isRecording && (
-          <div className="rounded-xl p-4 mb-6 border text-sm" style={{ backgroundColor: "var(--color-surface-2)", borderColor: !screenEnabled && !audioEnabled ? "var(--color-negative)" : "var(--color-accent)", color: !screenEnabled && !audioEnabled ? "var(--color-negative)" : "var(--color-accent-light)" }}>
-            {isIOS && !screenEnabled && audioEnabled
-              ? "Audio mode: put your call on speaker — Tonvo will capture both sides via microphone for real-time analysis."
-              : isMobile && screenEnabled && audioEnabled
-              ? t("session.modeFullCapture")
-              : isMobile && !screenEnabled && audioEnabled
-              ? t("session.modeMobileAudio")
-              : screenEnabled && audioEnabled ? t("session.modeFullAnalysis") : screenEnabled && !audioEnabled ? t("session.modeScreenOnly") : !screenEnabled && audioEnabled ? t("session.modeAudioOnly") : t("session.modeNone")}
+          <div
+            className="flex items-start gap-2.5 mb-6 px-1 text-xs"
+            style={{
+              color: !screenEnabled && !audioEnabled ? "#fca5a5" : "var(--color-text-muted)",
+            }}
+          >
+            <svg
+              width="13"
+              height="13"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              style={{ marginTop: 2, flexShrink: 0, opacity: 0.7 }}
+            >
+              <circle cx="12" cy="12" r="10" />
+              <line x1="12" y1="8" x2="12" y2="12" />
+              <line x1="12" y1="16" x2="12.01" y2="16" />
+            </svg>
+            <span style={{ lineHeight: 1.5 }}>
+              {isIOS && !screenEnabled && audioEnabled
+                ? "Audio mode: put your call on speaker — Tonvo will capture both sides via microphone for real-time analysis."
+                : isMobile && screenEnabled && audioEnabled
+                  ? t("session.modeFullCapture")
+                  : isMobile && !screenEnabled && audioEnabled
+                    ? t("session.modeMobileAudio")
+                    : screenEnabled && audioEnabled
+                      ? t("session.modeFullAnalysis")
+                      : screenEnabled && !audioEnabled
+                        ? t("session.modeScreenOnly")
+                        : !screenEnabled && audioEnabled
+                          ? t("session.modeAudioOnly")
+                          : t("session.modeNone")}
+            </span>
           </div>
         )}
 
         {/* Mobile speaker tip */}
         {!isRecording && isMobile && audioEnabled && !screenEnabled && (
-          <div className="rounded-xl p-4 mb-3 border text-xs flex items-start gap-3" style={{ backgroundColor: "rgba(52, 211, 153, 0.04)", borderColor: "rgba(52, 211, 153, 0.15)", color: "var(--color-text-muted)" }}>
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" style={{ color: "var(--color-positive)", flexShrink: 0, marginTop: 1 }}>
+          <div
+            className="relative overflow-hidden rounded-2xl p-4 mb-3 flex items-start gap-3 text-xs"
+            style={{
+              background: "linear-gradient(135deg, rgba(52, 211, 153, 0.05) 0%, rgba(255, 255, 255, 0.01) 100%)",
+              border: "1px solid rgba(52, 211, 153, 0.18)",
+              color: "var(--color-text-silver)",
+            }}
+          >
+            <span aria-hidden className="absolute -top-10 -right-10 w-28 h-28 rounded-full pointer-events-none"
+              style={{ background: "radial-gradient(circle, rgba(52, 211, 153, 0.22), transparent 70%)", filter: "blur(24px)", opacity: 0.6 }} />
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" style={{ color: "#34d399", flexShrink: 0, marginTop: 2 }}>
               <path d="M11 5L6 9H2v6h4l5 4V5z" /><path d="M19.07 4.93a10 10 0 0 1 0 14.14" /><path d="M15.54 8.46a5 5 0 0 1 0 7.07" />
             </svg>
-            <div>
-              <span className="font-semibold block mb-1" style={{ color: "var(--color-positive)" }}>Speaker mode recommended</span>
-              <p className="m-0 leading-relaxed">Put your phone call on speaker or use speakerphone so Tonvo can hear both sides of the conversation through the microphone. This gives the best analysis results.</p>
+            <div className="relative">
+              <span className="text-[10px] font-semibold uppercase tracking-[0.18em] block mb-1.5" style={{ color: "#34d399" }}>Speaker mode recommended</span>
+              <p className="m-0 leading-relaxed" style={{ color: "var(--color-text-muted)" }}>Put your phone call on speaker so Tonvo can hear both sides through the microphone. Best results that way.</p>
             </div>
           </div>
         )}
 
         {/* iOS: suggest Analyze Text for screenshots */}
         {!isRecording && isIOS && (
-          <div className="rounded-xl p-4 mb-3 border text-xs flex items-start gap-3" style={{ backgroundColor: "var(--color-surface)", borderColor: "var(--color-border)", color: "var(--color-text-muted)" }}>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0, marginTop: 1 }}>
+          <div
+            className="rounded-2xl p-4 mb-3 flex items-start gap-3 text-xs"
+            style={{
+              background: "rgba(255, 255, 255, 0.02)",
+              border: "1px solid rgba(255, 255, 255, 0.05)",
+              color: "var(--color-text-muted)",
+            }}
+          >
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0, marginTop: 2, opacity: 0.7 }}>
               <rect x="3" y="3" width="18" height="18" rx="2" ry="2" /><circle cx="8.5" cy="8.5" r="1.5" /><polyline points="21 15 16 10 5 21" />
             </svg>
-            <div>
-              Want to analyze a text conversation (Instagram, Snap, WhatsApp)? Use <a href="/analyze-text" style={{ color: "var(--color-accent-light)", textDecoration: "underline", textUnderlineOffset: 2 }}>Analyze Conversation</a> to import screenshots or paste text.
-            </div>
+            <span style={{ lineHeight: 1.6 }}>
+              Pour analyser une conversation texte (Instagram, Snap, WhatsApp), utilise <a href="/analyze-text" style={{ color: "#c4b5fd", textDecoration: "underline", textUnderlineOffset: 2 }}>Analyze Conversation</a>.
+            </span>
           </div>
         )}
 
         {!isRecording && !isIOS && screenEnabled && audioEnabled && (
-          <div className="rounded-xl p-4 mb-3 border text-xs" style={{ backgroundColor: "rgba(52, 211, 153, 0.04)", borderColor: "rgba(52, 211, 153, 0.15)", color: "var(--color-text-muted)" }}>
-            <div className="flex items-center gap-2 mb-2">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ color: "var(--color-positive)", flexShrink: 0 }}><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z" /><path d="M19 10v2a7 7 0 0 1-14 0v-2" /></svg>
-              <span className="font-semibold" style={{ color: "var(--color-positive)" }}>Capture audio from Discord, Zoom, Meet, etc.</span>
+          <div
+            className="relative overflow-hidden rounded-2xl p-4 mb-3 text-xs"
+            style={{
+              background: "linear-gradient(135deg, rgba(52, 211, 153, 0.05) 0%, rgba(255, 255, 255, 0.01) 100%)",
+              border: "1px solid rgba(52, 211, 153, 0.18)",
+              color: "var(--color-text-silver)",
+            }}
+          >
+            <span aria-hidden className="absolute -top-10 -right-10 w-32 h-32 rounded-full pointer-events-none"
+              style={{ background: "radial-gradient(circle, rgba(52, 211, 153, 0.22), transparent 70%)", filter: "blur(24px)", opacity: 0.6 }} />
+            <div className="relative flex items-center gap-2 mb-2">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ color: "#34d399", flexShrink: 0 }}><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z" /><path d="M19 10v2a7 7 0 0 1-14 0v-2" /></svg>
+              <span className="text-[10px] font-semibold uppercase tracking-[0.18em]" style={{ color: "#34d399" }}>Capture audio from Discord, Zoom, Meet…</span>
             </div>
-            <p className="m-0 leading-relaxed">When the sharing dialog appears, make sure to check <strong style={{ color: "var(--color-text)" }}>&quot;Share system audio&quot;</strong> or <strong style={{ color: "var(--color-text)" }}>&quot;Also share tab audio&quot;</strong>. This lets Tonvo hear both you and the other person for a complete conversation analysis.</p>
+            <p className="relative m-0 leading-relaxed" style={{ color: "var(--color-text-muted)" }}>
+              Quand la fenêtre de partage apparaît, coche <strong style={{ color: "var(--color-text)" }}>« Share system audio »</strong> ou <strong style={{ color: "var(--color-text)" }}>« Also share tab audio »</strong>. Ça permet à Tonvo d&apos;entendre les deux interlocuteurs.
+            </p>
           </div>
         )}
 
         {!isRecording && screenEnabled && !isIOS && (
-          <div className="rounded-xl p-4 mb-3 border text-xs flex items-center gap-3" style={{ backgroundColor: "var(--color-surface)", borderColor: "var(--color-border)", color: "var(--color-text-muted)" }}>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0 }}><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z" /></svg>
-            Ensure you have the right to analyze the content visible on your screen. By starting a session, you confirm compliance with our <a href="/terms" target="_blank" style={{ color: "var(--color-accent-light)", textDecoration: "underline", textUnderlineOffset: 2 }}>Terms of Service</a>.
+          <div
+            className="rounded-2xl p-4 mb-3 flex items-center gap-3 text-xs"
+            style={{
+              background: "rgba(255, 255, 255, 0.02)",
+              border: "1px solid rgba(255, 255, 255, 0.05)",
+              color: "var(--color-text-muted)",
+            }}
+          >
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0, opacity: 0.7 }}><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z" /></svg>
+            <span style={{ lineHeight: 1.6 }}>
+              Assure-toi d&apos;avoir le droit d&apos;analyser le contenu visible. En lançant la session, tu acceptes nos <a href="/terms" target="_blank" style={{ color: "var(--color-text-silver)", textDecoration: "underline", textUnderlineOffset: 2 }}>Terms of Service</a>.
+            </span>
           </div>
         )}
 
         {!isRecording && !audioEnabled && screenEnabled && (
-          <div className="rounded-xl p-4 mb-6 border text-sm flex items-center gap-3" style={{ backgroundColor: "rgba(251, 191, 36, 0.06)", borderColor: "rgba(251, 191, 36, 0.3)", color: "var(--color-neutral)" }}>
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" /><line x1="12" y1="9" x2="12" y2="13" /><line x1="12" y1="17" x2="12.01" y2="17" /></svg>
-            Audio disabled: no transcription, no conversation analysis. Only screen content will be analyzed visually.
+          <div
+            className="relative overflow-hidden rounded-2xl p-4 mb-6 flex items-center gap-3 text-sm"
+            style={{
+              background: "linear-gradient(135deg, rgba(251, 146, 60, 0.06) 0%, rgba(255, 255, 255, 0.01) 100%)",
+              border: "1px solid rgba(251, 146, 60, 0.28)",
+              color: "#fb923c",
+            }}
+          >
+            <span aria-hidden className="absolute -top-10 -right-10 w-32 h-32 rounded-full pointer-events-none"
+              style={{ background: "radial-gradient(circle, rgba(251, 146, 60, 0.25), transparent 70%)", filter: "blur(24px)", opacity: 0.5 }} />
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0 }}>
+              <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
+              <line x1="12" y1="9" x2="12" y2="13" />
+              <line x1="12" y1="17" x2="12.01" y2="17" />
+            </svg>
+            <span className="relative" style={{ color: "var(--color-text-silver)" }}>
+              <span style={{ color: "#fb923c", fontWeight: 600 }}>Audio désactivé</span> — pas de transcription ni d&apos;analyse conversationnelle. Seul le contenu écran sera analysé.
+            </span>
           </div>
         )}
 
         {/* KPI Grid — full when idle, slim strip during live session */}
         {!isRecording ? (
-          <div className="grid gap-3 sm:gap-4 mb-8 grid-cols-2 sm:grid-cols-2 md:grid-cols-4">
-            <div className="kpi-card flex flex-col items-center justify-center">
-              <span className="text-xs uppercase tracking-wider mb-3" style={{ color: "var(--color-text-muted)" }}>Tone</span>
-              <ToneIndicator tone={currentTone} size="lg" />
-            </div>
-            <div className="kpi-card flex flex-col items-center justify-center">
-              <span className="text-xs uppercase tracking-wider mb-3" style={{ color: "var(--color-text-muted)" }}>Idle</span>
-              <AudioWave active={false} />
-            </div>
-            <div className="kpi-card flex flex-col items-center justify-center">
-              <span className="text-xs uppercase tracking-wider mb-3" style={{ color: "var(--color-text-muted)" }}>Quality</span>
-              <span className="text-3xl font-bold" style={{ color: qualityScore > 0 ? getScoreColor(qualityScore) : "var(--color-text-muted)" }}>{qualityScore > 0 ? qualityScore : "--"}</span>
-            </div>
-            <div className="kpi-card flex flex-col items-center justify-center">
-              <span className="text-xs uppercase tracking-wider mb-3" style={{ color: "var(--color-text-muted)" }}>Segments</span>
-              <span className="text-3xl font-bold" style={{ color: "var(--color-accent-light)" }}>{segments.length}</span>
-            </div>
-          </div>
+          <motion.div
+            className="grid gap-3 sm:gap-4 mb-8 grid-cols-2 sm:grid-cols-2 md:grid-cols-4"
+            initial="hidden"
+            animate="show"
+            variants={{
+              hidden: {},
+              show: { transition: { staggerChildren: 0.07, delayChildren: 0.1 } },
+            }}
+          >
+            {/* TONE */}
+            <motion.div
+              variants={{ hidden: { opacity: 0, y: 16 }, show: { opacity: 1, y: 0, transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] } } }}
+              whileHover={{ y: -3 }}
+              transition={{ type: "spring", stiffness: 320, damping: 26 }}
+              className="group relative p-4 sm:p-5 rounded-2xl overflow-hidden flex flex-col items-center justify-center min-h-[140px]"
+              style={{
+                background: "linear-gradient(135deg, rgba(255, 255, 255, 0.03) 0%, rgba(255, 255, 255, 0.01) 100%)",
+                border: "1px solid rgba(255, 255, 255, 0.06)",
+                backdropFilter: "blur(20px)",
+                WebkitBackdropFilter: "blur(20px)",
+              }}
+            >
+              <span aria-hidden className="absolute -top-12 -right-12 w-32 h-32 rounded-full opacity-30 group-hover:opacity-70 transition-opacity duration-700"
+                style={{ background: "radial-gradient(circle, rgba(255, 255, 255, 0.16), transparent 70%)", filter: "blur(28px)" }} />
+              <div className="relative flex flex-col items-center gap-3">
+                <span className="text-[10px] font-semibold uppercase tracking-[0.22em]" style={{ color: "var(--color-text-muted)" }}>Tone</span>
+                <div className="flex items-center gap-3">
+                  <span
+                    className="relative inline-flex items-center justify-center rounded-full"
+                    style={{
+                      width: 48,
+                      height: 48,
+                      background: "rgba(255, 255, 255, 0.015)",
+                      border: "1px dashed rgba(255, 255, 255, 0.12)",
+                    }}
+                  >
+                    <span
+                      className="text-xl font-extralight leading-none"
+                      style={{ color: "rgba(255, 255, 255, 0.35)" }}
+                    >
+                      —
+                    </span>
+                  </span>
+                  <span
+                    className="text-sm font-medium"
+                    style={{ color: "var(--color-text-muted)" }}
+                  >
+                    Standby
+                  </span>
+                </div>
+              </div>
+            </motion.div>
+
+            {/* IDLE / STATUS */}
+            <motion.div
+              variants={{ hidden: { opacity: 0, y: 16 }, show: { opacity: 1, y: 0, transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] } } }}
+              whileHover={{ y: -3 }}
+              transition={{ type: "spring", stiffness: 320, damping: 26 }}
+              className="group relative p-4 sm:p-5 rounded-2xl overflow-hidden flex flex-col items-center justify-center min-h-[140px]"
+              style={{
+                background: "linear-gradient(135deg, rgba(255, 255, 255, 0.03) 0%, rgba(255, 255, 255, 0.01) 100%)",
+                border: "1px solid rgba(255, 255, 255, 0.06)",
+                backdropFilter: "blur(20px)",
+                WebkitBackdropFilter: "blur(20px)",
+              }}
+            >
+              <span aria-hidden className="absolute -top-12 -right-12 w-32 h-32 rounded-full opacity-30 group-hover:opacity-70 transition-opacity duration-700"
+                style={{ background: "radial-gradient(circle, rgba(255, 255, 255, 0.14), transparent 70%)", filter: "blur(28px)" }} />
+              <div className="relative flex flex-col items-center gap-3">
+                <span className="text-[10px] font-semibold uppercase tracking-[0.22em]" style={{ color: "var(--color-text-muted)" }}>Idle</span>
+                <AudioWave active={false} />
+              </div>
+            </motion.div>
+
+            {/* QUALITY */}
+            <motion.div
+              variants={{ hidden: { opacity: 0, y: 16 }, show: { opacity: 1, y: 0, transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] } } }}
+              whileHover={{ y: -3 }}
+              transition={{ type: "spring", stiffness: 320, damping: 26 }}
+              className="group relative p-4 sm:p-5 rounded-2xl overflow-hidden flex flex-col items-center justify-center min-h-[140px]"
+              style={{
+                background: "linear-gradient(135deg, rgba(96, 165, 250, 0.05) 0%, rgba(255, 255, 255, 0.01) 100%)",
+                border: "1px solid rgba(96, 165, 250, 0.12)",
+                backdropFilter: "blur(20px)",
+                WebkitBackdropFilter: "blur(20px)",
+              }}
+            >
+              <span aria-hidden className="absolute -top-12 -right-12 w-32 h-32 rounded-full opacity-40 group-hover:opacity-90 transition-opacity duration-700"
+                style={{ background: "radial-gradient(circle, rgba(96, 165, 250, 0.28), transparent 70%)", filter: "blur(28px)" }} />
+              <div className="relative flex flex-col items-center gap-2">
+                <span className="text-[10px] font-semibold uppercase tracking-[0.22em]" style={{ color: "var(--color-text-muted)" }}>Quality</span>
+                <motion.span
+                  className="m-0 tabular-nums leading-none"
+                  animate={qualityScore > 0 ? { backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"] } : undefined}
+                  transition={qualityScore > 0 ? { duration: 9, repeat: Infinity, ease: "easeInOut" } : undefined}
+                  style={{
+                    fontSize: "clamp(34px, 4.5vw, 52px)",
+                    fontWeight: 200,
+                    letterSpacing: "-0.04em",
+                    background: qualityScore > 0
+                      ? "linear-gradient(115deg, #60a5fa 0%, #93c5fd 30%, #60a5fa 50%, #93c5fd 70%, #60a5fa 100%)"
+                      : "linear-gradient(180deg, var(--color-text-muted) 0%, rgba(113, 113, 122, 0.5) 100%)",
+                    backgroundSize: qualityScore > 0 ? "200% 100%" : undefined,
+                    WebkitBackgroundClip: "text",
+                    WebkitTextFillColor: "transparent",
+                    backgroundClip: "text",
+                  }}
+                >
+                  {qualityScore > 0 ? qualityScore : "—"}
+                </motion.span>
+              </div>
+            </motion.div>
+
+            {/* SEGMENTS */}
+            <motion.div
+              variants={{ hidden: { opacity: 0, y: 16 }, show: { opacity: 1, y: 0, transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] } } }}
+              whileHover={{ y: -3 }}
+              transition={{ type: "spring", stiffness: 320, damping: 26 }}
+              className="group relative p-4 sm:p-5 rounded-2xl overflow-hidden flex flex-col items-center justify-center min-h-[140px]"
+              style={{
+                background: "linear-gradient(135deg, rgba(167, 139, 250, 0.05) 0%, rgba(255, 255, 255, 0.01) 100%)",
+                border: "1px solid rgba(167, 139, 250, 0.12)",
+                backdropFilter: "blur(20px)",
+                WebkitBackdropFilter: "blur(20px)",
+              }}
+            >
+              <span aria-hidden className="absolute -top-12 -right-12 w-32 h-32 rounded-full opacity-40 group-hover:opacity-90 transition-opacity duration-700"
+                style={{ background: "radial-gradient(circle, rgba(167, 139, 250, 0.28), transparent 70%)", filter: "blur(28px)" }} />
+              <div className="relative flex flex-col items-center gap-2">
+                <span className="text-[10px] font-semibold uppercase tracking-[0.22em]" style={{ color: "var(--color-text-muted)" }}>Segments</span>
+                <motion.span
+                  className="m-0 tabular-nums leading-none"
+                  animate={{ backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"] }}
+                  transition={{ duration: 9, repeat: Infinity, ease: "easeInOut" }}
+                  style={{
+                    fontSize: "clamp(34px, 4.5vw, 52px)",
+                    fontWeight: 200,
+                    letterSpacing: "-0.04em",
+                    background: "linear-gradient(115deg, #fafafa 0%, #fafafa 30%, #d4d4d8 50%, #fafafa 70%, #fafafa 100%)",
+                    backgroundSize: "200% 100%",
+                    WebkitBackgroundClip: "text",
+                    WebkitTextFillColor: "transparent",
+                    backgroundClip: "text",
+                  }}
+                >
+                  {segments.length}
+                </motion.span>
+              </div>
+            </motion.div>
+          </motion.div>
         ) : (
           <motion.div
             className="live-kpi-strip mb-5"
@@ -1311,22 +1902,47 @@ export default function SessionPage() {
 
         {/* Analysis Ready Banner */}
         {isRecording && analysisStatus === "completed" && (
-          <div className="analysis-complete-banner rounded-xl border p-5 mb-6 segment-enter" style={{ backgroundColor: "rgba(52, 211, 153, 0.06)", borderColor: "rgba(52, 211, 153, 0.25)" }}>
-            <div className="flex items-center justify-between flex-wrap gap-3">
+          <motion.div
+            className="relative overflow-hidden rounded-2xl p-5 mb-6"
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+            style={{
+              background: "linear-gradient(135deg, rgba(52, 211, 153, 0.08) 0%, rgba(255, 255, 255, 0.01) 100%)",
+              border: "1px solid rgba(52, 211, 153, 0.32)",
+              boxShadow: "0 18px 40px -20px rgba(52, 211, 153, 0.4)",
+            }}
+          >
+            <span aria-hidden className="absolute -top-12 -right-12 w-40 h-40 rounded-full pointer-events-none"
+              style={{ background: "radial-gradient(circle, rgba(52, 211, 153, 0.32), transparent 70%)", filter: "blur(28px)", opacity: 0.7 }} />
+            <div className="relative flex items-center justify-between flex-wrap gap-3">
               <div className="flex items-center gap-3">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ color: "var(--color-positive)" }}><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" /><polyline points="22 4 12 14.01 9 11.01" /></svg>
+                <span className="relative inline-flex w-8 h-8 items-center justify-center rounded-full"
+                  style={{ background: "rgba(52, 211, 153, 0.15)", border: "1px solid rgba(52, 211, 153, 0.3)" }}>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ color: "#34d399" }}>
+                    <polyline points="20 6 9 17 4 12" />
+                  </svg>
+                </span>
                 <div>
-                  <p className="text-sm font-semibold m-0" style={{ color: "var(--color-positive)" }}>Analysis ready</p>
+                  <p className="text-sm font-semibold m-0" style={{ color: "#34d399" }}>Analyse prête</p>
                   <p className="text-xs m-0 mt-1" style={{ color: "var(--color-text-muted)" }}>
-                    {segments.length > 0 ? `${segments.length} segments analyzed.` : "Screen analyzed."} Session still active -- stop when you're ready.
+                    {segments.length > 0 ? `${segments.length} segments analysés.` : "Écran analysé."} Session toujours active — stoppe quand tu es prêt.
                   </p>
                 </div>
               </div>
-              <button onClick={stopSession} className="px-4 py-2 rounded-lg text-sm font-semibold border-none cursor-pointer transition-all hover:opacity-90" style={{ backgroundColor: "var(--color-positive)", color: "#000" }}>
+              <button
+                onClick={stopSession}
+                className="px-4 py-2.5 rounded-xl text-sm font-semibold border-none cursor-pointer transition-all hover:translate-y-[-1px]"
+                style={{
+                  background: "linear-gradient(135deg, #34d399, #6ee7b7)",
+                  color: "#0a0a0a",
+                  boxShadow: "0 12px 30px -10px rgba(52, 211, 153, 0.55)",
+                }}
+              >
                 Stop & View Report
               </button>
             </div>
-          </div>
+          </motion.div>
         )}
 
         {/* ============================================================ */}
