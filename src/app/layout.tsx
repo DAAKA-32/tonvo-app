@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import Providers from "@/components/Providers";
+import { inlineDetectScript } from "@/lib/performance/detect";
 import "./globals.css";
 
 const inter = Inter({
@@ -337,6 +338,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(webSiteJsonLd) }}
         />
+        <script dangerouslySetInnerHTML={{ __html: inlineDetectScript() }} />
         <script
           dangerouslySetInnerHTML={{
             __html: `(function(){try{

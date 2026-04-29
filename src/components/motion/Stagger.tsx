@@ -1,8 +1,9 @@
 "use client";
 
-import { motion, useReducedMotion } from "framer-motion";
+import { motion } from "framer-motion";
 import type { ReactNode, CSSProperties, ElementType } from "react";
 import { staggerItem, VIEWPORT } from "./transitions";
+import { usePerformance } from "@/lib/performance";
 
 interface StaggerProps {
   children: ReactNode;
@@ -23,8 +24,10 @@ export function Stagger({
   style,
   amount = 0.15,
 }: StaggerProps) {
-  const reduce = useReducedMotion();
+  const { shouldAnimate, motionScale, tier } = usePerformance();
   const Component = motion[as as keyof typeof motion] as typeof motion.div;
+
+  const tStagger = !shouldAnimate ? 0 : tier === "low" ? Math.min(stagger, 0.04) : stagger * motionScale;
 
   return (
     <Component
@@ -36,9 +39,7 @@ export function Stagger({
       variants={{
         hidden: {},
         show: {
-          transition: reduce
-            ? { staggerChildren: 0 }
-            : { staggerChildren: stagger, delayChildren },
+          transition: { staggerChildren: tStagger, delayChildren: delayChildren * motionScale },
         },
       }}
     >
@@ -60,19 +61,17 @@ export function StaggerItem({
   className,
   style,
 }: StaggerItemProps) {
-  const reduce = useReducedMotion();
+  const { shouldAnimate, tier } = usePerformance();
   const Component = motion[as as keyof typeof motion] as typeof motion.div;
 
+  const variants = !shouldAnimate
+    ? { hidden: { opacity: 0 }, show: { opacity: 1, transition: { duration: 0.3 } } }
+    : tier === "low"
+      ? { hidden: { opacity: 0, y: 8 }, show: { opacity: 1, y: 0, transition: { duration: 0.35 } } }
+      : staggerItem;
+
   return (
-    <Component
-      className={className}
-      style={style}
-      variants={
-        reduce
-          ? { hidden: { opacity: 0 }, show: { opacity: 1, transition: { duration: 0.4 } } }
-          : staggerItem
-      }
-    >
+    <Component className={className} style={style} variants={variants}>
       {children}
     </Component>
   );

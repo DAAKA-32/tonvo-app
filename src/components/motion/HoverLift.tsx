@@ -1,8 +1,9 @@
 "use client";
 
-import { motion, useReducedMotion } from "framer-motion";
+import { motion } from "framer-motion";
 import type { ReactNode, CSSProperties } from "react";
 import { springGentle } from "./transitions";
+import { usePerformance } from "@/lib/performance";
 
 interface HoverLiftProps {
   children: ReactNode;
@@ -12,11 +13,6 @@ interface HoverLiftProps {
   scale?: number;
 }
 
-/**
- * Subtle hover lift for interactive cards.
- * Disabled on touch / reduced-motion. CSS hover rules in globals.css remain authoritative
- * for color/border — this only adds a smooth motion layer where pointer hover is available.
- */
 export default function HoverLift({
   children,
   className,
@@ -24,9 +20,9 @@ export default function HoverLift({
   lift = -3,
   scale = 1.005,
 }: HoverLiftProps) {
-  const reduce = useReducedMotion();
+  const { shouldAnimate, isFine, tier } = usePerformance();
 
-  if (reduce) {
+  if (!shouldAnimate || !isFine || tier === "low") {
     return (
       <div className={className} style={style}>
         {children}
@@ -34,11 +30,13 @@ export default function HoverLift({
     );
   }
 
+  const dLift = tier === "medium" ? Math.max(lift, -2) : lift;
+
   return (
     <motion.div
       className={className}
       style={style}
-      whileHover={{ y: lift, scale }}
+      whileHover={{ y: dLift, scale }}
       transition={springGentle}
     >
       {children}

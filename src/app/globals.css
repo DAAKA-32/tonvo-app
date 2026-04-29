@@ -5069,3 +5069,76 @@ html[data-theme="light"] .grid-bg {
   }
 }
 
+/* ===========================================================
+   Adaptive Performance UI — tier overrides
+   `data-perf` is set on <html> by the inline detect script and
+   adjusted at runtime by FpsMonitor when the rolling FPS drops.
+   The cascade below downgrades expensive paint/composite work on
+   weaker devices without touching component code.
+   =========================================================== */
+
+/* MEDIUM: drop heavy blur radii and decorative parallax */
+html[data-perf="medium"] .glass-card,
+html[data-perf="medium"] .spotlight-card {
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+html[data-perf="medium"] .auth-bg-glow-1,
+html[data-perf="medium"] .auth-bg-glow-2,
+html[data-perf="medium"] .auth-bg-glow-3 {
+  filter: blur(40px);
+}
+html[data-perf="medium"] .icon-field::before,
+html[data-perf="medium"] .section-ambient {
+  animation-duration: 60s !important;
+}
+html[data-perf="medium"] .auth-bg-noise {
+  display: none;
+}
+
+/* LOW: kill backdrop-filter entirely, freeze decorative loops,
+   remove ambient glows, reduce shadow weight, shorten transitions */
+html[data-perf="low"] .glass-card,
+html[data-perf="low"] .spotlight-card,
+html[data-perf="low"] [class*="backdrop-blur"] {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  background: rgba(17, 17, 20, 0.92);
+}
+html[data-perf="low"] .hero-glow,
+html[data-perf="low"] .auth-bg-glow-1,
+html[data-perf="low"] .auth-bg-glow-2,
+html[data-perf="low"] .auth-bg-glow-3,
+html[data-perf="low"] .auth-bg-noise,
+html[data-perf="low"] .auth-bg-grid {
+  display: none;
+}
+html[data-perf="low"] .icon-field::before,
+html[data-perf="low"] .section-ambient,
+html[data-perf="low"] [style*="animation"] {
+  animation: none !important;
+}
+html[data-perf="low"] .spotlight-card::before,
+html[data-perf="low"] .spotlight-card::after {
+  display: none;
+}
+html[data-perf="low"] * {
+  transition-duration: 0.18s !important;
+}
+html[data-perf="low"] .nav-cta-btn:hover,
+html[data-perf="low"] .spotlight-card:hover {
+  transform: none;
+  box-shadow: none;
+}
+html[data-perf="low"] .nav-cta-sweep,
+html[data-perf="low"] .text-shimmer,
+html[data-perf="low"] .marquee {
+  animation: none !important;
+}
+
+/* Hint the compositor to keep adaptive surfaces on the GPU.
+   We only hint where benefit > overhead — never blanket-apply. */
+html[data-perf="high"] .spotlight-card,
+html[data-perf="high"] .glass-card {
+  transform: translateZ(0);
+}

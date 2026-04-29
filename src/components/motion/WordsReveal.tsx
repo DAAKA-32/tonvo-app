@@ -1,40 +1,24 @@
 "use client";
 
 import { Fragment } from "react";
-import { motion, useReducedMotion } from "framer-motion";
+import { motion } from "framer-motion";
 import type { CSSProperties } from "react";
 import { easeOutExpo, VIEWPORT } from "./transitions";
+import { usePerformance } from "@/lib/performance";
 
 interface WordsRevealProps {
   text: string;
   baseDelay?: number;
-  /** Apply red glow accent to the last word — used for emphasis. */
   accentLastWord?: boolean;
   accentColor?: string;
-  /**
-   * Class applied to each word span. Use this when the parent uses
-   * `background-clip: text` — the gradient must live on each child span,
-   * not be inherited, otherwise children render with transparent fill.
-   */
   wordClassName?: string;
-  /** Per-word stagger interval in seconds. */
   stagger?: number;
-  /** Initial Y offset (px) for each word. */
   y?: number;
-  /** Initial blur (px) for each word. Set to 0 to disable the blur effect. */
   blur?: number;
   duration?: number;
   style?: CSSProperties;
 }
 
-/**
- * Cinematic word-by-word reveal. Each word fades + rises + unblurs in stagger.
- * Falls back to a plain text span under reduced-motion.
- *
- * Note: words render in inline-block spans, with regular text-node spaces
- * between them. Trailing whitespace inside an inline-block element collapses,
- * so the space MUST sit between siblings — not inside the span.
- */
 export default function WordsReveal({
   text,
   baseDelay = 0,
@@ -47,16 +31,21 @@ export default function WordsReveal({
   duration = 0.6,
   style,
 }: WordsRevealProps) {
-  const reduce = useReducedMotion();
+  const { shouldAnimate, shouldUseBlur, motionScale, tier } = usePerformance();
   const words = text.split(" ");
 
-  if (reduce) {
+  if (!shouldAnimate) {
     return wordClassName ? (
       <span className={wordClassName} style={style}>{text}</span>
     ) : (
       <span style={style}>{text}</span>
     );
   }
+
+  const useBlur = shouldUseBlur && tier === "high" && blur > 0;
+  const dY = tier === "low" ? Math.min(y, 8) : tier === "medium" ? Math.min(y, 12) : y;
+  const dStagger = tier === "low" ? Math.min(stagger, 0.03) : stagger * motionScale;
+  const dDur = duration * motionScale;
 
   return (
     <>
@@ -77,12 +66,12 @@ export default function WordsReveal({
                     }
                   : style
               }
-              initial={{ opacity: 0, y, filter: blur ? `blur(${blur}px)` : "none" }}
+              initial={{ opacity: 0, y: dY, filter: useBlur ? `blur(${blur}px)` : "none" }}
               whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
               viewport={VIEWPORT}
               transition={{
-                duration,
-                delay: baseDelay + i * stagger,
+                duration: dDur,
+                delay: baseDelay + i * dStagger,
                 ease: easeOutExpo,
               }}
             >

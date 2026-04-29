@@ -1,9 +1,10 @@
 "use client";
 
-import { motion, useReducedMotion } from "framer-motion";
+import { motion } from "framer-motion";
 import Link from "next/link";
 import type { ReactNode, CSSProperties } from "react";
 import { springSnappy } from "./transitions";
+import { usePerformance } from "@/lib/performance";
 
 const MotionAnchor = motion.create(Link);
 
@@ -26,9 +27,9 @@ export default function MotionLink({
   style,
   ariaLabel,
 }: MotionLinkProps) {
-  const reduce = useReducedMotion();
+  const { shouldAnimate, tier } = usePerformance();
 
-  if (reduce) {
+  if (!shouldAnimate || tier === "low") {
     return (
       <Link href={href} className={className} style={style} aria-label={ariaLabel}>
         {children}

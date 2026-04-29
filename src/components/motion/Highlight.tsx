@@ -1,8 +1,9 @@
 "use client";
 
-import { motion, useReducedMotion } from "framer-motion";
+import { motion } from "framer-motion";
 import type { ReactNode } from "react";
 import { easeOutExpo, VIEWPORT } from "./transitions";
+import { usePerformance } from "@/lib/performance";
 
 interface HighlightProps {
   children: ReactNode;
@@ -23,14 +24,14 @@ export default function Highlight({
   delay = 0,
   bold = true,
 }: HighlightProps) {
-  const reduce = useReducedMotion();
+  const { shouldAnimate, motionScale, tier } = usePerformance();
 
   return (
     <span className="relative inline-block whitespace-nowrap">
       <span style={{ fontWeight: bold ? 600 : "inherit", color: "inherit" }}>
         {children}
       </span>
-      {!reduce && (
+      {shouldAnimate && (
         <motion.span
           aria-hidden
           className="absolute pointer-events-none"
@@ -42,13 +43,13 @@ export default function Highlight({
             borderRadius: 999,
             background: `linear-gradient(90deg, transparent, ${color}, transparent)`,
             transformOrigin: "center",
-            boxShadow: `0 0 6px ${color}`,
+            boxShadow: tier === "high" ? `0 0 6px ${color}` : "none",
           }}
           initial={{ scaleX: 0, opacity: 0 }}
           whileInView={{ scaleX: 1, opacity: 1 }}
           viewport={VIEWPORT}
           transition={{
-            duration: 0.7,
+            duration: 0.7 * motionScale,
             delay: delay + 0.25,
             ease: easeOutExpo,
           }}

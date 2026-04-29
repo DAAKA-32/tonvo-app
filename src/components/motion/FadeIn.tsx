@@ -1,8 +1,9 @@
 "use client";
 
-import { motion, useReducedMotion } from "framer-motion";
+import { motion } from "framer-motion";
 import type { ReactNode, CSSProperties, ElementType } from "react";
 import { easeOutSoft, VIEWPORT } from "./transitions";
+import { usePerformance } from "@/lib/performance";
 
 interface FadeInProps {
   children: ReactNode;
@@ -25,17 +26,35 @@ export default function FadeIn({
   style,
   once = true,
 }: FadeInProps) {
-  const reduce = useReducedMotion();
+  const { shouldAnimate, motionScale, tier } = usePerformance();
   const Component = motion[as as keyof typeof motion] as typeof motion.div;
+
+  if (!shouldAnimate) {
+    return (
+      <Component
+        className={className}
+        style={style}
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        viewport={{ ...VIEWPORT, once }}
+        transition={{ duration: 0.3, delay: delay * 0.5 }}
+      >
+        {children}
+      </Component>
+    );
+  }
+
+  const dY = tier === "low" ? Math.min(y, 8) : tier === "medium" ? Math.min(y, 16) : y;
+  const dDur = duration * motionScale;
 
   return (
     <Component
       className={className}
       style={style}
-      initial={reduce ? { opacity: 0 } : { opacity: 0, y }}
-      whileInView={reduce ? { opacity: 1 } : { opacity: 1, y: 0 }}
+      initial={{ opacity: 0, y: dY }}
+      whileInView={{ opacity: 1, y: 0 }}
       viewport={{ ...VIEWPORT, once }}
-      transition={{ duration, delay, ease: easeOutSoft }}
+      transition={{ duration: dDur, delay, ease: easeOutSoft }}
     >
       {children}
     </Component>

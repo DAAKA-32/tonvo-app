@@ -3,9 +3,11 @@
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { motion, useReducedMotion } from "framer-motion";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "@/lib/auth-context";
 import TonvoLogo from "@/components/Logo";
+import CountUp from "@/components/motion/CountUp";
 
 function IconArrowRight({ className }: { className?: string }) {
   return (
@@ -225,6 +227,7 @@ export default function LandingHero() {
   const { user, loading } = useAuth();
   const { t } = useTranslation();
   const router = useRouter();
+  const reduce = useReducedMotion();
 
   useEffect(() => {
     if (!loading && user) {
@@ -237,55 +240,302 @@ export default function LandingHero() {
 
   const ctaHref = "/login";
 
+  /* Highlight the leading metric (e.g. "27%" in "Close 27% more deals.") with
+     a gradient + scintillation. Falls back to plain text for locales without
+     a percent in the headline. */
+  const headline1 = t("landing.hero.headline1");
+  const percentMatch = headline1.match(/^(.*?)(\d+%)(.*)$/);
+
   return (
     <>
       {/* ── Hero ── */}
       <section className="relative min-h-[85vh] sm:min-h-screen flex flex-col items-center justify-center px-4 sm:px-6 pt-28 sm:pt-32 pb-8 overflow-hidden grid-bg">
-        {/* Ambient glows */}
+        {/* Static ambient glows (CSS) */}
         <div className="hero-glow" style={{ top: "-10%", left: "50%", transform: "translateX(-50%)" }} />
         <div className="hero-glow" style={{ bottom: "-20%", left: "-10%", width: 400, height: 400, background: "radial-gradient(circle, rgba(52, 211, 153, 0.04) 0%, transparent 70%)" }} />
         <div className="hero-glow" style={{ top: "30%", right: "-10%", width: 350, height: 350, background: "radial-gradient(circle, rgba(200, 200, 216, 0.04) 0%, transparent 70%)" }} />
 
         <div className="relative z-10 max-w-3xl text-center">
-          {/* Status badge */}
-          <div className="animate-fade-up flex justify-center mb-8">
+          {/* ── PREMIUM LIVE BADGE ── */}
+          <motion.div
+            initial={reduce ? { opacity: 0 } : { opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+            className="flex justify-center mb-8 sm:mb-10"
+          >
             <div
-              className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-medium"
-              style={{ background: "rgba(200, 200, 216, 0.06)", border: "1px solid rgba(200, 200, 216, 0.12)", color: "var(--color-accent-light)" }}
+              className="relative inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full text-[11px] font-medium overflow-hidden"
+              style={{
+                background:
+                  "linear-gradient(135deg, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0.02) 100%)",
+                border: "1px solid rgba(255, 255, 255, 0.08)",
+                color: "var(--color-text-silver)",
+                boxShadow:
+                  "inset 0 1px 0 rgba(255, 255, 255, 0.06), 0 8px 28px -12px rgba(52, 211, 153, 0.25)",
+                backdropFilter: "blur(14px)",
+                WebkitBackdropFilter: "blur(14px)",
+              }}
             >
-              <div className="w-2 h-2 rounded-full pulse-positive" style={{ backgroundColor: "var(--color-positive)" }} />
-              {t("landing.hero.badge")}
+              <span className="relative inline-flex w-1.5 h-1.5 shrink-0">
+                <span
+                  className="absolute inset-0 rounded-full"
+                  style={{
+                    backgroundColor: "#34d399",
+                    opacity: 0.5,
+                    animation: "pulseRing 1.8s ease-in-out infinite",
+                  }}
+                />
+                <span
+                  className="relative w-1.5 h-1.5 rounded-full"
+                  style={{
+                    backgroundColor: "#34d399",
+                    boxShadow: "0 0 8px rgba(52, 211, 153, 0.6)",
+                  }}
+                />
+              </span>
+              <span className="uppercase tracking-[0.18em]">{t("landing.hero.badge")}</span>
+              <span aria-hidden className="opacity-30">·</span>
+              <span className="tabular-nums" style={{ color: "var(--color-text)" }}>
+                <CountUp value={1247} duration={2} />{" "}
+                <span style={{ color: "var(--color-text-muted)" }}>sessions today</span>
+              </span>
             </div>
-          </div>
+          </motion.div>
 
-          {/* Headline */}
-          <h1 className="animate-fade-up animate-delay-100 hero-heading text-glow mb-6">
-            {t("landing.hero.headline1")}
-            <br />
-            <span className="text-shimmer">{t("landing.hero.headline2")}</span>
+          {/* ── HEADLINE ── */}
+          <h1 className="hero-heading text-glow mb-6" style={{ fontWeight: 700 }}>
+            <motion.span
+              initial={reduce ? { opacity: 0 } : { opacity: 0, y: 18 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.85, ease: [0.22, 1, 0.36, 1], delay: 0.1 }}
+              style={{ display: "block" }}
+            >
+              {percentMatch ? (
+                <>
+                  {percentMatch[1]}
+                  <motion.span
+                    className="inline-block tabular-nums"
+                    animate={
+                      reduce
+                        ? undefined
+                        : { backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"] }
+                    }
+                    transition={
+                      reduce
+                        ? undefined
+                        : { duration: 7, repeat: Infinity, ease: "easeInOut", delay: 1 }
+                    }
+                    style={{
+                      background:
+                        "linear-gradient(115deg, #fafafa 0%, #34d399 30%, #6ee7b7 50%, #34d399 70%, #fafafa 100%)",
+                      backgroundSize: "240% 100%",
+                      WebkitBackgroundClip: "text",
+                      WebkitTextFillColor: "transparent",
+                      backgroundClip: "text",
+                      filter: "drop-shadow(0 0 18px rgba(52, 211, 153, 0.35))",
+                    }}
+                  >
+                    {percentMatch[2]}
+                  </motion.span>
+                  {percentMatch[3]}
+                </>
+              ) : (
+                headline1
+              )}
+            </motion.span>
+            <motion.span
+              initial={reduce ? { opacity: 0 } : { opacity: 0, y: 18 }}
+              animate={
+                reduce
+                  ? { opacity: 1 }
+                  : { opacity: 1, y: 0, backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"] }
+              }
+              transition={
+                reduce
+                  ? { duration: 0.85, ease: [0.22, 1, 0.36, 1], delay: 0.25 }
+                  : {
+                      opacity: { duration: 0.85, ease: [0.22, 1, 0.36, 1], delay: 0.25 },
+                      y: { duration: 0.85, ease: [0.22, 1, 0.36, 1], delay: 0.25 },
+                      backgroundPosition: { duration: 9, repeat: Infinity, ease: "easeInOut", delay: 1.4 },
+                    }
+              }
+              className="block mt-1"
+              style={{
+                fontWeight: 200,
+                letterSpacing: "-0.025em",
+                background:
+                  "linear-gradient(115deg, rgba(255, 255, 255, 0.55) 0%, #fafafa 30%, rgba(200, 200, 216, 0.95) 50%, #fafafa 70%, rgba(255, 255, 255, 0.55) 100%)",
+                backgroundSize: "240% 100%",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+                backgroundClip: "text",
+              }}
+            >
+              {t("landing.hero.headline2")}
+            </motion.span>
           </h1>
 
-          <p className="animate-fade-up animate-delay-200 body-muted text-lg md:text-xl mb-10 max-w-xl mx-auto">
+          <motion.p
+            initial={reduce ? { opacity: 0 } : { opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1], delay: 0.4 }}
+            className="body-muted text-lg md:text-xl mb-10 max-w-xl mx-auto"
+          >
             {t("landing.hero.subtitle")}
-          </p>
+          </motion.p>
 
-          {/* CTA */}
-          <div className="animate-fade-up animate-delay-300 flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <Link
-              href={ctaHref}
-              className="btn-primary inline-flex items-center gap-2 px-8 py-3.5 text-base no-underline"
+          {/* ── PREMIUM CTAs ── */}
+          <motion.div
+            initial={reduce ? { opacity: 0 } : { opacity: 0, y: 14 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1], delay: 0.55 }}
+            className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-stretch sm:items-center"
+          >
+            {/* Primary — broadcast button */}
+            <motion.div
+              whileHover={reduce ? undefined : { y: -3 }}
+              whileTap={reduce ? undefined : { scale: 0.97 }}
+              transition={{ type: "spring", stiffness: 320, damping: 26 }}
             >
-              {t("landing.hero.cta")}
-              <IconArrowRight />
-            </Link>
-            <a
-              href="#demo"
-              className="btn-secondary inline-flex items-center gap-2 px-8 py-3.5 text-base no-underline"
-            >
-              {t("landing.hero.ctaSecondary")}
-            </a>
-          </div>
+              <Link
+                href={ctaHref}
+                className="relative inline-flex items-center gap-3 px-5 sm:px-6 py-3.5 rounded-full no-underline overflow-hidden"
+                style={{
+                  background:
+                    "linear-gradient(135deg, rgba(52, 211, 153, 0.22) 0%, rgba(52, 211, 153, 0.06) 100%)",
+                  border: "1px solid rgba(52, 211, 153, 0.4)",
+                  boxShadow:
+                    "0 24px 60px -22px rgba(52, 211, 153, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.08)",
+                  color: "var(--color-text)",
+                  minHeight: 52,
+                }}
+              >
+                <motion.span
+                  aria-hidden
+                  className="absolute top-0 bottom-0 pointer-events-none"
+                  animate={reduce ? undefined : { x: ["-130%", "230%"] }}
+                  transition={
+                    reduce
+                      ? undefined
+                      : { duration: 4.5, repeat: Infinity, ease: "easeInOut", repeatDelay: 1.6 }
+                  }
+                  style={{
+                    width: "60%",
+                    background:
+                      "linear-gradient(105deg, transparent 30%, rgba(255, 255, 255, 0.18) 50%, transparent 70%)",
+                    mixBlendMode: "screen",
+                  }}
+                />
+                <span
+                  className="relative shrink-0 inline-flex items-center justify-center"
+                  style={{ width: 28, height: 28 }}
+                >
+                  {[0, 1, 2].map((i) => (
+                    <motion.span
+                      key={i}
+                      aria-hidden
+                      className="absolute rounded-full"
+                      style={{
+                        width: 28,
+                        height: 28,
+                        border: "1px solid rgba(52, 211, 153, 0.6)",
+                      }}
+                      animate={reduce ? undefined : { scale: [0.4, 1.2], opacity: [0.55, 0] }}
+                      transition={
+                        reduce
+                          ? undefined
+                          : { duration: 2.2, repeat: Infinity, ease: "easeOut", delay: i * 0.7 }
+                      }
+                    />
+                  ))}
+                  <span
+                    aria-hidden
+                    className="relative rounded-full"
+                    style={{
+                      width: 8,
+                      height: 8,
+                      background: "linear-gradient(180deg, #34d399 0%, #059669 100%)",
+                      boxShadow: "0 0 12px rgba(52, 211, 153, 0.8)",
+                    }}
+                  />
+                </span>
+                <span className="relative text-sm sm:text-base font-semibold">
+                  {t("landing.hero.cta")}
+                </span>
+                <IconArrowRight className="relative" />
+              </Link>
+            </motion.div>
 
+            {/* Secondary — ghost glass */}
+            <motion.div
+              whileHover={reduce ? undefined : { y: -3 }}
+              transition={{ type: "spring", stiffness: 320, damping: 26 }}
+            >
+              <a
+                href="#demo"
+                className="relative inline-flex items-center gap-2 px-5 sm:px-6 py-3.5 rounded-full no-underline group w-full sm:w-auto justify-center"
+                style={{
+                  background: "rgba(255, 255, 255, 0.025)",
+                  border: "1px solid rgba(255, 255, 255, 0.08)",
+                  color: "var(--color-text-silver)",
+                  minHeight: 52,
+                  transition: "background 0.3s ease, border-color 0.3s ease, color 0.3s ease",
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.background = "rgba(255, 255, 255, 0.05)";
+                  e.currentTarget.style.borderColor = "rgba(255, 255, 255, 0.18)";
+                  e.currentTarget.style.color = "var(--color-text)";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.background = "rgba(255, 255, 255, 0.025)";
+                  e.currentTarget.style.borderColor = "rgba(255, 255, 255, 0.08)";
+                  e.currentTarget.style.color = "var(--color-text-silver)";
+                }}
+              >
+                <span className="text-sm sm:text-base font-medium">
+                  {t("landing.hero.ctaSecondary")}
+                </span>
+                <span
+                  aria-hidden
+                  className="opacity-50 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all"
+                >
+                  →
+                </span>
+              </a>
+            </motion.div>
+          </motion.div>
+
+          {/* ── TRUST LINE ── */}
+          <motion.div
+            initial={reduce ? { opacity: 0 } : { opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1], delay: 0.8 }}
+            className="mt-10 sm:mt-12 flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-[11px] uppercase tracking-[0.18em]"
+            style={{ color: "var(--color-text-muted)" }}
+          >
+            <span className="inline-flex items-center gap-1.5">
+              {[0, 1, 2, 3, 4].map((i) => (
+                <svg
+                  key={i}
+                  width="11"
+                  height="11"
+                  viewBox="0 0 24 24"
+                  fill="#fbbf24"
+                  style={{ filter: "drop-shadow(0 0 4px rgba(251, 191, 36, 0.5))" }}
+                >
+                  <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                </svg>
+              ))}
+            </span>
+            <span aria-hidden className="opacity-30 hidden sm:inline">·</span>
+            <span>
+              <span style={{ color: "var(--color-text-silver)" }}>200+</span> closing professionals
+            </span>
+            <span aria-hidden className="opacity-30 hidden sm:inline">·</span>
+            <span>
+              <span style={{ color: "#34d399" }}>+27%</span> avg close rate
+            </span>
+          </motion.div>
         </div>
 
         {/* Hero app preview — the product mockup that sells */}

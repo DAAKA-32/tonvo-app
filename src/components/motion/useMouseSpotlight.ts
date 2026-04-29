@@ -1,18 +1,21 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { usePerformance } from "@/lib/performance";
 
 /**
  * Tracks pointer position over a container as CSS custom properties (--mx, --my).
  * No React re-renders during mousemove — direct DOM updates only.
- * Falls back to no-op when pointer is coarse (touch).
+ * Disabled on coarse pointers and on tiers that don't allow spotlight.
  */
 export function useMouseSpotlight<T extends HTMLElement = HTMLDivElement>() {
   const ref = useRef<T | null>(null);
+  const { shouldUseSpotlight } = usePerformance();
 
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
+    if (!shouldUseSpotlight) return;
 
     const fine = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
     if (!fine) return;
@@ -37,7 +40,7 @@ export function useMouseSpotlight<T extends HTMLElement = HTMLDivElement>() {
       el.removeEventListener("pointerenter", onEnter);
       el.removeEventListener("pointerleave", onLeave);
     };
-  }, []);
+  }, [shouldUseSpotlight]);
 
   return ref;
 }

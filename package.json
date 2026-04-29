@@ -10,7 +10,10 @@
     "agents:start": "tsx agents/scheduler/index.ts",
     "agents:run-once": "tsx agents/scheduler/run-once.ts",
     "tiktok:list": "tsx agents/pipelines/tiktok/publish.ts list",
-    "tiktok:publish": "tsx agents/pipelines/tiktok/publish.ts publish"
+    "tiktok:publish": "tsx agents/pipelines/tiktok/publish.ts publish",
+    "scripts:generate": "tsx agents/scripts/generate-batch.ts",
+    "scripts:render-all": "tsx agents/scripts/render-all.ts",
+    "hook:log": "tsx agents/scripts/hook-log.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.78.0",

@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { animate, useInView, useReducedMotion } from "framer-motion";
+import { animate, useInView } from "framer-motion";
+import { usePerformance } from "@/lib/performance";
 
 interface CountUpProps {
   value: number;
@@ -26,24 +27,24 @@ export default function CountUp({
   className,
   formatter,
 }: CountUpProps) {
-  const reduce = useReducedMotion();
+  const { shouldAnimate, motionScale } = usePerformance();
   const ref = useRef<HTMLSpanElement>(null);
   const inView = useInView(ref, { once: true, margin: "-30px" });
-  const [display, setDisplay] = useState(reduce ? value : 0);
+  const [display, setDisplay] = useState(shouldAnimate ? 0 : value);
 
   useEffect(() => {
     if (!inView) return;
-    if (reduce) {
+    if (!shouldAnimate) {
       setDisplay(value);
       return;
     }
     const controls = animate(0, value, {
-      duration,
+      duration: duration * motionScale,
       ease: [0.22, 1, 0.36, 1],
       onUpdate: (n) => setDisplay(n),
     });
     return () => controls.stop();
-  }, [inView, value, duration, reduce]);
+  }, [inView, value, duration, shouldAnimate, motionScale]);
 
   const formatted = formatter
     ? formatter(display)

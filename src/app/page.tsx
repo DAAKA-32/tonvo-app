@@ -10,7 +10,6 @@ import TonvoLogo from "@/components/Logo";
 import LandingNavbar from "@/components/landing/LandingNavbar";
 import LandingHero from "@/components/landing/LandingHero";
 import PricingSection from "@/components/landing/PricingSection";
-import BenefitsSection from "@/components/landing/BenefitsSection";
 import UseCasesSection from "@/components/landing/UseCasesSection";
 import SolutionSection from "@/components/landing/SolutionSection";
 import ProblemSection from "@/components/landing/ProblemSection";
@@ -382,9 +381,6 @@ export default function HomePage() {
             </FadeIn>
           </div>
         </section>
-
-        {/* ── Benefits (client component: framer-motion) ── */}
-        <BenefitsSection />
 
         {/* ── Use Cases (client component: framer-motion) ── */}
         <UseCasesSection />
