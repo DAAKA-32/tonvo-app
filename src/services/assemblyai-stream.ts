@@ -170,6 +170,9 @@ export class AssemblyAIStreamingService {
       url.searchParams.set("sample_rate", String(SAMPLE_RATE));
       url.searchParams.set("speech_model", "universal-streaming-multilingual");
       url.searchParams.set("format_turns", "true");
+      // Identify who said what — used by the Speaker Breakdown in the post-call report.
+      // Silently ignored on streaming variants that don't support it.
+      url.searchParams.set("speaker_diarization", "true");
       if (this.currentLanguage === "auto") {
         url.searchParams.set("language_detection", "true");
       } else {
