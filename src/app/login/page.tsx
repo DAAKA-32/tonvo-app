@@ -635,11 +635,25 @@ function LoginPageInner() {
         {/* Google Auth — placed first like Resend */}
         <motion.button
           onClick={handleGoogleAuth}
-          className="auth-btn-google"
+          className="auth-btn-google relative overflow-hidden rounded-full"
           type="button"
           whileHover={reduce ? undefined : { y: -1 }}
           whileTap={reduce ? undefined : { scale: 0.98 }}
           transition={SPRING_TAP}
+          style={{
+            background: "rgba(255, 255, 255, 0.025)",
+            border: "1px solid rgba(255, 255, 255, 0.08)",
+            color: "var(--color-text)",
+            transition: "background 0.25s ease, border-color 0.25s ease",
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.background = "rgba(255, 255, 255, 0.05)";
+            e.currentTarget.style.borderColor = "rgba(255, 255, 255, 0.18)";
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.background = "rgba(255, 255, 255, 0.025)";
+            e.currentTarget.style.borderColor = "rgba(255, 255, 255, 0.08)";
+          }}
         >
           <GoogleIcon />
           {t("auth.continueWithGoogle")}
@@ -756,7 +770,7 @@ function LoginPageInner() {
           <motion.button
             type="submit"
             disabled={loading || (isRegister && !acceptedTerms)}
-            className="auth-btn-primary w-full"
+            className="auth-btn-primary w-full relative overflow-hidden rounded-full"
             whileHover={
               reduce || loading || (isRegister && !acceptedTerms)
                 ? undefined
@@ -768,7 +782,29 @@ function LoginPageInner() {
                 : { scale: 0.98 }
             }
             transition={SPRING_TAP}
+            style={{
+              background:
+                "linear-gradient(135deg, rgba(52, 211, 153, 0.22) 0%, rgba(52, 211, 153, 0.06) 100%)",
+              border: "1px solid rgba(52, 211, 153, 0.4)",
+              boxShadow:
+                "0 24px 60px -22px rgba(52, 211, 153, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.08)",
+              color: "var(--color-text)",
+            }}
           >
+            {!reduce && !loading && !(isRegister && !acceptedTerms) && (
+              <motion.span
+                aria-hidden
+                className="absolute top-0 bottom-0 pointer-events-none"
+                animate={{ x: ["-130%", "230%"] }}
+                transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut", repeatDelay: 2 }}
+                style={{
+                  width: "60%",
+                  background:
+                    "linear-gradient(105deg, transparent 30%, rgba(255, 255, 255, 0.18) 50%, transparent 70%)",
+                  mixBlendMode: "screen",
+                }}
+              />
+            )}
             <AnimatePresence mode="wait" initial={false}>
               {loading ? (
                 <motion.span

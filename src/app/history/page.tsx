@@ -68,9 +68,9 @@ function groupByDay(items: Conversation[]): { dayKey: string; date: Date; items:
 
 const TONE_COLORS: Record<string, { dot: string; bg: string; label: string; rgba: string }> = {
   positive: { dot: "#34d399", bg: "rgba(52, 211, 153, 0.10)", label: "Positive", rgba: "52, 211, 153" },
-  neutral: { dot: "#fb923c", bg: "rgba(251, 146, 60, 0.10)", label: "Neutral", rgba: "251, 146, 60" },
-  negative: { dot: "#ef4444", bg: "rgba(239, 68, 68, 0.10)", label: "Negative", rgba: "239, 68, 68" },
-  hesitant: { dot: "#fb923c", bg: "rgba(251, 146, 60, 0.10)", label: "Hesitant", rgba: "251, 146, 60" },
+  neutral: { dot: "#fbbf24", bg: "rgba(251, 191, 36, 0.10)", label: "Neutral", rgba: "251, 191, 36" },
+  negative: { dot: "#fb7185", bg: "rgba(251, 113, 133, 0.10)", label: "Negative", rgba: "251, 113, 133" },
+  hesitant: { dot: "#fbbf24", bg: "rgba(251, 191, 36, 0.10)", label: "Hesitant", rgba: "251, 191, 36" },
 };
 
 /* ----------------------------------------------------------------- */
@@ -600,8 +600,8 @@ export default function HistoryPage() {
               {([
                 { key: "all", label: t("common.all"), count: conversations.length, color: null },
                 { key: "positive", label: t("common.positive"), count: toneCounts.positive, color: "#34d399" },
-                { key: "neutral", label: t("common.neutral"), count: toneCounts.neutral, color: "#fb923c" },
-                { key: "negative", label: t("common.negative"), count: toneCounts.negative, color: "#ef4444" },
+                { key: "neutral", label: t("common.neutral"), count: toneCounts.neutral, color: "#fbbf24" },
+                { key: "negative", label: t("common.negative"), count: toneCounts.negative, color: "#fb7185" },
               ] as { key: ToneFilter; label: string; count: number; color: string | null }[]).map((chip) => (
                 <FilterChip
                   key={chip.key}

@@ -420,10 +420,21 @@ export default function HomePage() {
 
             <MotionLink
               href={ctaHref}
-              className="btn-primary inline-flex items-center gap-2 px-10 py-4 text-base no-underline"
+              className="relative overflow-hidden inline-flex items-center gap-3 px-7 sm:px-9 py-4 text-base no-underline rounded-full font-semibold"
+              style={{
+                background:
+                  "linear-gradient(135deg, rgba(52, 211, 153, 0.22) 0%, rgba(52, 211, 153, 0.06) 100%)",
+                border: "1px solid rgba(52, 211, 153, 0.4)",
+                boxShadow:
+                  "0 28px 70px -22px rgba(52, 211, 153, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.08)",
+                color: "var(--color-text)",
+                minHeight: 56,
+              }}
             >
-              {t("landing.cta.button")}
-              <IconArrowRight />
+              <span className="relative z-10 inline-flex items-center gap-2">
+                {t("landing.cta.button")}
+                <IconArrowRight />
+              </span>
             </MotionLink>
 
             <FadeIn as="p" className="text-xs mt-6" style={{ color: "var(--color-text-muted)" }} delay={0.18} y={8}>

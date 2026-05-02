@@ -36,47 +36,107 @@ export default function LanguageSelector() {
     <div ref={ref} className="relative">
       <button
         onClick={() => setOpen(!open)}
-        className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs border-none cursor-pointer transition-colors"
-        style={{ background: "rgba(255,255,255,0.04)", color: "var(--color-text-muted)" }}
+        className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs border-none cursor-pointer"
+        style={{
+          background: open ? "rgba(255, 255, 255, 0.06)" : "rgba(255, 255, 255, 0.025)",
+          border: `1px solid rgba(255, 255, 255, ${open ? 0.18 : 0.08})`,
+          color: "var(--color-text-silver)",
+          transition: "background 0.25s ease, border-color 0.25s ease, color 0.25s ease",
+        }}
+        onMouseEnter={(e) => {
+          if (open) return;
+          e.currentTarget.style.background = "rgba(255, 255, 255, 0.06)";
+          e.currentTarget.style.borderColor = "rgba(255, 255, 255, 0.18)";
+          e.currentTarget.style.color = "var(--color-text)";
+        }}
+        onMouseLeave={(e) => {
+          if (open) return;
+          e.currentTarget.style.background = "rgba(255, 255, 255, 0.025)";
+          e.currentTarget.style.borderColor = "rgba(255, 255, 255, 0.08)";
+          e.currentTarget.style.color = "var(--color-text-silver)";
+        }}
         aria-label="Change language"
       >
         <span>{FLAG_EMOJI[current.flag] || "🌐"}</span>
-        <span className="hidden sm:inline">{current.code.toUpperCase()}</span>
-        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ opacity: 0.5 }}>
+        <span className="hidden sm:inline font-medium tracking-[0.06em]">
+          {current.code.toUpperCase()}
+        </span>
+        <svg
+          width="10"
+          height="10"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2.5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          style={{
+            opacity: 0.6,
+            transform: open ? "rotate(180deg)" : "rotate(0deg)",
+            transition: "transform 0.25s ease",
+          }}
+        >
           <path d="m6 9 6 6 6-6" />
         </svg>
       </button>
 
       {open && (
         <div
-          className="absolute right-0 top-full mt-1.5 py-1.5 rounded-xl z-50 min-w-[160px]"
+          className="absolute right-0 top-full mt-2 py-1.5 rounded-2xl z-50 min-w-42.5 overflow-hidden"
           style={{
-            background: "rgba(20, 20, 24, 0.98)",
-            backdropFilter: "blur(16px)",
-            border: "1px solid rgba(255,255,255,0.08)",
-            boxShadow: "0 12px 40px rgba(0,0,0,0.5)",
+            background:
+              "linear-gradient(135deg, rgba(20, 20, 24, 0.96) 0%, rgba(15, 15, 18, 0.96) 100%)",
+            backdropFilter: "blur(20px) saturate(160%)",
+            WebkitBackdropFilter: "blur(20px) saturate(160%)",
+            border: "1px solid rgba(255, 255, 255, 0.08)",
+            boxShadow:
+              "0 24px 60px -20px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.04)",
           }}
         >
-          {SUPPORTED_LANGUAGES.map((lang) => (
-            <button
-              key={lang.code}
-              onClick={() => select(lang.code)}
-              className="flex items-center gap-2.5 w-full px-3.5 py-2 text-left text-sm border-none cursor-pointer transition-colors"
-              style={{
-                background: lang.code === i18n.language ? "rgba(255,255,255,0.06)" : "transparent",
-                color: lang.code === i18n.language ? "var(--color-text)" : "var(--color-text-muted)",
-                fontWeight: lang.code === i18n.language ? 600 : 400,
-              }}
-            >
-              <span>{FLAG_EMOJI[lang.flag] || "🌐"}</span>
-              <span>{lang.label}</span>
-              {lang.code === i18n.language && (
-                <svg className="ml-auto" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--color-positive)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                  <polyline points="20 6 9 17 4 12" />
-                </svg>
-              )}
-            </button>
-          ))}
+          {SUPPORTED_LANGUAGES.map((lang) => {
+            const active = lang.code === i18n.language;
+            return (
+              <button
+                key={lang.code}
+                onClick={() => select(lang.code)}
+                className="flex items-center gap-2.5 w-full px-3.5 py-2 text-left text-sm border-none cursor-pointer"
+                style={{
+                  background: active ? "rgba(255, 255, 255, 0.06)" : "transparent",
+                  color: active ? "var(--color-text)" : "var(--color-text-silver)",
+                  fontWeight: active ? 600 : 400,
+                  transition: "background 0.2s ease, color 0.2s ease",
+                }}
+                onMouseEnter={(e) => {
+                  if (active) return;
+                  e.currentTarget.style.background = "rgba(255, 255, 255, 0.04)";
+                  e.currentTarget.style.color = "var(--color-text)";
+                }}
+                onMouseLeave={(e) => {
+                  if (active) return;
+                  e.currentTarget.style.background = "transparent";
+                  e.currentTarget.style.color = "var(--color-text-silver)";
+                }}
+              >
+                <span>{FLAG_EMOJI[lang.flag] || "🌐"}</span>
+                <span>{lang.label}</span>
+                {active && (
+                  <svg
+                    className="ml-auto"
+                    width="13"
+                    height="13"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="#34d399"
+                    strokeWidth="2.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <polyline points="20 6 9 17 4 12" />
+                  </svg>
+                )}
+              </button>
+            );
+          })}
         </div>
       )}
     </div>

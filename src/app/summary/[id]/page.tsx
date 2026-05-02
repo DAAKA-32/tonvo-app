@@ -394,7 +394,7 @@ export default function SummaryPage() {
                 </div>
 
                 <motion.h1
-                  className="m-0 break-words"
+                  className="m-0 wrap-break-word"
                   animate={reduce ? undefined : { backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"] }}
                   transition={
                     reduce

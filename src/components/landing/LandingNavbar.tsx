@@ -221,7 +221,23 @@ export default function LandingNavbar() {
                 >
                   <Link
                     href="/login"
-                    className="nav-signin-link text-sm no-underline px-4 py-2 rounded-lg"
+                    className="text-sm no-underline px-4 py-2 rounded-full inline-flex items-center"
+                    style={{
+                      background: "rgba(255, 255, 255, 0.025)",
+                      border: "1px solid rgba(255, 255, 255, 0.08)",
+                      color: "var(--color-text-silver)",
+                      transition: "background 0.25s ease, border-color 0.25s ease, color 0.25s ease",
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.background = "rgba(255, 255, 255, 0.06)";
+                      e.currentTarget.style.borderColor = "rgba(255, 255, 255, 0.18)";
+                      e.currentTarget.style.color = "var(--color-text)";
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.background = "rgba(255, 255, 255, 0.025)";
+                      e.currentTarget.style.borderColor = "rgba(255, 255, 255, 0.08)";
+                      e.currentTarget.style.color = "var(--color-text-silver)";
+                    }}
                   >
                     {t("landing.nav.signIn")}
                   </Link>
@@ -430,30 +446,47 @@ interface NavCTAProps {
 }
 
 /**
- * Premium CTA — gradient background with subtle sweep on hover, spring scale on tap.
- * Reduced-motion fallback: static button, no scaling.
+ * Premium broadcast CTA — mint glass pill with halo shadow, animated diagonal
+ * shimmer sweep on hover. Matches the rest of the app's primary action style.
  */
 function NavCTA({ href, children, reduce, block, onClick }: NavCTAProps) {
   return (
     <motion.div
       className={block ? "block" : "inline-block"}
-      whileHover={reduce ? undefined : { scale: 1.03 }}
+      whileHover={reduce ? undefined : { y: -1 }}
       whileTap={reduce ? undefined : { scale: 0.97 }}
       transition={SPRING_TAP}
     >
       <Link
         href={href}
         onClick={onClick}
-        className={`nav-cta-btn relative overflow-hidden text-sm no-underline ${
-          block ? "w-full justify-center flex items-center" : ""
-        } px-5 py-2 rounded-lg font-medium text-white`}
+        className={`relative overflow-hidden text-sm no-underline ${
+          block ? "w-full justify-center flex items-center" : "inline-flex items-center"
+        } px-5 py-2 rounded-full font-semibold`}
         style={{
-          background: "linear-gradient(135deg, var(--color-accent) 0%, #6e6e82 100%)",
-          display: block ? "flex" : "inline-flex",
+          background:
+            "linear-gradient(135deg, rgba(52, 211, 153, 0.22) 0%, rgba(52, 211, 153, 0.06) 100%)",
+          border: "1px solid rgba(52, 211, 153, 0.4)",
+          boxShadow:
+            "0 16px 40px -18px rgba(52, 211, 153, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.08)",
+          color: "var(--color-text)",
         }}
       >
+        {!reduce && (
+          <motion.span
+            aria-hidden
+            className="absolute top-0 bottom-0 pointer-events-none"
+            animate={{ x: ["-130%", "230%"] }}
+            transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut", repeatDelay: 2 }}
+            style={{
+              width: "60%",
+              background:
+                "linear-gradient(105deg, transparent 30%, rgba(255, 255, 255, 0.18) 50%, transparent 70%)",
+              mixBlendMode: "screen",
+            }}
+          />
+        )}
         <span className="relative z-10">{children}</span>
-        {!reduce && <span className="nav-cta-sweep" aria-hidden />}
       </Link>
     </motion.div>
   );

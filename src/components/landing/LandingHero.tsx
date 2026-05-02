@@ -7,7 +7,6 @@ import { motion, useReducedMotion } from "framer-motion";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "@/lib/auth-context";
 import TonvoLogo from "@/components/Logo";
-import CountUp from "@/components/motion/CountUp";
 
 function IconArrowRight({ className }: { className?: string }) {
   return (
@@ -256,52 +255,6 @@ export default function LandingHero() {
         <div className="hero-glow" style={{ top: "30%", right: "-10%", width: 350, height: 350, background: "radial-gradient(circle, rgba(200, 200, 216, 0.04) 0%, transparent 70%)" }} />
 
         <div className="relative z-10 max-w-3xl text-center">
-          {/* ── PREMIUM LIVE BADGE ── */}
-          <motion.div
-            initial={reduce ? { opacity: 0 } : { opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-            className="flex justify-center mb-8 sm:mb-10"
-          >
-            <div
-              className="relative inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full text-[11px] font-medium overflow-hidden"
-              style={{
-                background:
-                  "linear-gradient(135deg, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0.02) 100%)",
-                border: "1px solid rgba(255, 255, 255, 0.08)",
-                color: "var(--color-text-silver)",
-                boxShadow:
-                  "inset 0 1px 0 rgba(255, 255, 255, 0.06), 0 8px 28px -12px rgba(52, 211, 153, 0.25)",
-                backdropFilter: "blur(14px)",
-                WebkitBackdropFilter: "blur(14px)",
-              }}
-            >
-              <span className="relative inline-flex w-1.5 h-1.5 shrink-0">
-                <span
-                  className="absolute inset-0 rounded-full"
-                  style={{
-                    backgroundColor: "#34d399",
-                    opacity: 0.5,
-                    animation: "pulseRing 1.8s ease-in-out infinite",
-                  }}
-                />
-                <span
-                  className="relative w-1.5 h-1.5 rounded-full"
-                  style={{
-                    backgroundColor: "#34d399",
-                    boxShadow: "0 0 8px rgba(52, 211, 153, 0.6)",
-                  }}
-                />
-              </span>
-              <span className="uppercase tracking-[0.18em]">{t("landing.hero.badge")}</span>
-              <span aria-hidden className="opacity-30">·</span>
-              <span className="tabular-nums" style={{ color: "var(--color-text)" }}>
-                <CountUp value={1247} duration={2} />{" "}
-                <span style={{ color: "var(--color-text-muted)" }}>sessions today</span>
-              </span>
-            </div>
-          </motion.div>
-
           {/* ── HEADLINE ── */}
           <h1 className="hero-heading text-glow mb-6" style={{ fontWeight: 700 }}>
             <motion.span
@@ -505,20 +458,20 @@ export default function LandingHero() {
             </motion.div>
           </motion.div>
 
-          {/* ── TRUST LINE ── */}
+          {/* ── 5-STAR ORNAMENT ── */}
           <motion.div
             initial={reduce ? { opacity: 0 } : { opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1], delay: 0.8 }}
-            className="mt-10 sm:mt-12 flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-[11px] uppercase tracking-[0.18em]"
-            style={{ color: "var(--color-text-muted)" }}
+            className="mt-8 sm:mt-10 flex justify-center"
+            aria-hidden
           >
             <span className="inline-flex items-center gap-1.5">
               {[0, 1, 2, 3, 4].map((i) => (
                 <svg
                   key={i}
-                  width="11"
-                  height="11"
+                  width="13"
+                  height="13"
                   viewBox="0 0 24 24"
                   fill="#fbbf24"
                   style={{ filter: "drop-shadow(0 0 4px rgba(251, 191, 36, 0.5))" }}
@@ -527,15 +480,8 @@ export default function LandingHero() {
                 </svg>
               ))}
             </span>
-            <span aria-hidden className="opacity-30 hidden sm:inline">·</span>
-            <span>
-              <span style={{ color: "var(--color-text-silver)" }}>200+</span> closing professionals
-            </span>
-            <span aria-hidden className="opacity-30 hidden sm:inline">·</span>
-            <span>
-              <span style={{ color: "#34d399" }}>+27%</span> avg close rate
-            </span>
           </motion.div>
+
         </div>
 
         {/* Hero app preview — the product mockup that sells */}

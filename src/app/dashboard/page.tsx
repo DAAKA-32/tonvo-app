@@ -39,25 +39,26 @@ function useGreeting() {
   return t("dashboard.greetingEvening");
 }
 
-/* Vibrant semantic palette — green / orange / red with peps. */
+/* Refined sentiment palette — Apple Health-inspired: vibrant mint, warm
+   amber (not aggressive orange), soft coral (not alarm red). */
 const TONE_PALETTE = {
   positive: {
     color: "#34d399",
     soft: "rgba(110, 231, 183, 0.85)",
     rgba: "52, 211, 153",
-    glow: "rgba(52, 211, 153, 0.55)",
+    glow: "rgba(52, 211, 153, 0.45)",
   },
   neutral: {
-    color: "#fb923c",
-    soft: "rgba(253, 186, 116, 0.9)",
-    rgba: "251, 146, 60",
-    glow: "rgba(251, 146, 60, 0.55)",
+    color: "#fbbf24",
+    soft: "rgba(252, 211, 77, 0.9)",
+    rgba: "251, 191, 36",
+    glow: "rgba(251, 191, 36, 0.45)",
   },
   negative: {
-    color: "#ef4444",
-    soft: "rgba(248, 113, 113, 0.9)",
-    rgba: "239, 68, 68",
-    glow: "rgba(239, 68, 68, 0.55)",
+    color: "#fb7185",
+    soft: "rgba(252, 165, 165, 0.9)",
+    rgba: "251, 113, 133",
+    glow: "rgba(251, 113, 133, 0.45)",
   },
 } as const;
 
@@ -105,7 +106,7 @@ function ToneWheel({
         >
           <defs>
             <filter id="tone-glow" x="-50%" y="-50%" width="200%" height="200%">
-              <feGaussianBlur stdDeviation="4" result="blur" />
+              <feGaussianBlur stdDeviation="2.5" result="blur" />
               <feMerge>
                 <feMergeNode in="blur" />
                 <feMergeNode in="SourceGraphic" />
@@ -122,6 +123,52 @@ function ToneWheel({
           />
           {!empty && !loading && (
             <>
+              {/* Glow halo layer — blurred copies of each arc behind the crisp ones.
+                  Adding +1 overlap to each dasharray closes any sub-pixel gap
+                  while keeping the visible color span correct. */}
+              <g style={{ filter: "url(#tone-glow)", opacity: 0.6 }}>
+                <motion.circle
+                  cx={size / 2}
+                  cy={size / 2}
+                  r={radius}
+                  fill="none"
+                  stroke={TONE_PALETTE.positive.color}
+                  strokeWidth={stroke}
+                  strokeLinecap="butt"
+                  strokeDashoffset={-positiveOffset}
+                  initial={reduce ? undefined : { strokeDasharray: `0 ${circumference}` }}
+                  animate={{ strokeDasharray: `${Math.max(0, positiveLen + 1)} ${circumference}` }}
+                  transition={{ duration: 1.1, ease: EASE, delay: 0.3 }}
+                />
+                <motion.circle
+                  cx={size / 2}
+                  cy={size / 2}
+                  r={radius}
+                  fill="none"
+                  stroke={TONE_PALETTE.neutral.color}
+                  strokeWidth={stroke}
+                  strokeLinecap="butt"
+                  strokeDashoffset={-neutralOffset}
+                  initial={reduce ? undefined : { strokeDasharray: `0 ${circumference}` }}
+                  animate={{ strokeDasharray: `${Math.max(0, neutralLen + 1)} ${circumference}` }}
+                  transition={{ duration: 1.1, ease: EASE, delay: 0.5 }}
+                />
+                <motion.circle
+                  cx={size / 2}
+                  cy={size / 2}
+                  r={radius}
+                  fill="none"
+                  stroke={TONE_PALETTE.negative.color}
+                  strokeWidth={stroke}
+                  strokeLinecap="butt"
+                  strokeDashoffset={-negativeOffset}
+                  initial={reduce ? undefined : { strokeDasharray: `0 ${circumference}` }}
+                  animate={{ strokeDasharray: `${Math.max(0, negativeLen + 1)} ${circumference}` }}
+                  transition={{ duration: 1.1, ease: EASE, delay: 0.7 }}
+                />
+              </g>
+
+              {/* Crisp arcs on top — no filter, +1 overlap to seal the wrap join */}
               <motion.circle
                 cx={size / 2}
                 cy={size / 2}
@@ -129,12 +176,11 @@ function ToneWheel({
                 fill="none"
                 stroke={TONE_PALETTE.positive.color}
                 strokeWidth={stroke}
-                strokeLinecap="round"
+                strokeLinecap="butt"
                 strokeDashoffset={-positiveOffset}
                 initial={reduce ? undefined : { strokeDasharray: `0 ${circumference}` }}
-                animate={{ strokeDasharray: `${Math.max(0, positiveLen - 4)} ${circumference}` }}
+                animate={{ strokeDasharray: `${Math.max(0, positiveLen + 1)} ${circumference}` }}
                 transition={{ duration: 1.1, ease: EASE, delay: 0.3 }}
-                style={{ filter: "url(#tone-glow)" }}
               />
               <motion.circle
                 cx={size / 2}
@@ -143,12 +189,11 @@ function ToneWheel({
                 fill="none"
                 stroke={TONE_PALETTE.neutral.color}
                 strokeWidth={stroke}
-                strokeLinecap="round"
+                strokeLinecap="butt"
                 strokeDashoffset={-neutralOffset}
                 initial={reduce ? undefined : { strokeDasharray: `0 ${circumference}` }}
-                animate={{ strokeDasharray: `${Math.max(0, neutralLen - 4)} ${circumference}` }}
+                animate={{ strokeDasharray: `${Math.max(0, neutralLen + 1)} ${circumference}` }}
                 transition={{ duration: 1.1, ease: EASE, delay: 0.5 }}
-                style={{ filter: "url(#tone-glow)" }}
               />
               <motion.circle
                 cx={size / 2}
@@ -157,12 +202,11 @@ function ToneWheel({
                 fill="none"
                 stroke={TONE_PALETTE.negative.color}
                 strokeWidth={stroke}
-                strokeLinecap="round"
+                strokeLinecap="butt"
                 strokeDashoffset={-negativeOffset}
                 initial={reduce ? undefined : { strokeDasharray: `0 ${circumference}` }}
-                animate={{ strokeDasharray: `${Math.max(0, negativeLen - 4)} ${circumference}` }}
+                animate={{ strokeDasharray: `${Math.max(0, negativeLen + 1)} ${circumference}` }}
                 transition={{ duration: 1.1, ease: EASE, delay: 0.7 }}
-                style={{ filter: "url(#tone-glow)" }}
               />
             </>
           )}
@@ -193,7 +237,7 @@ function ToneWheel({
                 style={{
                   color: dominantTone.color,
                   letterSpacing: "-0.04em",
-                  textShadow: `0 0 24px ${dominantTone.glow}, 0 0 4px ${dominantTone.glow}`,
+                  textShadow: `0 0 18px ${dominantTone.glow}`,
                 }}
               >
                 {dominantPct}%
@@ -869,14 +913,14 @@ export default function DashboardPage() {
                   ? "113, 113, 122"
                   : dominantTone === "positive"
                     ? "52, 211, 153"
-                    : "239, 68, 68"
+                    : "251, 113, 133"
               }
               accentColor={
                 empty
                   ? "#a1a1aa"
                   : dominantTone === "positive"
                     ? "#34d399"
-                    : "#ef4444"
+                    : "#fb7185"
               }
               icon={
                 <>
@@ -983,7 +1027,7 @@ export default function DashboardPage() {
                         {/* tone-color rail (subtle) */}
                         <span
                           aria-hidden
-                          className="shrink-0 self-stretch w-[3px] rounded-full"
+                          className="shrink-0 self-stretch w-0.75 rounded-full"
                           style={{
                             background: `linear-gradient(180deg, ${railColor}, rgba(${railRgba}, 0.4))`,
                             boxShadow: `0 0 14px rgba(${railRgba}, 0.3)`,

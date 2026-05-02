@@ -453,16 +453,19 @@ function CTASlot({
   reduce,
 }: CTASlotProps) {
   const primaryStyle = {
-    background: "linear-gradient(135deg, #5c5c6e, #6e6e82)",
-    color: "#fff",
-    border: "none" as const,
+    background:
+      "linear-gradient(135deg, rgba(52, 211, 153, 0.22) 0%, rgba(52, 211, 153, 0.06) 100%)",
+    color: "var(--color-text)",
+    border: "1px solid rgba(52, 211, 153, 0.4)",
+    boxShadow:
+      "0 24px 60px -22px rgba(52, 211, 153, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.08)",
   };
   const secondaryStyle = {
-    background: "transparent",
+    background: "rgba(255, 255, 255, 0.025)",
     color: "var(--color-text-silver)",
-    border: "1px solid var(--color-border)",
+    border: "1px solid rgba(255, 255, 255, 0.08)",
   };
-  const btnClass = `pricing-btn ${plan.popular ? "pricing-btn--primary" : "pricing-btn--secondary"} w-full py-3 rounded-xl font-semibold text-sm text-center`;
+  const btnClass = `pricing-btn ${plan.popular ? "pricing-btn--primary" : "pricing-btn--secondary"} w-full py-3.5 rounded-full font-semibold text-sm text-center relative overflow-hidden`;
 
   const tap = reduce ? undefined : { scale: 0.97 };
   const hover = reduce ? undefined : { scale: 1.02 };

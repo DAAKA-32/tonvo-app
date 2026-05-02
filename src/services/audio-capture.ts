@@ -51,6 +51,18 @@ export class AudioCaptureService {
     return this._hasSystemAudio;
   }
 
+  /**
+   * Combined MediaStream (mic + screen-share system audio if enabled),
+   * already merged through Web Audio API. This is exactly the audio we
+   * feed into the local MediaRecorder for Whisper batch — exposing it lets
+   * the AssemblyAI streaming client consume the SAME audio so it captures
+   * both sides of the conversation (Zoom prospect, Discord, etc.) and not
+   * just the user's mic. Returns null if audio is disabled or not yet started.
+   */
+  get audioStream(): MediaStream | null {
+    return this.stream;
+  }
+
   /** Current audio energy level (0-1). Use to detect true silence vs Whisper noise. */
   get audioLevel(): number {
     if (!this.analyserNode) return 0;
