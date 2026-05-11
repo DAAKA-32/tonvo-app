@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { verifyAuth } from "@/lib/auth-server";
-import { checkRateLimit, RATE_LIMITS } from "@/lib/rate-limit";
+import { RATE_LIMITS } from "@/lib/rate-limit";
+import { rateLimitGuard } from "@/lib/security";
 
 const ASSEMBLYAI_API_KEY = process.env.ASSEMBLYAI_API_KEY;
 
@@ -18,7 +19,7 @@ const ASSEMBLYAI_API_KEY = process.env.ASSEMBLYAI_API_KEY;
 export async function POST(req: NextRequest) {
   if (!ASSEMBLYAI_API_KEY) {
     return NextResponse.json(
-      { error: "ASSEMBLYAI_API_KEY not configured on server" },
+      { error: "Server misconfigured" },
       { status: 500 },
     );
   }
@@ -28,15 +29,14 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  // Rate-limit token mints per user (cheap to mint but no need to spam)
-  const rate = checkRateLimit(user.uid, RATE_LIMITS.transcribe);
-  if (!rate.allowed) {
-    const retryAfterSec = Math.ceil((rate.retryAfterMs ?? 60_000) / 1000);
-    return NextResponse.json(
-      { error: "Rate limit exceeded", retryAfter: retryAfterSec },
-      { status: 429, headers: { "Retry-After": String(retryAfterSec) } },
-    );
-  }
+  // Rate-limit token mints per user, prefixed so it doesn't share the same
+  // counter as /api/transcribe (which has its own quota).
+  const rateLimited = await rateLimitGuard(
+    "transcribe_token",
+    user.uid,
+    RATE_LIMITS.transcribe,
+  );
+  if (rateLimited) return rateLimited;
 
   // Token validity (seconds): 1–600. We pick 600 (10 min) so the user has time
   // to grant mic permission and start speaking before token redemption.

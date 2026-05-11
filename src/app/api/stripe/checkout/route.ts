@@ -3,7 +3,11 @@ import { getStripe, PLANS, type PlanId } from "@/lib/stripe";
 import { supabaseAdmin } from "@/lib/supabase-admin";
 import { verifyAuth } from "@/lib/auth-server";
 import { getAppUrl } from "@/lib/url";
+import { assertJsonSize, JSON_BODY_LIMIT } from "@/lib/security";
 import Stripe from "stripe";
+
+const VALID_PLAN_IDS = new Set(["pro", "team"]);
+const VALID_BILLING = new Set(["monthly", "yearly"]);
 
 /** Return a JSON error with only a code — the frontend maps codes to i18n messages */
 function errorResponse(code: string, status: number) {
@@ -11,21 +15,42 @@ function errorResponse(code: string, status: number) {
 }
 
 export async function POST(req: NextRequest) {
+  const sizeErr = assertJsonSize(req, JSON_BODY_LIMIT);
+  if (sizeErr) return sizeErr;
+
   const authUser = await verifyAuth(req);
   if (!authUser) {
     return errorResponse("UNAUTHORIZED", 401);
   }
 
   try {
-    const { planId, userId, userEmail, billing = "monthly" } = await req.json();
+    let body: Record<string, unknown>;
+    try {
+      body = (await req.json()) as Record<string, unknown>;
+    } catch {
+      return errorResponse("INVALID_JSON", 400);
+    }
+    const { planId, billing: billingRaw } = body as {
+      planId?: unknown;
+      billing?: unknown;
+    };
 
-    if (userId && userId !== authUser.uid) {
-      return errorResponse("FORBIDDEN", 403);
+    // Trust the verified Firebase token, never the request body, for identity.
+    const userId = authUser.uid;
+    const userEmail = authUser.email;
+
+    if (!userEmail) {
+      // Token is valid but no email claim — refuse rather than create an
+      // anonymous Stripe customer that can't be matched on payment failure.
+      return errorResponse("MISSING_EMAIL", 400);
     }
 
-    if (!planId || !userId || !userEmail) {
-      return errorResponse("MISSING_FIELDS", 400);
+    if (typeof planId !== "string" || !VALID_PLAN_IDS.has(planId)) {
+      return errorResponse("INVALID_PLAN", 400);
     }
+    const billing = typeof billingRaw === "string" && VALID_BILLING.has(billingRaw)
+      ? billingRaw
+      : "monthly";
 
     const plan = PLANS[planId as PlanId];
     if (!plan || !("priceId" in plan) || !plan.priceId) {

@@ -10,6 +10,7 @@ import { useToast } from "@/components/Toast";
 import { useAuth } from "@/lib/auth-context";
 import { getAuthErrorKey } from "@/lib/auth-errors";
 import { authFetch } from "@/lib/api-client";
+import { trackSignup } from "@/lib/meta-pixel";
 import {
   auth,
   googleProvider,
@@ -488,6 +489,7 @@ function LoginPageInner() {
         } catch {
           console.error("Failed to store consent");
         }
+        trackSignup({ email: cred.user.email ?? undefined, userId: cred.user.uid });
         redirectWithFeedback(t("auth.accountCreated"));
       } else {
         await signInWithEmailAndPassword(auth, email, password);
@@ -540,6 +542,10 @@ function LoginPageInner() {
       } catch {
         console.error("Failed to store consent");
       }
+      trackSignup({
+        email: pendingGoogleUser.user.email ?? undefined,
+        userId: pendingGoogleUser.user.uid,
+      });
     }
     setPendingGoogleUser(null);
     redirectWithFeedback(t("auth.accountCreated"));

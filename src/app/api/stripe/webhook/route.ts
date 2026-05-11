@@ -3,6 +3,37 @@ import { getStripe } from "@/lib/stripe";
 import { supabaseAdmin } from "@/lib/supabase-admin";
 import type Stripe from "stripe";
 
+// Reject events whose Stripe timestamp is older than this. Stripe retries
+// failed webhooks for ~3 days, so anything older is either a replay attempt
+// or a configuration mistake that we don't want to process.
+const MAX_EVENT_AGE_SECONDS = 4 * 24 * 60 * 60;
+
+// In-memory dedup cache. Per-instance only — a determined attacker who
+// triggered a serverless cold start could replay across instances, but
+// Stripe's own signature timestamp + the MAX_EVENT_AGE_SECONDS window
+// plus per-row updates being idempotent (upserts keyed on user_id /
+// stripe_customer_id) make replay impact minimal.
+//
+// For stronger guarantees, persist processed event ids in a Supabase table
+// or Redis with a TTL of MAX_EVENT_AGE_SECONDS.
+const SEEN_EVENT_IDS = new Map<string, number>();
+const SEEN_CAP = 5_000;
+
+function rememberEvent(id: string): boolean {
+  if (SEEN_EVENT_IDS.has(id)) return false;
+  if (SEEN_EVENT_IDS.size >= SEEN_CAP) {
+    // Drop the oldest 10% so the cache doesn't grow unbounded
+    const drop = Math.floor(SEEN_CAP / 10);
+    let i = 0;
+    for (const k of SEEN_EVENT_IDS.keys()) {
+      SEEN_EVENT_IDS.delete(k);
+      if (++i >= drop) break;
+    }
+  }
+  SEEN_EVENT_IDS.set(id, Date.now());
+  return true;
+}
+
 export async function POST(req: NextRequest) {
   const body = await req.text();
   const sig = req.headers.get("stripe-signature");
@@ -12,12 +43,24 @@ export async function POST(req: NextRequest) {
   }
 
   let event: Stripe.Event;
-
   try {
     event = getStripe().webhooks.constructEvent(body, sig, process.env.STRIPE_WEBHOOK_SECRET);
   } catch (err) {
-    console.error("Webhook signature verification failed:", err);
+    console.error("Webhook signature verification failed:", err instanceof Error ? err.message : "unknown");
     return NextResponse.json({ error: "Invalid signature" }, { status: 400 });
+  }
+
+  // Staleness check — reject ancient events even if signature is valid
+  const nowSec = Math.floor(Date.now() / 1000);
+  if (event.created && nowSec - event.created > MAX_EVENT_AGE_SECONDS) {
+    console.warn(`[stripe-webhook] rejecting stale event ${event.id} age=${nowSec - event.created}s`);
+    // Return 200 so Stripe stops retrying; we deliberately ignore.
+    return NextResponse.json({ received: true, ignored: "stale" });
+  }
+
+  // Idempotency — Stripe can deliver the same event multiple times.
+  if (!rememberEvent(event.id)) {
+    return NextResponse.json({ received: true, deduped: true });
   }
 
   try {
@@ -100,7 +143,7 @@ export async function POST(req: NextRequest) {
       }
     }
   } catch (err) {
-    console.error("Webhook handler error:", err);
+    console.error("Webhook handler error:", err instanceof Error ? err.message : "unknown");
     return NextResponse.json({ error: "Webhook handler failed" }, { status: 500 });
   }
 

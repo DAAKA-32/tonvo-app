@@ -1,8 +1,27 @@
 import { NextRequest, NextResponse } from "next/server";
-import { checkRateLimit, RATE_LIMITS } from "@/lib/rate-limit";
+import { RATE_LIMITS } from "@/lib/rate-limit";
 import { verifyAuth } from "@/lib/auth-server";
+import {
+  AUDIO_BODY_LIMIT,
+  getClientIp,
+  rateLimitGuard,
+} from "@/lib/security";
 
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
+
+// Allow-list of audio MIME types. Anything else is rejected before we burn
+// an OpenAI call on it.
+const ALLOWED_AUDIO_MIME = new Set([
+  "audio/webm",
+  "audio/webm;codecs=opus",
+  "audio/ogg",
+  "audio/ogg;codecs=opus",
+  "audio/mp4",
+  "audio/mpeg",
+  "audio/wav",
+  "audio/x-wav",
+  "audio/flac",
+]);
 
 /** Convert Whisper language name or locale to ISO-639-1 code. Returns null if unknown. */
 function toISO639(lang: string): string | null {
@@ -96,15 +115,23 @@ export async function POST(req: NextRequest) {
   }
 
   if (!OPENAI_API_KEY) {
-    return NextResponse.json({ error: "OpenAI API key not configured" }, { status: 500 });
+    return NextResponse.json({ error: "Server misconfigured" }, { status: 500 });
   }
 
-  // Rate limit by IP
-  const ip = req.headers.get("x-forwarded-for")?.split(",")[0] || req.headers.get("x-real-ip") || "unknown";
-  const rl = checkRateLimit(`transcribe:${ip}`, RATE_LIMITS.transcribe);
-  if (!rl.allowed) {
-    return NextResponse.json({ error: "Rate limit exceeded", retryAfterMs: rl.retryAfterMs }, { status: 429 });
+  // Reject oversized payloads at the edge before formData() buffers anything.
+  const lenHeader = req.headers.get("content-length");
+  if (lenHeader && Number(lenHeader) > AUDIO_BODY_LIMIT) {
+    return NextResponse.json({ error: "Payload too large" }, { status: 413 });
   }
+
+  // Rate-limit by uid+ip (user-first, IP as tiebreaker).
+  const ip = getClientIp(req);
+  const rateLimited = await rateLimitGuard(
+    "transcribe",
+    `${authUser.uid}:${ip}`,
+    RATE_LIMITS.transcribe,
+  );
+  if (rateLimited) return rateLimited;
 
   try {
     const formData = await req.formData();
@@ -115,13 +142,23 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "No audio file provided" }, { status: 400 });
     }
 
+    // Hard size cap (defends against chunked transfers that bypass content-length)
+    if (audioFile.size > AUDIO_BODY_LIMIT) {
+      return NextResponse.json({ error: "Audio file too large" }, { status: 413 });
+    }
+
     // Reject empty or too-small audio blobs (< 1KB is almost certainly silence/noise)
     if (audioFile.size < 1000) {
       return NextResponse.json({ text: "", language: null, speakerSegments: [] });
     }
 
-    // Determine the correct file extension from the MIME type
-    const mimeType = audioFile.type || "audio/webm";
+    // Strict MIME allow-list — reject anything else before sending to OpenAI.
+    const mimeType = (audioFile.type || "audio/webm").toLowerCase();
+    if (!ALLOWED_AUDIO_MIME.has(mimeType)) {
+      return NextResponse.json({ error: "Unsupported audio format" }, { status: 415 });
+    }
+
+    // Map MIME → extension Whisper expects.
     const extMap: Record<string, string> = {
       "audio/webm": "webm",
       "audio/webm;codecs=opus": "webm",
@@ -130,6 +167,7 @@ export async function POST(req: NextRequest) {
       "audio/mp4": "mp4",
       "audio/mpeg": "mp3",
       "audio/wav": "wav",
+      "audio/x-wav": "wav",
       "audio/flac": "flac",
     };
     const ext = extMap[mimeType] || "webm";

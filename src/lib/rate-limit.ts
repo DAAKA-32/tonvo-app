@@ -94,38 +94,52 @@ export interface RateLimitResult {
 }
 
 /**
- * Check if a request is allowed under the rate limit.
- * Uses Upstash Redis if configured, otherwise falls back to in-memory.
+ * Check if a request is allowed under the rate limit (sync).
+ *
+ * Behaviour:
+ * 1. Always evaluates the in-memory sliding window so a burst against a
+ *    single serverless instance is denied immediately — no optimistic
+ *    "allow first, enforce later" gap.
+ * 2. When Upstash is configured, fires an async cross-instance check whose
+ *    result feeds into a short-lived deny cache (`deny:{key}`). Subsequent
+ *    sync calls honour that deny.
+ * 3. If a previous async Redis check has flagged the key as denied within
+ *    the window, deny immediately.
+ *
+ * For routes that can `await`, prefer `checkRateLimitAsync` — it gives the
+ * authoritative cross-instance answer in a single round-trip.
  */
 export function checkRateLimit(key: string, config: RateLimitConfig): RateLimitResult {
-  // Extract prefix from key (e.g., "transcribe:1.2.3.4" → "transcribe")
   const prefix = key.split(":")[0] || "default";
   const limiter = getUpstashLimiter(prefix, config);
 
-  if (limiter) {
-    // Fire-and-forget async check — return optimistic result, enforce on next request
-    // For true sync enforcement, use checkRateLimitAsync instead
-    limiter.limit(key).then((result) => {
-      if (!result.success) {
-        // Store denial so next sync check can read it
-        const entry = store.get(`deny:${key}`);
-        if (!entry) {
-          store.set(`deny:${key}`, { timestamps: [Date.now()] });
-        }
-      } else {
-        store.delete(`deny:${key}`);
-      }
-    }).catch(() => {});
+  // 1) In-memory sliding window is ALWAYS evaluated. This is the
+  //    non-contournable per-instance backstop.
+  const localResult = checkInMemory(key, config);
 
-    // Check if previous async check denied this key
-    const denied = store.get(`deny:${key}`);
-    if (denied && denied.timestamps[0] && Date.now() - denied.timestamps[0] < config.windowMs) {
-      return { allowed: false, remaining: 0, retryAfterMs: config.windowMs };
-    }
-    return { allowed: true, remaining: config.maxRequests };
+  if (!limiter) return localResult;
+
+  // 2) Previous async Redis denial?
+  const denied = store.get(`deny:${key}`);
+  if (denied && denied.timestamps[0] && Date.now() - denied.timestamps[0] < config.windowMs) {
+    return { allowed: false, remaining: 0, retryAfterMs: config.windowMs };
   }
 
-  return checkInMemory(key, config);
+  // 3) Fire async cross-instance check; result feeds the deny cache for
+  //    the next sync call. Errors are swallowed — the in-memory result still
+  //    holds.
+  limiter.limit(key).then((result) => {
+    if (!result.success) {
+      if (!store.has(`deny:${key}`)) {
+        store.set(`deny:${key}`, { timestamps: [Date.now()] });
+      }
+    } else {
+      store.delete(`deny:${key}`);
+    }
+  }).catch(() => {});
+
+  // Local already counted this hit and decides allow/deny for this call.
+  return localResult;
 }
 
 /**
