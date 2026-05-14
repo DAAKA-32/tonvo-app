@@ -133,12 +133,50 @@ export default function TestimonialsSection() {
   const reduce = useReducedMotion();
 
   return (
-    <section className="relative px-4 sm:px-6 py-16 sm:py-24 md:py-32 overflow-hidden">
-      <div className="relative z-10 max-w-6xl mx-auto">
+    <section className="testimonials-section relative px-4 sm:px-6 py-12 sm:py-16 md:py-24 overflow-hidden">
+      <div className="relative z-10 max-w-5xl mx-auto">
         {/* Header */}
-        <div className="text-center mb-12">
+        <div className="text-center mb-10">
+          {/* 5-star social-proof ornament (moved here from hero) */}
+          <motion.div
+            className="testimonials-stars"
+            initial={reduce ? { opacity: 0 } : { opacity: 0, y: 8 }}
+            whileInView={reduce ? { opacity: 1 } : { opacity: 1, y: 0 }}
+            viewport={VIEWPORT}
+            transition={{ duration: 0.6, ease: easeOutExpo }}
+            aria-label="Rated 5 out of 5 stars"
+          >
+            <span className="testimonials-stars-row" aria-hidden>
+              {[0, 1, 2, 3, 4].map((i) => (
+                <motion.svg
+                  key={i}
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="#fbbf24"
+                  initial={reduce ? { opacity: 0 } : { opacity: 0, scale: 0.4, rotate: -25 }}
+                  whileInView={reduce ? { opacity: 1 } : { opacity: 1, scale: 1, rotate: 0 }}
+                  viewport={VIEWPORT}
+                  transition={{ duration: 0.55, delay: 0.12 + i * 0.08, ease: easeOutExpo }}
+                  style={{ filter: "drop-shadow(0 0 6px rgba(251, 191, 36, 0.55))" }}
+                >
+                  <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                </motion.svg>
+              ))}
+            </span>
+            <motion.span
+              className="testimonials-stars-text"
+              initial={reduce ? { opacity: 0 } : { opacity: 0, x: -6 }}
+              whileInView={reduce ? { opacity: 1 } : { opacity: 1, x: 0 }}
+              viewport={VIEWPORT}
+              transition={{ duration: 0.5, delay: 0.55, ease: easeOutExpo }}
+            >
+              5.0 · {t("landing.testimonials.label")}
+            </motion.span>
+          </motion.div>
+
           <motion.span
-            className="section-label inline-block"
+            className="section-label inline-block mt-5"
             initial={reduce ? { opacity: 0 } : { opacity: 0, y: 10 }}
             whileInView={reduce ? { opacity: 1 } : { opacity: 1, y: 0 }}
             viewport={VIEWPORT}
@@ -146,11 +184,11 @@ export default function TestimonialsSection() {
           >
             {t("landing.testimonials.label")}
           </motion.span>
-          <AnimatedTitle variant="right" className="section-heading">
+          <AnimatedTitle variant="right" className="section-heading testimonials-heading">
             {t("landing.testimonials.heading")}
           </AnimatedTitle>
           <motion.p
-            className="body-muted max-w-lg mx-auto mt-4"
+            className="body-muted max-w-md mx-auto mt-3 text-sm"
             initial={reduce ? { opacity: 0 } : { opacity: 0, y: 10 }}
             whileInView={reduce ? { opacity: 1 } : { opacity: 1, y: 0 }}
             viewport={VIEWPORT}
@@ -164,7 +202,7 @@ export default function TestimonialsSection() {
         <Scoreboard reduce={!!reduce} />
 
         {/* Result cards grid */}
-        <div className="testimonials-grid mt-14">
+        <div className="testimonials-grid mt-10">
           {RESULTS.map((r, i) => (
             <ResultCardView key={r.name} card={r} index={i} hideOnMobile={i >= 3} />
           ))}
@@ -179,7 +217,7 @@ export default function TestimonialsSection() {
 /* ----------------------------------------------------------------- */
 function Scoreboard({ reduce }: { reduce: boolean }) {
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-5 max-w-4xl mx-auto">
+    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 max-w-3xl mx-auto">
       {SCOREBOARD.map((kpi, i) => {
         const a = ACCENT_MAP[kpi.accent];
         return (
@@ -189,10 +227,10 @@ function Scoreboard({ reduce }: { reduce: boolean }) {
             delay={0.15}
             spotlightColor={a.spot}
             borderGlow={a.border}
-            className="p-5 sm:p-6 text-center"
+            className="p-4 sm:p-5 text-center"
           >
             <div
-              className="text-3xl sm:text-4xl font-bold tabular-nums tracking-tight"
+              className="text-2xl sm:text-3xl font-bold tabular-nums tracking-tight"
               style={{ color: a.color }}
             >
               <CountUp
@@ -243,12 +281,12 @@ function ResultCardView({
       delay={0.2}
       spotlightColor={a.spot}
       borderGlow={a.border}
-      className={`p-6 flex flex-col${hideOnMobile ? " testimonial-desktop-only" : ""}${card.featured ? " testimonial-featured" : ""}`}
+      className={`p-5 flex flex-col${hideOnMobile ? " testimonial-desktop-only" : ""}${card.featured ? " testimonial-featured" : ""}`}
     >
       {/* Metric badge */}
       <div className="flex items-baseline gap-2">
         <div
-          className="text-2xl sm:text-3xl font-bold tabular-nums"
+          className="text-xl sm:text-2xl font-bold tabular-nums"
           style={{ color: a.color }}
         >
           <CountUp
@@ -296,7 +334,7 @@ function ResultCardView({
 
       {/* Outcome quote */}
       <p
-        className="text-[15px] leading-relaxed mt-3 mb-0"
+        className="text-[13px] leading-relaxed mt-2.5 mb-0"
         style={{ color: "var(--color-text)" }}
       >
         &ldquo;{card.outcome}&rdquo;
@@ -304,17 +342,17 @@ function ResultCardView({
 
       {/* Attribution */}
       <div
-        className="flex items-center gap-3 mt-auto pt-4"
-        style={{ borderTop: "1px solid rgba(255, 255, 255, 0.05)", marginTop: 16 }}
+        className="flex items-center gap-2.5 mt-auto pt-3"
+        style={{ borderTop: "1px solid rgba(255, 255, 255, 0.05)", marginTop: 12 }}
       >
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src={card.avatar}
           alt={card.name}
-          className="w-9 h-9 rounded-full object-cover shrink-0 ring-2 ring-white/5"
+          className="w-8 h-8 rounded-full object-cover shrink-0 ring-2 ring-white/5"
         />
         <div className="min-w-0">
-          <div className="text-sm font-semibold leading-tight">{card.name}</div>
+          <div className="text-[13px] font-semibold leading-tight">{card.name}</div>
           <div
             className="text-xs leading-tight mt-0.5"
             style={{ color: "var(--color-text-muted)" }}

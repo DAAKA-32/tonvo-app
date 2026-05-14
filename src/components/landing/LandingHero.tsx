@@ -1,9 +1,16 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { motion, useReducedMotion } from "framer-motion";
+import {
+  motion,
+  useMotionValue,
+  useReducedMotion,
+  useScroll,
+  useSpring,
+  useTransform,
+} from "framer-motion";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "@/lib/auth-context";
 import TonvoLogo from "@/components/Logo";
@@ -17,9 +24,109 @@ function IconArrowRight({ className }: { className?: string }) {
   );
 }
 
-/* ------------------------------------------------------------------ */
-/*  Hero app preview — realistic full dashboard mockup                */
-/* ------------------------------------------------------------------ */
+/* ============================================================== */
+/*  HeroDemoStage                                                  */
+/*  — partial-peek video stage with 3D cursor tilt,                */
+/*    light-scan beam, reflective floor, breathing halo.           */
+/* ============================================================== */
+// Set to "/demo.mp4" (or any URL) once you drop a real video into /public.
+// While null, we render the rich app mockup directly without hitting the network.
+const DEMO_VIDEO_SRC: string | null = null;
+
+function HeroDemoStage() {
+  const reduce = useReducedMotion();
+  const stageRef = useRef<HTMLDivElement>(null);
+  const [videoFailed, setVideoFailed] = useState(false);
+  const [videoReady, setVideoReady] = useState(false);
+
+  // Scroll-driven yaw + roll: default tilt right, flips through 0 to opposite as page scrolls
+  const { scrollY } = useScroll();
+  const flip = useTransform(scrollY, [0, 800], [1, -1], { clamp: true });
+  const baseRotYRaw = useTransform(flip, (v) => v * 14);
+  const baseRotZRaw = useTransform(flip, (v) => v * -3);
+  const rotateY = useSpring(baseRotYRaw, { stiffness: 80, damping: 22, mass: 0.6 });
+  const rotateZ = useSpring(baseRotZRaw, { stiffness: 80, damping: 22, mass: 0.6 });
+
+  return (
+    <div
+      ref={stageRef}
+      className="hero-stage relative w-full"
+      style={{ perspective: 1600 }}
+    >
+      {/* Tilted frame — the partially visible "peek" demo */}
+      <motion.div
+        className="hero-stage-frame"
+        style={{
+          rotateY,
+          rotateZ,
+          transformStyle: "preserve-3d",
+          transformPerspective: 1600,
+        }}
+        initial={reduce ? { opacity: 0 } : { opacity: 0, y: 70, scale: 0.96 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        transition={{ duration: 1.05, ease: [0.22, 1, 0.36, 1], delay: 0.65 }}
+      >
+        {/* LIVE chip — sits over the top edge */}
+        <div className="hero-stage-live">
+          <span className="hero-stage-live-dot" />
+          <span className="hero-stage-live-text">LIVE • REAL-TIME COPILOT</span>
+        </div>
+
+        {/* The actual demo (video if available, otherwise rich app mockup) */}
+        <div className="hero-stage-screen">
+          {DEMO_VIDEO_SRC && !videoFailed ? (
+            <>
+              <video
+                className="hero-stage-video"
+                src={DEMO_VIDEO_SRC}
+                poster="/og-image.png"
+                autoPlay
+                muted
+                loop
+                playsInline
+                preload="metadata"
+                onCanPlay={() => setVideoReady(true)}
+                onError={() => setVideoFailed(true)}
+              />
+              {!videoReady && (
+                <div className="hero-stage-fallback">
+                  <HeroAppPreview />
+                </div>
+              )}
+            </>
+          ) : (
+            <div className="hero-stage-fallback">
+              <HeroAppPreview />
+            </div>
+          )}
+
+          {/* Vignette + bottom fade — implies "more below the fold" */}
+          <div aria-hidden className="hero-stage-vignette" />
+          <div aria-hidden className="hero-stage-bottomfade" />
+        </div>
+
+      </motion.div>
+
+      {/* "More below" hint */}
+      <motion.div
+        aria-hidden
+        className="hero-stage-morebelow"
+        initial={reduce ? { opacity: 0 } : { opacity: 0, y: -4 }}
+        animate={reduce ? { opacity: 1 } : { opacity: [0, 1, 1, 0.6, 1], y: [0, 6, 0, 6, 0] }}
+        transition={reduce ? { duration: 0.6, delay: 1.4 } : { duration: 2.4, repeat: Infinity, ease: "easeInOut", delay: 1.6 }}
+      >
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M12 5v14" />
+          <path d="m5 12 7 7 7-7" />
+        </svg>
+      </motion.div>
+    </div>
+  );
+}
+
+/* ============================================================== */
+/*  Hero app preview — realistic full dashboard mockup (fallback)  */
+/* ============================================================== */
 function HeroAppPreview() {
   const { t } = useTranslation();
   return (
@@ -55,12 +162,11 @@ function HeroAppPreview() {
 
         {/* App layout: sidebar + main */}
         <div className="flex" style={{ minHeight: 340 }}>
-          {/* Sidebar — matches real app sidebar with logo, icons, user profile */}
+          {/* Sidebar */}
           <div
             className="hidden sm:flex flex-col w-52 shrink-0 border-r py-3 px-3"
             style={{ borderColor: "var(--color-border)", backgroundColor: "rgba(14, 14, 17, 0.7)" }}
           >
-            {/* Logo */}
             <div className="flex items-center gap-2.5 px-2 py-2 mb-4">
               <TonvoLogo size="xs" showText={true} />
             </div>
@@ -89,7 +195,6 @@ function HeroAppPreview() {
               </div>
             ))}
 
-            {/* User profile at bottom */}
             <div className="mt-auto pt-3 border-t" style={{ borderColor: "var(--color-border)" }}>
               <div className="flex items-center gap-2 px-2 py-1.5">
                 <div className="w-6 h-6 rounded-full flex items-center justify-center text-[9px] font-semibold" style={{ background: "linear-gradient(135deg, rgba(200,200,216,0.12) 0%, rgba(200,200,216,0.04) 100%)", color: "var(--color-accent-light)", border: "1px solid rgba(255,255,255,0.06)" }}>E</div>
@@ -103,7 +208,6 @@ function HeroAppPreview() {
 
           {/* Main content */}
           <div className="flex-1 flex flex-col min-w-0">
-            {/* Top bar with live status */}
             <div
               className="flex items-center justify-between px-4 py-2.5 border-b"
               style={{ borderColor: "var(--color-border)" }}
@@ -125,9 +229,7 @@ function HeroAppPreview() {
               </div>
             </div>
 
-            {/* Content area: transcript + sidebar panel */}
             <div className="flex flex-1">
-              {/* Transcript */}
               <div className="flex-1 px-4 py-3 space-y-2.5 overflow-hidden">
                 {[
                   { text: t("mockup.transcript1"), tone: "positive", speaker: t("mockup.you"), time: "00:32" },
@@ -151,18 +253,15 @@ function HeroAppPreview() {
                 ))}
               </div>
 
-              {/* Right panel: AI Copilot with smart responses */}
               <div
                 className="hidden md:flex flex-col w-48 shrink-0 border-l px-3 py-3 gap-2.5"
                 style={{ borderColor: "var(--color-border)" }}
               >
-                {/* Copilot header */}
                 <div className="flex items-center gap-1.5 mb-0.5">
                   <div className="w-1.5 h-1.5 rounded-full pulse-positive" style={{ backgroundColor: "var(--color-positive)" }} />
                   <span className="text-[9px] font-bold uppercase tracking-wider" style={{ color: "var(--color-text)" }}>{t("mockup.aiCopilot")}</span>
                 </div>
 
-                {/* Say This — smart response cards */}
                 <div className="rounded-lg p-2.5" style={{ background: "rgba(52, 211, 153, 0.04)", border: "1px solid rgba(52, 211, 153, 0.12)" }}>
                   <div className="flex items-center gap-1 mb-2">
                     <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#34d399" strokeWidth="2.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" /></svg>
@@ -186,7 +285,6 @@ function HeroAppPreview() {
                   </div>
                 </div>
 
-                {/* Tone chart */}
                 <div className="rounded-lg p-2.5" style={{ background: "rgba(200, 200, 216, 0.04)", border: "1px solid rgba(200, 200, 216, 0.08)" }}>
                   <div className="text-[9px] font-semibold uppercase tracking-wider mb-2" style={{ color: "var(--color-accent-light)" }}>
                     {t("mockup.toneFlow")}
@@ -206,7 +304,6 @@ function HeroAppPreview() {
                   </div>
                 </div>
 
-                {/* Score */}
                 <div className="rounded-lg p-2 text-center" style={{ background: "rgba(52, 211, 153, 0.04)", border: "1px solid rgba(52, 211, 153, 0.1)" }}>
                   <div className="text-[8px] font-semibold uppercase tracking-wider mb-0.5" style={{ color: "var(--color-text-muted)" }}>
                     {t("mockup.quality")}
@@ -222,6 +319,292 @@ function HeroAppPreview() {
   );
 }
 
+/* ============================================================== */
+/*  WordsReveal — clip-path word-by-word reveal for the headline   */
+/* ============================================================== */
+function WordsReveal({
+  text,
+  delay = 0,
+  className,
+  style,
+  gradient,
+}: {
+  text: string;
+  delay?: number;
+  className?: string;
+  style?: React.CSSProperties;
+  gradient?: boolean;
+}) {
+  const reduce = useReducedMotion();
+  const words = text.split(" ");
+  return (
+    <span className={className} style={{ display: "inline-block", ...style }}>
+      {words.map((w, i) => (
+        <span key={i} className="hero-word-mask">
+          <motion.span
+            className="hero-word-inner"
+            initial={reduce ? { opacity: 0 } : { y: "115%", opacity: 0 }}
+            animate={{ y: "0%", opacity: 1 }}
+            transition={{
+              duration: 0.85,
+              ease: [0.22, 1, 0.36, 1],
+              delay: delay + i * 0.08,
+            }}
+            style={
+              gradient
+                ? {
+                    background:
+                      "linear-gradient(115deg, rgba(255,255,255,0.55) 0%, #fafafa 28%, rgba(200,200,216,0.95) 50%, #fafafa 72%, rgba(255,255,255,0.55) 100%)",
+                    backgroundSize: "240% 100%",
+                    WebkitBackgroundClip: "text",
+                    WebkitTextFillColor: "transparent",
+                    backgroundClip: "text",
+                  }
+                : undefined
+            }
+          >
+            {w}
+          </motion.span>
+          {i < words.length - 1 ? " " : ""}
+        </span>
+      ))}
+    </span>
+  );
+}
+
+/* ============================================================== */
+/*  commonPrefix — finds the shared leading word(s) across phrases */
+/*  (e.g., "Without" in EN, "Sans" in FR). Returns "" if none.     */
+/* ============================================================== */
+function commonPrefix(strs: string[]): string {
+  if (!strs.length) return "";
+  const first = strs[0];
+  let i = 0;
+  while (i < first.length && strs.every((s) => s[i] === first[i])) i += 1;
+  // Snap to a word boundary — never cut mid-word
+  const lastSpace = first.lastIndexOf(" ", i);
+  return lastSpace > 0 ? first.slice(0, lastSpace) : "";
+}
+
+/* ============================================================== */
+/*  TypewriterReveal — looping typewriter that cycles through      */
+/*  multiple phrases (type → hold → backspace → next).             */
+/* ============================================================== */
+function TypewriterReveal({
+  phrases,
+  prefix = "",
+  delay = 0,
+  typeSpeed = 42,
+  deleteSpeed = 24,
+  holdAfterType = 1800,
+  holdAfterDelete = 350,
+  gradient,
+  className,
+}: {
+  phrases: string[];
+  prefix?: string;
+  delay?: number;
+  typeSpeed?: number;
+  deleteSpeed?: number;
+  holdAfterType?: number;
+  holdAfterDelete?: number;
+  gradient?: boolean;
+  className?: string;
+}) {
+  const reduce = useReducedMotion();
+  const [phraseIdx, setPhraseIdx] = useState(0);
+  const [shown, setShown] = useState(0);
+  const [phase, setPhase] = useState<"start" | "typing" | "holdAfter" | "deleting" | "holdBefore">("start");
+
+  // Reserve space using the longest phrase so layout never shifts
+  const ghost = phrases.reduce((a, b) => (a.length >= b.length ? a : b), "");
+  const current = phrases[phraseIdx] ?? "";
+
+  useEffect(() => {
+    // Static render under prefers-reduced-motion: just show phrase 1
+    if (reduce) {
+      setShown(phrases[0]?.length ?? 0);
+      setPhase("holdAfter");
+      return;
+    }
+
+    let id: ReturnType<typeof setTimeout> | undefined;
+
+    if (phase === "start") {
+      id = setTimeout(() => setPhase("typing"), delay * 1000);
+    } else if (phase === "typing") {
+      if (shown < current.length) {
+        id = setTimeout(() => setShown(shown + 1), typeSpeed);
+      } else {
+        id = setTimeout(() => setPhase("holdAfter"), 0);
+      }
+    } else if (phase === "holdAfter") {
+      id = setTimeout(() => setPhase("deleting"), holdAfterType);
+    } else if (phase === "deleting") {
+      if (shown > 0) {
+        id = setTimeout(() => setShown(shown - 1), deleteSpeed);
+      } else {
+        id = setTimeout(() => setPhase("holdBefore"), 0);
+      }
+    } else if (phase === "holdBefore") {
+      id = setTimeout(() => {
+        setPhraseIdx((phraseIdx + 1) % phrases.length);
+        setPhase("typing");
+      }, holdAfterDelete);
+    }
+
+    return () => {
+      if (id) clearTimeout(id);
+    };
+  }, [phase, shown, phraseIdx, current.length, delay, typeSpeed, deleteSpeed, holdAfterType, holdAfterDelete, phrases, reduce]);
+
+  const gradientStyle: React.CSSProperties | undefined = gradient
+    ? {
+        background:
+          "linear-gradient(115deg, rgba(255,255,255,0.55) 0%, #fafafa 28%, rgba(200,200,216,0.95) 50%, #fafafa 72%, rgba(255,255,255,0.55) 100%)",
+        backgroundSize: "240% 100%",
+        WebkitBackgroundClip: "text",
+        WebkitTextFillColor: "transparent",
+        backgroundClip: "text",
+      }
+    : undefined;
+
+  const showCaret = !reduce;
+  // Progress as percentage of current phrase width (0–100)
+  const progressPct = current.length > 0 ? (shown / current.length) * 100 : 0;
+  const clipInsetRight = 100 - progressPct;
+
+  return (
+    <span
+      className={className}
+      style={{ display: "inline-block", whiteSpace: "nowrap", verticalAlign: "top" }}
+    >
+      {prefix ? (
+        <span style={{ whiteSpace: "nowrap", ...gradientStyle }}>{prefix} </span>
+      ) : null}
+      <span style={{ position: "relative", display: "inline-block", whiteSpace: "nowrap" }}>
+        {/* Invisible ghost of longest phrase → reserves layout, locks line height */}
+        <span
+          aria-hidden
+          style={{ visibility: "hidden", whiteSpace: "nowrap", ...gradientStyle }}
+        >
+          {ghost}
+        </span>
+
+        {/* Inner wrapper sized to current phrase intrinsic width — caret rides here */}
+        <span
+          style={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            display: "inline-block",
+            whiteSpace: "nowrap",
+          }}
+        >
+          {/* Full current text, progressively revealed via clip-path */}
+          <span
+            aria-hidden
+            style={{
+              ...gradientStyle,
+              display: "inline-block",
+              whiteSpace: "nowrap",
+              clipPath: `inset(0 ${clipInsetRight}% 0 0)`,
+              WebkitClipPath: `inset(0 ${clipInsetRight}% 0 0)`,
+              transition: "clip-path 60ms linear, -webkit-clip-path 60ms linear",
+            }}
+          >
+            {current}
+          </span>
+          {/* Caret riding the clip boundary */}
+          {showCaret && (
+            <span
+              aria-hidden
+              className="typewriter-caret"
+              style={{
+                position: "absolute",
+                top: "10%",
+                left: `${progressPct}%`,
+                height: "82%",
+                width: "0.06em",
+                background: "rgba(200, 200, 216, 0.92)",
+                borderRadius: "1px",
+                transform: "translateX(-50%)",
+                animation: "typewriterBlink 0.9s steps(1) infinite",
+                transition: "left 60ms linear",
+                pointerEvents: "none",
+              }}
+            />
+          )}
+        </span>
+      </span>
+      {/* SR-only full text for accessibility */}
+      <span
+        style={{
+          position: "absolute",
+          width: 1,
+          height: 1,
+          overflow: "hidden",
+          clip: "rect(0 0 0 0)",
+        }}
+      >
+        {prefix ? prefix + " " : ""}
+        {phrases.join(". ")}
+      </span>
+    </span>
+  );
+}
+
+/* ============================================================== */
+/*  MagneticButton — subtle cursor attraction on hover             */
+/* ============================================================== */
+function MagneticButton({
+  children,
+  className,
+  style,
+  href,
+  external,
+}: {
+  children: React.ReactNode;
+  className?: string;
+  style?: React.CSSProperties;
+  href: string;
+  external?: boolean;
+}) {
+  const reduce = useReducedMotion();
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+  const sx = useSpring(x, { stiffness: 220, damping: 18 });
+  const sy = useSpring(y, { stiffness: 220, damping: 18 });
+
+  function move(e: React.MouseEvent<HTMLElement>) {
+    if (reduce) return;
+    const r = e.currentTarget.getBoundingClientRect();
+    x.set(((e.clientX - r.left) / r.width - 0.5) * 14);
+    y.set(((e.clientY - r.top) / r.height - 0.5) * 10);
+  }
+  function leave() {
+    x.set(0);
+    y.set(0);
+  }
+
+  return (
+    <motion.div style={{ x: sx, y: sy, display: "inline-block" }}>
+      {external ? (
+        <a href={href} onMouseMove={move} onMouseLeave={leave} className={className} style={style}>
+          {children}
+        </a>
+      ) : (
+        <Link href={href} onMouseMove={move} onMouseLeave={leave} className={className} style={style}>
+          {children}
+        </Link>
+      )}
+    </motion.div>
+  );
+}
+
+/* ============================================================== */
+/*  LandingHero — exceptional opening                              */
+/* ============================================================== */
 export default function LandingHero() {
   const { user, loading } = useAuth();
   const { t } = useTranslation();
@@ -234,261 +617,510 @@ export default function LandingHero() {
     }
   }, [user, loading, router]);
 
-  /* While checking auth, show nothing briefly; once confirmed no user, render hero */
   if (loading || user) return null;
 
   const ctaHref = "/login";
-
-  /* Highlight the leading metric (e.g. "27%" in "Close 27% more deals.") with
-     a gradient + scintillation. Falls back to plain text for locales without
-     a percent in the headline. */
   const headline1 = t("landing.hero.headline1");
   const percentMatch = headline1.match(/^(.*?)(\d+%)(.*)$/);
 
   return (
-    <>
-      {/* ── Hero ── */}
-      <section className="relative min-h-[85vh] sm:min-h-screen flex flex-col items-center justify-center px-4 sm:px-6 pt-28 sm:pt-32 pb-8 overflow-hidden grid-bg">
-        {/* Static ambient glows (CSS) */}
-        <div className="hero-glow" style={{ top: "-10%", left: "50%", transform: "translateX(-50%)" }} />
-        <div className="hero-glow" style={{ bottom: "-20%", left: "-10%", width: 400, height: 400, background: "radial-gradient(circle, rgba(52, 211, 153, 0.04) 0%, transparent 70%)" }} />
-        <div className="hero-glow" style={{ top: "30%", right: "-10%", width: 350, height: 350, background: "radial-gradient(circle, rgba(200, 200, 216, 0.04) 0%, transparent 70%)" }} />
-
-        <div className="relative z-10 max-w-3xl text-center">
-          {/* ── HEADLINE ── */}
-          <h1 className="hero-heading text-glow mb-6" style={{ fontWeight: 700 }}>
-            <motion.span
-              initial={reduce ? { opacity: 0 } : { opacity: 0, y: 18 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.85, ease: [0.22, 1, 0.36, 1], delay: 0.1 }}
-              style={{ display: "block" }}
-            >
-              {percentMatch ? (
-                <>
-                  {percentMatch[1]}
-                  <motion.span
-                    className="inline-block tabular-nums"
-                    animate={
-                      reduce
-                        ? undefined
-                        : { backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"] }
-                    }
-                    transition={
-                      reduce
-                        ? undefined
-                        : { duration: 7, repeat: Infinity, ease: "easeInOut", delay: 1 }
-                    }
-                    style={{
-                      background:
-                        "linear-gradient(115deg, #fafafa 0%, #34d399 30%, #6ee7b7 50%, #34d399 70%, #fafafa 100%)",
-                      backgroundSize: "240% 100%",
-                      WebkitBackgroundClip: "text",
-                      WebkitTextFillColor: "transparent",
-                      backgroundClip: "text",
-                      filter: "drop-shadow(0 0 18px rgba(52, 211, 153, 0.35))",
-                    }}
-                  >
-                    {percentMatch[2]}
-                  </motion.span>
-                  {percentMatch[3]}
-                </>
-              ) : (
-                headline1
-              )}
-            </motion.span>
-            <motion.span
-              initial={reduce ? { opacity: 0 } : { opacity: 0, y: 18 }}
-              animate={
-                reduce
-                  ? { opacity: 1 }
-                  : { opacity: 1, y: 0, backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"] }
-              }
-              transition={
-                reduce
-                  ? { duration: 0.85, ease: [0.22, 1, 0.36, 1], delay: 0.25 }
-                  : {
-                      opacity: { duration: 0.85, ease: [0.22, 1, 0.36, 1], delay: 0.25 },
-                      y: { duration: 0.85, ease: [0.22, 1, 0.36, 1], delay: 0.25 },
-                      backgroundPosition: { duration: 9, repeat: Infinity, ease: "easeInOut", delay: 1.4 },
-                    }
-              }
-              className="block mt-1"
-              style={{
-                fontWeight: 200,
-                letterSpacing: "-0.025em",
-                background:
-                  "linear-gradient(115deg, rgba(255, 255, 255, 0.55) 0%, #fafafa 30%, rgba(200, 200, 216, 0.95) 50%, #fafafa 70%, rgba(255, 255, 255, 0.55) 100%)",
-                backgroundSize: "240% 100%",
-                WebkitBackgroundClip: "text",
-                WebkitTextFillColor: "transparent",
-                backgroundClip: "text",
-              }}
-            >
-              {t("landing.hero.headline2")}
-            </motion.span>
-          </h1>
-
-          <motion.p
-            initial={reduce ? { opacity: 0 } : { opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1], delay: 0.4 }}
-            className="body-muted text-lg md:text-xl mb-10 max-w-xl mx-auto"
-          >
-            {t("landing.hero.subtitle")}
-          </motion.p>
-
-          {/* ── PREMIUM CTAs ── */}
-          <motion.div
-            initial={reduce ? { opacity: 0 } : { opacity: 0, y: 14 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1], delay: 0.55 }}
-            className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-stretch sm:items-center"
-          >
-            {/* Primary — broadcast button */}
-            <motion.div
-              whileHover={reduce ? undefined : { y: -3 }}
-              whileTap={reduce ? undefined : { scale: 0.97 }}
-              transition={{ type: "spring", stiffness: 320, damping: 26 }}
-            >
-              <Link
-                href={ctaHref}
-                className="relative inline-flex items-center gap-3 px-5 sm:px-6 py-3.5 rounded-full no-underline overflow-hidden"
-                style={{
-                  background:
-                    "linear-gradient(135deg, rgba(52, 211, 153, 0.22) 0%, rgba(52, 211, 153, 0.06) 100%)",
-                  border: "1px solid rgba(52, 211, 153, 0.4)",
-                  boxShadow:
-                    "0 24px 60px -22px rgba(52, 211, 153, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.08)",
-                  color: "var(--color-text)",
-                  minHeight: 52,
-                }}
-              >
+    <section className="hero-section relative px-4 sm:px-6 pt-36 sm:pt-44 pb-0 overflow-hidden grid-bg">
+      {/* ── HEADLINE BLOCK ── */}
+      <div className="relative z-10 max-w-5xl mx-auto text-center">
+        {/* Headline */}
+        <h1 className="hero-heading text-glow mb-10 sm:mb-12" style={{ fontWeight: 700 }}>
+          <span style={{ display: "block" }}>
+            {percentMatch ? (
+              <>
+                <WordsReveal text={percentMatch[1].trim()} delay={0.15} />
+                {percentMatch[1].endsWith(" ") ? " " : ""}
                 <motion.span
-                  aria-hidden
-                  className="absolute top-0 bottom-0 pointer-events-none"
-                  animate={reduce ? undefined : { x: ["-130%", "230%"] }}
-                  transition={
-                    reduce
-                      ? undefined
-                      : { duration: 4.5, repeat: Infinity, ease: "easeInOut", repeatDelay: 1.6 }
-                  }
-                  style={{
-                    width: "60%",
-                    background:
-                      "linear-gradient(105deg, transparent 30%, rgba(255, 255, 255, 0.18) 50%, transparent 70%)",
-                    mixBlendMode: "screen",
-                  }}
+                  className="inline-block tabular-nums hero-percent"
+                  animate={reduce ? undefined : { backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"] }}
+                  transition={reduce ? undefined : { duration: 7, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+                >
+                  {percentMatch[2]}
+                </motion.span>
+                {percentMatch[3] ? <>{" "}<WordsReveal text={percentMatch[3].trim()} delay={0.35} /></> : null}
+              </>
+            ) : (
+              <WordsReveal text={headline1} delay={0.15} />
+            )}
+          </span>
+          <span className="hero-headline2 block mt-3" style={{ fontWeight: 200, letterSpacing: "-0.025em" }}>
+            {(() => {
+              const fullPhrases = [
+                t("landing.hero.headline2"),
+                t("landing.hero.headline2b"),
+                t("landing.hero.headline2c"),
+              ];
+              const sharedPrefix = commonPrefix(fullPhrases);
+              const suffixes = sharedPrefix
+                ? fullPhrases.map((p) => p.slice(sharedPrefix.length).trimStart())
+                : [fullPhrases[0]];
+              return (
+                <TypewriterReveal
+                  prefix={sharedPrefix}
+                  phrases={suffixes}
+                  delay={1.3}
+                  typeSpeed={42}
+                  deleteSpeed={22}
+                  holdAfterType={2200}
+                  holdAfterDelete={300}
+                  gradient
                 />
-                <span
-                  className="relative shrink-0 inline-flex items-center justify-center"
-                  style={{ width: 28, height: 28 }}
-                >
-                  {[0, 1, 2].map((i) => (
-                    <motion.span
-                      key={i}
-                      aria-hidden
-                      className="absolute rounded-full"
-                      style={{
-                        width: 28,
-                        height: 28,
-                        border: "1px solid rgba(52, 211, 153, 0.6)",
-                      }}
-                      animate={reduce ? undefined : { scale: [0.4, 1.2], opacity: [0.55, 0] }}
-                      transition={
-                        reduce
-                          ? undefined
-                          : { duration: 2.2, repeat: Infinity, ease: "easeOut", delay: i * 0.7 }
-                      }
-                    />
-                  ))}
-                  <span
-                    aria-hidden
-                    className="relative rounded-full"
-                    style={{
-                      width: 8,
-                      height: 8,
-                      background: "linear-gradient(180deg, #34d399 0%, #059669 100%)",
-                      boxShadow: "0 0 12px rgba(52, 211, 153, 0.8)",
-                    }}
-                  />
-                </span>
-                <span className="relative text-sm sm:text-base font-semibold">
-                  {t("landing.hero.cta")}
-                </span>
-                <IconArrowRight className="relative" />
-              </Link>
-            </motion.div>
+              );
+            })()}
+          </span>
+        </h1>
 
-            {/* Secondary — ghost glass */}
-            <motion.div
-              whileHover={reduce ? undefined : { y: -3 }}
-              transition={{ type: "spring", stiffness: 320, damping: 26 }}
-            >
-              <a
-                href="#demo"
-                className="relative inline-flex items-center gap-2 px-5 sm:px-6 py-3.5 rounded-full no-underline group w-full sm:w-auto justify-center"
-                style={{
-                  background: "rgba(255, 255, 255, 0.025)",
-                  border: "1px solid rgba(255, 255, 255, 0.08)",
-                  color: "var(--color-text-silver)",
-                  minHeight: 52,
-                  transition: "background 0.3s ease, border-color 0.3s ease, color 0.3s ease",
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.background = "rgba(255, 255, 255, 0.05)";
-                  e.currentTarget.style.borderColor = "rgba(255, 255, 255, 0.18)";
-                  e.currentTarget.style.color = "var(--color-text)";
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.background = "rgba(255, 255, 255, 0.025)";
-                  e.currentTarget.style.borderColor = "rgba(255, 255, 255, 0.08)";
-                  e.currentTarget.style.color = "var(--color-text-silver)";
-                }}
-              >
-                <span className="text-sm sm:text-base font-medium">
-                  {t("landing.hero.ctaSecondary")}
-                </span>
-                <span
-                  aria-hidden
-                  className="opacity-50 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all"
-                >
-                  →
-                </span>
-              </a>
-            </motion.div>
-          </motion.div>
+        <motion.p
+          initial={reduce ? { opacity: 0 } : { opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1], delay: 0.9 }}
+          className="body-muted text-lg md:text-xl mb-14 sm:mb-16 max-w-xl mx-auto"
+        >
+          {t("landing.hero.subtitle")}
+        </motion.p>
 
-          {/* ── 5-STAR ORNAMENT ── */}
-          <motion.div
-            initial={reduce ? { opacity: 0 } : { opacity: 0, y: 8 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1], delay: 0.8 }}
-            className="mt-8 sm:mt-10 flex justify-center"
-            aria-hidden
+        {/* ── CTAs ── */}
+        <motion.div
+          initial={reduce ? { opacity: 0 } : { opacity: 0, y: 14 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1], delay: 1.05 }}
+          className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-stretch sm:items-center"
+        >
+          <MagneticButton
+            href={ctaHref}
+            className="hero-cta-primary"
+            style={{
+              background: "linear-gradient(135deg, rgba(52, 211, 153, 0.22) 0%, rgba(52, 211, 153, 0.06) 100%)",
+              border: "1px solid rgba(52, 211, 153, 0.4)",
+              boxShadow: "0 24px 60px -22px rgba(52, 211, 153, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.08)",
+              color: "var(--color-text)",
+            }}
           >
-            <span className="inline-flex items-center gap-1.5">
-              {[0, 1, 2, 3, 4].map((i) => (
-                <svg
+            <motion.span
+              aria-hidden
+              className="absolute top-0 bottom-0 pointer-events-none"
+              animate={reduce ? undefined : { x: ["-130%", "230%"] }}
+              transition={reduce ? undefined : { duration: 6.5, repeat: Infinity, ease: "easeInOut", repeatDelay: 4.5 }}
+              style={{
+                width: "70%",
+                background: "linear-gradient(105deg, transparent 35%, rgba(255, 255, 255, 0.08) 50%, transparent 65%)",
+                mixBlendMode: "screen",
+                filter: "blur(2px)",
+              }}
+            />
+            <span className="relative shrink-0 inline-flex items-center justify-center" style={{ width: 28, height: 28 }}>
+              {[0, 1, 2].map((i) => (
+                <motion.span
                   key={i}
-                  width="13"
-                  height="13"
-                  viewBox="0 0 24 24"
-                  fill="#fbbf24"
-                  style={{ filter: "drop-shadow(0 0 4px rgba(251, 191, 36, 0.5))" }}
-                >
-                  <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
-                </svg>
+                  aria-hidden
+                  className="absolute rounded-full"
+                  style={{ width: 28, height: 28, border: "1px solid rgba(52, 211, 153, 0.6)" }}
+                  animate={reduce ? undefined : { scale: [0.4, 1.2], opacity: [0.55, 0] }}
+                  transition={reduce ? undefined : { duration: 2.2, repeat: Infinity, ease: "easeOut", delay: i * 0.7 }}
+                />
               ))}
+              <span
+                aria-hidden
+                className="relative rounded-full"
+                style={{
+                  width: 8,
+                  height: 8,
+                  background: "linear-gradient(180deg, #34d399 0%, #059669 100%)",
+                  boxShadow: "0 0 12px rgba(52, 211, 153, 0.8)",
+                }}
+              />
             </span>
-          </motion.div>
+            <span className="relative text-sm sm:text-base font-semibold">{t("landing.hero.cta")}</span>
+            <IconArrowRight className="relative" />
+          </MagneticButton>
 
-        </div>
+          <MagneticButton
+            href="#demo"
+            external
+            className="hero-cta-ghost"
+            style={{
+              background: "rgba(255, 255, 255, 0.025)",
+              border: "1px solid rgba(255, 255, 255, 0.08)",
+              color: "var(--color-text-silver)",
+            }}
+          >
+            <span className="hero-cta-ghost-play" aria-hidden>
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z" /></svg>
+            </span>
+            <span className="text-sm sm:text-base font-medium">{t("landing.hero.ctaSecondary")}</span>
+          </MagneticButton>
+        </motion.div>
+      </div>
 
-        {/* Hero app preview — the product mockup that sells */}
-        <div className="relative z-10 w-full max-w-5xl mx-auto mt-16 sm:mt-20 animate-fade-up animate-delay-500 px-2 sm:px-4">
-          <HeroAppPreview />
-        </div>
-      </section>
-    </>
+      {/* ── PARTIAL VIDEO DEMO STAGE ── */}
+      <div className="hero-stage-outer relative z-10 w-full max-w-5xl mx-auto mt-20 sm:mt-24 px-2 sm:px-4">
+        <HeroDemoStage />
+      </div>
+
+      <style jsx>{`
+        .hero-section {
+          min-height: 100vh;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+        }
+
+        .hero-eyebrow {
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+          padding: 6px 12px 6px 10px;
+          border-radius: 999px;
+          background: rgba(255, 255, 255, 0.03);
+          border: 1px solid rgba(255, 255, 255, 0.08);
+          color: var(--color-text-silver);
+          font-size: 11px;
+          font-weight: 600;
+          letter-spacing: 0.06em;
+          text-transform: uppercase;
+          backdrop-filter: blur(8px);
+          -webkit-backdrop-filter: blur(8px);
+        }
+        .hero-eyebrow-dot {
+          width: 6px;
+          height: 6px;
+          border-radius: 999px;
+          background: var(--color-positive);
+          box-shadow: 0 0 10px rgba(52, 211, 153, 0.8);
+          animation: heroDotPulse 1.6s ease-in-out infinite;
+        }
+        @keyframes heroDotPulse {
+          0%, 100% { opacity: 0.55; transform: scale(0.85); }
+          50% { opacity: 1; transform: scale(1.1); }
+        }
+
+        .hero-percent {
+          background: linear-gradient(115deg, #fafafa 0%, #34d399 30%, #6ee7b7 50%, #34d399 70%, #fafafa 100%);
+          background-size: 240% 100%;
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
+          filter: drop-shadow(0 0 18px rgba(52, 211, 153, 0.35));
+        }
+
+        :global(.hero-word-mask) {
+          display: inline-block;
+          overflow: hidden;
+          vertical-align: bottom;
+          line-height: 1.15;
+          padding-bottom: 0.22em;
+        }
+        :global(.hero-headline2) {
+          line-height: 1.18;
+          padding-bottom: 0.18em;
+        }
+        @keyframes typewriterBlink {
+          0%, 50% { opacity: 0.8; }
+          50.01%, 100% { opacity: 0; }
+        }
+        :global(.typewriter-caret) {
+          border-radius: 1px;
+        }
+        :global(.hero-word-inner) {
+          display: inline-block;
+          will-change: transform;
+        }
+
+        :global(.hero-cta-primary) {
+          position: relative;
+          display: inline-flex;
+          align-items: center;
+          gap: 12px;
+          padding: 14px 22px;
+          border-radius: 999px;
+          text-decoration: none;
+          overflow: hidden;
+          min-height: 52px;
+          white-space: nowrap;
+          transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        :global(.hero-cta-primary:hover) {
+          box-shadow: 0 32px 70px -22px rgba(52, 211, 153, 0.75), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+        }
+        :global(.hero-cta-ghost) {
+          position: relative;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          gap: 10px;
+          padding: 14px 22px;
+          border-radius: 999px;
+          text-decoration: none;
+          min-height: 52px;
+          white-space: nowrap;
+          transition: background 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+        }
+        :global(.hero-cta-ghost:hover) {
+          background: rgba(255, 255, 255, 0.05) !important;
+          border-color: rgba(255, 255, 255, 0.18) !important;
+          color: var(--color-text) !important;
+        }
+        :global(.hero-cta-ghost-play) {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          width: 20px;
+          height: 20px;
+          border-radius: 999px;
+          background: rgba(255, 255, 255, 0.08);
+          color: var(--color-text);
+          padding-left: 1px;
+        }
+
+        /* ── Stage ── */
+        :global(.hero-stage) {
+          position: relative;
+          transform-style: preserve-3d;
+        }
+        /* ── Smart aurora background ── */
+        :global(.hero-stage-aurora) {
+          position: absolute;
+          left: 50%;
+          top: 50%;
+          width: 130%;
+          height: 130%;
+          transform: translate(-50%, -50%);
+          pointer-events: none;
+          z-index: 0;
+          will-change: transform, opacity;
+        }
+        :global(.hero-stage-conic) {
+          position: absolute;
+          left: 50%;
+          top: 50%;
+          width: 95%;
+          height: 95%;
+          transform: translate(-50%, -50%);
+          background: conic-gradient(
+            from 0deg,
+            transparent 0%,
+            rgba(200, 200, 216, 0.16) 14%,
+            transparent 32%,
+            rgba(200, 200, 216, 0.10) 50%,
+            transparent 68%,
+            rgba(129, 140, 248, 0.12) 84%,
+            transparent 100%
+          );
+          filter: blur(50px);
+          opacity: 0.55;
+          mix-blend-mode: screen;
+        }
+        :global(.hero-stage-blob) {
+          position: absolute;
+          border-radius: 50%;
+          filter: blur(60px);
+          mix-blend-mode: screen;
+          will-change: transform;
+        }
+        :global(.hero-stage-blob--green) {
+          left: 8%;
+          top: 18%;
+          width: 42%;
+          height: 60%;
+          background: radial-gradient(circle, rgba(200, 200, 216, 0.20) 0%, rgba(200, 200, 216, 0) 70%);
+        }
+        :global(.hero-stage-blob--silver) {
+          right: 6%;
+          top: 12%;
+          width: 38%;
+          height: 55%;
+          background: radial-gradient(circle, rgba(200, 200, 216, 0.10) 0%, rgba(200, 200, 216, 0) 70%);
+        }
+        :global(.hero-stage-blob--violet) {
+          left: 40%;
+          top: 50%;
+          width: 36%;
+          height: 50%;
+          background: radial-gradient(circle, rgba(129, 140, 248, 0.32) 0%, rgba(129, 140, 248, 0) 70%);
+        }
+        :global(.hero-stage-core) {
+          position: absolute;
+          left: 50%;
+          top: 50%;
+          width: 70%;
+          height: 65%;
+          transform: translate(-50%, -50%);
+          background: radial-gradient(60% 50% at 50% 50%, rgba(200, 200, 216, 0.04) 0%, transparent 70%);
+          filter: blur(30px);
+        }
+        :global(.hero-stage-frame) {
+          position: relative;
+          z-index: 2;
+          margin: 0 auto;
+          width: 100%;
+          max-width: 880px;
+          /* PEEK: clip the bottom so only top portion is visible */
+          max-height: 56vh;
+          aspect-ratio: 16 / 10;
+          border-radius: 22px;
+          overflow: hidden;
+          background: linear-gradient(180deg, rgba(28, 28, 34, 0.92), rgba(14, 14, 18, 0.96));
+          border: 1px solid rgba(255, 255, 255, 0.08);
+          box-shadow:
+            0 60px 120px -30px rgba(0, 0, 0, 0.85),
+            0 30px 60px -20px rgba(0, 0, 0, 0.45),
+            0 0 0 1px rgba(255, 255, 255, 0.025) inset,
+            0 1px 0 rgba(255, 255, 255, 0.08) inset;
+        }
+        :global(.hero-stage-screen) {
+          position: relative;
+          width: 100%;
+          height: 100%;
+        }
+        :global(.hero-stage-video) {
+          position: absolute;
+          inset: 0;
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          object-position: top center;
+          z-index: 1;
+        }
+        :global(.hero-stage-fallback) {
+          position: absolute;
+          inset: 0;
+          z-index: 1;
+          padding: 12px;
+        }
+        :global(.hero-stage-fallback .hero-mockup-frame) {
+          height: 100%;
+        }
+        :global(.hero-stage-vignette) {
+          position: absolute;
+          inset: 0;
+          z-index: 3;
+          pointer-events: none;
+          background:
+            radial-gradient(ellipse at center, transparent 55%, rgba(0, 0, 0, 0.35) 100%);
+        }
+        :global(.hero-stage-bottomfade) {
+          position: absolute;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          height: 18%;
+          z-index: 4;
+          pointer-events: none;
+          background: linear-gradient(to top, var(--color-bg) 0%, rgba(10, 10, 14, 0.55) 60%, transparent 100%);
+        }
+        :global(.hero-stage-spotlight) {
+          position: absolute;
+          inset: 0;
+          z-index: 5;
+          pointer-events: none;
+          mix-blend-mode: screen;
+        }
+        :global(.hero-stage-scan) {
+          position: absolute;
+          top: -20%;
+          bottom: -20%;
+          width: 38%;
+          z-index: 6;
+          pointer-events: none;
+          background: linear-gradient(110deg, transparent 0%, rgba(255, 255, 255, 0.015) 40%, rgba(255, 255, 255, 0.06) 50%, rgba(255, 255, 255, 0.015) 60%, transparent 100%);
+          mix-blend-mode: screen;
+          filter: blur(8px);
+          opacity: 0.7;
+          transform: skewX(-12deg);
+        }
+        :global(.hero-stage-edge-top) {
+          position: absolute;
+          left: 0;
+          right: 0;
+          top: 0;
+          height: 1px;
+          z-index: 7;
+          background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.10) 50%, transparent 100%);
+          pointer-events: none;
+        }
+        :global(.hero-stage-edge-left) {
+          position: absolute;
+          left: 0;
+          top: 0;
+          bottom: 0;
+          width: 1px;
+          z-index: 7;
+          background: linear-gradient(180deg, rgba(255, 255, 255, 0.08) 0%, transparent 60%);
+          pointer-events: none;
+        }
+        :global(.hero-stage-live) {
+          position: absolute;
+          top: 14px;
+          left: 50%;
+          transform: translateX(-50%);
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+          padding: 5px 11px;
+          border-radius: 999px;
+          background: rgba(10, 10, 14, 0.75);
+          backdrop-filter: blur(10px);
+          -webkit-backdrop-filter: blur(10px);
+          border: 1px solid rgba(52, 211, 153, 0.35);
+          z-index: 8;
+          box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45), 0 0 24px rgba(52, 211, 153, 0.18);
+        }
+        :global(.hero-stage-live-dot) {
+          width: 6px;
+          height: 6px;
+          border-radius: 999px;
+          background: #34d399;
+          box-shadow: 0 0 8px rgba(52, 211, 153, 0.9);
+          animation: heroDotPulse 1.4s ease-in-out infinite;
+        }
+        :global(.hero-stage-live-text) {
+          font-size: 9px;
+          font-weight: 700;
+          letter-spacing: 0.16em;
+          color: #d6f6e6;
+        }
+        :global(.hero-stage-reflection) {
+          position: relative;
+          margin: -2vh auto 0;
+          width: 100%;
+          max-width: 1100px;
+          height: 16vh;
+          max-height: 140px;
+          background:
+            radial-gradient(60% 100% at 50% 0%, rgba(0, 0, 0, 0.55) 0%, transparent 70%);
+          filter: blur(12px);
+          opacity: 0.5;
+          transform-origin: top center;
+          mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.5) 0%, transparent 100%);
+          -webkit-mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.5) 0%, transparent 100%);
+          pointer-events: none;
+        }
+        :global(.hero-stage-morebelow) {
+          position: absolute;
+          left: 50%;
+          bottom: 18px;
+          transform: translateX(-50%);
+          color: rgba(255, 255, 255, 0.7);
+          z-index: 9;
+          pointer-events: none;
+          filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.4));
+        }
+
+        @media (max-width: 640px) {
+          :global(.hero-stage-frame) {
+            max-height: 62vh;
+            border-radius: 16px;
+            aspect-ratio: 16 / 12;
+          }
+          :global(.hero-stage-bottomfade) {
+            height: 22%;
+          }
+        }
+      `}</style>
+    </section>
   );
 }
