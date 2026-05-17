@@ -1,0 +1,186 @@
+name: Desktop Release
+
+on:
+  push:
+    tags:
+      - 'desktop-v*'
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - platform: 'macos-latest'
+            args: '--target aarch64-apple-darwin'
+            target_label: 'darwin-aarch64'
+          - platform: 'macos-latest'
+            args: '--target x86_64-apple-darwin'
+            target_label: 'darwin-x86_64'
+          - platform: 'ubuntu-22.04'
+            args: ''
+            target_label: 'linux-x86_64'
+          - platform: 'windows-latest'
+            args: ''
+            target_label: 'windows-x86_64'
+
+    runs-on: ${{ matrix.platform }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: desktop/package-lock.json
+
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: ${{ matrix.platform == 'macos-latest' && 'aarch64-apple-darwin,x86_64-apple-darwin' || '' }}
+
+      - name: Rust cache
+        uses: swatinem/rust-cache@v2
+        with:
+          workspaces: ./desktop/src-tauri -> target
+
+      - name: Install Linux build deps
+        if: matrix.platform == 'ubuntu-22.04'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libwebkit2gtk-4.1-dev libappindicator3-dev librsvg2-dev patchelf
+
+      - name: Install desktop deps
+        working-directory: ./desktop
+        run: npm ci
+
+      - name: Build Tauri app
+        uses: tauri-apps/tauri-action@v0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
+          TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
+        with:
+          projectPath: ./desktop
+          tagName: ${{ github.ref_name }}
+          releaseName: 'Cue Desktop ${{ github.ref_name }}'
+          releaseBody: |
+            Cue Desktop — see [docs/desktop-testing.md](../docs/desktop-testing.md) for install instructions.
+
+            Phase 1 builds are unsigned at the OS level. Windows will show SmartScreen ("More info" → "Run anyway"). macOS will show "unidentified developer" (right-click → Open).
+          releaseDraft: true
+          prerelease: false
+          args: ${{ matrix.args }}
+
+  publish-manifest:
+    needs: build
+    runs-on: ubuntu-22.04
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: master
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Resolve release info
+        id: release
+        run: |
+          TAG="${{ github.ref_name }}"
+          VERSION="${TAG#desktop-v}"
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "tag=$TAG" >> $GITHUB_OUTPUT
+
+      - name: Fetch signatures from release assets
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          mkdir -p /tmp/sigs
+          gh release download "${{ steps.release.outputs.tag }}" --pattern '*.sig' --dir /tmp/sigs --skip-existing
+          ls -la /tmp/sigs
+
+      - name: Generate latest.json
+        env:
+          REPO_URL: https://github.com/${{ github.repository }}
+          TAG: ${{ steps.release.outputs.tag }}
+          VERSION: ${{ steps.release.outputs.version }}
+        run: |
+          node <<'EOF'
+          const fs = require('fs');
+          const path = require('path');
+          const tag = process.env.TAG;
+          const version = process.env.VERSION;
+          const repo = process.env.REPO_URL;
+          const base = `${repo}/releases/download/${tag}`;
+
+          function readSig(fname) {
+            try { return fs.readFileSync(path.join('/tmp/sigs', fname), 'utf-8').trim(); }
+            catch { return ''; }
+          }
+
+          const sigs = fs.readdirSync('/tmp/sigs');
+          const find = (re) => sigs.find(f => re.test(f)) || '';
+
+          const winSig = find(/setup\.nsis\.zip\.sig$/);
+          const winAsset = winSig.replace(/\.sig$/, '') || `Cue_${version}_x64-setup.nsis.zip`;
+
+          const macAarch64Sig = find(/aarch64.*\.app\.tar\.gz\.sig$/);
+          const macAarch64Asset = macAarch64Sig.replace(/\.sig$/, '') || `Cue_${version}_aarch64.app.tar.gz`;
+
+          const macX64Sig = find(/x64.*\.app\.tar\.gz\.sig$/);
+          const macX64Asset = macX64Sig.replace(/\.sig$/, '') || `Cue_${version}_x64.app.tar.gz`;
+
+          const linuxSig = find(/AppImage\.sig$/);
+          const linuxAsset = linuxSig.replace(/\.sig$/, '') || `cue_${version}_amd64.AppImage`;
+
+          const manifest = {
+            version,
+            notes: `Cue Desktop ${tag}`,
+            pub_date: new Date().toISOString(),
+            platforms: {
+              'windows-x86_64': {
+                url: `${base}/${winAsset}`,
+                signature: readSig(winSig),
+              },
+              'darwin-aarch64': {
+                url: `${base}/${macAarch64Asset}`,
+                signature: readSig(macAarch64Sig),
+              },
+              'darwin-x86_64': {
+                url: `${base}/${macX64Asset}`,
+                signature: readSig(macX64Sig),
+              },
+              'linux-x86_64': {
+                url: `${base}/${linuxAsset}`,
+                signature: readSig(linuxSig),
+              },
+            },
+          };
+
+          const outPath = path.join(process.cwd(), 'public', 'desktop-releases', 'latest.json');
+          fs.mkdirSync(path.dirname(outPath), { recursive: true });
+          fs.writeFileSync(outPath, JSON.stringify(manifest, null, 2) + '\n');
+          console.log('Wrote manifest:', JSON.stringify(manifest, null, 2));
+          EOF
+
+      - name: Commit and push manifest
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add public/desktop-releases/latest.json
+          if git diff --staged --quiet; then
+            echo "No manifest changes"
+            exit 0
+          fi
+          git commit -m "chore(desktop): publish ${{ steps.release.outputs.tag }} manifest"
+          git push origin master
+
+      - name: Publish release (un-draft)
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh release edit "${{ steps.release.outputs.tag }}" --draft=false
