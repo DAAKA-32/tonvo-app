@@ -11,4 +11,7 @@ export default defineConfig({
     minify: "esbuild",
     sourcemap: false,
   },
+  css: {
+    postcss: { plugins: [] },
+  },
 });
