@@ -532,12 +532,12 @@
       "dashboard": "Dashboard"
     },
     "hero": {
-      "badge": "Growth-as-a-Service per negoziatori",
-      "headline1": "Chiuda il 27% di deal in più.",
-      "headline2": "Senza cambiare il suo pitch.",
-      "subtitle": "Closing intelligence in tempo reale per consulenti e coach di negoziazione. Si colleghi. Chiuda. Moltiplichi.",
-      "cta": "Aumentare il mio close rate",
-      "ctaSecondary": "Vedere il risultato"
+      "badge": "IA in tempo reale per le tue conversazioni di vendita",
+      "headline1": "Il copilota IA per",
+      "headline2": "le conversazioni decisive.",
+      "subtitle": "Trascrizione live, insights istantanei e suggerimenti di chiusura — nel momento giusto. Pensato per closer, consulenti e chiunque viva della prossima chiamata.",
+      "cta": "Inizia gratis",
+      "ctaSecondary": "Vedi come funziona"
     },
     "problem": {
       "label": "Il costo di non chiudere",

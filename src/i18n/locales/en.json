@@ -532,14 +532,14 @@
       "dashboard": "Dashboard"
     },
     "hero": {
-      "badge": "Growth-as-a-Service for negotiators",
-      "headline1": "Close 27% more deals.",
-      "headline2": "Without changing your pitch.",
-      "headline2b": "Without taking a single note.",
-      "headline2c": "Without missing a signal.",
-      "subtitle": "Live closing intelligence for consultants and negotiation coaches. Plug in. Win. Compound.",
-      "cta": "Raise my close rate",
-      "ctaSecondary": "See the outcome"
+      "badge": "Real-time AI for sales conversations",
+      "headline1": "The AI copilot for",
+      "headline2": "high-stakes conversations.",
+      "headline2b": "the moments that decide deals.",
+      "headline2c": "every call that counts.",
+      "subtitle": "Live transcription, instant insights, and closing suggestions — the moment they matter. Built for closers, consultants, and anyone whose income depends on the next call.",
+      "cta": "Start free",
+      "ctaSecondary": "See how it works"
     },
     "problem": {
       "label": "The cost of not winning",

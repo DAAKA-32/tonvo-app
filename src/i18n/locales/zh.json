@@ -532,12 +532,12 @@
       "dashboard": "工作台"
     },
     "hero": {
-      "badge": "为谈判者打造的 Growth-as-a-Service",
-      "headline1": "成单率提升 27%。",
-      "headline2": "话术一字不改。",
-      "subtitle": "为咨询顾问与谈判教练打造的实时成单 AI 副驾。接入。成单。复利。",
-      "cta": "提升我的成单率",
-      "ctaSecondary": "看实战结果"
+      "badge": "面向销售对话的实时 AI",
+      "headline1": "为高风险对话而生的",
+      "headline2": "AI 副驾驶。",
+      "subtitle": "实时转录、即时洞察、成交建议 — 在你需要的那一刻。为成交者、咨询顾问、以及收入取决于下一通电话的所有人打造。",
+      "cta": "免费开始",
+      "ctaSecondary": "了解工作原理"
     },
     "problem": {
       "label": "丢单的代价",

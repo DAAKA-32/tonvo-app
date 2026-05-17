@@ -27,30 +27,30 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: "Tonvo — Close 27% More Deals | Growth-as-a-Service for Closers",
+    default: "Tonvo — AI Copilot for High-Stakes Conversations",
     template: "%s | Tonvo",
   },
   description:
-    "Tonvo is Growth-as-a-Service for consultants, negotiators and high-ticket closers. Raise your close rate by 27% in 30 days — live closing lines, objection counters and price anchors delivered the moment they matter. We sell results, not software.",
+    "Tonvo is the real-time AI copilot for sales conversations. Live transcription, instant insights, and closing suggestions — the moment they matter. Built for closers, consultants, and anyone whose income depends on the next call.",
   keywords: [
-    "growth as a service",
-    "raise close rate",
-    "close more deals",
-    "closing rate coach",
-    "negotiation growth system",
-    "high ticket closing",
-    "live closing assistant",
-    "objection handling live",
-    "sales close rate uplift",
-    "consultant closing edge",
-    "negotiation performance",
-    "revenue per call",
-    "win rate growth",
-    "sales results as a service",
-    "close more sales calls",
-    "GaaS for sales",
-    "outcome-based sales tool",
-    "deal closing growth engine",
+    "AI sales copilot",
+    "real-time AI",
+    "AI conversation assistant",
+    "AI sales assistant",
+    "sales call copilot",
+    "live call transcription",
+    "AI closing assistant",
+    "AI for sales calls",
+    "conversation intelligence",
+    "AI meeting assistant",
+    "AI sales coach",
+    "real-time sales insights",
+    "sales conversation AI",
+    "live transcription AI",
+    "AI negotiation assistant",
+    "AI call assistant",
+    "AI for closers",
+    "sales AI copilot",
     "Tonvo",
   ],
   authors: [{ name: "Tonvo", url: SITE_URL }],
@@ -89,15 +89,15 @@ export const metadata: Metadata = {
     locale: "en_US",
     url: SITE_URL,
     siteName: SITE_NAME,
-    title: "Tonvo — Close 27% More Deals | Growth-as-a-Service for Closers",
+    title: "Tonvo — AI Copilot for High-Stakes Conversations",
     description:
-      "We don't sell software — we sell close rate. Tonvo arms consultants and negotiators with the exact closing line, the moment they need it. +27% close rate in 30 days, or your money back.",
+      "The real-time AI copilot for sales conversations. Live transcription, instant insights, and closing suggestions — the moment they matter.",
     images: [
       {
         url: "/og-image.png",
         width: 1200,
         height: 630,
-        alt: "Tonvo — Growth-as-a-Service that raises your close rate",
+        alt: "Tonvo — AI Copilot for High-Stakes Conversations",
         type: "image/png",
       },
     ],
@@ -106,10 +106,10 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     site: "@tonvo",
     creator: "@tonvo",
-    title: "Tonvo — Close More. Negotiate Better.",
+    title: "Tonvo — Real-Time AI Sales Copilot",
     description:
-      "Growth-as-a-Service for high-ticket closers. Raise your close rate by 27% in 30 days. We sell the outcome, not the software.",
-    images: [{ url: "/og-image.png", alt: "Tonvo — Close More Deals" }],
+      "Live transcription, instant insights, and closing suggestions during every call that matters. The AI copilot for sales conversations.",
+    images: [{ url: "/og-image.png", alt: "Tonvo — Real-Time AI Sales Copilot" }],
   },
   alternates: {
     canonical: SITE_URL,
@@ -141,7 +141,7 @@ const organizationJsonLd = {
   url: SITE_URL,
   logo: `${SITE_URL}/logo-tonvo.png`,
   description:
-    "Tonvo is Growth-as-a-Service for consultants, negotiators and high-ticket closers. We deliver a measurable close-rate uplift — not software.",
+    "Tonvo is the real-time AI copilot for sales conversations — live transcription, instant insights, and closing suggestions during every call that matters.",
   contactPoint: {
     "@type": "ContactPoint",
     email: "tonvoco.pro@gmail.com",
@@ -152,24 +152,24 @@ const organizationJsonLd = {
 const softwareJsonLd = {
   "@context": "https://schema.org",
   "@type": "SoftwareApplication",
-  name: "Tonvo — Growth-as-a-Service for Closers",
+  name: "Tonvo — AI Copilot for Sales Conversations",
   applicationCategory: "BusinessApplication",
-  applicationSubCategory: "SalesGrowth",
-  operatingSystem: "Web",
+  applicationSubCategory: "SalesAssistant",
+  operatingSystem: "Web, Windows, macOS, Linux",
   url: SITE_URL,
   description:
-    "Tonvo delivers a 27% average close-rate uplift in 30 days. Live closing lines, objection counters and price anchors are surfaced the moment a buying signal hits, so consultants and negotiation coaches stop losing winnable deals.",
+    "Tonvo is a real-time AI copilot for sales calls. Live transcription, instant suggestions, objection counters, and closing prompts — surfaced the moment a buying signal hits.",
   featureList: [
+    "Real-time call transcription",
     "Live buying-signal detection",
-    "Exact closing lines, delivered the moment you need them",
+    "AI closing suggestions, surfaced the moment they matter",
     "Objection counters and price anchors",
     "Speaker separation (you vs prospect)",
-    "Post-call deal review from transcript",
+    "Post-call review with searchable transcript",
     "Close-rate and objection win-rate tracking",
-    "10-language coverage for international deals",
+    "10-language coverage for international calls",
     "Invisible during screen share",
-    "Deal reports and export",
-    "Revenue coach and playbooks",
+    "Native desktop apps (Windows, macOS, Linux)",
   ],
   screenshot: `${SITE_URL}/og-image.png`,
   offers: [
@@ -215,42 +215,34 @@ const faqJsonLd = {
   mainEntity: [
     {
       "@type": "Question",
-      name: "Is Tonvo a tool or a growth system?",
+      name: "What is Tonvo?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "Tonvo is a Growth-as-a-Service system — we sell close rate, not software. You plug in, and the outcome we deliver is measurable: more deals closed, bigger tickets, fewer objections lost. The application is just the delivery mechanism.",
+        text: "Tonvo is a real-time AI copilot for sales conversations. During every call that matters, it transcribes what's said, surfaces buying signals, and suggests the next line — instantly. Available as a web app and as native desktop apps for Windows, macOS, and Linux.",
       },
     },
     {
       "@type": "Question",
-      name: "How fast does my close rate actually move?",
+      name: "How does it work during a live call?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "Most closers on Tonvo see a measurable close-rate lift inside 14 days — not because they changed their pitch, but because they stopped missing the moments that decide a deal. The average uplift across 30 days is +27% close rate.",
+        text: "Tonvo listens to the conversation in real time, runs live transcription, and surfaces AI suggestions the moment a buying signal, objection, or pricing question appears. You see the next best move without breaking eye contact or fumbling for a script.",
       },
     },
     {
       "@type": "Question",
-      name: "What do I actually get during a call?",
+      name: "What languages does Tonvo support?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "The exact sentence to say when it matters: the objection-handler, the price anchor, the commitment ask, the reframe. No dashboards to read live — just the next move, surfaced the instant the buying signal hits.",
+        text: "Tonvo handles 10 languages out of the box: English, French, Spanish, German, Italian, Portuguese, Dutch, Japanese, Korean, and Chinese. International calls are transcribed and analyzed in real time.",
       },
     },
     {
       "@type": "Question",
-      name: "Do I need to change my sales process or pitch?",
+      name: "Do I need to change my sales process to use Tonvo?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "No. Tonvo layers on top of your existing process. Your pitch, your deck, your offer — unchanged. What changes is the rate at which they end in a signed deal.",
-      },
-    },
-    {
-      "@type": "Question",
-      name: "Is there a guarantee on the outcome?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: "Yes. If your close rate doesn't move in 7 days, we refund you. We sell results — if you don't get them, we don't keep your money.",
+        text: "No. Tonvo layers on top of your existing workflow — your pitch, your deck, your offer stay unchanged. It runs alongside the call you'd already be making and adds an AI layer of guidance only you can see.",
       },
     },
     {
@@ -258,7 +250,7 @@ const faqJsonLd = {
       name: "Can my prospect see anything during a call?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "Never. Tonvo runs in a separate window, invisible to the other side — even on screen share. Your edge stays your edge.",
+        text: "No. Tonvo runs in a separate window, invisible to the other side — even during screen share. The intelligence stays on your side of the call.",
       },
     },
     {
@@ -266,15 +258,23 @@ const faqJsonLd = {
       name: "Who is Tonvo built for?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "Consultants, negotiation coaches, high-ticket closers, and client-facing operators whose income depends on their close rate. If you live by the deal, Tonvo compounds your edge.",
+        text: "Anyone whose work depends on high-stakes conversations: sales closers, consultants, negotiation coaches, account executives, customer success managers, and founders running discovery and renewal calls.",
       },
     },
     {
       "@type": "Question",
-      name: "How much does Tonvo cost versus the revenue it generates?",
+      name: "Is there a free version?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "The Closer plan is $19/month (or $156/year — 30% off). One additional deal closed pays for the entire year. Pricing is built around the outcome — we price on the growth you get, not per feature.",
+        text: "Yes. The Starter plan is free and includes 3 live sessions per month with full transcription and AI suggestions. The Closer plan unlocks unlimited sessions and starts at $19/month.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "Do I need to install anything?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Use the web app at app.tonvo.com — no install required. Or install the native desktop app for Windows, macOS, or Linux for a faster, dock-launchable experience.",
       },
     },
   ],
@@ -283,26 +283,26 @@ const faqJsonLd = {
 const howToJsonLd = {
   "@context": "https://schema.org",
   "@type": "HowTo",
-  name: "How to raise your close rate with Tonvo",
-  description: "Turn every call into a higher-close-rate rep in 3 steps.",
+  name: "How to use Tonvo during a sales call",
+  description: "Add a real-time AI copilot to your next call in 3 steps.",
   step: [
     {
       "@type": "HowToStep",
       position: 1,
-      name: "Plug in before the call",
-      text: "One click. Tonvo joins silently — invisible to your prospect. No workflow change, no extra setup.",
+      name: "Open Tonvo before the call",
+      text: "Launch the desktop app or open app.tonvo.com in a browser tab. Tonvo runs in its own window, invisible to your prospect on screen share.",
     },
     {
       "@type": "HowToStep",
       position: 2,
-      name: "Win live",
-      text: "The moment a buying signal, objection or price pushback hits, Tonvo surfaces the exact line to say. You deliver it. The deal tips your way.",
+      name: "Get live guidance during the call",
+      text: "Tonvo transcribes the conversation in real time and surfaces AI suggestions the moment a buying signal, objection, or pricing question lands. You see the next best move instantly.",
     },
     {
       "@type": "HowToStep",
       position: 3,
-      name: "Compound the edge",
-      text: "After the call, review what moved the deal and what cost you. Your close-rate trend climbs, call after call.",
+      name: "Review after the call",
+      text: "Open the transcript and the conversation analysis. See what landed, what didn't, and the patterns that repeat across your calls.",
     },
   ],
 };
@@ -312,7 +312,7 @@ const webSiteJsonLd = {
   "@type": "WebSite",
   name: SITE_NAME,
   url: SITE_URL,
-  description: "Growth-as-a-Service for closers. Raise your close rate by 27% in 30 days — we sell results, not software.",
+  description: "The real-time AI copilot for sales conversations. Live transcription, instant insights, and closing suggestions — the moment they matter.",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

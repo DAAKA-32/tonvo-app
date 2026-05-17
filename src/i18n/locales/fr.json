@@ -532,14 +532,14 @@
       "dashboard": "Tableau de bord"
     },
     "hero": {
-      "badge": "Growth-as-a-Service pour closers",
-      "headline1": "Closez 27 % de deals en plus.",
-      "headline2": "Sans toucher à votre pitch.",
-      "headline2b": "Sans prendre une seule note.",
-      "headline2c": "Sans manquer un signal.",
-      "subtitle": "L'intelligence de closing en temps réel pour consultants et coachs en négociation. Branchez-vous. Closez. Capitalisez.",
-      "cta": "Faire monter mon close rate",
-      "ctaSecondary": "Voir Tonvo en action"
+      "badge": "L'IA en temps réel pour vos conversations commerciales",
+      "headline1": "Le copilote IA pour",
+      "headline2": "les conversations à enjeu.",
+      "headline2b": "les moments qui font basculer un deal.",
+      "headline2c": "chaque appel qui compte.",
+      "subtitle": "Transcription en direct, insights instantanés, suggestions de closing — au moment exact où ça compte. Pensé pour les closers, consultants, et tous ceux dont le revenu dépend du prochain appel.",
+      "cta": "Commencer gratuitement",
+      "ctaSecondary": "Voir comment ça marche"
     },
     "problem": {
       "label": "Le coût des deals qui s'échappent",

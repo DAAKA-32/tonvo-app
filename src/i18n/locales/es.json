@@ -532,12 +532,12 @@
       "dashboard": "Panel"
     },
     "hero": {
-      "badge": "Growth-as-a-Service para closers",
-      "headline1": "Cierre un 27 % más de deals.",
-      "headline2": "Sin tocar su pitch.",
-      "subtitle": "Inteligencia de cierre en directo para consultores y coaches de negociación. Conéctese. Cierre. Multiplique.",
-      "cta": "Subir mi tasa de cierre",
-      "ctaSecondary": "Ver el resultado"
+      "badge": "IA en tiempo real para tus conversaciones de venta",
+      "headline1": "El copiloto IA para",
+      "headline2": "conversaciones de alto impacto.",
+      "subtitle": "Transcripción en vivo, insights instantáneos y sugerencias de cierre — en el momento exacto. Pensado para closers, consultores y todos los que viven de la próxima llamada.",
+      "cta": "Empezar gratis",
+      "ctaSecondary": "Ver cómo funciona"
     },
     "problem": {
       "label": "Lo que cuesta no cerrar",

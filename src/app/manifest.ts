@@ -2,10 +2,10 @@ import type { MetadataRoute } from "next";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "Tonvo — Close More. Negotiate Better.",
+    name: "Tonvo — AI Copilot for High-Stakes Conversations",
     short_name: "Tonvo",
     description:
-      "Growth-as-a-Service for closers. Raise your close rate by 27% in 30 days — exact closing lines, objection counters and price anchors, delivered the moment you need them.",
+      "The real-time AI copilot for sales conversations. Live transcription, instant insights, and closing suggestions — the moment they matter.",
     start_url: "/",
     display: "standalone",
     background_color: "#09090b",

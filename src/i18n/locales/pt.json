@@ -532,12 +532,12 @@
       "dashboard": "Dashboard"
     },
     "hero": {
-      "badge": "Growth-as-a-Service para negociadores",
-      "headline1": "Feche mais 27 % de negócios.",
-      "headline2": "Sem mudar uma vírgula do seu pitch.",
-      "subtitle": "Inteligência de fecho ao vivo para consultores e coaches de negociação. Ligue-se. Feche. Multiplique.",
-      "cta": "Subir a minha taxa de fecho",
-      "ctaSecondary": "Ver o resultado"
+      "badge": "IA em tempo real para suas conversas de vendas",
+      "headline1": "O copiloto de IA para",
+      "headline2": "conversas decisivas.",
+      "subtitle": "Transcrição ao vivo, insights instantâneos e sugestões de fechamento — no momento certo. Feito para closers, consultores e todos que vivem da próxima ligação.",
+      "cta": "Começar grátis",
+      "ctaSecondary": "Veja como funciona"
     },
     "problem": {
       "label": "O custo de não ganhar",
