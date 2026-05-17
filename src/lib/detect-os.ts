@@ -21,7 +21,7 @@ export function downloadUrl(os: OS): string {
     case "windows":
       return `${REPO_BASE}/latest/download/Cue-Setup.exe`;
     case "macos":
-      return `${REPO_BASE}/latest/download/Cue.dmg`;
+      return `${REPO_BASE}/latest/download/Cue-aarch64.dmg`;
     case "linux":
       return `${REPO_BASE}/latest/download/Cue.AppImage`;
     case "unknown":

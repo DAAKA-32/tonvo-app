@@ -33,8 +33,8 @@ describe("downloadUrl", () => {
   it("windows → Cue-Setup.exe", () => {
     expect(downloadUrl("windows")).toBe(`${REPO}/Cue-Setup.exe`);
   });
-  it("macos → Cue.dmg", () => {
-    expect(downloadUrl("macos")).toBe(`${REPO}/Cue.dmg`);
+  it("macos → Cue-aarch64.dmg", () => {
+    expect(downloadUrl("macos")).toBe(`${REPO}/Cue-aarch64.dmg`);
   });
   it("linux → Cue.AppImage", () => {
     expect(downloadUrl("linux")).toBe(`${REPO}/Cue.AppImage`);
