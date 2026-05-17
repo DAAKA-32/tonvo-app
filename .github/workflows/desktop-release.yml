@@ -73,19 +73,23 @@ jobs:
       - name: Collect artifacts
         shell: bash
         run: |
+          set -e
           mkdir -p artifacts
-          cd desktop/src-tauri/target
-          # Adjust path for cross-compile target dirs
-          if [ -d "aarch64-apple-darwin/release/bundle" ]; then
-            BUNDLE_DIR="aarch64-apple-darwin/release/bundle"
-          elif [ -d "x86_64-apple-darwin/release/bundle" ]; then
-            BUNDLE_DIR="x86_64-apple-darwin/release/bundle"
+          TARGET_ROOT="desktop/src-tauri/target"
+          # Resolve bundle dir (cross-compile targets put bundles under target/<triple>/release/)
+          if [ -d "$TARGET_ROOT/aarch64-apple-darwin/release/bundle" ]; then
+            BUNDLE_DIR="$TARGET_ROOT/aarch64-apple-darwin/release/bundle"
+          elif [ -d "$TARGET_ROOT/x86_64-apple-darwin/release/bundle" ]; then
+            BUNDLE_DIR="$TARGET_ROOT/x86_64-apple-darwin/release/bundle"
           else
-            BUNDLE_DIR="release/bundle"
+            BUNDLE_DIR="$TARGET_ROOT/release/bundle"
           fi
           echo "Bundle dir: $BUNDLE_DIR"
-          find "$BUNDLE_DIR" -type f \( -name "*.exe" -o -name "*.msi" -o -name "*.dmg" -o -name "*.AppImage" -o -name "*.deb" -o -name "*.tar.gz" -o -name "*.zip" -o -name "*.sig" \) -exec cp {} ../../../../artifacts/ \;
-          ls -la ../../../../artifacts/
+          ls -la "$BUNDLE_DIR" || (echo "Bundle dir not found"; exit 1)
+          find "$BUNDLE_DIR" -type f \( -name "*.exe" -o -name "*.msi" -o -name "*.dmg" -o -name "*.AppImage" -o -name "*.deb" -o -name "*.tar.gz" -o -name "*.zip" -o -name "*.sig" \) -exec cp {} artifacts/ \;
+          echo "--- Collected artifacts: ---"
+          ls -la artifacts/
+          [ "$(ls -A artifacts/ 2>/dev/null)" ] || (echo "No artifacts collected"; exit 1)
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
