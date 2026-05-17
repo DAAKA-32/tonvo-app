@@ -28,7 +28,7 @@ describe("detectOSFromUA", () => {
 });
 
 describe("downloadUrl", () => {
-  const REPO = "https://github.com/tonvo/cue-desktop/releases/latest/download";
+  const REPO = "https://github.com/DAAKA-32/cue-desktop/releases/latest/download";
 
   it("windows → Cue-Setup.exe", () => {
     expect(downloadUrl("windows")).toBe(`${REPO}/Cue-Setup.exe`);
@@ -41,7 +41,7 @@ describe("downloadUrl", () => {
   });
   it("unknown → repo releases page", () => {
     expect(downloadUrl("unknown")).toBe(
-      "https://github.com/tonvo/cue-desktop/releases/latest",
+      "https://github.com/DAAKA-32/cue-desktop/releases/latest",
     );
   });
 });

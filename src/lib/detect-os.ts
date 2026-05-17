@@ -1,6 +1,6 @@
 export type OS = "windows" | "macos" | "linux" | "unknown";
 
-const REPO_BASE = "https://github.com/tonvo/cue-desktop/releases";
+const REPO_BASE = "https://github.com/DAAKA-32/cue-desktop/releases";
 
 export function detectOSFromUA(ua: string): OS {
   if (!ua) return "unknown";

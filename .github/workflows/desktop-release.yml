@@ -6,7 +6,11 @@ on:
       - 'desktop-v*'
 
 permissions:
-  contents: write
+  contents: read
+
+env:
+  RELEASE_REPO: DAAKA-32/cue-desktop
+  MANIFEST_REPO: ${{ github.repository }}
 
 jobs:
   build:
@@ -59,26 +63,80 @@ jobs:
         working-directory: ./desktop
         run: npm ci
 
-      - name: Build Tauri app
-        uses: tauri-apps/tauri-action@v0
+      - name: Tauri build (no release — artifacts only)
+        working-directory: ./desktop
+        run: npx tauri build ${{ matrix.args }}
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
           TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
-        with:
-          projectPath: ./desktop
-          tagName: ${{ github.ref_name }}
-          releaseName: 'Cue Desktop ${{ github.ref_name }}'
-          releaseBody: |
-            Cue Desktop — see [docs/desktop-testing.md](../docs/desktop-testing.md) for install instructions.
 
-            Phase 1 builds are unsigned at the OS level. Windows will show SmartScreen ("More info" → "Run anyway"). macOS will show "unidentified developer" (right-click → Open).
-          releaseDraft: true
-          prerelease: false
-          args: ${{ matrix.args }}
+      - name: Collect artifacts
+        shell: bash
+        run: |
+          mkdir -p artifacts
+          cd desktop/src-tauri/target
+          # Adjust path for cross-compile target dirs
+          if [ -d "aarch64-apple-darwin/release/bundle" ]; then
+            BUNDLE_DIR="aarch64-apple-darwin/release/bundle"
+          elif [ -d "x86_64-apple-darwin/release/bundle" ]; then
+            BUNDLE_DIR="x86_64-apple-darwin/release/bundle"
+          else
+            BUNDLE_DIR="release/bundle"
+          fi
+          echo "Bundle dir: $BUNDLE_DIR"
+          find "$BUNDLE_DIR" -type f \( -name "*.exe" -o -name "*.msi" -o -name "*.dmg" -o -name "*.AppImage" -o -name "*.deb" -o -name "*.tar.gz" -o -name "*.zip" -o -name "*.sig" \) -exec cp {} ../../../../artifacts/ \;
+          ls -la ../../../../artifacts/
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: bundle-${{ matrix.target_label }}
+          path: artifacts/*
+          retention-days: 7
+          if-no-files-found: error
+
+  publish-release:
+    needs: build
+    runs-on: ubuntu-22.04
+    permissions:
+      contents: write
+    steps:
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+          merge-multiple: true
+
+      - name: List downloaded artifacts
+        run: ls -la artifacts/
+
+      - name: Resolve version
+        id: release
+        run: |
+          TAG="${{ github.ref_name }}"
+          VERSION="${TAG#desktop-v}"
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "tag=$TAG" >> $GITHUB_OUTPUT
+
+      - name: Create release in cross-repo and upload assets
+        env:
+          GH_TOKEN: ${{ secrets.RELEASE_REPO_TOKEN }}
+        run: |
+          set -e
+          TAG="${{ steps.release.outputs.tag }}"
+          gh release create "$TAG" \
+            --repo "$RELEASE_REPO" \
+            --title "Cue Desktop $TAG" \
+            --notes "Cue Desktop $TAG
+
+          Phase 1 builds are unsigned at the OS level.
+          - **Windows:** SmartScreen will warn — click \"More info\" → \"Run anyway\"
+          - **macOS:** Right-click the app → \"Open\" → \"Open\" (bypasses Gatekeeper)
+          - **Linux:** \`chmod +x Cue.AppImage && ./Cue.AppImage\` or install the \`.deb\`" \
+            artifacts/*
 
   publish-manifest:
-    needs: build
+    needs: publish-release
     runs-on: ubuntu-22.04
     permissions:
       contents: write
@@ -96,17 +154,19 @@ jobs:
           echo "version=$VERSION" >> $GITHUB_OUTPUT
           echo "tag=$TAG" >> $GITHUB_OUTPUT
 
-      - name: Fetch signatures from release assets
+      - name: Fetch .sig files from cross-repo release
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.RELEASE_REPO_TOKEN }}
         run: |
           mkdir -p /tmp/sigs
-          gh release download "${{ steps.release.outputs.tag }}" --pattern '*.sig' --dir /tmp/sigs --skip-existing
+          gh release download "${{ steps.release.outputs.tag }}" \
+            --repo "$RELEASE_REPO" \
+            --pattern '*.sig' \
+            --dir /tmp/sigs --skip-existing
           ls -la /tmp/sigs
 
       - name: Generate latest.json
         env:
-          REPO_URL: https://github.com/${{ github.repository }}
           TAG: ${{ steps.release.outputs.tag }}
           VERSION: ${{ steps.release.outputs.version }}
         run: |
@@ -115,10 +175,11 @@ jobs:
           const path = require('path');
           const tag = process.env.TAG;
           const version = process.env.VERSION;
-          const repo = process.env.REPO_URL;
-          const base = `${repo}/releases/download/${tag}`;
+          const releaseRepo = process.env.RELEASE_REPO;
+          const base = `https://github.com/${releaseRepo}/releases/download/${tag}`;
 
           function readSig(fname) {
+            if (!fname) return '';
             try { return fs.readFileSync(path.join('/tmp/sigs', fname), 'utf-8').trim(); }
             catch { return ''; }
           }
@@ -143,22 +204,10 @@ jobs:
             notes: `Cue Desktop ${tag}`,
             pub_date: new Date().toISOString(),
             platforms: {
-              'windows-x86_64': {
-                url: `${base}/${winAsset}`,
-                signature: readSig(winSig),
-              },
-              'darwin-aarch64': {
-                url: `${base}/${macAarch64Asset}`,
-                signature: readSig(macAarch64Sig),
-              },
-              'darwin-x86_64': {
-                url: `${base}/${macX64Asset}`,
-                signature: readSig(macX64Sig),
-              },
-              'linux-x86_64': {
-                url: `${base}/${linuxAsset}`,
-                signature: readSig(linuxSig),
-              },
+              'windows-x86_64': { url: `${base}/${winAsset}`, signature: readSig(winSig) },
+              'darwin-aarch64': { url: `${base}/${macAarch64Asset}`, signature: readSig(macAarch64Sig) },
+              'darwin-x86_64': { url: `${base}/${macX64Asset}`, signature: readSig(macX64Sig) },
+              'linux-x86_64': { url: `${base}/${linuxAsset}`, signature: readSig(linuxSig) },
             },
           };
 
@@ -179,8 +228,3 @@ jobs:
           fi
           git commit -m "chore(desktop): publish ${{ steps.release.outputs.tag }} manifest"
           git push origin master
-
-      - name: Publish release (un-draft)
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: gh release edit "${{ steps.release.outputs.tag }}" --draft=false
