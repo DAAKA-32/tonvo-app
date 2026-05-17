@@ -9,6 +9,7 @@ import AnimatedTitle from "@/components/AnimatedTitle";
 import TonvoLogo from "@/components/Logo";
 import LandingNavbar from "@/components/landing/LandingNavbar";
 import LandingHero from "@/components/landing/LandingHero";
+import DesktopDownloadHero from "@/components/landing/DesktopDownloadHero";
 import PricingSection from "@/components/landing/PricingSection";
 import UseCasesSection from "@/components/landing/UseCasesSection";
 import SolutionSection from "@/components/landing/SolutionSection";
@@ -309,6 +310,9 @@ export default function HomePage() {
       <main>
         {/* ── Hero (client component: auth redirect + CurtainIntro) ── */}
         <LandingHero />
+
+        {/* ── Desktop download CTA (OS-detected) ── */}
+        <DesktopDownloadHero />
 
         {/* ── Divider ── */}
         <RevealLine className="glow-line max-w-2xl mx-auto" />

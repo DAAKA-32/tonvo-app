@@ -13,7 +13,9 @@
     "tiktok:publish": "tsx agents/pipelines/tiktok/publish.ts publish",
     "scripts:generate": "tsx agents/scripts/generate-batch.ts",
     "scripts:render-all": "tsx agents/scripts/render-all.ts",
-    "hook:log": "tsx agents/scripts/hook-log.ts"
+    "hook:log": "tsx agents/scripts/hook-log.ts",
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.78.0",
@@ -51,6 +53,7 @@
     "satori": "^0.26.0",
     "tailwindcss": "^4.2.1",
     "tsx": "^4.19.2",
-    "typescript": "^5.9.3"
+    "typescript": "^5.9.3",
+    "vitest": "^2.1.4"
   }
 }
