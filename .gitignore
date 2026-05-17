@@ -11,3 +11,9 @@ firebase-debug.log
 
 # Local-only autonomous agent system — never push to remote
 agents/
+
+# Tauri desktop workspace
+desktop/node_modules/
+desktop/dist/
+desktop/src-tauri/target/
+desktop/src-tauri/gen/

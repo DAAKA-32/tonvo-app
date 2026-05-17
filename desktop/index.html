@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cue</title>
+    <link rel="stylesheet" href="/src/styles.css" />
+  </head>
+  <body data-state="booting">
+    <main class="shell">
+      <div class="brand">
+        <div class="logo">C</div>
+        <h1>Cue</h1>
+      </div>
+      <p class="status status-booting">Starting…</p>
+      <p class="status status-offline">Cue is offline. Reconnecting…</p>
+      <button class="retry" type="button">Retry now</button>
+    </main>
+    <script type="module" src="/src/shell.ts"></script>
+  </body>
+</html>
