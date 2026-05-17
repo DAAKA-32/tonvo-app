@@ -57,6 +57,53 @@ Run before publishing each release. Phase 1 has no automated end-to-end coverage
    - Commits manifest back to `master`
    - Un-drafts the release
 7. Vercel auto-deploys → users get the update on next launch
+8. **Post-release: submit `Tonvo-Setup.exe` to Microsoft for SmartScreen whitelisting** (see next section)
+
+## Post-release: Microsoft Defender / SmartScreen submission
+
+Phase 1 binaries are not OS-signed, so Windows SmartScreen warns users on first launch ("Windows protected your PC"). Microsoft can whitelist each release's specific file hash after a free scan. This is the cheapest path to clean installs until Phase 7 (proper code signing certificate).
+
+**Time required:** ~2 minutes per release. **Delay before warning disappears:** 1-3 days.
+
+### Per-release checklist
+
+1. **Download the just-published `Tonvo-Setup.exe`** from the release page:
+   `https://github.com/DAAKA-32/cue-desktop/releases/latest`
+2. **Open the Microsoft submission form:**
+   👉 https://www.microsoft.com/en-us/wdsi/filesubmission
+3. **Sign in** with a Microsoft account (any free MSA works). Use a single shared account so submissions accumulate reputation under one identity.
+4. **Fill the form:**
+   | Field | Value |
+   |---|---|
+   | What is the file you want to submit | Choose `Tonvo-Setup.exe` |
+   | What do you believe this file is | **Incorrectly detected as malware/malicious** |
+   | Defender version | Use the prefilled value (or `1.x.xxxxx.x` from Windows Security) |
+   | Detection name | Leave blank if not flagged by name, otherwise paste the exact name |
+   | Detected on | Today's date |
+   | Additional information | "Tonvo is a Tauri 2 desktop application (AI sales copilot). The binary is built via GitHub Actions in https://github.com/DAAKA-32/tonvo-app/actions and published unsigned. Phase 1 release — OS-level code signing coming later. Source: https://app.tonvo.com" |
+   | Files | Drag the downloaded `Tonvo-Setup.exe` |
+5. **Submit.** You'll get a tracking ID.
+6. **Wait 1-3 days.** Microsoft scans, confirms clean, adds hash to whitelist. SmartScreen stops warning for that exact binary.
+
+### Important notes
+
+- **Hash-specific whitelist.** Each release's `Tonvo-Setup.exe` has a different SHA256, so Microsoft must whitelist each one separately. Do this for every `desktop-v*` release.
+- **In the meantime,** users see the SmartScreen warning. Workaround: "More info" → "Run anyway". Document this in the release notes.
+- **Track submissions** in a doc / spreadsheet (version → submission date → status). Microsoft sends an email when the verdict is in.
+- **If Microsoft flags as malicious,** they'll respond explaining why. Most common false positive triggers for unsigned Rust binaries: heuristic detection of WebView2 bootstrapper, single-instance plugin's named pipes. Reply with details, usually resolved within a week.
+
+### Reputation strategy
+
+Independent of per-release submission, SmartScreen also accumulates **organic reputation** based on download count and absence of complaints. After several thousand installs of releases without issues, even un-submitted future releases tend to be flagged less aggressively. The "per-release submission" approach speeds this up — Microsoft attaches reputation to the publisher identity (signed by your MSA), not just the file hash.
+
+### When to graduate to code signing (Phase 7)
+
+Move to Azure Trusted Signing (~$10/month) or an EV certificate ($300+/year) when **any** of these is true:
+- You're shipping more than 2 releases per week (manual submission too tedious)
+- You're paying for paid ads driving installs (SmartScreen lost-install rate becomes material)
+- A B2B prospect blocks installs at the firewall/EDR level (some EDRs aggressively block unsigned binaries regardless of SmartScreen)
+
+Azure Trusted Signing is the recommended Phase 7 path — Microsoft signs via their own CA chain, immediate SmartScreen acceptance, and the workflow integration is a 2-env-var change in `.github/workflows/desktop-release.yml`.
 
 ## Local-only dev iteration
 
