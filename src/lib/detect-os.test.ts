@@ -30,14 +30,14 @@ describe("detectOSFromUA", () => {
 describe("downloadUrl", () => {
   const REPO = "https://github.com/DAAKA-32/cue-desktop/releases/latest/download";
 
-  it("windows → Cue-Setup.exe", () => {
-    expect(downloadUrl("windows")).toBe(`${REPO}/Cue-Setup.exe`);
+  it("windows → Tonvo-Setup.exe", () => {
+    expect(downloadUrl("windows")).toBe(`${REPO}/Tonvo-Setup.exe`);
   });
-  it("macos → Cue-aarch64.dmg", () => {
-    expect(downloadUrl("macos")).toBe(`${REPO}/Cue-aarch64.dmg`);
+  it("macos → Tonvo-aarch64.dmg", () => {
+    expect(downloadUrl("macos")).toBe(`${REPO}/Tonvo-aarch64.dmg`);
   });
-  it("linux → Cue.AppImage", () => {
-    expect(downloadUrl("linux")).toBe(`${REPO}/Cue.AppImage`);
+  it("linux → Tonvo.AppImage", () => {
+    expect(downloadUrl("linux")).toBe(`${REPO}/Tonvo.AppImage`);
   });
   it("unknown → repo releases page", () => {
     expect(downloadUrl("unknown")).toBe(

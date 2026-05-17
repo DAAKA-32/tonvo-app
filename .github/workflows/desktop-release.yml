@@ -126,46 +126,46 @@ jobs:
         run: |
           set -e
           cd artifacts
-          # Windows: Cue_X.Y.Z_x64-setup.exe → Cue-Setup.exe
-          for f in Cue_*_x64-setup.exe; do
-            [ -f "$f" ] && cp "$f" "Cue-Setup.exe"
+          # Windows: Tonvo_X.Y.Z_x64-setup.exe → Tonvo-Setup.exe
+          for f in Tonvo_*_x64-setup.exe; do
+            [ -f "$f" ] && cp "$f" "Tonvo-Setup.exe"
           done
-          for f in Cue_*_x64-setup.exe.sig; do
-            [ -f "$f" ] && cp "$f" "Cue-Setup.exe.sig"
+          for f in Tonvo_*_x64-setup.exe.sig; do
+            [ -f "$f" ] && cp "$f" "Tonvo-Setup.exe.sig"
           done
-          # macOS Apple Silicon: Cue_X.Y.Z_aarch64.dmg → Cue-aarch64.dmg
-          for f in Cue_*_aarch64.dmg; do
-            [ -f "$f" ] && cp "$f" "Cue-aarch64.dmg"
+          # macOS Apple Silicon
+          for f in Tonvo_*_aarch64.dmg; do
+            [ -f "$f" ] && cp "$f" "Tonvo-aarch64.dmg"
           done
-          # macOS Intel: Cue_X.Y.Z_x64.dmg → Cue-x64.dmg
-          for f in Cue_*_x64.dmg; do
-            [ -f "$f" ] && cp "$f" "Cue-x64.dmg"
+          # macOS Intel
+          for f in Tonvo_*_x64.dmg; do
+            [ -f "$f" ] && cp "$f" "Tonvo-x64.dmg"
           done
           # macOS updater bundles
-          for f in Cue_*_aarch64.app.tar.gz; do
-            [ -f "$f" ] && cp "$f" "Cue-aarch64.app.tar.gz"
+          for f in Tonvo_*_aarch64.app.tar.gz; do
+            [ -f "$f" ] && cp "$f" "Tonvo-aarch64.app.tar.gz"
           done
-          for f in Cue_*_aarch64.app.tar.gz.sig; do
-            [ -f "$f" ] && cp "$f" "Cue-aarch64.app.tar.gz.sig"
+          for f in Tonvo_*_aarch64.app.tar.gz.sig; do
+            [ -f "$f" ] && cp "$f" "Tonvo-aarch64.app.tar.gz.sig"
           done
-          for f in Cue_*_x64.app.tar.gz; do
-            [ -f "$f" ] && cp "$f" "Cue-x64.app.tar.gz"
+          for f in Tonvo_*_x64.app.tar.gz; do
+            [ -f "$f" ] && cp "$f" "Tonvo-x64.app.tar.gz"
           done
-          for f in Cue_*_x64.app.tar.gz.sig; do
-            [ -f "$f" ] && cp "$f" "Cue-x64.app.tar.gz.sig"
+          for f in Tonvo_*_x64.app.tar.gz.sig; do
+            [ -f "$f" ] && cp "$f" "Tonvo-x64.app.tar.gz.sig"
           done
-          # Linux: Cue_X.Y.Z_amd64.AppImage → Cue.AppImage
-          for f in Cue_*_amd64.AppImage; do
-            [ -f "$f" ] && cp "$f" "Cue.AppImage"
+          # Linux AppImage
+          for f in Tonvo_*_amd64.AppImage; do
+            [ -f "$f" ] && cp "$f" "Tonvo.AppImage"
           done
-          for f in Cue_*_amd64.AppImage.sig; do
-            [ -f "$f" ] && cp "$f" "Cue.AppImage.sig"
+          for f in Tonvo_*_amd64.AppImage.sig; do
+            [ -f "$f" ] && cp "$f" "Tonvo.AppImage.sig"
           done
-          # Linux .deb: cue_X.Y.Z_amd64.deb → cue.deb
-          for f in cue_*_amd64.deb; do
-            [ -f "$f" ] && cp "$f" "cue.deb"
+          # Linux .deb: tonvo_X.Y.Z_amd64.deb → tonvo.deb
+          for f in [Tt]onvo_*_amd64.deb; do
+            [ -f "$f" ] && cp "$f" "tonvo.deb"
           done
-          # Remove tarballs from .deb internals that shouldn't be in release
+          # Remove .deb internals that shouldn't be in release
           rm -f control.tar.gz data.tar.gz
           echo "--- Final artifacts: ---"
           ls -la
@@ -178,13 +178,13 @@ jobs:
           TAG="${{ steps.release.outputs.tag }}"
           gh release create "$TAG" \
             --repo "$RELEASE_REPO" \
-            --title "Cue Desktop $TAG" \
-            --notes "Cue Desktop $TAG
+            --title "Tonvo Desktop $TAG" \
+            --notes "Tonvo Desktop $TAG
 
           Phase 1 builds are unsigned at the OS level.
           - **Windows:** SmartScreen will warn — click \"More info\" → \"Run anyway\"
           - **macOS:** Right-click the app → \"Open\" → \"Open\" (bypasses Gatekeeper)
-          - **Linux:** \`chmod +x Cue.AppImage && ./Cue.AppImage\` or install the \`.deb\`" \
+          - **Linux:** \`chmod +x Tonvo.AppImage && ./Tonvo.AppImage\` or install the \`.deb\`" \
             artifacts/*
 
   publish-manifest:
@@ -241,24 +241,24 @@ jobs:
           // the EXE/AppImage/tarball directly, not zipped wrappers.
           const manifest = {
             version,
-            notes: `Cue Desktop ${tag}`,
+            notes: `Tonvo Desktop ${tag}`,
             pub_date: new Date().toISOString(),
             platforms: {
               'windows-x86_64': {
-                url: `${base}/Cue-Setup.exe`,
-                signature: readSig('Cue-Setup.exe.sig'),
+                url: `${base}/Tonvo-Setup.exe`,
+                signature: readSig('Tonvo-Setup.exe.sig'),
               },
               'darwin-aarch64': {
-                url: `${base}/Cue-aarch64.app.tar.gz`,
-                signature: readSig('Cue-aarch64.app.tar.gz.sig'),
+                url: `${base}/Tonvo-aarch64.app.tar.gz`,
+                signature: readSig('Tonvo-aarch64.app.tar.gz.sig'),
               },
               'darwin-x86_64': {
-                url: `${base}/Cue-x64.app.tar.gz`,
-                signature: readSig('Cue-x64.app.tar.gz.sig'),
+                url: `${base}/Tonvo-x64.app.tar.gz`,
+                signature: readSig('Tonvo-x64.app.tar.gz.sig'),
               },
               'linux-x86_64': {
-                url: `${base}/Cue.AppImage`,
-                signature: readSig('Cue.AppImage.sig'),
+                url: `${base}/Tonvo.AppImage`,
+                signature: readSig('Tonvo.AppImage.sig'),
               },
             },
           };

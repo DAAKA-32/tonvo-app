@@ -1,13 +1,13 @@
 [package]
-name = "cue"
-version = "0.1.1"
-description = "Cue Desktop"
+name = "tonvo"
+version = "0.1.2"
+description = "Tonvo Desktop"
 authors = ["Tonvo"]
 edition = "2021"
 rust-version = "1.77"
 
 [lib]
-name = "cue_lib"
+name = "tonvo_lib"
 crate-type = ["staticlib", "cdylib", "rlib"]
 
 [build-dependencies]

@@ -19,11 +19,11 @@ export function detectOS(): OS {
 export function downloadUrl(os: OS): string {
   switch (os) {
     case "windows":
-      return `${REPO_BASE}/latest/download/Cue-Setup.exe`;
+      return `${REPO_BASE}/latest/download/Tonvo-Setup.exe`;
     case "macos":
-      return `${REPO_BASE}/latest/download/Cue-aarch64.dmg`;
+      return `${REPO_BASE}/latest/download/Tonvo-aarch64.dmg`;
     case "linux":
-      return `${REPO_BASE}/latest/download/Cue.AppImage`;
+      return `${REPO_BASE}/latest/download/Tonvo.AppImage`;
     case "unknown":
     default:
       return `${REPO_BASE}/latest`;

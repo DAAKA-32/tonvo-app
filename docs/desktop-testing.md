@@ -1,36 +1,36 @@
-# Cue Desktop — Manual Smoke Checklist
+# Tonvo Desktop — Manual Smoke Checklist
 
 Run before publishing each release. Phase 1 has no automated end-to-end coverage of the Tauri shell.
 
 ## Per-OS install + launch
 
 ### Windows 11
-- [ ] Download `Cue-Setup.exe` from the release page
+- [ ] Download `Tonvo-Setup.exe` from the release page
 - [ ] SmartScreen warns → "More info" → "Run anyway"
 - [ ] Installer completes without errors
-- [ ] Start menu has "Cue" entry
-- [ ] Launching opens a window titled "Cue"
+- [ ] Start menu has "Tonvo" entry
+- [ ] Launching opens a window titled "Tonvo"
 - [ ] Window shows "Starting…" briefly, then loads `app.tonvo.com`
 - [ ] Login flow works (Firebase auth completes in the embedded webview)
 
 ### macOS 14 (Apple Silicon)
-- [ ] Download `Cue.dmg` (aarch64 variant)
-- [ ] Drag Cue.app to Applications
+- [ ] Download `Tonvo-aarch64.dmg`
+- [ ] Drag Tonvo.app to Applications
 - [ ] First launch: right-click → "Open" → "Open" in the dialog (bypasses Gatekeeper)
 - [ ] Window appears, loads `app.tonvo.com`
 
 ### macOS 14 (Intel)
-- [ ] Same as Apple Silicon but downloading the x64 dmg
+- [ ] Same as Apple Silicon but downloading `Tonvo-x64.dmg`
 
 ### Ubuntu 22.04
-- [ ] Download `Cue.AppImage`, `chmod +x Cue.AppImage`, run
-- [ ] OR install `.deb`: `sudo dpkg -i cue_0.x.x_amd64.deb`
+- [ ] Download `Tonvo.AppImage`, `chmod +x Tonvo.AppImage`, run
+- [ ] OR install `.deb`: `sudo dpkg -i tonvo.deb`
 - [ ] Window appears, loads `app.tonvo.com`
 
 ## Offline behavior
 
 - [ ] With app running and showing the web UI, disable Wi-Fi → web app shows its own offline state
-- [ ] Quit and re-launch with Wi-Fi disabled → desktop shell shows "Cue is offline. Reconnecting…" with retry button
+- [ ] Quit and re-launch with Wi-Fi disabled → desktop shell shows "Tonvo is offline. Reconnecting…" with retry button
 - [ ] Click retry button (no network) → still shows offline (correct)
 - [ ] Re-enable Wi-Fi, wait up to ~30s → shell auto-navigates to `app.tonvo.com`
 
@@ -69,7 +69,7 @@ $env:TAURI_SIGNING_PRIVATE_KEY_PASSWORD = ""
 npx tauri build
 ```
 
-Output: `desktop/src-tauri/target/release/bundle/nsis/Cue_X.X.X_x64-setup.exe`
+Output: `desktop/src-tauri/target/release/bundle/nsis/Tonvo_X.X.X_x64-setup.exe`
 
 To run a live dev shell pointed at your local Next.js:
 

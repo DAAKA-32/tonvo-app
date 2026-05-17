@@ -71,7 +71,7 @@ export default function DesktopDownloadHero() {
           className="text-4xl md:text-5xl font-bold tracking-tight mb-3"
           style={{ color: "var(--color-text)" }}
         >
-          Cue on your desktop
+          Tonvo on your desktop
         </h2>
 
         <p
@@ -96,7 +96,7 @@ export default function DesktopDownloadHero() {
           }}
         >
           <IconDownload />
-          {mounted ? `Download for ${osLabel(primaryOS)}` : "Download Cue"}
+          {mounted ? `Download for ${osLabel(primaryOS)}` : "Download Tonvo"}
         </a>
 
         <p
