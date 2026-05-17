@@ -534,10 +534,21 @@
     "hero": {
       "badge": "IA en tiempo real para tus conversaciones de venta",
       "headline1": "El copiloto IA para",
-      "headline2": "conversaciones de alto impacto.",
+      "headline2": "las conversaciones que importan.",
+      "headline2b": "las conversaciones que cierran deals.",
+      "headline2c": "las conversaciones que no puedes perder.",
       "subtitle": "Transcripción en vivo, insights instantáneos y sugerencias de cierre — en el momento exacto. Pensado para closers, consultores y todos los que viven de la próxima llamada.",
       "cta": "Empezar gratis",
       "ctaSecondary": "Ver cómo funciona"
+    },
+    "desktopDownload": {
+      "badge": "Ahora en desktop",
+      "title": "Tonvo en tu escritorio",
+      "subtitle": "App nativa para {{os}} — instala una vez, lanza desde tu dock.",
+      "subtitleNoOS": "App nativa — instala una vez, lanza desde tu dock.",
+      "cta": "Descargar para {{os}}",
+      "ctaFallback": "Descargar Tonvo",
+      "alsoOn": "También en"
     },
     "problem": {
       "label": "Lo que cuesta no cerrar",

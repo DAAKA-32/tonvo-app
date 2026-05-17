@@ -534,12 +534,21 @@
     "hero": {
       "badge": "Real-time AI for sales conversations",
       "headline1": "The AI copilot for",
-      "headline2": "high-stakes conversations.",
-      "headline2b": "the moments that decide deals.",
-      "headline2c": "every call that counts.",
+      "headline2": "conversations that matter.",
+      "headline2b": "conversations that close deals.",
+      "headline2c": "conversations you can't afford to lose.",
       "subtitle": "Live transcription, instant insights, and closing suggestions — the moment they matter. Built for closers, consultants, and anyone whose income depends on the next call.",
       "cta": "Start free",
       "ctaSecondary": "See how it works"
+    },
+    "desktopDownload": {
+      "badge": "Now in desktop",
+      "title": "Tonvo on your desktop",
+      "subtitle": "Native app for {{os}} — install once, launch from your dock.",
+      "subtitleNoOS": "Native app — install once, launch from your dock.",
+      "cta": "Download for {{os}}",
+      "ctaFallback": "Download Tonvo",
+      "alsoOn": "Also on"
     },
     "problem": {
       "label": "The cost of not winning",

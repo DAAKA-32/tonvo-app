@@ -534,10 +534,21 @@
     "hero": {
       "badge": "Echtzeit-KI für deine Vertriebsgespräche",
       "headline1": "Der KI-Copilot für",
-      "headline2": "wichtige Gespräche.",
+      "headline2": "Gespräche, die zählen.",
+      "headline2b": "Gespräche, die Deals entscheiden.",
+      "headline2c": "Gespräche, die du nicht verlieren darfst.",
       "subtitle": "Live-Transkription, sofortige Insights und Closing-Vorschläge — genau im richtigen Moment. Gebaut für Closer, Berater und alle, deren Einkommen vom nächsten Call abhängt.",
       "cta": "Kostenlos starten",
       "ctaSecondary": "So funktioniert's"
+    },
+    "desktopDownload": {
+      "badge": "Jetzt als Desktop-App",
+      "title": "Tonvo auf deinem Desktop",
+      "subtitle": "Native App für {{os}} — einmal installieren, vom Dock starten.",
+      "subtitleNoOS": "Native App — einmal installieren, vom Dock starten.",
+      "cta": "Für {{os}} herunterladen",
+      "ctaFallback": "Tonvo herunterladen",
+      "alsoOn": "Auch auf"
     },
     "problem": {
       "label": "Was Sie kostet, was Sie nicht gewinnen",

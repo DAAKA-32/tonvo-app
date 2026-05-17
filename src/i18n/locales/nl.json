@@ -535,9 +535,20 @@
       "badge": "Realtime AI voor je salesgesprekken",
       "headline1": "De AI-copilot voor",
       "headline2": "gesprekken die ertoe doen.",
+      "headline2b": "gesprekken die deals beslissen.",
+      "headline2c": "gesprekken die je niet kunt verliezen.",
       "subtitle": "Live transcriptie, directe inzichten en closing-suggesties — precies wanneer het telt. Gebouwd voor closers, consultants en iedereen wiens inkomen afhangt van het volgende gesprek.",
       "cta": "Gratis beginnen",
       "ctaSecondary": "Bekijk hoe het werkt"
+    },
+    "desktopDownload": {
+      "badge": "Nu als desktop-app",
+      "title": "Tonvo op je desktop",
+      "subtitle": "Native app voor {{os}} — installeer één keer, start vanaf je dock.",
+      "subtitleNoOS": "Native app — installeer één keer, start vanaf je dock.",
+      "cta": "Download voor {{os}}",
+      "ctaFallback": "Download Tonvo",
+      "alsoOn": "Ook op"
     },
     "problem": {
       "label": "De prijs van niet winnen",

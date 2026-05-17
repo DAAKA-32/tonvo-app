@@ -535,9 +535,20 @@
       "badge": "面向销售对话的实时 AI",
       "headline1": "为高风险对话而生的",
       "headline2": "AI 副驾驶。",
+      "headline2b": "决定成交的关键时刻。",
+      "headline2c": "每一次重要的通话。",
       "subtitle": "实时转录、即时洞察、成交建议 — 在你需要的那一刻。为成交者、咨询顾问、以及收入取决于下一通电话的所有人打造。",
       "cta": "免费开始",
       "ctaSecondary": "了解工作原理"
+    },
+    "desktopDownload": {
+      "badge": "桌面版上线",
+      "title": "桌面端的 Tonvo",
+      "subtitle": "{{os}} 原生应用 — 一次安装，从 Dock 启动。",
+      "subtitleNoOS": "原生应用 — 一次安装，从 Dock 启动。",
+      "cta": "下载 {{os}} 版",
+      "ctaFallback": "下载 Tonvo",
+      "alsoOn": "也可在"
     },
     "problem": {
       "label": "丢单的代价",

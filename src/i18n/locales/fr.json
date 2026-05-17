@@ -535,11 +535,20 @@
       "badge": "L'IA en temps réel pour vos conversations commerciales",
       "headline1": "Le copilote IA pour",
       "headline2": "les conversations à enjeu.",
-      "headline2b": "les moments qui font basculer un deal.",
-      "headline2c": "chaque appel qui compte.",
+      "headline2b": "les conversations qui comptent.",
+      "headline2c": "les conversations qui décident.",
       "subtitle": "Transcription en direct, insights instantanés, suggestions de closing — au moment exact où ça compte. Pensé pour les closers, consultants, et tous ceux dont le revenu dépend du prochain appel.",
       "cta": "Commencer gratuitement",
       "ctaSecondary": "Voir comment ça marche"
+    },
+    "desktopDownload": {
+      "badge": "Maintenant en desktop",
+      "title": "Tonvo sur ton bureau",
+      "subtitle": "App native pour {{os}} — installe une fois, lance depuis ton dock.",
+      "subtitleNoOS": "App native — installe une fois, lance depuis ton dock.",
+      "cta": "Télécharger pour {{os}}",
+      "ctaFallback": "Télécharger Tonvo",
+      "alsoOn": "Aussi sur"
     },
     "problem": {
       "label": "Le coût des deals qui s'échappent",

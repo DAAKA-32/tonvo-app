@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { detectOS, downloadUrl, osLabel, type OS } from "@/lib/detect-os";
 
 function IconDownload() {
@@ -24,6 +25,7 @@ function IconDownload() {
 }
 
 export default function DesktopDownloadHero() {
+  const { t } = useTranslation();
   const [os, setOS] = useState<OS>("unknown");
   const [mounted, setMounted] = useState(false);
 
@@ -63,7 +65,7 @@ export default function DesktopDownloadHero() {
             border: "1px solid rgba(200, 200, 216, 0.1)",
           }}
         >
-          Now in desktop
+          {t("landing.desktopDownload.badge")}
         </span>
 
         <h2
@@ -71,7 +73,7 @@ export default function DesktopDownloadHero() {
           className="text-4xl md:text-5xl font-bold tracking-tight mb-3"
           style={{ color: "var(--color-text)" }}
         >
-          Tonvo on your desktop
+          {t("landing.desktopDownload.title")}
         </h2>
 
         <p
@@ -79,8 +81,8 @@ export default function DesktopDownloadHero() {
           style={{ color: "var(--color-text-silver)" }}
         >
           {mounted
-            ? `Native app for ${osLabel(primaryOS)} — install once, launch from your dock.`
-            : "Native app — install once, launch from your dock."}
+            ? t("landing.desktopDownload.subtitle", { os: osLabel(primaryOS) })
+            : t("landing.desktopDownload.subtitleNoOS")}
         </p>
 
         <a
@@ -96,14 +98,16 @@ export default function DesktopDownloadHero() {
           }}
         >
           <IconDownload />
-          {mounted ? `Download for ${osLabel(primaryOS)}` : "Download Tonvo"}
+          {mounted
+            ? t("landing.desktopDownload.cta", { os: osLabel(primaryOS) })
+            : t("landing.desktopDownload.ctaFallback")}
         </a>
 
         <p
           className="mt-6 text-sm"
           style={{ color: "var(--color-text-muted)" }}
         >
-          Also on{" "}
+          {t("landing.desktopDownload.alsoOn")}{" "}
           {others.map((o, i) => (
             <span key={o}>
               <a
