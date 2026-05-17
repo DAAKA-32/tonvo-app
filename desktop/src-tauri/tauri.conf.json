@@ -47,7 +47,7 @@
   },
   "plugins": {
     "updater": {
-      "pubkey": "REPLACE_IN_TASK_3",
+      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDQ4MjdGMDJFNUJGRjc2QkYKUldTL2R2OWJMdkFuU05hY2tZNnAwOTJJbERMRHAwTi96R1RiTFN3enZQaTgvemNXRUxsY1dlRjIK",
       "endpoints": [
         "https://app.tonvo.com/api/desktop-release/{{target}}-{{arch}}"
       ]
