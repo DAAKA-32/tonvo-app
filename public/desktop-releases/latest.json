@@ -1,6 +1,23 @@
 {
-  "version": "0.0.0",
-  "notes": "No release published yet.",
-  "pub_date": "2026-05-17T00:00:00Z",
-  "platforms": {}
+  "version": "0.1.0",
+  "notes": "Cue Desktop desktop-v0.1.0",
+  "pub_date": "2026-05-17T15:13:19.580Z",
+  "platforms": {
+    "windows-x86_64": {
+      "url": "https://github.com/DAAKA-32/cue-desktop/releases/download/desktop-v0.1.0/Cue_0.1.0_x64-setup.nsis.zip",
+      "signature": ""
+    },
+    "darwin-aarch64": {
+      "url": "https://github.com/DAAKA-32/cue-desktop/releases/download/desktop-v0.1.0/Cue_0.1.0_aarch64.app.tar.gz",
+      "signature": ""
+    },
+    "darwin-x86_64": {
+      "url": "https://github.com/DAAKA-32/cue-desktop/releases/download/desktop-v0.1.0/Cue_0.1.0_x64.app.tar.gz",
+      "signature": ""
+    },
+    "linux-x86_64": {
+      "url": "https://github.com/DAAKA-32/cue-desktop/releases/download/desktop-v0.1.0/Cue_0.1.0_amd64.AppImage",
+      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVTL2R2OWJMdkFuU0h3RThSdDc3NmNuRlBkY3dXaEtJVzhncHVsNXdiSEdOV0hRanRnbVNzazE2N3RINjRhSm91b2FrS292MjZ0VWMvNjExblpOaUZVMkZjU1o3eWVtM3dVPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzc5MDMwMzI5CWZpbGU6Q3VlXzAuMS4wX2FtZDY0LkFwcEltYWdlCk84TmV5M1VqNU44d3E3b2NsU0c5ZWorWTBwWkczTUlGbk4vaTFTWUZuWE1wWmQycW9tdEFCM2JiR083Zm1xYWpGUnduWjFxQkpoemNwZWJqaTNBMkFnPT0K"
+    }
+  }
 }
