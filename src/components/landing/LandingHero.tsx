@@ -712,7 +712,7 @@ export default function LandingHero() {
   const percentMatch = headline1.match(/^(.*?)(\d+%)(.*)$/);
 
   return (
-    <section className="hero-section relative px-4 sm:px-6 pb-0 overflow-hidden grid-bg">
+    <section className="hero-section relative px-4 sm:px-6 pt-32 sm:pt-36 pb-0 overflow-hidden grid-bg">
       {/* ── HEADLINE BLOCK ── */}
       <div className="relative z-10 max-w-5xl mx-auto text-center">
         {/* Headline */}
@@ -850,8 +850,6 @@ export default function LandingHero() {
           display: flex;
           flex-direction: column;
           align-items: center;
-          /* Compact vertical rhythm on short laptops so the mockup stays above the fold */
-          padding-top: clamp(80px, 14vh, 176px) !important;
         }
 
         /* ── Fade rotation (replaces old typewriter) ── */
@@ -1067,9 +1065,11 @@ export default function LandingHero() {
           width: 100%;
           max-width: 880px;
           /* PEEK: clip the bottom so only top portion is visible.
-             clamp keeps the frame visible above the fold on short laptops
-             (e.g. 13" MacBook ~ 768px tall) without going tiny on big screens. */
-          max-height: clamp(260px, 38vh, 460px);
+             Fixed height across devices — the mockup is the same size
+             on a 13" laptop and a 27" monitor. Whatever doesn't fit
+             above the fold is the user's view to scroll, but the visual
+             never shrinks. */
+          max-height: 460px;
           aspect-ratio: 16 / 10;
           border-radius: 22px;
           overflow: hidden;
@@ -1231,23 +1231,6 @@ export default function LandingHero() {
           }
         }
 
-        /* Short laptops (13"-14" MacBooks ≈ 720-820px tall):
-           compact everything so the mockup peek stays above the fold. */
-        @media (min-width: 641px) and (max-height: 820px) {
-          .hero-section {
-            padding-top: clamp(64px, 10vh, 110px) !important;
-          }
-          :global(.hero-heading) {
-            font-size: clamp(1.8rem, 4.4vw, 2.6rem) !important;
-            margin-bottom: 0.75rem !important;
-          }
-          :global(.hero-headline2) {
-            font-size: clamp(1.5rem, 3.6vw, 2.2rem) !important;
-          }
-          :global(.hero-stage-frame) {
-            max-height: clamp(220px, 30vh, 340px);
-          }
-        }
       `}</style>
     </section>
   );
