@@ -548,7 +548,9 @@
       "subtitleNoOS": "App native — installe une fois, lance depuis ton dock.",
       "cta": "Télécharger pour {{os}}",
       "ctaFallback": "Télécharger Tonvo",
-      "alsoOn": "Aussi sur"
+      "alsoOn": "Aussi sur",
+      "safetyNote": "App sécurisée — vérification Microsoft en cours.",
+      "safetyTooltip": "Tonvo n'est pas encore signé pendant la bêta Phase 1. Microsoft whitelist chaque release. Si SmartScreen alerte, clique 'Informations complémentaires' puis 'Exécuter quand même' — le binaire est buildé depuis un CI ouvert sur GitHub Actions."
     },
     "problem": {
       "label": "Le coût des deals qui s'échappent",

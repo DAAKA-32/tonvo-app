@@ -548,7 +548,9 @@
       "subtitleNoOS": "ネイティブアプリ — 一度インストール、ドックから起動。",
       "cta": "{{os}}版をダウンロード",
       "ctaFallback": "Tonvoをダウンロード",
-      "alsoOn": "他にも"
+      "alsoOn": "他にも",
+      "safetyNote": "安全なアプリ — Microsoft 検証中。",
+      "safetyTooltip": "Tonvo はフェーズ1ベータ期間中、署名されていません。Microsoft が各リリースを承認しています。SmartScreen が警告した場合は「詳細情報」→「実行」をクリックしてください — バイナリは GitHub Actions のオープン CI からビルドされています。"
     },
     "problem": {
       "label": "決めきれないコスト",

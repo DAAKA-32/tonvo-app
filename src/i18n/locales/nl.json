@@ -548,7 +548,9 @@
       "subtitleNoOS": "Native app — installeer één keer, start vanaf je dock.",
       "cta": "Download voor {{os}}",
       "ctaFallback": "Download Tonvo",
-      "alsoOn": "Ook op"
+      "alsoOn": "Ook op",
+      "safetyNote": "App is veilig — Microsoft-verificatie loopt.",
+      "safetyTooltip": "Tonvo is nog niet gesigneerd tijdens de Phase 1-bèta. Microsoft keurt elke release goed. Als SmartScreen waarschuwt, klik op 'Meer informatie' en dan 'Toch uitvoeren' — de binary is gebouwd vanaf een open CI op GitHub Actions."
     },
     "problem": {
       "label": "De prijs van niet winnen",

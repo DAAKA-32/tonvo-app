@@ -548,7 +548,9 @@
       "subtitleNoOS": "App nativa — installa una volta, avvia dal dock.",
       "cta": "Scarica per {{os}}",
       "ctaFallback": "Scarica Tonvo",
-      "alsoOn": "Anche su"
+      "alsoOn": "Anche su",
+      "safetyNote": "App sicura — verifica Microsoft in corso.",
+      "safetyTooltip": "Tonvo non è firmato durante la beta Fase 1. Microsoft sta approvando ogni release. Se SmartScreen avvisa, clicca 'Ulteriori informazioni' e poi 'Esegui comunque' — il binario è compilato da CI aperto su GitHub Actions."
     },
     "problem": {
       "label": "Il costo di non chiudere",

@@ -548,7 +548,9 @@
       "subtitleNoOS": "Native app — install once, launch from your dock.",
       "cta": "Download for {{os}}",
       "ctaFallback": "Download Tonvo",
-      "alsoOn": "Also on"
+      "alsoOn": "Also on",
+      "safetyNote": "Safe to install — Microsoft verification in progress.",
+      "safetyTooltip": "Tonvo is unsigned during the Phase 1 beta. Microsoft is whitelisting each release. If Windows SmartScreen warns, click 'More info' then 'Run anyway' — the binary is built from open CI on GitHub Actions."
     },
     "problem": {
       "label": "The cost of not winning",

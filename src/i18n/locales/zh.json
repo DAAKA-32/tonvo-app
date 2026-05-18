@@ -548,7 +548,9 @@
       "subtitleNoOS": "原生应用 — 一次安装，从 Dock 启动。",
       "cta": "下载 {{os}} 版",
       "ctaFallback": "下载 Tonvo",
-      "alsoOn": "也可在"
+      "alsoOn": "也可在",
+      "safetyNote": "应用安全 — Microsoft 验证中。",
+      "safetyTooltip": "Tonvo 在 Phase 1 测试期间尚未签名。Microsoft 正在审批每个版本。如果 SmartScreen 警告，点击「详细信息」→「仍要运行」— 二进制文件由 GitHub Actions 的公开 CI 构建。"
     },
     "problem": {
       "label": "丢单的代价",

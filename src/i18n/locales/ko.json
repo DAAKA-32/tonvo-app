@@ -548,7 +548,9 @@
       "subtitleNoOS": "네이티브 앱 — 한 번 설치, 독에서 실행.",
       "cta": "{{os}}용 다운로드",
       "ctaFallback": "Tonvo 다운로드",
-      "alsoOn": "다른 OS"
+      "alsoOn": "다른 OS",
+      "safetyNote": "안전한 앱 — Microsoft 인증 진행 중.",
+      "safetyTooltip": "Tonvo는 Phase 1 베타 기간 중 서명되지 않았습니다. Microsoft가 각 릴리스를 승인 중입니다. SmartScreen이 경고하면 '추가 정보' → '실행'을 클릭하세요 — 바이너리는 GitHub Actions의 오픈 CI에서 빌드됩니다."
     },
     "problem": {
       "label": "놓친 딜의 진짜 비용",
