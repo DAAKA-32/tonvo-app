@@ -1,4 +1,4 @@
-const TARGET = import.meta.env.VITE_DESKTOP_TARGET ?? "https://app.tonvo.com";
+const TARGET = import.meta.env.VITE_DESKTOP_TARGET ?? "https://tonvo.co/dashboard";
 const HEALTH = `${TARGET}/api/health`;
 const PROBE_TIMEOUT_MS = 1500;
 
