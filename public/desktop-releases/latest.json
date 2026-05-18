@@ -1,23 +1,23 @@
 {
-  "version": "0.1.3",
-  "notes": "Tonvo Desktop desktop-v0.1.3",
-  "pub_date": "2026-05-17T18:41:38.175Z",
+  "version": "0.1.4",
+  "notes": "Tonvo Desktop desktop-v0.1.4",
+  "pub_date": "2026-05-18T16:53:41.368Z",
   "platforms": {
     "windows-x86_64": {
-      "url": "https://github.com/DAAKA-32/cue-desktop/releases/download/desktop-v0.1.3/Tonvo-Setup.exe",
-      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVTL2R2OWJMdkFuU0ZRekdLenVhQXM2RUp4dGtqcUhydkxDL2lrZVQ4cGpUbC81TjBiZmxQNVRxbkxHenB1S2M4UFdoQ3NGeVQyenlkQ05PQjFla203U05hSko2UDdLSGdNPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzc5MDQzMjAyCWZpbGU6VG9udm9fMC4xLjNfeDY0LXNldHVwLmV4ZQpOZTdNNU9yMGdKTXhQT2tnWkVsM0lOR0lVVjIyZDZVUmJBN0QyakVyMFVZR3pxeXVnZEVZckZGNllTclNRQ2RjMzc4WlVPUkRqZjNEazBGT0JTKzRBZz09Cg=="
+      "url": "https://github.com/DAAKA-32/cue-desktop/releases/download/desktop-v0.1.4/Tonvo-Setup.exe",
+      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVTL2R2OWJMdkFuU0YydGVzSk45NDRlMkJnTmx0NkN6OVZRc2E4OEFQWEVON0NvQm12NStaRU50ZEFURXdLajNyMzc0c2s0bXlSWnYrTWVJeFo3bmV5Kzl6R2F6MGhoRkFBPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzc5MTIzMTAxCWZpbGU6VG9udm9fMC4xLjRfeDY0LXNldHVwLmV4ZQpIa3NBU1pXRUhEVnl5RUVQaXZiSlV3ay9jczBtRzdCenVVT1haQlYwbjlIS2ZaNmNDb3ZqOXNFQmRNM3prRlZOQnBuOFRIbWRUM1BtbFJFRVliUnlEdz09Cg=="
     },
     "darwin-aarch64": {
-      "url": "https://github.com/DAAKA-32/cue-desktop/releases/download/desktop-v0.1.3/Tonvo-aarch64.app.tar.gz",
+      "url": "https://github.com/DAAKA-32/cue-desktop/releases/download/desktop-v0.1.4/Tonvo-aarch64.app.tar.gz",
       "signature": ""
     },
     "darwin-x86_64": {
-      "url": "https://github.com/DAAKA-32/cue-desktop/releases/download/desktop-v0.1.3/Tonvo-x64.app.tar.gz",
+      "url": "https://github.com/DAAKA-32/cue-desktop/releases/download/desktop-v0.1.4/Tonvo-x64.app.tar.gz",
       "signature": ""
     },
     "linux-x86_64": {
-      "url": "https://github.com/DAAKA-32/cue-desktop/releases/download/desktop-v0.1.3/Tonvo.AppImage",
-      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVTL2R2OWJMdkFuU05wOEJad0V0Vm1JWitIaTRPYTd3WFRkb2EwYnUwV0oxK2xKcU9LdHA3VFA3ZVd1VERTdjdLMlpFdm92VGo2dDRBOHdTQ0RyY3B3RXBjdmNHM0orTFFzPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzc5MDQzMTUzCWZpbGU6VG9udm9fMC4xLjNfYW1kNjQuQXBwSW1hZ2UKaVNXTmxqcXRYb0o1QkdnalMyRXlGa1dyK2JoV010SUJGalhEWlNybWJWVVRUc0ROcDMzTVZjcnFVUXhYakRvZTBjZTE0VkdnMXhNRVZWVEtHN2krQ0E9PQo="
+      "url": "https://github.com/DAAKA-32/cue-desktop/releases/download/desktop-v0.1.4/Tonvo.AppImage",
+      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVTL2R2OWJMdkFuU0FqMjBjWDFCV1owVWN0TUxwcmJidmJHNFY5SVpFVWFyQW8yMk5IQ1YxNlJMVnpIdWxDaSs4UEw1QXhHdlNPNzdIVUFqRzRNYlUwOHNOZy94U3NCOVF3PQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzc5MTIyMjI3CWZpbGU6VG9udm9fMC4xLjRfYW1kNjQuQXBwSW1hZ2UKdFNSbDJHM1dNbTlYZXJjbGp3UDZqZGlJMWJXdEJwRDNwK0g5Q1dZbDk3aGtXQ2lsWm9nOHRFVHdTd0RJKzZ1M3R3REhvQk9hKzdCNXpEVlo0VFFKRFE9PQo="
     }
   }
 }
