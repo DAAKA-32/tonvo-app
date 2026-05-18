@@ -83,6 +83,7 @@ export const metadata: Metadata = {
   },
   other: {
     "mobile-web-app-capable": "yes",
+    google: "notranslate",
   },
   openGraph: {
     type: "website",
@@ -274,7 +275,7 @@ const faqJsonLd = {
       name: "Do I need to install anything?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "Use the web app at app.tonvo.com — no install required. Or install the native desktop app for Windows, macOS, or Linux for a faster, dock-launchable experience.",
+        text: "Use the web app at tonvo.co — no install required. Or install the native desktop app for Windows, macOS, or Linux for a faster, dock-launchable experience.",
       },
     },
   ],
@@ -290,7 +291,7 @@ const howToJsonLd = {
       "@type": "HowToStep",
       position: 1,
       name: "Open Tonvo before the call",
-      text: "Launch the desktop app or open app.tonvo.com in a browser tab. Tonvo runs in its own window, invisible to your prospect on screen share.",
+      text: "Launch the desktop app or open tonvo.co in a browser tab. Tonvo runs in its own window, invisible to your prospect on screen share.",
     },
     {
       "@type": "HowToStep",
@@ -317,7 +318,7 @@ const webSiteJsonLd = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" dir="ltr" className={inter.variable} style={{ backgroundColor: "#09090b" }} suppressHydrationWarning>
+    <html lang="en" dir="ltr" translate="no" className={`${inter.variable} notranslate`} style={{ backgroundColor: "#09090b" }} suppressHydrationWarning>
       <head>
         <script
           type="application/ld+json"
@@ -360,7 +361,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           }}
         />
       </head>
-      <body className="antialiased">
+      <body className="antialiased notranslate" translate="no">
         <MetaPixel />
         <Providers>
           {children}
@@ -397,6 +398,78 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 // Block gesturestart/gesturechange (Safari iOS)
                 document.addEventListener('gesturestart',function(e){e.preventDefault();});
                 document.addEventListener('gesturechange',function(e){e.preventDefault();});
+              })();
+            `,
+          }}
+        />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function(){
+                // Tonvo owns its language layer. Neutralize browser translation extensions
+                // (Google Translate, Chrome auto-translate, Microsoft, DeepL, Safari) so
+                // they can't mutate the DOM, retranslate AI conversations, or break
+                // React hydration/layout.
+                try {
+                  var html = document.documentElement;
+                  var body = document.body;
+                  function reassert(el){
+                    if(!el) return;
+                    if(el.getAttribute('translate') !== 'no') el.setAttribute('translate','no');
+                    if(!/(^|\\s)notranslate(\\s|$)/.test(el.className||'')){
+                      el.className = ((el.className||'') + ' notranslate').trim();
+                    }
+                  }
+                  reassert(html);
+                  reassert(body);
+
+                  // Strip widgets/banners injected by Google Translate and similar tools.
+                  var INJECTED_SELECTORS = [
+                    '.goog-te-banner-frame',
+                    '.goog-te-menu-frame',
+                    '#goog-gt-tt',
+                    '.goog-tooltip',
+                    '.goog-text-highlight',
+                    '#google_translate_element',
+                    'iframe.skiptranslate',
+                    'iframe[src*="translate.google"]',
+                    'iframe[src*="translate.googleapis"]'
+                  ];
+                  function cleanup(){
+                    INJECTED_SELECTORS.forEach(function(sel){
+                      document.querySelectorAll(sel).forEach(function(el){ try{ el.remove(); }catch(_){} });
+                    });
+                    // Google Translate pins the body with inline top offset — reset it.
+                    if(body && body.style && body.style.top){ body.style.top = ''; }
+                    if(html && html.classList && html.classList.contains('translated-ltr')){
+                      html.classList.remove('translated-ltr');
+                    }
+                    if(html && html.classList && html.classList.contains('translated-rtl')){
+                      html.classList.remove('translated-rtl');
+                    }
+                    // External extensions sometimes rewrite <html lang>. Restore from
+                    // the Tonvo-controlled truth marker (data-tonvo-lang), defaulting to 'en'.
+                    if(html){
+                      var expected = html.getAttribute('data-tonvo-lang') || 'en';
+                      if(html.getAttribute('lang') !== expected){
+                        html.setAttribute('lang', expected);
+                      }
+                    }
+                    reassert(html);
+                    reassert(body);
+                  }
+                  cleanup();
+                  var mo = new MutationObserver(function(mutations){
+                    var hit = false;
+                    for(var i=0;i<mutations.length;i++){
+                      var m = mutations[i];
+                      if(m.type === 'childList' && m.addedNodes && m.addedNodes.length){ hit = true; break; }
+                      if(m.type === 'attributes' && (m.attributeName === 'class' || m.attributeName === 'style' || m.attributeName === 'lang')){ hit = true; break; }
+                    }
+                    if(hit) cleanup();
+                  });
+                  mo.observe(document.documentElement, { childList: true, subtree: true, attributes: true, attributeFilter: ['class','style','lang'] });
+                } catch(e) {}
               })();
             `,
           }}

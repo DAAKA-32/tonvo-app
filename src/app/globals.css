@@ -16,6 +16,43 @@ iframe[src*="vercel.com"] {
   overflow: hidden !important;
 }
 
+/* Anti-translation defense: hide any UI injected by browser translation
+   extensions (Google Translate, Chrome auto-translate). Tonvo owns its
+   language system end-to-end — these widgets cause UI shifts, double
+   translations, and React hydration mismatches. */
+.goog-te-banner-frame,
+.goog-te-menu-frame,
+.goog-tooltip,
+.goog-text-highlight,
+#goog-gt-tt,
+#google_translate_element,
+iframe.skiptranslate,
+iframe[src*="translate.google"],
+iframe[src*="translate.googleapis"] {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  position: absolute !important;
+  top: -9999px !important;
+  left: -9999px !important;
+}
+
+/* Google Translate adds inline top offset on <body> for its banner.
+   Force it back to 0 so layout never shifts. */
+body {
+  top: 0 !important;
+}
+
+/* Belt-and-braces: kill the .translated-* classes Google Translate adds
+   to the root element, which trigger its own font/color overrides. */
+html.translated-ltr,
+html.translated-rtl {
+  background-color: transparent !important;
+}
+
 :root {
   --color-bg: #09090b;
   --color-surface: #111114;

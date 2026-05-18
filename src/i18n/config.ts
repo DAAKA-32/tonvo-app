@@ -49,6 +49,23 @@ i18n.use(initReactI18next).init({
   interpolation: { escapeValue: false },
 });
 
+/**
+ * Keep <html lang> and data-tonvo-lang in sync with the active i18next language.
+ * data-tonvo-lang is the truth marker our anti-translation guard checks against —
+ * without it, the guard would fight legitimate Tonvo language switches.
+ */
+function syncHtmlLang(lang: string) {
+  if (typeof document === "undefined") return;
+  const html = document.documentElement;
+  html.setAttribute("data-tonvo-lang", lang);
+  if (html.getAttribute("lang") !== lang) {
+    html.setAttribute("lang", lang);
+  }
+}
+
+syncHtmlLang(savedLang || "en");
+i18n.on("languageChanged", syncHtmlLang);
+
 // If saved language is not English, eagerly load it
 if (savedLang && savedLang !== "en") {
   loadLanguage(savedLang).then(() => {
