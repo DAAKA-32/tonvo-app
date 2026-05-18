@@ -1,0 +1,13 @@
+Date Range,Campaign,Ad Set,Ad Name,Impressions,Reach,Frequency,Link Clicks,CTR (link) %,Hook Rate 3s %,Hold Rate 15s %,Landing Page Views,Add to Cart,CompleteRegistration (Signups),Activated (first session),CPM USD,CPC (link) USD,Cost per Signup USD,Cost per Activated USD,ROAS,Spend USD,Notes
+2026-05-17 → 2026-05-23,TVO_v01_US_SIGNUP,01_US_SIGNUP_QuotaSlippingAE_POV-50k,Ad-A-POV50k-9x16_h1_pA_hlA,,,,,,,,,,,,,,,,,,Paste from Ads Manager CSV export
+2026-05-17 → 2026-05-23,TVO_v01_US_SIGNUP,01_US_SIGNUP_QuotaSlippingAE_POV-50k,Ad-A-POV50k-1x1_h1_pA_hlA,,,,,,,,,,,,,,,,,,
+2026-05-17 → 2026-05-23,TVO_v01_US_SIGNUP,01_US_SIGNUP_QuotaSlippingAE_POV-50k,Ad-D-StopPitch-9x16_h2_pA_hlC,,,,,,,,,,,,,,,,,,
+2026-05-17 → 2026-05-23,TVO_v01_US_SIGNUP,02_US_SIGNUP_TopRepHunter_Gap-27pc,Ad-B-27pc-9x16_h3_pB_hlB,,,,,,,,,,,,,,,,,,
+2026-05-17 → 2026-05-23,TVO_v01_US_SIGNUP,02_US_SIGNUP_TopRepHunter_Gap-27pc,Ad-B-27pc-3x4_h3_pB_hlB,,,,,,,,,,,,,,,,,,
+2026-05-17 → 2026-05-23,TVO_v01_US_SIGNUP,02_US_SIGNUP_TopRepHunter_Gap-27pc,Ad-C-Gap-9x16_h1_pA_hlC,,,,,,,,,,,,,,,,,,
+2026-05-17 → 2026-05-23,TVO_v01_US_SIGNUP,03_US_SIGNUP_FounderSelling_AB-cross,Ad-A-POV50k-1x1_h2_pB_hlB,,,,,,,,,,,,,,,,,,
+2026-05-17 → 2026-05-23,TVO_v01_US_SIGNUP,03_US_SIGNUP_FounderSelling_AB-cross,Ad-B-27pc-9x16_h3_pB_hlB,,,,,,,,,,,,,,,,,,
+2026-05-17 → 2026-05-23,TVO_v01_US_SIGNUP,03_US_SIGNUP_FounderSelling_AB-cross,Ad-D-StopPitch-Static-1x1_h3_pB_hlC,,,,,,,,,,,,,,,,,,
+2026-05-17 → 2026-05-23,TVO_v01_US_SIGNUP,04_US_SIGNUP_LAL1-3-Signup_Control,Ad-A-POV50k-9x16_h1_pA_hlA,,,,,,,,,,,,,,,,,,
+2026-05-17 → 2026-05-23,TVO_v01_US_SIGNUP,04_US_SIGNUP_LAL1-3-Signup_Control,Ad-C-Gap-1x1_h1_pA_hlC,,,,,,,,,,,,,,,,,,
+2026-05-17 → 2026-05-23,TVO_v01_US_SIGNUP,04_US_SIGNUP_LAL1-3-Signup_Control,Ad-B-27pc-9x16_h3_pB_hlB,,,,,,,,,,,,,,,,,,

@@ -1,0 +1,381 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Tonvo · vs Cluely (comparison static)</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg-dark: #0e0d10;
+      --bg-darker: #0a090c;
+      --text: #fafafa;
+      --muted-dark: rgba(250, 250, 250, 0.55);
+      --muted-light: rgba(250, 250, 250, 0.75);
+      --tonvo-mint: #00E5A0;
+      --tonvo-violet: #8B5CF6;
+      --tonvo-violet-soft: #C4B5FD;
+      --cluely-red: #FF3B3B;
+      --hairline: rgba(255, 255, 255, 0.08);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body {
+      width: 100%; height: 100%;
+      background: var(--bg-darker);
+      color: var(--text);
+      font-family: 'Inter', -apple-system, system-ui, sans-serif;
+      font-feature-settings: 'ss01' on, 'cv11' on;
+      -webkit-font-smoothing: antialiased;
+      overflow: hidden;
+    }
+    body {
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      isolation: isolate;
+    }
+
+    /* ─────────  Split board (top 78%)  ───────── */
+    .board {
+      flex: 1 1 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      position: relative;
+    }
+    .col {
+      position: relative;
+      padding: 88px 56px 88px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      overflow: hidden;
+    }
+    /* Left column — Cluely (dark / loser) */
+    .col.left {
+      background: linear-gradient(180deg, #14121a 0%, #0c0a0e 100%);
+    }
+    .col.left::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at 50% 14%, rgba(255, 59, 59, 0.12), transparent 50%);
+      pointer-events: none;
+    }
+    /* Right column — Tonvo (premium / winner) — strong lavender→beige glow */
+    .col.right {
+      background:
+        radial-gradient(ellipse 90% 70% at 75% 38%, rgba(241, 222, 196, 0.55) 0%, rgba(196, 181, 253, 0.42) 28%, rgba(139, 92, 246, 0.18) 55%, transparent 75%),
+        linear-gradient(180deg, #1c1428 0%, #110d1a 100%);
+    }
+    .col.right::after {
+      content: "";
+      position: absolute;
+      top: 4%; right: -18%;
+      width: 95%; height: 90%;
+      background: radial-gradient(circle, rgba(248, 235, 215, 0.55), rgba(232, 222, 248, 0.25) 40%, transparent 70%);
+      filter: blur(70px);
+      opacity: 0.9;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Center hairline divider */
+    .board::before {
+      content: "";
+      position: absolute;
+      top: 6%; bottom: 14%;
+      left: 50%;
+      width: 1px;
+      background: linear-gradient(180deg, transparent, rgba(255,255,255,0.18) 30%, rgba(255,255,255,0.18) 70%, transparent);
+      z-index: 2;
+    }
+
+    /* App icon tile */
+    .icon-tile {
+      width: 168px; height: 168px;
+      border-radius: 38px;
+      display: flex; align-items: center; justify-content: center;
+      position: relative;
+      z-index: 1;
+      box-shadow:
+        0 30px 60px -20px rgba(0,0,0,0.55),
+        inset 0 1px 0 rgba(255,255,255,0.12);
+    }
+    .icon-tile.cluely {
+      background: radial-gradient(circle at 30% 30%, #2a1d1d, #100808);
+      border: 1px solid rgba(255, 59, 59, 0.22);
+    }
+    .icon-tile.tonvo {
+      background: radial-gradient(circle at 30% 30%, #1f1530, #0d0816);
+      border: 1px solid rgba(196, 181, 253, 0.30);
+    }
+    .icon-tile svg { width: 110px; height: 110px; }
+
+    .brand-name {
+      margin-top: 32px;
+      font-size: 38px;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      color: var(--text);
+      z-index: 1;
+    }
+
+    .divider-line {
+      width: 88%;
+      height: 1px;
+      background: var(--hairline);
+      margin: 42px 0 36px;
+      z-index: 1;
+    }
+
+    /* Bullet rows */
+    .bullets {
+      width: 100%;
+      max-width: 380px;
+      display: flex;
+      flex-direction: column;
+      gap: 30px;
+      z-index: 1;
+    }
+    .bullet {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      font-size: 30px;
+      font-weight: 500;
+      letter-spacing: -0.01em;
+      line-height: 1.15;
+    }
+    .bullet.bad {
+      color: var(--muted-dark);
+    }
+    .bullet.good {
+      color: var(--muted-light);
+    }
+    .mark {
+      flex: 0 0 36px;
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .mark.x {
+      background: rgba(255, 59, 59, 0.16);
+      color: var(--cluely-red);
+    }
+    .mark.check {
+      background: rgba(196, 181, 253, 0.22);
+      color: #E9DEFD;
+    }
+    .mark svg { width: 18px; height: 18px; }
+
+    /* ─────────  Bottom CTA strip  ───────── */
+    .cta {
+      flex: 0 0 18%;
+      background: var(--bg-darker);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 22px 56px 28px;
+      gap: 12px;
+      border-top: 1px solid var(--hairline);
+    }
+    .cta-headline {
+      font-size: 70px;
+      font-weight: 800;
+      letter-spacing: -0.035em;
+      color: var(--text);
+      text-align: center;
+      line-height: 1.0;
+    }
+    .cta-url {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      font-size: 62px;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      color: var(--text);
+    }
+    .cta-url .logo-mark {
+      width: 62px; height: 62px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .cta-url .logo-mark svg { width: 100%; height: 100%; }
+
+    /* Square (1x1) tweaks */
+    body.aspect-1x1 .col { padding: 68px 44px 64px; }
+    body.aspect-1x1 .icon-tile { width: 144px; height: 144px; }
+    body.aspect-1x1 .icon-tile svg { width: 94px; height: 94px; }
+    body.aspect-1x1 .brand-name { font-size: 32px; margin-top: 24px; }
+    body.aspect-1x1 .divider-line { margin: 32px 0 26px; }
+    body.aspect-1x1 .bullets { gap: 22px; max-width: 340px; }
+    body.aspect-1x1 .bullet { font-size: 26px; gap: 14px; }
+    body.aspect-1x1 .mark { flex: 0 0 30px; width: 30px; height: 30px; }
+    body.aspect-1x1 .cta { flex: 0 0 22%; gap: 10px; padding: 18px 44px 22px; }
+    body.aspect-1x1 .cta-headline { font-size: 58px; }
+    body.aspect-1x1 .cta-url { font-size: 52px; }
+    body.aspect-1x1 .cta-url .logo-mark { width: 52px; height: 52px; }
+  </style>
+</head>
+<body>
+
+  <main class="board">
+    <!-- ─────────  Cluely (left)  ───────── -->
+    <section class="col left">
+      <div class="icon-tile cluely" aria-label="Cluely icon">
+        <!-- Stylised eye-skull mark, no real-trademark replica -->
+        <svg viewBox="0 0 96 96" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <radialGradient id="rg1" cx="50%" cy="40%" r="60%">
+              <stop offset="0%" stop-color="#FF6B6B"/>
+              <stop offset="100%" stop-color="#C81E1E"/>
+            </radialGradient>
+          </defs>
+          <path d="M48 12c-18 0-30 12-30 28 0 9 4 17 12 22v10c0 4 3 7 7 7h22c4 0 7-3 7-7V62c8-5 12-13 12-22 0-16-12-28-30-28z" fill="url(#rg1)"/>
+          <circle cx="36" cy="44" r="6" fill="#0a0608"/>
+          <circle cx="60" cy="44" r="6" fill="#0a0608"/>
+          <circle cx="37" cy="42" r="2" fill="#fff" opacity="0.9"/>
+          <circle cx="61" cy="42" r="2" fill="#fff" opacity="0.9"/>
+          <path d="M40 64 L44 70 L48 64 L52 70 L56 64" stroke="#0a0608" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+        </svg>
+      </div>
+      <div class="brand-name">Cluely</div>
+      <div class="divider-line"></div>
+
+      <ul class="bullets">
+        <li class="bullet bad">
+          <span class="mark x"><svg viewBox="0 0 16 16" fill="none"><path d="M4 4 L12 12 M12 4 L4 12" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></span>
+          <span>made for cheating</span>
+        </li>
+        <li class="bullet bad">
+          <span class="mark x"><svg viewBox="0 0 16 16" fill="none"><path d="M4 4 L12 12 M12 4 L4 12" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></span>
+          <span>desktop overlay</span>
+        </li>
+        <li class="bullet bad">
+          <span class="mark x"><svg viewBox="0 0 16 16" fill="none"><path d="M4 4 L12 12 M12 4 L4 12" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></span>
+          <span>screen-record risk</span>
+        </li>
+        <li class="bullet bad">
+          <span class="mark x"><svg viewBox="0 0 16 16" fill="none"><path d="M4 4 L12 12 M12 4 L4 12" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></span>
+          <span>no CRM sync</span>
+        </li>
+        <li class="bullet bad">
+          <span class="mark x"><svg viewBox="0 0 16 16" fill="none"><path d="M4 4 L12 12 M12 4 L4 12" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></span>
+          <span>not B2B ready</span>
+        </li>
+      </ul>
+    </section>
+
+    <!-- ─────────  Tonvo (right)  ───────── -->
+    <section class="col right">
+      <div class="icon-tile tonvo" aria-label="Tonvo icon">
+        <!-- Clean diamond: rotated rounded square outline + 4 cardinal dots -->
+        <svg viewBox="0 0 96 96" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="lg-tonvo" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#F5E9D6"/>
+              <stop offset="55%" stop-color="#E9DEFD"/>
+              <stop offset="100%" stop-color="#9D7BFF"/>
+            </linearGradient>
+          </defs>
+          <g transform="rotate(45 48 48)">
+            <rect x="18" y="18" width="60" height="60" rx="12" ry="12"
+                  stroke="url(#lg-tonvo)" stroke-width="5" fill="none" stroke-linejoin="round"/>
+          </g>
+          <circle cx="48" cy="13" r="5.2" fill="#F1E4FB"/>
+          <circle cx="83" cy="48" r="5.2" fill="#F1E4FB"/>
+          <circle cx="48" cy="83" r="5.2" fill="#F1E4FB"/>
+          <circle cx="13" cy="48" r="5.2" fill="#F1E4FB"/>
+        </svg>
+      </div>
+      <div class="brand-name">Tonvo</div>
+      <div class="divider-line"></div>
+
+      <ul class="bullets">
+        <li class="bullet good">
+          <span class="mark check"><svg viewBox="0 0 16 16" fill="none"><path d="M4 8.5 L7 11.5 L12.5 5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <span>built for closers</span>
+        </li>
+        <li class="bullet good">
+          <span class="mark check"><svg viewBox="0 0 16 16" fill="none"><path d="M4 8.5 L7 11.5 L12.5 5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <span>lives in browser</span>
+        </li>
+        <li class="bullet good">
+          <span class="mark check"><svg viewBox="0 0 16 16" fill="none"><path d="M4 8.5 L7 11.5 L12.5 5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <span>syncs to HubSpot</span>
+        </li>
+        <li class="bullet good">
+          <span class="mark check"><svg viewBox="0 0 16 16" fill="none"><path d="M4 8.5 L7 11.5 L12.5 5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <span>SOC2 ready</span>
+        </li>
+        <li class="bullet good">
+          <span class="mark check"><svg viewBox="0 0 16 16" fill="none"><path d="M4 8.5 L7 11.5 L12.5 5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <span>live deal coaching</span>
+        </li>
+      </ul>
+    </section>
+  </main>
+
+  <!-- ─────────  CTA strip  ───────── -->
+  <footer class="cta">
+    <div class="cta-headline">Need to close?</div>
+    <div class="cta-url">
+      <span class="logo-mark">
+        <svg viewBox="0 0 96 96" fill="none">
+          <defs>
+            <linearGradient id="lg-cta" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#F5E9D6"/>
+              <stop offset="55%" stop-color="#E9DEFD"/>
+              <stop offset="100%" stop-color="#9D7BFF"/>
+            </linearGradient>
+          </defs>
+          <g transform="rotate(45 48 48)">
+            <rect x="18" y="18" width="60" height="60" rx="12" ry="12"
+                  stroke="url(#lg-cta)" stroke-width="5" fill="none" stroke-linejoin="round"/>
+          </g>
+          <circle cx="48" cy="13" r="5.2" fill="#F1E4FB"/>
+          <circle cx="83" cy="48" r="5.2" fill="#F1E4FB"/>
+          <circle cx="48" cy="83" r="5.2" fill="#F1E4FB"/>
+          <circle cx="13" cy="48" r="5.2" fill="#F1E4FB"/>
+        </svg>
+      </span>
+      <span>tonvo.co</span>
+    </div>
+  </footer>
+
+  <script>
+    // Locale + aspect routing via query string:
+    //   ?aspect=1x1   → square
+    //   ?aspect=4x5   → portrait (default)
+    //   ?lang=fr      → French copy
+    const p = new URLSearchParams(location.search);
+    const aspect = p.get("aspect") || "4x5";
+    if (aspect === "1x1") document.body.classList.add("aspect-1x1");
+
+    const lang = p.get("lang") || "en";
+    if (lang === "fr") {
+      const bad = [
+        "fait pour tricher",
+        "appli à installer",
+        "risque écran enregistré",
+        "aucun lien CRM",
+        "pas prêt B2B",
+      ];
+      const good = [
+        "fait pour closer",
+        "vit dans le navigateur",
+        "se branche à HubSpot",
+        "SOC2 ready",
+        "coaching en direct",
+      ];
+      const badNodes = document.querySelectorAll(".col.left .bullet.bad span:last-child");
+      const goodNodes = document.querySelectorAll(".col.right .bullet.good span:last-child");
+      badNodes.forEach((n,i)=> n.textContent = bad[i] || n.textContent);
+      goodNodes.forEach((n,i)=> n.textContent = good[i] || n.textContent);
+      document.querySelector(".cta-headline").textContent = "Tu veux closer ?";
+    }
+  </script>
+</body>
+</html>
