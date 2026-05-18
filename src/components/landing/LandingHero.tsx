@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import {
+  AnimatePresence,
   motion,
   useMotionValue,
   useReducedMotion,
@@ -373,8 +374,95 @@ function WordsReveal({
 }
 
 /* ============================================================== */
+/*  FadeRotation — cycles through phrases with a smooth fade.      */
+/*  Replaces the older typewriter pattern: full phrase appears,    */
+/*  holds, fades out + up, next fades in + down. No layout shift   */
+/*  thanks to a hidden ghost sized to the longest phrase.          */
+/* ============================================================== */
+function FadeRotation({
+  phrases,
+  initialDelayMs = 0,
+  holdMs = 1500,
+  fadeMs = 280,
+  className,
+  gradient,
+}: {
+  phrases: string[];
+  initialDelayMs?: number;
+  holdMs?: number;
+  fadeMs?: number;
+  className?: string;
+  gradient?: boolean;
+}) {
+  const reduce = useReducedMotion();
+  const [index, setIndex] = useState(0);
+
+  useEffect(() => {
+    if (reduce || phrases.length <= 1) return;
+    let intervalId: ReturnType<typeof setInterval> | null = null;
+    const startId = setTimeout(() => {
+      intervalId = setInterval(() => {
+        setIndex((i) => (i + 1) % phrases.length);
+      }, holdMs + fadeMs);
+    }, initialDelayMs);
+    return () => {
+      clearTimeout(startId);
+      if (intervalId) clearInterval(intervalId);
+    };
+  }, [phrases.length, holdMs, fadeMs, initialDelayMs, reduce]);
+
+  const longest = phrases.reduce(
+    (a, b) => (a.length >= b.length ? a : b),
+    "",
+  );
+
+  const gradientStyle: React.CSSProperties | undefined = gradient
+    ? {
+        background:
+          "linear-gradient(115deg, rgba(255,255,255,0.55) 0%, #fafafa 28%, rgba(200,200,216,0.95) 50%, #fafafa 72%, rgba(255,255,255,0.55) 100%)",
+        backgroundSize: "240% 100%",
+        WebkitBackgroundClip: "text",
+        WebkitTextFillColor: "transparent",
+        backgroundClip: "text",
+      }
+    : undefined;
+
+  if (reduce) {
+    return (
+      <span className={className} style={gradientStyle}>
+        {phrases[0]}
+      </span>
+    );
+  }
+
+  return (
+    <span className={`fade-rotation ${className ?? ""}`} aria-live="polite">
+      <span className="fade-rotation-ghost" aria-hidden style={gradientStyle}>
+        {longest}
+      </span>
+      <AnimatePresence mode="wait">
+        <motion.span
+          key={index}
+          className="fade-rotation-current"
+          style={gradientStyle}
+          initial={{ opacity: 0, y: 14, filter: "blur(6px)" }}
+          animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+          exit={{ opacity: 0, y: -10, filter: "blur(6px)" }}
+          transition={{
+            duration: fadeMs / 1000,
+            ease: [0.22, 1, 0.36, 1],
+          }}
+        >
+          {phrases[index]}
+        </motion.span>
+      </AnimatePresence>
+    </span>
+  );
+}
+
+/* ============================================================== */
 /*  commonPrefix — finds the shared leading word(s) across phrases */
-/*  (e.g., "Without" in EN, "Sans" in FR). Returns "" if none.     */
+/*  (kept for back-compat — no longer used by the hero headline)   */
 /* ============================================================== */
 function commonPrefix(strs: string[]): string {
   if (!strs.length) return "";
@@ -624,11 +712,11 @@ export default function LandingHero() {
   const percentMatch = headline1.match(/^(.*?)(\d+%)(.*)$/);
 
   return (
-    <section className="hero-section relative px-4 sm:px-6 pt-36 sm:pt-44 pb-0 overflow-hidden grid-bg">
+    <section className="hero-section relative px-4 sm:px-6 pb-0 overflow-hidden grid-bg">
       {/* ── HEADLINE BLOCK ── */}
       <div className="relative z-10 max-w-5xl mx-auto text-center">
         {/* Headline */}
-        <h1 className="hero-heading text-glow mb-10 sm:mb-12" style={{ fontWeight: 700 }}>
+        <h1 className="hero-heading text-glow mb-6 sm:mb-8" style={{ fontWeight: 700 }}>
           <span style={{ display: "block" }}>
             {percentMatch ? (
               <>
@@ -649,24 +737,19 @@ export default function LandingHero() {
           </span>
           <span className="hero-headline2 block mt-3" style={{ fontWeight: 200, letterSpacing: "-0.025em" }}>
             {(() => {
-              const fullPhrases = [
-                t("landing.hero.headline2"),
-                t("landing.hero.headline2b"),
-                t("landing.hero.headline2c"),
-              ];
-              const sharedPrefix = commonPrefix(fullPhrases);
-              const suffixes = sharedPrefix
-                ? fullPhrases.map((p) => p.slice(sharedPrefix.length).trimStart())
-                : [fullPhrases[0]];
+              const raw = t("landing.hero.headline2Phrases", {
+                returnObjects: true,
+              });
+              const phrases =
+                Array.isArray(raw) && raw.length > 0
+                  ? (raw as string[])
+                  : [t("landing.hero.headline2") as string];
               return (
-                <TypewriterReveal
-                  prefix={sharedPrefix}
-                  phrases={suffixes}
-                  delay={1.3}
-                  typeSpeed={42}
-                  deleteSpeed={22}
-                  holdAfterType={2200}
-                  holdAfterDelete={300}
+                <FadeRotation
+                  phrases={phrases}
+                  initialDelayMs={1100}
+                  holdMs={1500}
+                  fadeMs={320}
                   gradient
                 />
               );
@@ -678,7 +761,7 @@ export default function LandingHero() {
           initial={reduce ? { opacity: 0 } : { opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1], delay: 0.9 }}
-          className="body-muted text-lg md:text-xl mb-14 sm:mb-16 max-w-xl mx-auto"
+          className="body-muted text-base md:text-lg mb-8 sm:mb-10 max-w-xl mx-auto"
         >
           {t("landing.hero.subtitle")}
         </motion.p>
@@ -757,7 +840,7 @@ export default function LandingHero() {
       </div>
 
       {/* ── PARTIAL VIDEO DEMO STAGE ── */}
-      <div className="hero-stage-outer relative z-10 w-full max-w-5xl mx-auto mt-20 sm:mt-24 px-2 sm:px-4">
+      <div className="hero-stage-outer relative z-10 w-full max-w-5xl mx-auto mt-10 sm:mt-12 px-2 sm:px-4">
         <HeroDemoStage />
       </div>
 
@@ -767,6 +850,31 @@ export default function LandingHero() {
           display: flex;
           flex-direction: column;
           align-items: center;
+          /* Compact vertical rhythm on short laptops so the mockup stays above the fold */
+          padding-top: clamp(80px, 14vh, 176px) !important;
+        }
+
+        /* ── Fade rotation (replaces old typewriter) ── */
+        :global(.fade-rotation) {
+          position: relative;
+          display: inline-block;
+          vertical-align: bottom;
+        }
+        :global(.fade-rotation-ghost) {
+          visibility: hidden;
+          display: inline-block;
+          white-space: nowrap;
+          pointer-events: none;
+        }
+        :global(.fade-rotation-current) {
+          position: absolute;
+          left: 0;
+          right: 0;
+          top: 0;
+          bottom: 0;
+          display: inline-block;
+          white-space: nowrap;
+          will-change: opacity, transform, filter;
         }
 
         .hero-eyebrow {
@@ -958,8 +1066,10 @@ export default function LandingHero() {
           margin: 0 auto;
           width: 100%;
           max-width: 880px;
-          /* PEEK: clip the bottom so only top portion is visible */
-          max-height: 56vh;
+          /* PEEK: clip the bottom so only top portion is visible.
+             clamp keeps the frame visible above the fold on short laptops
+             (e.g. 13" MacBook ~ 768px tall) without going tiny on big screens. */
+          max-height: clamp(260px, 38vh, 460px);
           aspect-ratio: 16 / 10;
           border-radius: 22px;
           overflow: hidden;
@@ -1118,6 +1228,24 @@ export default function LandingHero() {
           }
           :global(.hero-stage-bottomfade) {
             height: 22%;
+          }
+        }
+
+        /* Short laptops (13"-14" MacBooks ≈ 720-820px tall):
+           compact everything so the mockup peek stays above the fold. */
+        @media (min-width: 641px) and (max-height: 820px) {
+          .hero-section {
+            padding-top: clamp(64px, 10vh, 110px) !important;
+          }
+          :global(.hero-heading) {
+            font-size: clamp(1.8rem, 4.4vw, 2.6rem) !important;
+            margin-bottom: 0.75rem !important;
+          }
+          :global(.hero-headline2) {
+            font-size: clamp(1.5rem, 3.6vw, 2.2rem) !important;
+          }
+          :global(.hero-stage-frame) {
+            max-height: clamp(220px, 30vh, 340px);
           }
         }
       `}</style>
