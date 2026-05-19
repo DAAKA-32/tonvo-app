@@ -1,7 +1,7 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
   "productName": "Tonvo",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "identifier": "com.tonvo.cue",
   "build": {
     "beforeDevCommand": "npm run dev",
@@ -54,7 +54,7 @@
     },
     "deep-link": {
       "desktop": {
-        "schemes": ["cue"]
+        "schemes": ["tonvo"]
       }
     }
   }
