@@ -1,5 +1,6 @@
 const TARGET = import.meta.env.VITE_DESKTOP_TARGET ?? "https://tonvo.co/dashboard";
-const HEALTH = `${TARGET}/api/health`;
+// /api/health lives at the site origin, never under a sub-path like /dashboard.
+const HEALTH = new URL("/api/health", TARGET).toString();
 const PROBE_TIMEOUT_MS = 1500;
 
 async function probe(): Promise<boolean> {
