@@ -48,7 +48,7 @@ export default function LegalPage() {
             <div className="rounded-xl p-5" style={{ backgroundColor: "var(--color-surface)" }}>
               <p className="text-sm m-0">
                 <strong style={{ color: "var(--color-text)" }}>{t("legalPage.nameLabel")}</strong> Emilien Nepveu<br />
-                <strong style={{ color: "var(--color-text)" }}>{t("legalPage.emailLabel")}</strong> tonvoco.pro@gmail.com
+                <strong style={{ color: "var(--color-text)" }}>{t("legalPage.emailLabel")}</strong> tonvo.sales@gmail.com
               </p>
             </div>
           </section>
@@ -58,7 +58,7 @@ export default function LegalPage() {
             <div className="rounded-xl p-5" style={{ backgroundColor: "var(--color-surface)" }}>
               <p className="text-sm m-0">
                 <strong style={{ color: "var(--color-text)" }}>DPO:</strong> {t("legalPage.dpoDesc")}<br />
-                <strong style={{ color: "var(--color-text)" }}>{t("legalPage.contactLabel")}</strong> tonvoco.pro@gmail.com
+                <strong style={{ color: "var(--color-text)" }}>{t("legalPage.contactLabel")}</strong> tonvo.sales@gmail.com
               </p>
             </div>
           </section>

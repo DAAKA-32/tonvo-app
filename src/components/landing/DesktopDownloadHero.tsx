@@ -60,13 +60,11 @@ export default function DesktopDownloadHero() {
 
   return (
     <section
-      className="relative py-24 px-6 flex justify-center overflow-hidden"
+      className="relative pt-56 pb-24 px-6 flex justify-center overflow-hidden"
       aria-labelledby="desktop-dl-heading"
-      style={{
-        background:
-          "linear-gradient(180deg, transparent 0%, rgba(92, 92, 110, 0.05) 50%, transparent 100%)",
-      }}
+      style={{ marginTop: -160 }}
     >
+
       <div
         className="absolute inset-0 pointer-events-none opacity-40"
         style={{

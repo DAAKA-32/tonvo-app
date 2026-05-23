@@ -620,11 +620,20 @@
       "meetingsDesc": "Transforme um check-in em upsell. Ao vivo, não três dias depois."
     },
     "testimonials": {
-      "label": "Resultados acima de reviews",
-      "heading": "Closers não escrevem testemunhos. Entregam números.",
-      "desc": "Em centenas de negociadores, a taxa de fecho subiu de 24 % para 31 % no primeiro mês.",
-      "rating": "+29 %",
-      "ratingDesc": "subida média de receita por closer, no primeiro mês"
+      "label": "Adorado pelos closers",
+      "heading": "As calls passam a sentir-se diferentes.",
+      "desc": "Três pessoas. Três conversas muito diferentes. A mesma sensação calma: a frase certa já lá está.",
+      "starsLine": "5.0 nas avaliações dos primeiros utilizadores",
+      "footer": "Usado por closers, founders e consultores em mais de 40 países.",
+      "q1": "Antes falava por cima do cliente para preencher o silêncio. Agora o Tonvo dá-me o próximo passo antes de eu precisar — por isso ouço. As calls parecem conversas, não pitches.",
+      "n1": "Sarah Mitchell",
+      "r1": "Account Executive · SaaS",
+      "q2": "Ensaiava uma hora antes de cada call com investidores e ainda assim bloqueava nas perguntas difíceis. Agora abro o Tonvo e soo como eu — só que mais afiado. Já nada me apanha desprevenido.",
+      "n2": "Marcus Adler",
+      "r2": "Founder · SaaS indie",
+      "q3": "Metade do meu pipeline é na minha segunda língua. O Tonvo acompanha a call em tempo real e dá-me a frase certa no momento certo. Fecho em inglês sem hesitar.",
+      "n3": "Elena Rossi",
+      "r3": "Enterprise AE · EMEA"
     },
     "cta": {
       "heading1": "A sua próxima call",
@@ -823,7 +832,7 @@
     "s6Item3Label": "Plano Team:",
     "s6Item3Desc": "49 $/utilizador/mês. Inclui funcionalidades de colaboração em equipa.",
     "s6Item4": "Os pagamentos são processados de forma segura via Stripe. Pode cancelar a sua subscrição a qualquer momento na página de Definições.",
-    "s6Item5": "Os reembolsos são tratados caso a caso. Contacte tonvoco.pro@gmail.com para pedidos de reembolso.",
+    "s6Item5": "Os reembolsos são tratados caso a caso. Contacte tonvo.sales@gmail.com para pedidos de reembolso.",
     "s7Title": "7. Propriedade Intelectual",
     "s7Text": "A aplicação Tonvo, o seu design, código, modelos de IA e marca são propriedade da Tonvo. Mantém a propriedade do seu conteúdo (transcrições, análises). Ao utilizar o Serviço, concede-nos uma licença limitada para tratar o seu conteúdo exclusivamente com a finalidade de prestar o Serviço.",
     "s8Title": "8. Conteúdos Gerados por IA",
@@ -922,7 +931,7 @@
     "s9Title": "9. Segurança dos Dados",
     "s9Text": "Implementamos medidas de segurança alinhadas com as boas práticas do setor para proteger os seus dados, incluindo encriptação em trânsito (TLS/SSL), armazenamento encriptado em base de dados, autenticação segura via Firebase e auditorias de segurança regulares. Ainda assim, nenhum método de transmissão eletrónica ou de armazenamento é 100 % seguro.",
     "s10Title": "10. Privacidade dos Menores",
-    "s10Text": "O Tonvo não se destina a ser utilizado por pessoas com menos de 16 anos. Não recolhemos intencionalmente dados pessoais de menores. Se considera que um menor nos forneceu dados pessoais, contacte-nos em tonvoco.pro@gmail.com.",
+    "s10Text": "O Tonvo não se destina a ser utilizado por pessoas com menos de 16 anos. Não recolhemos intencionalmente dados pessoais de menores. Se considera que um menor nos forneceu dados pessoais, contacte-nos em tonvo.sales@gmail.com.",
     "s11Title": "11. Alterações a esta Política",
     "s11Text": "Podemos atualizar esta Política de Privacidade periodicamente. Notificá-lo-emos de quaisquer alterações substanciais publicando a política atualizada nesta página e atualizando a data de \"Última atualização\". A utilização continuada do serviço após as alterações constitui aceitação da política atualizada.",
     "s12Title": "12. Contacto",

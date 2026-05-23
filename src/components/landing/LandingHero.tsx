@@ -101,25 +101,11 @@ function HeroDemoStage() {
             </div>
           )}
 
-          {/* Vignette + bottom fade — implies "more below the fold" */}
+          {/* Subtle vignette — kept for depth (no bottom fade: mockup is no
+              longer cropped, so there's nothing to mask). */}
           <div aria-hidden className="hero-stage-vignette" />
-          <div aria-hidden className="hero-stage-bottomfade" />
         </div>
 
-      </motion.div>
-
-      {/* "More below" hint */}
-      <motion.div
-        aria-hidden
-        className="hero-stage-morebelow"
-        initial={reduce ? { opacity: 0 } : { opacity: 0, y: -4 }}
-        animate={reduce ? { opacity: 1 } : { opacity: [0, 1, 1, 0.6, 1], y: [0, 6, 0, 6, 0] }}
-        transition={reduce ? { duration: 0.6, delay: 1.4 } : { duration: 2.4, repeat: Infinity, ease: "easeInOut", delay: 1.6 }}
-      >
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M12 5v14" />
-          <path d="m5 12 7 7 7-7" />
-        </svg>
       </motion.div>
     </div>
   );
@@ -712,7 +698,7 @@ export default function LandingHero() {
   const percentMatch = headline1.match(/^(.*?)(\d+%)(.*)$/);
 
   return (
-    <section className="hero-section relative px-4 sm:px-6 pt-32 sm:pt-36 pb-0 overflow-hidden grid-bg">
+    <section className="hero-section relative z-10 px-4 sm:px-6 pt-32 sm:pt-36 pb-0 overflow-hidden">
       {/* ── HEADLINE BLOCK ── */}
       <div className="relative z-10 max-w-5xl mx-auto text-center">
         {/* Headline */}
@@ -841,7 +827,19 @@ export default function LandingHero() {
 
       {/* ── PARTIAL VIDEO DEMO STAGE ── */}
       <div className="hero-stage-outer relative z-10 w-full max-w-5xl mx-auto mt-10 sm:mt-12 px-2 sm:px-4">
-        <HeroDemoStage />
+        <div
+          aria-hidden
+          className="absolute inset-0 pointer-events-none grid-bg"
+          style={{
+            WebkitMaskImage:
+              "radial-gradient(ellipse at 50% 50%, rgba(0,0,0,0.7) 0%, transparent 70%)",
+            maskImage:
+              "radial-gradient(ellipse at 50% 50%, rgba(0,0,0,0.7) 0%, transparent 70%)",
+          }}
+        />
+        <div className="relative">
+          <HeroDemoStage />
+        </div>
       </div>
 
       <style jsx>{`
@@ -1064,13 +1062,7 @@ export default function LandingHero() {
           margin: 0 auto;
           width: 100%;
           max-width: 880px;
-          /* PEEK: clip the bottom so only top portion is visible.
-             Fixed height across devices — the mockup is the same size
-             on a 13" laptop and a 27" monitor. Whatever doesn't fit
-             above the fold is the user's view to scroll, but the visual
-             never shrinks. */
-          max-height: 460px;
-          aspect-ratio: 16 / 10;
+          /* Sizes to mockup content — no peek/clip. */
           border-radius: 22px;
           overflow: hidden;
           background: linear-gradient(180deg, rgba(28, 28, 34, 0.92), rgba(14, 14, 18, 0.96));
@@ -1084,7 +1076,6 @@ export default function LandingHero() {
         :global(.hero-stage-screen) {
           position: relative;
           width: 100%;
-          height: 100%;
         }
         :global(.hero-stage-video) {
           position: absolute;
@@ -1096,13 +1087,11 @@ export default function LandingHero() {
           z-index: 1;
         }
         :global(.hero-stage-fallback) {
-          position: absolute;
-          inset: 0;
+          /* Flows in normal layout so the frame sizes to the mockup's
+             natural height (no cropping). */
+          position: relative;
           z-index: 1;
           padding: 12px;
-        }
-        :global(.hero-stage-fallback .hero-mockup-frame) {
-          height: 100%;
         }
         :global(.hero-stage-vignette) {
           position: absolute;
@@ -1111,16 +1100,6 @@ export default function LandingHero() {
           pointer-events: none;
           background:
             radial-gradient(ellipse at center, transparent 55%, rgba(0, 0, 0, 0.35) 100%);
-        }
-        :global(.hero-stage-bottomfade) {
-          position: absolute;
-          left: 0;
-          right: 0;
-          bottom: 0;
-          height: 18%;
-          z-index: 4;
-          pointer-events: none;
-          background: linear-gradient(to top, var(--color-bg) 0%, rgba(10, 10, 14, 0.55) 60%, transparent 100%);
         }
         :global(.hero-stage-spotlight) {
           position: absolute;
@@ -1209,25 +1188,9 @@ export default function LandingHero() {
           -webkit-mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.5) 0%, transparent 100%);
           pointer-events: none;
         }
-        :global(.hero-stage-morebelow) {
-          position: absolute;
-          left: 50%;
-          bottom: 18px;
-          transform: translateX(-50%);
-          color: rgba(255, 255, 255, 0.7);
-          z-index: 9;
-          pointer-events: none;
-          filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.4));
-        }
-
         @media (max-width: 640px) {
           :global(.hero-stage-frame) {
-            max-height: 62vh;
             border-radius: 16px;
-            aspect-ratio: 16 / 12;
-          }
-          :global(.hero-stage-bottomfade) {
-            height: 22%;
           }
         }
 

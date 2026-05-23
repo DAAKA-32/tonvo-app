@@ -32,7 +32,6 @@ export default function SolutionSection() {
     offset: ["start 75%", "end 60%"],
   });
   const lineScale = useTransform(scrollYProgress, [0.2, 0.85], [0, 1]);
-  const pulsePos = useTransform(scrollYProgress, [0.2, 0.85], ["0%", "100%"]);
 
   const steps: Step[] = [
     {
@@ -120,22 +119,6 @@ export default function SolutionSection() {
                     "linear-gradient(90deg, #818cf8 0%, #c8c8d8 50%, #34d399 100%)",
                   borderRadius: 2,
                   boxShadow: "0 0 14px rgba(200, 200, 216, 0.35)",
-                }}
-              />
-              {/* Energy particle traveling along the line */}
-              <motion.div
-                className="absolute"
-                style={{
-                  left: pulsePos,
-                  top: -3,
-                  width: 8,
-                  height: 8,
-                  borderRadius: 999,
-                  background:
-                    "radial-gradient(circle, #fff, rgba(200,200,216,0.6) 60%, transparent 80%)",
-                  boxShadow:
-                    "0 0 12px rgba(200, 200, 216, 0.7), 0 0 24px rgba(129, 140, 248, 0.4)",
-                  marginLeft: -4,
                 }}
               />
             </div>
@@ -293,30 +276,6 @@ function StepBadge({ step, active, delay, reduce }: StepBadgeProps) {
         {step.num}
       </motion.span>
 
-      {/* Live indicator dot — pulses while step is in view */}
-      {!reduce && active && (
-        <motion.div
-          className="absolute"
-          style={{
-            top: 4,
-            right: 4,
-            width: 6,
-            height: 6,
-            borderRadius: 999,
-            background: step.color,
-            boxShadow: `0 0 6px ${step.color}, 0 0 12px ${step.color}66`,
-          }}
-          initial={{ opacity: 0, scale: 0 }}
-          animate={{
-            opacity: [0, 1, 0.55, 1, 0.55],
-            scale: [0, 1.2, 1, 1.2, 1],
-          }}
-          transition={{
-            opacity: { duration: 2.4, delay: delay + 0.6, repeat: Infinity, repeatType: "loop", ease: "easeInOut" },
-            scale: { duration: 2.4, delay: delay + 0.6, repeat: Infinity, repeatType: "loop", ease: "easeInOut" },
-          }}
-        />
-      )}
     </div>
   );
 }

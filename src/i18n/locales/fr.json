@@ -620,11 +620,20 @@
       "meetingsDesc": "Transformez un point d'étape en upsell. En live, pas trois jours plus tard."
     },
     "testimonials": {
-      "label": "Des résultats, pas des avis",
-      "heading": "Les closers n'écrivent pas de témoignages. Ils sortent des chiffres.",
-      "desc": "Sur des centaines de négociateurs, le close rate est passé de 24 % à 31 % dès le premier mois.",
-      "rating": "+29 %",
-      "ratingDesc": "de chiffre par closer, le premier mois"
+      "label": "Plébiscité par les closers",
+      "heading": "Les appels ne sont plus les mêmes.",
+      "desc": "Trois personnes. Trois conversations très différentes. Et la même sensation : la bonne phrase, déjà là.",
+      "starsLine": "Noté 5.0 par les premiers utilisateurs",
+      "footer": "Utilisé par des closers, fondateurs et consultants dans plus de 40 pays.",
+      "q1": "Avant, je parlais pour combler les silences. Maintenant Tonvo me souffle la suite avant même que j'en aie besoin — alors j'écoute. Mes appels ressemblent à des conversations, plus à des pitchs.",
+      "n1": "Sarah Mitchell",
+      "r1": "Account Executive · SaaS",
+      "q2": "Je répétais une heure avant chaque call investisseur et je calais quand même sur les questions difficiles. Avec Tonvo, je reste moi-même — en plus net. Plus rien ne me prend de court.",
+      "n2": "Marcus Adler",
+      "r2": "Fondateur · SaaS indé",
+      "q3": "La moitié de mon pipe est dans ma deuxième langue. Tonvo suit la conversation en direct et m'envoie la formule juste au bon moment. Je closes en anglais sans hésiter.",
+      "n3": "Elena Rossi",
+      "r3": "Enterprise AE · EMEA"
     },
     "cta": {
       "heading1": "Votre prochain appel",
@@ -823,7 +832,7 @@
     "s6Item3Label": "Plan Team :",
     "s6Item3Desc": "49 $/utilisateur/mois. Inclut les fonctionnalités collaboratives d'équipe.",
     "s6Item4": "Les paiements sont traités de manière sécurisée via Stripe. Vous pouvez résilier votre abonnement à tout moment depuis la page Paramètres.",
-    "s6Item5": "Les remboursements sont étudiés au cas par cas. Pour toute demande, contactez tonvoco.pro@gmail.com.",
+    "s6Item5": "Les remboursements sont étudiés au cas par cas. Pour toute demande, contactez tonvo.sales@gmail.com.",
     "s7Title": "7. Propriété intellectuelle",
     "s7Text": "L'application Tonvo, son design, son code, ses modèles d'IA et son image de marque sont la propriété de Tonvo. Vous conservez la propriété de vos contenus (transcriptions, analyses). En utilisant le Service, vous nous accordez une licence limitée pour traiter vos contenus dans le seul but de fournir le Service.",
     "s8Title": "8. Contenu généré par l'IA",
@@ -922,7 +931,7 @@
     "s9Title": "9. Sécurité des données",
     "s9Text": "Nous mettons en œuvre des mesures de sécurité conformes aux standards du marché pour protéger vos données : chiffrement en transit (TLS/SSL), stockage chiffré en base de données, authentification sécurisée via Firebase et audits de sécurité réguliers. Cela étant, aucune méthode de transmission ou de stockage électronique n'est sûre à 100 %.",
     "s10Title": "10. Protection des mineurs",
-    "s10Text": "Tonvo n'est pas destiné aux personnes de moins de 16 ans. Nous ne collectons pas sciemment de données personnelles de mineurs. Si vous pensez qu'un mineur nous a transmis des données personnelles, contactez-nous à tonvoco.pro@gmail.com.",
+    "s10Text": "Tonvo n'est pas destiné aux personnes de moins de 16 ans. Nous ne collectons pas sciemment de données personnelles de mineurs. Si vous pensez qu'un mineur nous a transmis des données personnelles, contactez-nous à tonvo.sales@gmail.com.",
     "s11Title": "11. Modifications de cette politique",
     "s11Text": "Nous pouvons mettre à jour la présente Politique de Confidentialité à tout moment. Toute modification substantielle vous sera notifiée par la publication de la version mise à jour sur cette page et par l'actualisation de la date de « Dernière mise à jour ». L'utilisation continue du service après les modifications vaut acceptation de la politique mise à jour.",
     "s12Title": "12. Contact",

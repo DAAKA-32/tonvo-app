@@ -620,11 +620,20 @@
       "meetingsDesc": "Aus dem Check-in einen Upsell machen. Live, nicht drei Tage später."
     },
     "testimonials": {
-      "label": "Resultate statt Reviews",
-      "heading": "Closer schreiben keine Testimonials. Sie liefern Zahlen.",
-      "desc": "Über Hunderte Verhandler hinweg stieg die Close-Rate im ersten Monat von 24 % auf 31 %.",
-      "rating": "+29 %",
-      "ratingDesc": "Ø Umsatz-Uplift pro Closer im ersten Monat"
+      "label": "Von Closern geliebt",
+      "heading": "Die Calls fühlen sich anders an.",
+      "desc": "Drei Menschen. Drei sehr unterschiedliche Gespräche. Das gleiche ruhige Gefühl — der nächste Satz ist schon da.",
+      "starsLine": "5.0 von ersten Nutzern bewertet",
+      "footer": "Eingesetzt von Closern, Gründern und Berater:innen in über 40 Ländern.",
+      "q1": "Früher habe ich Kunden überredet, um Stille zu füllen. Heute flüstert mir Tonvo den nächsten Schritt zu, bevor ich ihn brauche — also höre ich zu. Calls fühlen sich wie Gespräche an, nicht wie Pitches.",
+      "n1": "Sarah Mitchell",
+      "r1": "Account Executive · SaaS",
+      "q2": "Vor jedem Investor-Call habe ich eine Stunde geprobt und bin trotzdem bei harten Fragen erstarrt. Jetzt öffne ich Tonvo und klinge wie ich selbst — nur klarer. Nichts erwischt mich mehr kalt.",
+      "n2": "Marcus Adler",
+      "r2": "Gründer · Indie-SaaS",
+      "q3": "Die Hälfte meiner Pipeline läuft in meiner zweiten Sprache. Tonvo folgt dem Call in Echtzeit und gibt mir genau den richtigen Satz im richtigen Moment. Ich schließe auf Englisch ab, ohne zu zögern.",
+      "n3": "Elena Rossi",
+      "r3": "Enterprise AE · EMEA"
     },
     "cta": {
       "heading1": "Ihr nächster Call",
@@ -823,7 +832,7 @@
     "s6Item3Label": "Team-Plan:",
     "s6Item3Desc": "49 $/Nutzer/Monat. Inklusive Team-Funktionen.",
     "s6Item4": "Zahlungen werden sicher über Stripe abgewickelt. Sie können Ihr Abo jederzeit über die Einstellungen kündigen.",
-    "s6Item5": "Erstattungen werden im Einzelfall geprüft. Anfragen bitte an tonvoco.pro@gmail.com.",
+    "s6Item5": "Erstattungen werden im Einzelfall geprüft. Anfragen bitte an tonvo.sales@gmail.com.",
     "s7Title": "7. Geistiges Eigentum",
     "s7Text": "Die Tonvo-Anwendung, ihr Design, Code, ihre KI-Modelle und ihr Branding sind Eigentum von Tonvo. Das Eigentum an Ihren Inhalten (Transkripte, Analysen) bleibt bei Ihnen. Mit der Nutzung des Dienstes räumen Sie uns eine eingeschränkte Lizenz zur Verarbeitung Ihrer Inhalte ein — ausschließlich zur Bereitstellung des Dienstes.",
     "s8Title": "8. KI-generierte Inhalte",
@@ -922,7 +931,7 @@
     "s9Title": "9. Datensicherheit",
     "s9Text": "Wir setzen branchenübliche Sicherheitsmaßnahmen zum Schutz Ihrer Daten ein, darunter Verschlüsselung bei der Übertragung (TLS/SSL), verschlüsselte Datenbankspeicherung, sichere Authentifizierung über Firebase und regelmäßige Sicherheits-Audits. Keine Methode der elektronischen Übertragung oder Speicherung ist jedoch zu 100 % sicher.",
     "s10Title": "10. Datenschutz für Minderjährige",
-    "s10Text": "Tonvo ist nicht für die Nutzung durch Personen unter 16 Jahren bestimmt. Wir erheben wissentlich keine personenbezogenen Daten von Kindern. Sollten Sie der Ansicht sein, dass uns ein Kind personenbezogene Daten übermittelt hat, kontaktieren Sie uns bitte unter tonvoco.pro@gmail.com.",
+    "s10Text": "Tonvo ist nicht für die Nutzung durch Personen unter 16 Jahren bestimmt. Wir erheben wissentlich keine personenbezogenen Daten von Kindern. Sollten Sie der Ansicht sein, dass uns ein Kind personenbezogene Daten übermittelt hat, kontaktieren Sie uns bitte unter tonvo.sales@gmail.com.",
     "s11Title": "11. Änderungen dieser Erklärung",
     "s11Text": "Wir können diese Datenschutzerklärung von Zeit zu Zeit aktualisieren. Wesentliche Änderungen kommunizieren wir, indem wir die aktualisierte Erklärung auf dieser Seite veröffentlichen und das Datum „Zuletzt aktualisiert“ anpassen. Die fortgesetzte Nutzung nach Änderungen gilt als Zustimmung zur aktualisierten Erklärung.",
     "s12Title": "12. Kontakt",

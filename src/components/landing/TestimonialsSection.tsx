@@ -1,130 +1,38 @@
 "use client";
 
-import { useRef } from "react";
-import { motion, useInView, useReducedMotion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { useTranslation } from "react-i18next";
 import AnimatedTitle from "@/components/AnimatedTitle";
-import CountUp from "@/components/motion/CountUp";
-import SpotlightCard from "@/components/motion/SpotlightCard";
-import {
-  easeOutExpo,
-  VIEWPORT,
-} from "@/components/motion/transitions";
+import { easeOutExpo, easeOutSoft, VIEWPORT } from "@/components/motion/transitions";
 
-interface ResultCard {
-  metric: {
-    value: number;
-    prefix?: string;
-    suffix: string;
-    decimals?: number;
-    label: string;
-  };
-  beforeAfter?: { before: string; after: string };
-  outcome: string;
-  name: string;
-  role: string;
-  company?: string;
+interface Story {
+  quoteKey: string;
+  nameKey: string;
+  roleKey: string;
   avatar: string;
-  accent: "green" | "violet" | "silver" | "amber";
-  featured?: boolean;
 }
 
-const ACCENT_MAP = {
-  green: { color: "#34d399", spot: "rgba(52, 211, 153, 0.10)", border: "rgba(52, 211, 153, 0.28)" },
-  violet: { color: "#818cf8", spot: "rgba(129, 140, 248, 0.10)", border: "rgba(129, 140, 248, 0.28)" },
-  silver: { color: "#c8c8d8", spot: "rgba(200, 200, 216, 0.10)", border: "rgba(200, 200, 216, 0.30)" },
-  amber: { color: "#fbbf24", spot: "rgba(251, 191, 36, 0.10)", border: "rgba(251, 191, 36, 0.26)" },
-} as const;
-
-const RESULTS: ResultCard[] = [
+const STORIES: Story[] = [
   {
-    metric: { value: 27, prefix: "+", suffix: "%", label: "close rate lift" },
-    beforeAfter: { before: "24%", after: "31%" },
-    outcome: "I actually listen instead of scrambling to take notes.",
-    name: "Sarah Mitchell",
-    role: "Account Executive",
-    company: "Salesforce",
-    avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&fit=crop&crop=face",
-    accent: "green",
-    featured: true,
+    quoteKey: "landing.testimonials.q1",
+    nameKey: "landing.testimonials.n1",
+    roleKey: "landing.testimonials.r1",
+    avatar:
+      "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=120&h=120&fit=crop&crop=face",
   },
   {
-    metric: { value: 3, suffix: "h", label: "saved per week" },
-    outcome: "I'm more present during calls. The team noticed.",
-    name: "David Chen",
-    role: "Engineering Manager",
-    company: "Datadog",
-    avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&h=80&fit=crop&crop=face",
-    accent: "silver",
+    quoteKey: "landing.testimonials.q2",
+    nameKey: "landing.testimonials.n2",
+    roleKey: "landing.testimonials.r2",
+    avatar:
+      "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=120&h=120&fit=crop&crop=face",
   },
   {
-    metric: { value: 40, prefix: "−", suffix: "%", label: "onboarding ramp" },
-    beforeAfter: { before: "8 weeks", after: "5 weeks" },
-    outcome: "New SDRs review real call summaries — not shadow for weeks.",
-    name: "Priya Sharma",
-    role: "Head of Sales",
-    company: "Notion",
-    avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=80&h=80&fit=crop&crop=face",
-    accent: "violet",
-  },
-  {
-    metric: { value: 20, suffix: "min", label: "saved per call" },
-    outcome: "Notes just get written. I show up, they're done.",
-    name: "Jessica Adams",
-    role: "Customer Success Lead",
-    company: "HubSpot",
-    avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=80&h=80&fit=crop&crop=face",
-    accent: "silver",
-  },
-  {
-    metric: { value: 5, suffix: "×", label: "more follow-ups" },
-    outcome: "I prep less, listen more. Clients can tell.",
-    name: "Marcus Johnson",
-    role: "Freelance Consultant",
-    avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=80&h=80&fit=crop&crop=face",
-    accent: "amber",
-  },
-  {
-    metric: { value: 6, suffix: "+", label: "interviews / week" },
-    outcome: "Every insight captured. Coaching tips are spot-on.",
-    name: "Elena Rossi",
-    role: "Product Manager",
-    company: "Figma",
-    avatar: "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=80&h=80&fit=crop&crop=face",
-    accent: "green",
-  },
-];
-
-interface ScoreboardKPI {
-  prefix?: string;
-  value: number;
-  suffix: string;
-  decimals?: number;
-  label: string;
-  beforeAfter?: { before: string; after: string };
-  accent: keyof typeof ACCENT_MAP;
-}
-
-const SCOREBOARD: ScoreboardKPI[] = [
-  {
-    value: 31,
-    suffix: "%",
-    label: "Average close rate, month one",
-    beforeAfter: { before: "24%", after: "31%" },
-    accent: "green",
-  },
-  {
-    prefix: "+",
-    value: 29,
-    suffix: "%",
-    label: "Average revenue lift per closer",
-    accent: "violet",
-  },
-  {
-    value: 14,
-    suffix: " days",
-    label: "Time to measurable lift",
-    accent: "silver",
+    quoteKey: "landing.testimonials.q3",
+    nameKey: "landing.testimonials.n3",
+    roleKey: "landing.testimonials.r3",
+    avatar:
+      "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=120&h=120&fit=crop&crop=face",
   },
 ];
 
@@ -133,50 +41,64 @@ export default function TestimonialsSection() {
   const reduce = useReducedMotion();
 
   return (
-    <section className="testimonials-section relative px-4 sm:px-6 py-12 sm:py-16 md:py-24 overflow-hidden">
-      <div className="relative z-10 max-w-5xl mx-auto">
-        {/* Header */}
-        <div className="text-center mb-10">
-          {/* 5-star social-proof ornament (moved here from hero) */}
+    <section className="relative px-4 sm:px-6 py-20 sm:py-28 md:py-32 overflow-hidden">
+      <div className="relative z-10 max-w-6xl mx-auto">
+        {/* ── Header ─────────────────────────────────────────── */}
+        <div className="text-center mb-14 sm:mb-20">
+          {/* 5-star pill */}
           <motion.div
-            className="testimonials-stars"
+            className="inline-flex items-center gap-2.5"
+            style={{
+              padding: "7px 14px",
+              borderRadius: 999,
+              background: "rgba(251, 191, 36, 0.05)",
+              border: "1px solid rgba(251, 191, 36, 0.18)",
+              backdropFilter: "blur(8px)",
+              WebkitBackdropFilter: "blur(8px)",
+            }}
             initial={reduce ? { opacity: 0 } : { opacity: 0, y: 8 }}
             whileInView={reduce ? { opacity: 1 } : { opacity: 1, y: 0 }}
             viewport={VIEWPORT}
             transition={{ duration: 0.6, ease: easeOutExpo }}
             aria-label="Rated 5 out of 5 stars"
           >
-            <span className="testimonials-stars-row" aria-hidden>
+            <span className="inline-flex items-center" style={{ gap: 3 }} aria-hidden>
               {[0, 1, 2, 3, 4].map((i) => (
                 <motion.svg
                   key={i}
-                  width="16"
-                  height="16"
+                  width="13"
+                  height="13"
                   viewBox="0 0 24 24"
                   fill="#fbbf24"
-                  initial={reduce ? { opacity: 0 } : { opacity: 0, scale: 0.4, rotate: -25 }}
-                  whileInView={reduce ? { opacity: 1 } : { opacity: 1, scale: 1, rotate: 0 }}
+                  initial={reduce ? { opacity: 0 } : { opacity: 0, scale: 0.4 }}
+                  whileInView={reduce ? { opacity: 1 } : { opacity: 1, scale: 1 }}
                   viewport={VIEWPORT}
-                  transition={{ duration: 0.55, delay: 0.12 + i * 0.08, ease: easeOutExpo }}
-                  style={{ filter: "drop-shadow(0 0 6px rgba(251, 191, 36, 0.55))" }}
+                  transition={{ duration: 0.5, delay: 0.12 + i * 0.07, ease: easeOutExpo }}
+                  style={{ filter: "drop-shadow(0 0 5px rgba(251, 191, 36, 0.45))" }}
                 >
                   <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
                 </motion.svg>
               ))}
             </span>
             <motion.span
-              className="testimonials-stars-text"
+              style={{
+                fontSize: 11,
+                fontWeight: 600,
+                letterSpacing: "0.14em",
+                textTransform: "uppercase",
+                color: "rgba(251, 191, 36, 0.92)",
+              }}
               initial={reduce ? { opacity: 0 } : { opacity: 0, x: -6 }}
               whileInView={reduce ? { opacity: 1 } : { opacity: 1, x: 0 }}
               viewport={VIEWPORT}
-              transition={{ duration: 0.5, delay: 0.55, ease: easeOutExpo }}
+              transition={{ duration: 0.5, delay: 0.5, ease: easeOutExpo }}
             >
-              5.0 · {t("landing.testimonials.label")}
+              {t("landing.testimonials.starsLine")}
             </motion.span>
           </motion.div>
 
           <motion.span
-            className="section-label inline-block mt-5"
+            className="section-label inline-block mt-6"
             initial={reduce ? { opacity: 0 } : { opacity: 0, y: 10 }}
             whileInView={reduce ? { opacity: 1 } : { opacity: 1, y: 0 }}
             viewport={VIEWPORT}
@@ -184,11 +106,26 @@ export default function TestimonialsSection() {
           >
             {t("landing.testimonials.label")}
           </motion.span>
-          <AnimatedTitle variant="right" className="section-heading testimonials-heading">
+          <AnimatedTitle
+            variant="right"
+            className="section-heading"
+            style={{
+              fontSize: "clamp(1.875rem, 4vw, 2.75rem)",
+              lineHeight: 1.1,
+              letterSpacing: "-0.025em",
+              marginTop: 14,
+            }}
+          >
             {t("landing.testimonials.heading")}
           </AnimatedTitle>
           <motion.p
-            className="body-muted max-w-md mx-auto mt-3 text-sm"
+            style={{
+              color: "var(--color-text-muted)",
+              fontSize: 16,
+              lineHeight: 1.6,
+              maxWidth: 560,
+              margin: "18px auto 0",
+            }}
             initial={reduce ? { opacity: 0 } : { opacity: 0, y: 10 }}
             whileInView={reduce ? { opacity: 1 } : { opacity: 1, y: 0 }}
             viewport={VIEWPORT}
@@ -198,238 +135,174 @@ export default function TestimonialsSection() {
           </motion.p>
         </div>
 
-        {/* Scoreboard — 3 aggregate KPIs */}
-        <Scoreboard reduce={!!reduce} />
-
-        {/* Result cards grid */}
-        <div className="testimonials-grid mt-10">
-          {RESULTS.map((r, i) => (
-            <ResultCardView key={r.name} card={r} index={i} hideOnMobile={i >= 3} />
+        {/* ── Stories grid ───────────────────────────────────── */}
+        <div
+          className="grid grid-cols-1 md:grid-cols-3"
+          style={{ gap: 20, maxWidth: 1120, margin: "0 auto" }}
+        >
+          {STORIES.map((s, i) => (
+            <StoryCard
+              key={s.nameKey}
+              quote={t(s.quoteKey)}
+              name={t(s.nameKey)}
+              role={t(s.roleKey)}
+              avatar={s.avatar}
+              index={i}
+            />
           ))}
         </div>
+
+        {/* ── Footer trust line ──────────────────────────────── */}
+        <motion.p
+          className="text-center"
+          style={{
+            marginTop: 56,
+            fontSize: 13,
+            color: "var(--color-text-muted)",
+            letterSpacing: "0.01em",
+            maxWidth: 520,
+            marginLeft: "auto",
+            marginRight: "auto",
+          }}
+          initial={reduce ? { opacity: 0 } : { opacity: 0, y: 8 }}
+          whileInView={reduce ? { opacity: 1 } : { opacity: 1, y: 0 }}
+          viewport={VIEWPORT}
+          transition={{ duration: 0.6, delay: 0.3, ease: easeOutExpo }}
+        >
+          {t("landing.testimonials.footer")}
+        </motion.p>
       </div>
     </section>
   );
 }
 
 /* ----------------------------------------------------------------- */
-/*  Scoreboard — aggregate KPIs at the top of the section            */
+/*  StoryCard — bulletproof inline styles, no class-resolution risk  */
 /* ----------------------------------------------------------------- */
-function Scoreboard({ reduce }: { reduce: boolean }) {
-  return (
-    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 max-w-3xl mx-auto">
-      {SCOREBOARD.map((kpi, i) => {
-        const a = ACCENT_MAP[kpi.accent];
-        return (
-          <SpotlightCard
-            key={kpi.label}
-            index={i}
-            delay={0.15}
-            spotlightColor={a.spot}
-            borderGlow={a.border}
-            className="p-4 sm:p-5 text-center"
-          >
-            <div
-              className="text-2xl sm:text-3xl font-bold tabular-nums tracking-tight"
-              style={{ color: a.color }}
-            >
-              <CountUp
-                value={kpi.value}
-                prefix={kpi.prefix}
-                suffix={kpi.suffix}
-                decimals={kpi.decimals ?? 0}
-                duration={1.7}
-              />
-            </div>
-            {kpi.beforeAfter && !reduce && (
-              <BeforeAfter
-                before={kpi.beforeAfter.before}
-                after={kpi.beforeAfter.after}
-                accent={a.color}
-                delay={0.6}
-              />
-            )}
-            <p
-              className="text-xs uppercase tracking-wider mt-3 m-0"
-              style={{ color: "var(--color-text-muted)", letterSpacing: "0.1em" }}
-            >
-              {kpi.label}
-            </p>
-          </SpotlightCard>
-        );
-      })}
-    </div>
-  );
-}
-
-/* ----------------------------------------------------------------- */
-/*  ResultCardView — one outcome card                                */
-/* ----------------------------------------------------------------- */
-function ResultCardView({
-  card,
+function StoryCard({
+  quote,
+  name,
+  role,
+  avatar,
   index,
-  hideOnMobile,
 }: {
-  card: ResultCard;
+  quote: string;
+  name: string;
+  role: string;
+  avatar: string;
   index: number;
-  hideOnMobile?: boolean;
 }) {
-  const a = ACCENT_MAP[card.accent];
+  const reduce = useReducedMotion();
+
   return (
-    <SpotlightCard
-      index={index}
-      delay={0.2}
-      spotlightColor={a.spot}
-      borderGlow={a.border}
-      className={`p-5 flex flex-col${hideOnMobile ? " testimonial-desktop-only" : ""}${card.featured ? " testimonial-featured" : ""}`}
+    <motion.figure
+      style={{
+        position: "relative",
+        display: "flex",
+        flexDirection: "column",
+        padding: "32px 28px 26px",
+        background: "rgba(255, 255, 255, 0.018)",
+        border: "1px solid rgba(255, 255, 255, 0.06)",
+        borderRadius: 20,
+        margin: 0,
+        minHeight: 320,
+        backdropFilter: "blur(20px)",
+        WebkitBackdropFilter: "blur(20px)",
+      }}
+      initial={reduce ? { opacity: 0 } : { opacity: 0, y: 24 }}
+      whileInView={reduce ? { opacity: 1 } : { opacity: 1, y: 0 }}
+      viewport={VIEWPORT}
+      transition={{
+        duration: 0.7,
+        delay: 0.2 + index * 0.1,
+        ease: easeOutSoft,
+      }}
     >
-      {/* Metric badge */}
-      <div className="flex items-baseline gap-2">
-        <div
-          className="text-xl sm:text-2xl font-bold tabular-nums"
-          style={{ color: a.color }}
-        >
-          <CountUp
-            value={card.metric.value}
-            prefix={card.metric.prefix}
-            suffix={card.metric.suffix}
-            decimals={card.metric.decimals ?? 0}
-            duration={1.4}
-          />
-        </div>
-        <span
-          className="text-[11px] uppercase font-semibold"
-          style={{
-            color: "var(--color-text-muted)",
-            letterSpacing: "0.08em",
-          }}
-        >
-          {card.metric.label}
-        </span>
-      </div>
-
-      {/* Before / After */}
-      {card.beforeAfter && (
-        <BeforeAfter
-          before={card.beforeAfter.before}
-          after={card.beforeAfter.after}
-          accent={a.color}
-          delay={0.5}
-        />
-      )}
-
-      {/* Verified outcome pill */}
-      <div className="flex items-center gap-1.5 mt-4">
-        <span
-          className="w-1.5 h-1.5 rounded-full pulse-positive"
-          style={{ backgroundColor: a.color }}
-        />
-        <span
-          className="text-[10px] font-semibold uppercase"
-          style={{ color: a.color, letterSpacing: "0.14em" }}
-        >
-          verified outcome
-        </span>
-      </div>
-
-      {/* Outcome quote */}
-      <p
-        className="text-[13px] leading-relaxed mt-2.5 mb-0"
-        style={{ color: "var(--color-text)" }}
+      {/* Open quote glyph */}
+      <svg
+        width="26"
+        height="20"
+        viewBox="0 0 28 22"
+        fill="none"
+        aria-hidden
+        style={{
+          color: "rgba(200, 200, 216, 0.16)",
+          marginBottom: 16,
+          flexShrink: 0,
+        }}
       >
-        &ldquo;{card.outcome}&rdquo;
-      </p>
+        <path
+          d="M0 22V13.2C0 9.2 0.733333 5.93333 2.2 3.4C3.66667 0.866667 6 -0.4 9.2 -0.4L9.6 2.6C7.46667 2.86667 6 3.86667 5.2 5.6C4.4 7.33333 4 9.66667 4 12.6H9.4V22H0ZM18 22V13.2C18 9.2 18.7333 5.93333 20.2 3.4C21.6667 0.866667 24 -0.4 27.2 -0.4L27.6 2.6C25.4667 2.86667 24 3.86667 23.2 5.6C22.4 7.33333 22 9.66667 22 12.6H27.4V22H18Z"
+          fill="currentColor"
+        />
+      </svg>
 
-      {/* Attribution */}
-      <div
-        className="flex items-center gap-2.5 mt-auto pt-3"
-        style={{ borderTop: "1px solid rgba(255, 255, 255, 0.05)", marginTop: 12 }}
+      {/* The quote — visual hero of the card */}
+      <blockquote
+        style={{
+          flex: 1,
+          margin: 0,
+          fontSize: 15.5,
+          lineHeight: 1.62,
+          letterSpacing: "-0.003em",
+          color: "rgba(255, 255, 255, 0.9)",
+          fontWeight: 400,
+        }}
+      >
+        {quote}
+      </blockquote>
+
+      {/* Attribution row — inline flex, no CSS dependency */}
+      <figcaption
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: 12,
+          marginTop: 24,
+          paddingTop: 18,
+          borderTop: "1px solid rgba(255, 255, 255, 0.06)",
+        }}
       >
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          src={card.avatar}
-          alt={card.name}
-          className="w-8 h-8 rounded-full object-cover shrink-0 ring-2 ring-white/5"
+          src={avatar}
+          alt={name}
+          width={40}
+          height={40}
+          loading="lazy"
+          style={{
+            width: 40,
+            height: 40,
+            minWidth: 40,
+            borderRadius: 999,
+            objectFit: "cover",
+            flexShrink: 0,
+            background: "rgba(255, 255, 255, 0.04)",
+            display: "block",
+          }}
         />
-        <div className="min-w-0">
-          <div className="text-[13px] font-semibold leading-tight">{card.name}</div>
+        <div style={{ minWidth: 0, lineHeight: 1.3 }}>
           <div
-            className="text-xs leading-tight mt-0.5"
-            style={{ color: "var(--color-text-muted)" }}
+            style={{
+              fontSize: 13.5,
+              fontWeight: 600,
+              color: "var(--color-text)",
+              letterSpacing: "-0.005em",
+            }}
           >
-            {card.role}
-            {card.company ? ` · ${card.company}` : ""}
+            {name}
+          </div>
+          <div
+            style={{
+              fontSize: 12,
+              color: "var(--color-text-muted)",
+              marginTop: 2,
+            }}
+          >
+            {role}
           </div>
         </div>
-      </div>
-    </SpotlightCard>
-  );
-}
-
-/* ----------------------------------------------------------------- */
-/*  BeforeAfter — small badge "before → after" with arrow reveal     */
-/* ----------------------------------------------------------------- */
-function BeforeAfter({
-  before,
-  after,
-  accent,
-  delay = 0,
-}: {
-  before: string;
-  after: string;
-  accent: string;
-  delay?: number;
-}) {
-  const reduce = useReducedMotion();
-  const ref = useRef<HTMLDivElement>(null);
-  const inView = useInView(ref, { once: true, margin: "-30px" });
-
-  return (
-    <div
-      ref={ref}
-      className="inline-flex items-center gap-2 mt-3 px-2.5 py-1 rounded-md"
-      style={{
-        background: "rgba(255, 255, 255, 0.03)",
-        border: "1px solid rgba(255, 255, 255, 0.05)",
-      }}
-    >
-      <motion.span
-        className="text-[11px] tabular-nums font-medium"
-        style={{ color: "var(--color-text-muted)" }}
-        initial={reduce ? { opacity: 0 } : { opacity: 0, x: -6 }}
-        animate={inView ? { opacity: 1, x: 0 } : undefined}
-        transition={{ duration: 0.45, delay, ease: easeOutExpo }}
-      >
-        {before}
-      </motion.span>
-      <motion.svg
-        width="12"
-        height="10"
-        viewBox="0 0 14 10"
-        fill="none"
-        aria-hidden
-        initial={reduce ? { opacity: 0 } : { opacity: 0, scaleX: 0 }}
-        animate={inView ? { opacity: 1, scaleX: 1 } : undefined}
-        transition={{ duration: 0.55, delay: delay + 0.1, ease: easeOutExpo }}
-        style={{ transformOrigin: "left" }}
-      >
-        <path
-          d="M1 5h11m0 0L8.5 1.5M12 5L8.5 8.5"
-          stroke={accent}
-          strokeWidth="1.4"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
-      </motion.svg>
-      <motion.span
-        className="text-[11px] tabular-nums font-bold"
-        style={{ color: accent }}
-        initial={reduce ? { opacity: 0 } : { opacity: 0, x: 6 }}
-        animate={inView ? { opacity: 1, x: 0 } : undefined}
-        transition={{ duration: 0.45, delay: delay + 0.2, ease: easeOutExpo }}
-      >
-        {after}
-      </motion.span>
-    </div>
+      </figcaption>
+    </motion.figure>
   );
 }

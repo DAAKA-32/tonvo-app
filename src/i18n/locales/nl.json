@@ -620,11 +620,20 @@
       "meetingsDesc": "Maak van een check-in een upsell. Live, niet drie dagen later."
     },
     "testimonials": {
-      "label": "Resultaten boven reviews",
-      "heading": "Closers schrijven geen testimonials. Ze leveren cijfers.",
-      "desc": "Bij honderden onderhandelaars steeg de close rate van 24% naar 31% in maand één.",
-      "rating": "+29%",
-      "ratingDesc": "gemiddelde omzetstijging per closer, eerste maand"
+      "label": "Geliefd door closers",
+      "heading": "De calls voelen nu anders.",
+      "desc": "Drie mensen. Drie heel verschillende gesprekken. Hetzelfde rustige gevoel — de juiste zin ligt al klaar.",
+      "starsLine": "5.0 beoordeeld door early users",
+      "footer": "Gebruikt door closers, founders en consultants in 40+ landen.",
+      "q1": "Vroeger praatte ik door de prospect heen om stiltes op te vullen. Nu fluistert Tonvo me de volgende stap in voor ik 'm nodig heb — dus luister ik. Calls voelen als gesprekken, niet als pitches.",
+      "n1": "Sarah Mitchell",
+      "r1": "Account Executive · SaaS",
+      "q2": "Ik repeteerde een uur voor elke investor call en blokkeerde nog steeds op de moeilijke vragen. Nu open ik Tonvo en klink ik als mezelf — alleen scherper. Niets verrast me meer.",
+      "n2": "Marcus Adler",
+      "r2": "Founder · indie SaaS",
+      "q3": "De helft van mijn pipeline is in mijn tweede taal. Tonvo volgt het gesprek live en geeft me de juiste zin precies op het juiste moment. Ik close in het Engels zonder twijfel.",
+      "n3": "Elena Rossi",
+      "r3": "Enterprise AE · EMEA"
     },
     "cta": {
       "heading1": "Je volgende call",
@@ -823,7 +832,7 @@
     "s6Item3Label": "Team-plan:",
     "s6Item3Desc": "$49/gebruiker/maand. Inclusief teamfeatures.",
     "s6Item4": "Betalingen worden veilig verwerkt via Stripe. U kunt uw abonnement op elk moment opzeggen via de pagina Instellingen.",
-    "s6Item5": "Restituties worden per geval beoordeeld. Neem contact op met tonvoco.pro@gmail.com voor restitutieverzoeken.",
+    "s6Item5": "Restituties worden per geval beoordeeld. Neem contact op met tonvo.sales@gmail.com voor restitutieverzoeken.",
     "s7Title": "7. Intellectueel eigendom",
     "s7Text": "De Tonvo-applicatie, het ontwerp, de code, AI-modellen en branding zijn eigendom van Tonvo. U behoudt het eigendom van uw content (transcripties, analyses). Door de Dienst te gebruiken verleent u ons een beperkte licentie om uw content uitsluitend te verwerken voor het leveren van de Dienst.",
     "s8Title": "8. Door AI gegenereerde content",
@@ -922,7 +931,7 @@
     "s9Title": "9. Gegevensbeveiliging",
     "s9Text": "Wij implementeren beveiligingsmaatregelen volgens de industriestandaard om uw gegevens te beschermen, waaronder versleuteling tijdens transport (TLS/SSL), versleutelde databaseopslag, veilige authenticatie via Firebase en regelmatige beveiligingsaudits. Geen enkele methode van elektronische overdracht of opslag is echter 100% veilig.",
     "s10Title": "10. Privacy van kinderen",
-    "s10Text": "Tonvo is niet bedoeld voor gebruik door personen jonger dan 16 jaar. Wij verzamelen niet bewust persoonsgegevens van kinderen. Vermoedt u dat een kind ons persoonsgegevens heeft verstrekt, neem dan contact op via tonvoco.pro@gmail.com.",
+    "s10Text": "Tonvo is niet bedoeld voor gebruik door personen jonger dan 16 jaar. Wij verzamelen niet bewust persoonsgegevens van kinderen. Vermoedt u dat een kind ons persoonsgegevens heeft verstrekt, neem dan contact op via tonvo.sales@gmail.com.",
     "s11Title": "11. Wijzigingen in dit beleid",
     "s11Text": "Wij kunnen dit Privacybeleid van tijd tot tijd bijwerken. Wij stellen u op de hoogte van materiële wijzigingen door het bijgewerkte beleid op deze pagina te plaatsen en de datum \"Laatst bijgewerkt\" aan te passen. Voortgezet gebruik van de dienst na wijzigingen geldt als aanvaarding van het bijgewerkte beleid.",
     "s12Title": "12. Contact",

@@ -78,7 +78,7 @@ export default function CookiesPage() {
             <h2 className="text-lg font-semibold mb-3" style={{ color: "var(--color-text)" }}>{t("cookiesPage.s5Title")}</h2>
             <p className="text-sm leading-relaxed m-0">
               {t("cookiesPage.s5Text")}<br /><br />
-              Email: <strong>tonvoco.pro@gmail.com</strong>
+              Email: <strong>tonvo.sales@gmail.com</strong>
             </p>
           </section>
         </div>

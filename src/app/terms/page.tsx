@@ -118,7 +118,7 @@ export default function TermsPage() {
               {t("termsPage.s13Intro")}<br /><br />
               <strong>Tonvo</strong><br />
               42170 Chambles, France<br />
-              Email: <strong>tonvoco.pro@gmail.com</strong>
+              Email: <strong>tonvo.sales@gmail.com</strong>
             </p>
           </section>
         </div>

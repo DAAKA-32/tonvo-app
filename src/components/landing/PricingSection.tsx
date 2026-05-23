@@ -119,6 +119,8 @@ export default function PricingSection() {
           })}
         </div>
 
+        <EnterprisePanel t={t} reduce={!!reduce} />
+
         <motion.p
           className="text-center text-xs mt-8"
           style={{ color: "var(--color-text-muted)" }}
@@ -137,6 +139,156 @@ export default function PricingSection() {
         </motion.p>
       </div>
     </section>
+  );
+}
+
+/* ----------------------------------------------------------------- */
+/*  EnterprisePanel — sales-led tier, anchors the ladder upward      */
+/*  Horizontal wide card sitting below the 3-tier grid. No price     */
+/*  shown — buyers in this segment expect a sales conversation.      */
+/* ----------------------------------------------------------------- */
+interface EnterprisePanelProps {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  t: any;
+  reduce: boolean;
+}
+
+function EnterprisePanel({ t, reduce }: EnterprisePanelProps) {
+  const features = t("pricing.planEnterprise.features", { returnObjects: true }) as string[];
+  const subject = encodeURIComponent("Tonvo Enterprise — sales inquiry");
+  const mailto = `mailto:tonvo.sales@gmail.com?subject=${subject}`;
+
+  return (
+    <motion.div
+      className="mt-8 rounded-2xl border p-7 sm:p-9 relative overflow-hidden"
+      style={{
+        background:
+          "linear-gradient(135deg, rgba(17, 17, 20, 0.85) 0%, rgba(24, 24, 28, 0.65) 100%)",
+        backdropFilter: "blur(24px)",
+        WebkitBackdropFilter: "blur(24px)",
+        borderColor: "rgba(200, 200, 216, 0.12)",
+        boxShadow: "0 12px 40px rgba(0, 0, 0, 0.25)",
+      }}
+      initial={reduce ? { opacity: 0 } : { opacity: 0, y: 24, filter: "blur(8px)" }}
+      whileInView={reduce ? { opacity: 1 } : { opacity: 1, y: 0, filter: "blur(0px)" }}
+      viewport={VIEWPORT}
+      transition={{ duration: 0.7, delay: 0.5, ease: easeOutExpo }}
+    >
+      {/* Subtle directional sheen — bottom-right glow */}
+      {!reduce && (
+        <motion.div
+          aria-hidden
+          className="absolute pointer-events-none"
+          style={{
+            inset: "auto -20% -50% auto",
+            width: "60%",
+            height: "120%",
+            background:
+              "radial-gradient(ellipse at center, rgba(200, 200, 216, 0.10), transparent 70%)",
+            filter: "blur(40px)",
+          }}
+          animate={{ opacity: [0.5, 0.85, 0.5] }}
+          transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+        />
+      )}
+
+      <div className="relative grid grid-cols-1 lg:grid-cols-[1fr_auto] gap-8 lg:gap-12 items-start">
+        {/* Left column: label, name, description, features */}
+        <div className="min-w-0">
+          <div className="flex items-center gap-3 mb-3 flex-wrap">
+            <span
+              className="text-xs font-semibold uppercase tracking-[0.14em] px-3 py-1 rounded-full"
+              style={{
+                color: "var(--color-accent-light)",
+                background: "rgba(200, 200, 216, 0.08)",
+                border: "1px solid rgba(200, 200, 216, 0.18)",
+              }}
+            >
+              {t("pricing.planEnterprise.label")}
+            </span>
+            <span
+              className="text-xs font-medium tabular-nums"
+              style={{ color: "var(--color-text-muted)" }}
+            >
+              {t("pricing.planEnterprise.priceLabel")}
+              {" · "}
+              {t("pricing.planEnterprise.priceSubLabel")}
+            </span>
+          </div>
+
+          <h3
+            className="text-2xl sm:text-3xl font-bold mb-3 leading-tight"
+            style={{ color: "var(--color-text)" }}
+          >
+            {t("pricing.planEnterprise.name")}
+          </h3>
+          <p
+            className="text-sm sm:text-base mb-6 max-w-2xl"
+            style={{ color: "var(--color-text-silver)" }}
+          >
+            {t("pricing.planEnterprise.description")}
+          </p>
+
+          <ul
+            className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-2.5"
+            style={{ listStyle: "none", padding: 0, margin: 0 }}
+          >
+            {features.map((f, fi) => (
+              <motion.li
+                key={f}
+                className="flex items-start gap-2.5 text-sm"
+                style={{ color: "var(--color-text-silver)" }}
+                initial={reduce ? { opacity: 0 } : { opacity: 0, x: -8 }}
+                whileInView={reduce ? { opacity: 1 } : { opacity: 1, x: 0 }}
+                viewport={VIEWPORT}
+                transition={{
+                  duration: 0.4,
+                  delay: 0.55 + fi * 0.04,
+                  ease: easeOutSoft,
+                }}
+              >
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="var(--color-accent-light)"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="mt-0.5 shrink-0"
+                >
+                  <polyline points="20 6 9 17 4 12" />
+                </svg>
+                <span>{f}</span>
+              </motion.li>
+            ))}
+          </ul>
+        </div>
+
+        {/* Right column: CTA */}
+        <div className="lg:self-center flex-shrink-0 w-full lg:w-auto">
+          <MotionLink
+            href={mailto}
+            className="block px-7 py-3.5 rounded-full font-semibold text-sm text-center no-underline whitespace-nowrap"
+            style={{
+              background:
+                "linear-gradient(135deg, rgba(200, 200, 216, 0.18) 0%, rgba(200, 200, 216, 0.06) 100%)",
+              color: "var(--color-text)",
+              border: "1px solid rgba(200, 200, 216, 0.32)",
+              boxShadow:
+                "0 18px 48px -22px rgba(200, 200, 216, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.06)",
+            }}
+            whileHover={reduce ? undefined : { scale: 1.03, y: -1 }}
+            whileTap={reduce ? undefined : { scale: 0.97 }}
+            transition={SPRING_HOVER}
+          >
+            {t("pricing.planEnterprise.cta")}
+            <span className="ml-2" aria-hidden>→</span>
+          </MotionLink>
+        </div>
+      </div>
+    </motion.div>
   );
 }
 

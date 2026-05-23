@@ -8,6 +8,7 @@ import { useAuth } from "@/lib/auth-context";
 import AnimatedTitle from "@/components/AnimatedTitle";
 import TonvoLogo from "@/components/Logo";
 import LandingNavbar from "@/components/landing/LandingNavbar";
+import ScrollProgressBar from "@/components/landing/ScrollProgressBar";
 import LandingHero from "@/components/landing/LandingHero";
 import DesktopDownloadHero from "@/components/landing/DesktopDownloadHero";
 import PricingSection from "@/components/landing/PricingSection";
@@ -304,15 +305,28 @@ export default function HomePage() {
 
   return (
     <>
+      {/* ── Scroll progress (GPU scaleX, sits above the navbar) ── */}
+      <ScrollProgressBar />
+
       {/* ── Navbar (client component: scroll behavior + auth) ── */}
       <LandingNavbar />
 
       <main>
-        {/* ── Hero (client component: auth redirect + CurtainIntro) ── */}
-        <LandingHero />
+        {/* Hero + Now-in-desktop share a single continuous grid backdrop —
+            wrapped together so lines stay aligned across the section boundary,
+            and the grid ends exactly where this group ends (no bleed into the
+            sections below). */}
+        <div className="relative">
+          <div
+            aria-hidden
+            className="absolute inset-0 pointer-events-none grid-bg"
+          />
+          {/* ── Hero (client component: auth redirect + CurtainIntro) ── */}
+          <LandingHero />
 
-        {/* ── Desktop download CTA (OS-detected) ── */}
-        <DesktopDownloadHero />
+          {/* ── Desktop download CTA (OS-detected) ── */}
+          <DesktopDownloadHero />
+        </div>
 
         {/* ── Divider ── */}
         <RevealLine className="glow-line max-w-2xl mx-auto" />
@@ -528,7 +542,7 @@ export default function HomePage() {
                 <ul className="list-none p-0 m-0 space-y-2.5">
                   <li><Link href="/about" className="footer-link">{t("footer.about")}</Link></li>
                   <li><Link href="/blog" className="footer-link">{t("footer.blog")}</Link></li>
-                  <li><a href="mailto:tonvoco.pro@gmail.com" className="footer-link">{t("footer.contact")}</a></li>
+                  <li><a href="mailto:tonvo.sales@gmail.com" className="footer-link">{t("footer.contact")}</a></li>
                 </ul>
               </div>
 

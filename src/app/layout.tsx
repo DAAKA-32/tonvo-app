@@ -145,7 +145,7 @@ const organizationJsonLd = {
     "Tonvo is the real-time AI copilot for sales conversations — live transcription, instant insights, and closing suggestions during every call that matters.",
   contactPoint: {
     "@type": "ContactPoint",
-    email: "tonvoco.pro@gmail.com",
+    email: "tonvo.sales@gmail.com",
     contactType: "sales",
   },
 };
