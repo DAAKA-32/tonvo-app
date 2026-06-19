@@ -324,8 +324,9 @@ export default function HomePage() {
           {/* ── Hero (client component: auth redirect + CurtainIntro) ── */}
           <LandingHero />
 
-          {/* ── Desktop download CTA (OS-detected) ── */}
-          <DesktopDownloadHero />
+          {/* ── Desktop download CTA (OS-detected) — hidden in production for now
+                 (Microsoft verification pending). Still visible in dev. ── */}
+          {process.env.NODE_ENV !== "production" && <DesktopDownloadHero />}
         </div>
 
         {/* ── Divider ── */}
