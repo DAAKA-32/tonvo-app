@@ -578,7 +578,7 @@
       "step3Desc": "See what worked, what cost you, and your closing trend."
     },
     "features": {
-      "label": "How we raise your close rate",
+      "label": "How Tonvo works on a live call",
       "heading1": "Every lever that moves",
       "heading2": "a deal forward.",
       "liveTone": "Buying-signal detection",
@@ -586,7 +586,7 @@
       "smartSuggestions": "Closing lines, ready to deploy",
       "smartSuggestionsDesc": "The exact line for their objection. Tailored to what they just said.",
       "conversationInsights": "Deal-by-deal performance",
-      "conversationInsightsDesc": "Close rate, objection win rate, average ticket. Your scoreboard.",
+      "conversationInsightsDesc": "Conversation score, engagement, tone trend. Your scoreboard.",
       "textAnalysis": "Post-call deal review",
       "textAnalysisDesc": "Drop a transcript. Learn what won the deal — or what cost it."
     },
@@ -598,12 +598,12 @@
     "benefits": {
       "label": "The outcome",
       "heading": "Results that compound, call after call.",
-      "realtime": "+27%",
-      "realtimeDesc": "Average close rate uplift in 30 days",
+      "realtime": "Live",
+      "realtimeDesc": "Every buying signal caught the moment it lands",
       "threeClicks": "0 sec",
-      "threeClicksDesc": "Thinking time before your closing move",
-      "actionable": "3.4x",
-      "actionableDesc": "Objection win rate vs solo performance",
+      "threeClicksDesc": "Thinking time before your next move",
+      "actionable": "10",
+      "actionableDesc": "Languages it follows and translates, live",
       "private": "Silent",
       "privateDesc": "Invisible to your prospect — always"
     },
@@ -620,43 +620,43 @@
       "meetingsDesc": "Turn a check-in into an upsell. Live, not three days later."
     },
     "testimonials": {
-      "label": "Loved by closers",
-      "heading": "The calls feel different now.",
-      "desc": "Three people. Three very different calls. Same quiet feeling — the next move is already there.",
-      "starsLine": "Rated 5.0 by early users",
-      "footer": "Used by closers, founders, and consultants in 40+ countries.",
-      "q1": "I used to talk over prospects to fill the silence. Now Tonvo gives me the next move before I need it — so I just listen. Calls feel like conversations, not pitches.",
-      "n1": "Sarah Mitchell",
-      "r1": "Account Executive · SaaS",
-      "q2": "I'd rehearse for an hour before every investor call and still freeze on the hard questions. Now I open Tonvo and sound like myself — just sharper. Nothing catches me cold anymore.",
-      "n2": "Marcus Adler",
-      "r2": "Founder · indie SaaS",
-      "q3": "Half my pipeline is in my second language. Tonvo follows the call in real time and surfaces the exact phrase right when I need it. I close in English now without hesitating.",
-      "n3": "Elena Rossi",
-      "r3": "Enterprise AE · EMEA"
+      "label": "What a call feels like with Tonvo",
+      "heading": "The calls feel different.",
+      "desc": "Three calls. The same quiet feeling: the next move is already there.",
+      "starsLine": "Built with closers, in the open.",
+      "footer": "Made for closers, founders, and consultants.",
+      "q1": "You used to talk over prospects to fill the silence. With Tonvo the next move is there before you need it, so you just listen. Calls feel like conversations, not pitches.",
+      "n1": "A SaaS closer",
+      "r1": "Illustrative · Account Executive",
+      "q2": "You used to rehearse for an hour before every investor call and still freeze on the hard questions. With Tonvo you sound like yourself, just sharper. Nothing catches you cold.",
+      "n2": "A solo founder",
+      "r2": "Illustrative · indie SaaS",
+      "q3": "Half the pipeline is in a second language. Tonvo follows the call in real time and surfaces the exact phrase right when you need it. You close without hesitating.",
+      "n3": "An enterprise AE",
+      "r3": "Illustrative · EMEA"
     },
     "cta": {
       "heading1": "Your next call",
       "heading2": "closes itself.",
-      "desc": "Stop losing winnable deals. Plug Tonvo in. Higher close rate by Friday.",
-      "button": "Raise my close rate",
-      "note": "Free to start. Outcome guaranteed or your money back — 7 days."
+      "desc": "Stop losing winnable deals. Plug Tonvo in. The line that closes, surfaced live.",
+      "button": "Try Tonvo free",
+      "note": "Free to start. 7-day money-back, no questions."
     },
     "faq": {
       "title": "Questions closers ask.",
-      "subtitle": "Everything you need to know before you raise your close rate with Tonvo.",
-      "q1": "Is Tonvo a tool or a growth system?",
-      "a1": "Tonvo is a Growth-as-a-Service system — we sell closing rate, not software. You plug in, and the outcome we deliver is measurable: more deals closed, bigger tickets, fewer objections lost. The app is just the delivery mechanism.",
-      "q2": "How fast does the close rate actually move?",
-      "a2": "Most closers on Tonvo see a measurable close-rate lift inside 14 days — not because they changed their pitch, but because they stopped missing the moments that decide a deal. The average uplift across 30 days is +27% close rate.",
+      "subtitle": "Everything you need to know before your first call with Tonvo.",
+      "q1": "What is Tonvo, exactly?",
+      "a1": "Tonvo is a real-time coaching layer for your live calls. It listens, catches the buying signals and objections, and surfaces the exact line to say next. The app is the delivery; the value is never missing the moment that decides the call.",
+      "q2": "How fast will I feel the difference?",
+      "a2": "On your very next call. You stop missing the moments that decide a deal, because the next move is on your screen the instant the signal hits. No new pitch to learn.",
       "q3": "What exactly do I get during a call?",
       "a3": "The exact line to say when it matters: the objection-handler, the price anchor, the commitment ask, the reframe. No dashboards to read live — just the next move, surfaced the instant the signal hits.",
       "q4": "Do I need to change my sales process or pitch?",
       "a4": "No. Tonvo layers on top of your existing process. Your pitch, your deck, your offer — unchanged. What changes is the rate at which they end in a signed deal.",
       "q5": "Can my prospect see anything?",
       "a5": "Never. Tonvo runs in a separate window, invisible to the other side — even on screen share. Your edge stays your edge.",
-      "q6": "Is there a guarantee on the outcome?",
-      "a6": "Yes. If your close rate doesn't move in 7 days, we refund you. We sell results — if you don't get them, we don't keep your money."
+      "q6": "Is there a guarantee?",
+      "a6": "Yes. Start free, and if Tonvo is not for you, there is a 7-day money-back guarantee. No questions."
     }
   },
   "mockup": {
@@ -702,7 +702,7 @@
   },
   "pricing": {
     "title": "Priced on the outcome, not the software.",
-    "subtitle": "One higher-close-rate month pays the whole year. Start free — upgrade when Tonvo starts closing deals for you.",
+    "subtitle": "One month pays the whole year. Start free, upgrade when Tonvo is on every call.",
     "monthly": "Monthly",
     "annual": "Annual",
     "manageSubscription": "Manage Subscription",
@@ -745,7 +745,7 @@
       "cta": "Unlock my edge",
       "features": [
         "Unlimited closing sessions",
-        "Full objection-handling library",
+        "Live objection handling, on the call",
         "Live closing lines & price anchors",
         "Close rate trend, all-time",
         "Post-call deal review (transcripts)",
@@ -755,15 +755,15 @@
     },
     "planTeam": {
       "name": "Sales Team",
-      "description": "Compound close rate across every rep",
+      "description": "Sharper calls across every rep",
       "cta": "Lift the whole team",
       "features": [
         "Everything in Closer",
-        "Team close-rate dashboard",
+        "Team conversation dashboard",
         "Manager win/loss insights",
         "Custom playbook per rep",
-        "API access",
-        "SSO integration",
+        "API access (on the roadmap)",
+        "SSO (on the roadmap)",
         "Dedicated revenue coach"
       ]
     },
@@ -786,17 +786,17 @@
   },
   "upgrade": {
     "successTitle": "You're in. Time to close.",
-    "successSubtitle": "Your {{plan}} plan is live. Every call from here compounds into a higher close rate.",
+    "successSubtitle": "Your {{plan}} plan is live. Every call from here gets sharper.",
     "cancelTitle": "Not sure yet?",
     "cancelSubtitle": "No pressure — keep closing on the Starter plan, upgrade the moment you want unlimited calls.",
-    "nudgeTitle": "Your close rate is capped",
+    "nudgeTitle": "Your free sessions are capped",
     "nudgeSubtitle": "You're on Starter — 3 calls a month. Unlock unlimited closings and the full objection library.",
     "goToDashboard": "Go to Dashboard",
     "stayFree": "Stay on Starter"
   },
   "footer": {
     "tagline1": "Growth-as-a-Service for closers.",
-    "tagline2": "We sell close rate — not software.",
+    "tagline2": "Real-time coaching on every call.",
     "product": "Product",
     "features": "Features",
     "demo": "Demo",

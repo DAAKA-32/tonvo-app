@@ -1012,11 +1012,11 @@ export default function SessionPage() {
     setSessionStarting(true);
 
     try {
-    // Block screen-only on free plan — screen analysis requires Pro
+    // Block screen-only unless on Team plan (screenAnalysis gate, plan-features.ts)
     const effectiveScreen = screenEnabled && features.screenAnalysis;
     if (!effectiveScreen && !audioEnabled) {
       if (screenEnabled && !features.screenAnalysis) {
-        toast.show(t("session.screenProOnly", "Screen analysis is available on the Pro plan. Upgrade to unlock this feature!"), { type: "info", duration: 5000 });
+        toast.show(t("session.screenProOnly", "Screen analysis is available on the Team plan. Upgrade to unlock this feature!"), { type: "info", duration: 5000 });
       } else {
         toast.show(t("session.enableAtLeast"), { type: "error", duration: 4000 });
       }
@@ -1584,7 +1584,7 @@ export default function SessionPage() {
                       toast.show(
                         t(
                           "session.screenProOnly",
-                          "Screen analysis is available on the Pro plan. Upgrade to unlock this feature!",
+                          "Screen analysis is available on the Team plan. Upgrade to unlock this feature!",
                         ),
                         { type: "info", duration: 5000 },
                       );
