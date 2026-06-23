@@ -598,12 +598,12 @@
     "benefits": {
       "label": "O resultado",
       "heading": "Resultados que se multiplicam, call após call.",
-      "realtime": "+27 %",
-      "realtimeDesc": "Subida média da taxa de fecho em 30 dias",
+      "realtime": "Ao vivo",
+      "realtimeDesc": "Cada sinal de compra captado no instante em que surge",
       "threeClicks": "0 seg",
-      "threeClicksDesc": "Tempo de pensar antes da sua jogada de fecho",
-      "actionable": "3,4×",
-      "actionableDesc": "Win rate em objeções vs performance a solo",
+      "threeClicksDesc": "Tempo de pensar antes da sua próxima jogada",
+      "actionable": "10",
+      "actionableDesc": "Idiomas que acompanha e traduz, ao vivo",
       "private": "Silencioso",
       "privateDesc": "Invisível para o seu prospect — sempre"
     },
@@ -620,43 +620,43 @@
       "meetingsDesc": "Transforme um check-in em upsell. Ao vivo, não três dias depois."
     },
     "testimonials": {
-      "label": "Adorado pelos closers",
+      "label": "Como é uma call com o Tonvo",
       "heading": "As calls passam a sentir-se diferentes.",
-      "desc": "Três pessoas. Três conversas muito diferentes. A mesma sensação calma: a frase certa já lá está.",
-      "starsLine": "5.0 nas avaliações dos primeiros utilizadores",
-      "footer": "Usado por closers, founders e consultores em mais de 40 países.",
-      "q1": "Antes falava por cima do cliente para preencher o silêncio. Agora o Tonvo dá-me o próximo passo antes de eu precisar — por isso ouço. As calls parecem conversas, não pitches.",
-      "n1": "Sarah Mitchell",
-      "r1": "Account Executive · SaaS",
-      "q2": "Ensaiava uma hora antes de cada call com investidores e ainda assim bloqueava nas perguntas difíceis. Agora abro o Tonvo e soo como eu — só que mais afiado. Já nada me apanha desprevenido.",
-      "n2": "Marcus Adler",
-      "r2": "Founder · SaaS indie",
-      "q3": "Metade do meu pipeline é na minha segunda língua. O Tonvo acompanha a call em tempo real e dá-me a frase certa no momento certo. Fecho em inglês sem hesitar.",
-      "n3": "Elena Rossi",
-      "r3": "Enterprise AE · EMEA"
+      "desc": "Três calls. A mesma sensação calma: a próxima jogada já lá está.",
+      "starsLine": "Construído com closers, à vista de todos.",
+      "footer": "Feito para closers, founders e consultores.",
+      "q1": "Antes falava por cima do cliente para preencher o silêncio. Com o Tonvo a próxima jogada está lá antes de eu precisar, por isso limito-me a ouvir. As calls parecem conversas, não pitches.",
+      "n1": "Um closer de SaaS",
+      "r1": "Ilustrativo · Account Executive",
+      "q2": "Ensaiava uma hora antes de cada call com investidores e ainda assim bloqueava nas perguntas difíceis. Com o Tonvo soo como eu, só que mais afiado. Já nada me apanha desprevenido.",
+      "n2": "Um founder a solo",
+      "r2": "Ilustrativo · SaaS indie",
+      "q3": "Metade do pipeline é numa segunda língua. O Tonvo acompanha a call em tempo real e dá-me a frase certa no momento certo. Fecho sem hesitar.",
+      "n3": "Um Enterprise AE",
+      "r3": "Ilustrativo · EMEA"
     },
     "cta": {
       "heading1": "A sua próxima call",
       "heading2": "fecha-se sozinha.",
-      "desc": "Pare de perder deals ganháveis. Ligue o Tonvo. Taxa de fecho mais alta até sexta-feira.",
-      "button": "Subir a minha taxa de fecho",
-      "note": "Grátis para começar. Resultado garantido ou devolução do dinheiro — 7 dias."
+      "desc": "Pare de perder deals ganháveis. Ligue o Tonvo. A frase que fecha, surgida ao vivo.",
+      "button": "Experimentar o Tonvo grátis",
+      "note": "Grátis para começar. Devolução do dinheiro em 7 dias, sem perguntas."
     },
     "faq": {
       "title": "Perguntas que os closers fazem.",
-      "subtitle": "Tudo o que precisa de saber antes de subir a sua taxa de fecho com o Tonvo.",
-      "q1": "O Tonvo é uma ferramenta ou um sistema de crescimento?",
-      "a1": "O Tonvo é um sistema Growth-as-a-Service — vendemos taxa de fecho, não software. Liga-se e o resultado entregue é mensurável: mais deals fechados, tickets maiores, menos objeções perdidas. A app é apenas o canal de entrega.",
-      "q2": "Em quanto tempo é que a taxa de fecho mexe?",
-      "a2": "A maioria dos closers no Tonvo vê uma subida mensurável da taxa de fecho em menos de 14 dias — não por mudarem o pitch, mas por deixarem de perder os momentos que decidem um deal. A subida média em 30 dias é de +27 %.",
+      "subtitle": "Tudo o que precisa de saber antes da sua primeira call com o Tonvo.",
+      "q1": "O que é o Tonvo, exatamente?",
+      "a1": "O Tonvo é uma camada de coaching em tempo real para as suas calls ao vivo. Ouve, capta os sinais de compra e as objeções, e mostra-lhe a frase exata a dizer a seguir. A app é o canal de entrega; o valor é nunca falhar o momento que decide a call.",
+      "q2": "Em quanto tempo vou sentir a diferença?",
+      "a2": "Já na sua próxima call. Deixa de falhar os momentos que decidem um deal, porque a próxima jogada aparece no seu ecrã no instante em que o sinal surge. Sem novo pitch para aprender.",
       "q3": "O que recebo durante uma call?",
       "a3": "A frase exata para dizer no momento que conta: o handler de objeção, a âncora de preço, a pedida de compromisso, o reframe. Sem dashboards para ler ao vivo — só a próxima jogada, no instante em que o sinal chega.",
       "q4": "Tenho de mudar o meu processo ou pitch?",
       "a4": "Não. O Tonvo assenta em cima do seu processo atual. O seu pitch, o seu deck, a sua oferta — sem mudanças. O que muda é a taxa a que terminam em deal assinado.",
       "q5": "O meu prospect consegue ver alguma coisa?",
       "a5": "Nunca. O Tonvo corre numa janela separada, invisível para o outro lado — mesmo na partilha de ecrã. A sua vantagem continua a ser sua.",
-      "q6": "Existe garantia de resultado?",
-      "a6": "Sim. Se a sua taxa de fecho não mexer em 7 dias, devolvemos o dinheiro. Vendemos resultados — se não os tiver, não ficamos com o seu dinheiro."
+      "q6": "Existe garantia?",
+      "a6": "Sim. Comece grátis e, se o Tonvo não for para si, há garantia de devolução do dinheiro em 7 dias. Sem perguntas."
     }
   },
   "mockup": {
@@ -780,7 +780,7 @@
   },
   "footer": {
     "tagline1": "Growth-as-a-Service para closers.",
-    "tagline2": "Vendemos taxa de fecho — não software.",
+    "tagline2": "Coaching em tempo real em todas as calls.",
     "product": "Produto",
     "features": "Funcionalidades",
     "demo": "Demo",

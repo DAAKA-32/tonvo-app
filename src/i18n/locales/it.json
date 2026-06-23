@@ -578,17 +578,17 @@
       "step3Desc": "Veda cosa ha funzionato, cosa Le è costato, e il trend del suo close rate."
     },
     "features": {
-      "label": "Come alziamo il suo close rate",
+      "label": "Come Tonvo lavora durante una call live",
       "heading1": "Ogni leva che fa avanzare",
       "heading2": "un deal.",
       "liveTone": "Rilevamento dei signal di acquisto",
-      "liveToneDesc": "Colpisca quando si apre la finestra — mai dieci secondi troppo tardi.",
+      "liveToneDesc": "Colpisca quando si apre la finestra, mai dieci secondi troppo tardi.",
       "smartSuggestions": "Frasi di chiusura, pronte all'uso",
       "smartSuggestionsDesc": "La frase esatta sulla sua obiezione. Calibrata su quello che ha appena detto.",
       "conversationInsights": "Performance deal per deal",
-      "conversationInsightsDesc": "Close rate, win rate sulle obiezioni, ticket medio. Il suo scoreboard.",
+      "conversationInsightsDesc": "Score della conversazione, engagement, trend del tono. Il suo scoreboard.",
       "textAnalysis": "Debrief deal post-call",
-      "textAnalysisDesc": "Incolli un transcript. Capisca cosa ha vinto il deal — o cosa Le è costato."
+      "textAnalysisDesc": "Incolli un transcript. Capisca cosa ha vinto il deal, o cosa Le è costato."
     },
     "demo": {
       "label": "Vantaggio live",
@@ -598,14 +598,14 @@
     "benefits": {
       "label": "Il risultato",
       "heading": "Risultati che si moltiplicano, call dopo call.",
-      "realtime": "+27%",
-      "realtimeDesc": "Uplift medio del close rate in 30 giorni",
+      "realtime": "Live",
+      "realtimeDesc": "Ogni signal di acquisto colto nell'istante in cui arriva",
       "threeClicks": "0 sec",
-      "threeClicksDesc": "Tempo di pensiero prima della sua mossa di chiusura",
-      "actionable": "3,4×",
-      "actionableDesc": "Win rate sulle obiezioni vs performance da solo",
+      "threeClicksDesc": "Tempo di pensiero prima della sua prossima mossa",
+      "actionable": "10",
+      "actionableDesc": "Lingue che segue e traduce, live",
       "private": "Silenzioso",
-      "privateDesc": "Invisibile al suo prospect — sempre"
+      "privateDesc": "Invisibile al suo prospect, sempre"
     },
     "useCases": {
       "label": "Chi vince con Tonvo",
@@ -623,40 +623,40 @@
       "label": "Amato dai closer",
       "heading": "Le call ora si sentono diverse.",
       "desc": "Tre persone. Tre conversazioni molto diverse. La stessa sensazione calma: la frase giusta è già lì.",
-      "starsLine": "Valutato 5.0 dai primi utenti",
-      "footer": "Usato da closer, founder e consulenti in oltre 40 paesi.",
-      "q1": "Prima parlavo sopra al cliente per riempire i silenzi. Ora Tonvo mi suggerisce la mossa successiva prima ancora che mi serva — così ascolto. Le call sembrano conversazioni, non pitch.",
-      "n1": "Sarah Mitchell",
-      "r1": "Account Executive · SaaS",
-      "q2": "Provavo per un'ora prima di ogni call con gli investitori e mi bloccavo lo stesso sulle domande difficili. Ora apro Tonvo e suono come me stesso — solo più affilato. Niente mi prende più alla sprovvista.",
-      "n2": "Marcus Adler",
-      "r2": "Founder · SaaS indie",
-      "q3": "Metà della mia pipeline è nella mia seconda lingua. Tonvo segue la call in tempo reale e mi dà la frase esatta proprio quando serve. Chiudo in inglese senza esitare.",
-      "n3": "Elena Rossi",
-      "r3": "Enterprise AE · EMEA"
+      "starsLine": "Costruito con i closer, alla luce del sole.",
+      "footer": "Pensato per closer, founder e consulenti.",
+      "q1": "Prima parlavo sopra al cliente per riempire i silenzi. Ora Tonvo mi suggerisce la mossa successiva prima ancora che mi serva, così ascolto. Le call sembrano conversazioni, non pitch.",
+      "n1": "Un closer SaaS",
+      "r1": "Illustrativo, Account Executive",
+      "q2": "Provavo per un'ora prima di ogni call con gli investitori e mi bloccavo lo stesso sulle domande difficili. Ora apro Tonvo e suono come me stesso, solo più affilato. Niente mi prende più alla sprovvista.",
+      "n2": "Un founder solitario",
+      "r2": "Illustrativo, SaaS indie",
+      "q3": "Metà della mia pipeline è nella mia seconda lingua. Tonvo segue la call in tempo reale e mi dà la frase esatta proprio quando serve. Chiudo senza esitare.",
+      "n3": "Un AE enterprise",
+      "r3": "Illustrativo, EMEA"
     },
     "cta": {
       "heading1": "La sua prossima call",
       "heading2": "si chiude da sola.",
       "desc": "Smetta di perdere deal vincibili. Colleghi Tonvo. Close rate più alto entro venerdì.",
-      "button": "Aumentare il mio close rate",
-      "note": "Gratis per iniziare. Risultato garantito o rimborso — 7 giorni."
+      "button": "Prova Tonvo gratis",
+      "note": "Gratis per iniziare. Rimborso entro 7 giorni, senza domande."
     },
     "faq": {
       "title": "Le domande dei closer.",
-      "subtitle": "Tutto quello che deve sapere prima di alzare il suo close rate con Tonvo.",
-      "q1": "Tonvo è uno strumento o un sistema di crescita?",
-      "a1": "Tonvo è un sistema Growth-as-a-Service — vendiamo close rate, non software. Lei si collega, e il risultato che consegniamo è misurabile: più deal chiusi, ticket più grandi, meno obiezioni perse. L'app è solo il meccanismo di delivery.",
-      "q2": "In quanto tempo si muove davvero il close rate?",
-      "a2": "La maggior parte dei closer su Tonvo vede un uplift misurabile entro 14 giorni — non perché ha cambiato pitch, ma perché smette di perdere i momenti che decidono un deal. L'uplift medio a 30 giorni è del +27%.",
+      "subtitle": "Tutto quello che deve sapere prima della sua prima call con Tonvo.",
+      "q1": "Cos'è Tonvo, esattamente?",
+      "a1": "Tonvo è un livello di coaching in tempo reale per le sue call live. Ascolta, coglie i signal di acquisto e le obiezioni, e Le mostra la frase esatta da dire dopo. L'app è il mezzo di consegna; il valore è non perdere mai il momento che decide la call.",
+      "q2": "In quanto tempo sentirò la differenza?",
+      "a2": "Già dalla sua prossima call. Smette di perdere i momenti che decidono un deal, perché la mossa successiva è sul suo schermo nell'istante in cui arriva il signal. Nessun nuovo pitch da imparare.",
       "q3": "Cosa ricevo esattamente durante una call?",
       "a3": "La frase esatta da dire quando conta: la contro-obiezione, l'ancora di prezzo, la richiesta di commitment, la riformulazione. Nessuna dashboard da leggere live — solo la prossima mossa, servita nell'istante in cui arriva il signal.",
       "q4": "Devo cambiare il mio processo di vendita o il mio pitch?",
       "a4": "No. Tonvo si appoggia sopra al suo processo esistente. Il suo pitch, il suo deck, la sua offerta — invariati. Cambia il tasso con cui finiscono in un deal firmato.",
       "q5": "Il mio prospect può vedere qualcosa?",
       "a5": "Mai. Tonvo gira in una finestra separata, invisibile alla controparte — anche in screen share. Il suo vantaggio resta il suo vantaggio.",
-      "q6": "C'è una garanzia sul risultato?",
-      "a6": "Sì. Se il suo close rate non si muove in 7 giorni, La rimborsiamo. Vendiamo risultati — se non li ottiene, non teniamo i suoi soldi."
+      "q6": "C'è una garanzia?",
+      "a6": "Sì. Inizi gratis e, se Tonvo non fa per Lei, c'è una garanzia di rimborso di 7 giorni. Senza domande."
     }
   },
   "mockup": {
@@ -780,7 +780,7 @@
   },
   "footer": {
     "tagline1": "Growth-as-a-Service per closer.",
-    "tagline2": "Vendiamo close rate — non software.",
+    "tagline2": "Coaching in tempo reale su ogni call.",
     "product": "Prodotto",
     "features": "Funzionalità",
     "demo": "Demo",

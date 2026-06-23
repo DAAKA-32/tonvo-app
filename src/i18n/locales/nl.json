@@ -586,7 +586,7 @@
       "smartSuggestions": "Closing-zinnen, klaar om in te zetten",
       "smartSuggestionsDesc": "De exacte zin voor hun bezwaar. Afgestemd op wat ze net zeiden.",
       "conversationInsights": "Performance per deal",
-      "conversationInsightsDesc": "Close rate, win rate op bezwaren, gemiddelde deal-waarde. Jouw scoreboard.",
+      "conversationInsightsDesc": "Gespreksscore, betrokkenheid, toontrend. Jouw scoreboard.",
       "textAnalysis": "Deal-review na de call",
       "textAnalysisDesc": "Drop een transcript. Leer wat de deal won — of wat 'm kostte."
     },
@@ -598,14 +598,14 @@
     "benefits": {
       "label": "Het resultaat",
       "heading": "Resultaten die zich opstapelen, call na call.",
-      "realtime": "+27%",
-      "realtimeDesc": "Gemiddelde uplift in close rate binnen 30 dagen",
+      "realtime": "Live",
+      "realtimeDesc": "Elk koopsignaal gepakt op het moment dat het valt",
       "threeClicks": "0 sec",
-      "threeClicksDesc": "Denktijd voor je closing-zet",
-      "actionable": "3,4×",
-      "actionableDesc": "Win rate op bezwaren vs. solo",
+      "threeClicksDesc": "Denktijd voor je volgende zet",
+      "actionable": "10",
+      "actionableDesc": "Talen die het live volgt en vertaalt",
       "private": "Stil",
-      "privateDesc": "Onzichtbaar voor je prospect — altijd"
+      "privateDesc": "Onzichtbaar voor je prospect, altijd"
     },
     "useCases": {
       "label": "Wie wint met Tonvo",
@@ -620,43 +620,43 @@
       "meetingsDesc": "Maak van een check-in een upsell. Live, niet drie dagen later."
     },
     "testimonials": {
-      "label": "Geliefd door closers",
+      "label": "Hoe een call voelt met Tonvo",
       "heading": "De calls voelen nu anders.",
-      "desc": "Drie mensen. Drie heel verschillende gesprekken. Hetzelfde rustige gevoel — de juiste zin ligt al klaar.",
-      "starsLine": "5.0 beoordeeld door early users",
-      "footer": "Gebruikt door closers, founders en consultants in 40+ landen.",
-      "q1": "Vroeger praatte ik door de prospect heen om stiltes op te vullen. Nu fluistert Tonvo me de volgende stap in voor ik 'm nodig heb — dus luister ik. Calls voelen als gesprekken, niet als pitches.",
-      "n1": "Sarah Mitchell",
-      "r1": "Account Executive · SaaS",
-      "q2": "Ik repeteerde een uur voor elke investor call en blokkeerde nog steeds op de moeilijke vragen. Nu open ik Tonvo en klink ik als mezelf — alleen scherper. Niets verrast me meer.",
-      "n2": "Marcus Adler",
-      "r2": "Founder · indie SaaS",
-      "q3": "De helft van mijn pipeline is in mijn tweede taal. Tonvo volgt het gesprek live en geeft me de juiste zin precies op het juiste moment. Ik close in het Engels zonder twijfel.",
-      "n3": "Elena Rossi",
-      "r3": "Enterprise AE · EMEA"
+      "desc": "Drie calls. Hetzelfde rustige gevoel: de volgende zet ligt al klaar.",
+      "starsLine": "Gebouwd met closers, in de open.",
+      "footer": "Gemaakt voor closers, founders en consultants.",
+      "q1": "Vroeger praatte je door de prospect heen om stiltes op te vullen. Met Tonvo ligt de volgende zet er voor je 'm nodig hebt, dus luister je gewoon. Calls voelen als gesprekken, niet als pitches.",
+      "n1": "Een SaaS-closer",
+      "r1": "Illustratief · Account Executive",
+      "q2": "Vroeger repeteerde je een uur voor elke investor call en blokkeerde je nog steeds op de moeilijke vragen. Met Tonvo klink je als jezelf, alleen scherper. Niets verrast je meer.",
+      "n2": "Een solo-founder",
+      "r2": "Illustratief · indie SaaS",
+      "q3": "De helft van de pipeline is in een tweede taal. Tonvo volgt het gesprek live en geeft je de exacte zin precies wanneer je 'm nodig hebt. Je closet zonder te twijfelen.",
+      "n3": "Een enterprise AE",
+      "r3": "Illustratief · EMEA"
     },
     "cta": {
       "heading1": "Je volgende call",
       "heading2": "sluit zichzelf.",
-      "desc": "Stop met winbare deals laten lopen. Plug Tonvo in. Hogere close rate vóór vrijdag.",
-      "button": "Verhoog mijn close rate",
-      "note": "Gratis te starten. Resultaat gegarandeerd of je geld terug — 7 dagen."
+      "desc": "Stop met winbare deals laten lopen. Plug Tonvo in. De zin die closet, live op je scherm.",
+      "button": "Probeer Tonvo gratis",
+      "note": "Gratis te starten. 7 dagen geld terug, zonder gedoe."
     },
     "faq": {
       "title": "Vragen die closers stellen.",
-      "subtitle": "Alles wat je moet weten voor je je close rate met Tonvo verhoogt.",
-      "q1": "Is Tonvo een tool of een groeisysteem?",
-      "a1": "Tonvo is een Growth-as-a-Service-systeem — wij verkopen close rate, geen software. Je plugt in en wat we leveren is meetbaar: meer deals gesloten, grotere tickets, minder verloren bezwaren. De app is alleen het leveringsmechanisme.",
-      "q2": "Hoe snel beweegt mijn close rate echt?",
-      "a2": "De meeste closers op Tonvo zien binnen 14 dagen een meetbare lift in hun close rate — niet omdat ze hun pitch veranderden, maar omdat ze de momenten die een deal beslissen niet meer missen. De gemiddelde uplift over 30 dagen is +27% close rate.",
+      "subtitle": "Alles wat je moet weten voor je eerste call met Tonvo.",
+      "q1": "Wat is Tonvo precies?",
+      "a1": "Tonvo is een realtime coachinglaag voor je live calls. Het luistert mee, pikt de koopsignalen en bezwaren op en toont je de exacte zin die je daarna moet zeggen. De app is de levering; de waarde is dat je nooit het moment mist dat de call beslist.",
+      "q2": "Hoe snel voel ik het verschil?",
+      "a2": "Al bij je volgende call. Je mist niet langer de momenten die een deal beslissen, want je volgende zet staat op je scherm op het moment dat het signaal valt. Geen nieuwe pitch om te leren.",
       "q3": "Wat krijg ik tijdens een call precies?",
       "a3": "De exacte zin om te zeggen wanneer het ertoe doet: de bezwaar-counter, het prijsanker, de commitment-ask, de reframe. Geen dashboards die je live moet lezen — alleen de volgende zet, op het moment dat het signaal valt.",
       "q4": "Moet ik mijn salesproces of pitch aanpassen?",
       "a4": "Nee. Tonvo legt zich over je bestaande proces. Je pitch, je deck, je aanbod — onveranderd. Wat verandert is de rate waarmee ze eindigen in een getekende deal.",
       "q5": "Kan mijn prospect iets zien?",
       "a5": "Nooit. Tonvo draait in een apart venster, onzichtbaar voor de overkant — zelfs bij screen share. Jouw voorsprong blijft jouw voorsprong.",
-      "q6": "Is er een resultaatgarantie?",
-      "a6": "Ja. Beweegt je close rate niet binnen 7 dagen, dan krijg je je geld terug. Wij verkopen resultaten — krijg je ze niet, dan houden wij je geld niet."
+      "q6": "Is er een garantie?",
+      "a6": "Ja. Begin gratis, en als Tonvo niets voor je is, geldt er een geld-terug-garantie van 7 dagen. Zonder gedoe."
     }
   },
   "mockup": {
@@ -780,7 +780,7 @@
   },
   "footer": {
     "tagline1": "Growth-as-a-Service voor closers.",
-    "tagline2": "Wij verkopen close rate — geen software.",
+    "tagline2": "Realtime coaching bij elke call.",
     "product": "Product",
     "features": "Features",
     "demo": "Demo",
