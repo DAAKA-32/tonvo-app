@@ -158,6 +158,17 @@ export default function SessionPage() {
   const { t, i18n } = useTranslation();
   const toast = useToast();
   const { plan, can, features, sessionsRemaining } = usePlan();
+
+  // Scripted demo mode (?demo=1): replays a fake call into the REAL session UI
+  // without touching mic, network, auth or the DB. Used to film the landing
+  // demo video on the genuine product. See the demo-driver effect below.
+  // Resolved after mount (not during render) so SSR/client first paint match —
+  // avoids a hydration mismatch on the AppShell auth gate.
+  const [isDemo, setIsDemo] = useState(false);
+  useEffect(() => {
+    setIsDemo(new URLSearchParams(window.location.search).has("demo"));
+  }, []);
+  const demoTranscriptRef = useRef<HTMLDivElement>(null);
   const audioService = useRef<AudioCaptureService | null>(null);
   const liveSpeech = useRef<LiveSpeechService | null>(null);
   const aaiStream = useRef<AssemblyAIStreamingService | null>(null);
@@ -347,9 +358,166 @@ export default function SessionPage() {
     return () => clearInterval(interval);
   }, [sessionStart]);
 
+  // ── Scripted demo driver (?demo=1) ──────────────────────────────────────
+  // Plays a deterministic fake closing-call straight into the real session
+  // state (segments, copilot suggestion/coaching/insight, signals, scores).
+  // No mic, no AssemblyAI, no /api, no DB — startSession is never called.
+  useEffect(() => {
+    if (!isDemo) return;
+
+    // Activate the live UI without any hardware/network.
+    setAudioEnabled(true);
+    setCopilotPaused(false);
+    setIsRecording(true);
+    setSessionStart(new Date());
+    setAnalysisStatus("running");
+    setActiveTab("transcript");
+    setDetectedLanguage("en");
+    setCurrentTone("neutral");
+
+    const timeouts: ReturnType<typeof setTimeout>[] = [];
+    const intervals: ReturnType<typeof setInterval>[] = [];
+    const at = (ms: number, fn: () => void) => timeouts.push(setTimeout(fn, ms));
+
+    // Smooth count-up for the KPI numbers.
+    let qCur = 0, eCur = 0;
+    const ramp = (
+      get: () => number, set: (v: number) => void, setter: (v: number) => void, to: number, ms = 700,
+    ) => {
+      const from = get();
+      const start = Date.now();
+      const id = setInterval(() => {
+        const p = Math.min(1, (Date.now() - start) / ms);
+        const v = Math.round(from + (to - from) * (1 - Math.pow(1 - p, 3)));
+        set(v); setter(v);
+        if (p >= 1) clearInterval(id);
+      }, 33);
+      intervals.push(id);
+    };
+    const rampQ = (to: number) => ramp(() => qCur, (v) => { qCur = v; }, setQualityScore, to);
+    const rampE = (to: number) => ramp(() => eCur, (v) => { eCur = v; }, setEngagementScore, to);
+
+    const seg = (
+      speaker: "Speaker 1" | "Speaker 2",
+      text: string,
+      tone: Tone,
+      classification: ConversationClassification,
+      signal: ConversationSignal,
+      signalLabel: string,
+    ) => {
+      const toneResult: ToneResult = {
+        tone, confidence: 0.92, suggestion: "", emotions: [],
+        signal, signalLabel, qualityScore: qCur, classification,
+        coachingTip: "", liveInsight: "", engagementScore: eCur, responseDelay: "normal",
+      };
+      setSegments((prev) => [
+        ...prev,
+        { text, timestamp: Date.now(), tone: toneResult, speaker, detectedLanguage: "en" },
+      ]);
+      if (signal !== "none") {
+        setSignals((prev) => [...prev, { signal, label: signalLabel, time: Date.now() }]);
+        setKeyMoments((prev) => [...prev, { timestamp: Date.now(), type: signal, label: signalLabel, text, speaker }]);
+      }
+    };
+
+    // "Speaker 1" → You (the rep), "Speaker 2" → Them (the prospect)
+    at(1200, () => {
+      seg("Speaker 2", "Honestly, we've already trialed a couple of tools like this.", "neutral", "neutral", "key_point", "context");
+      setLiveInsight("They've evaluated competitors — educated buyer, likely price-aware.");
+      setSpeakerBalance(0.34); rampQ(71); rampE(67);
+    });
+    at(3600, () => {
+      seg("Speaker 1", "Makes sense. What made those fall short for your team?", "neutral", "neutral", "none", "");
+      setCoachingTip("Strong discovery question — let them name the gap themselves.");
+      setSpeakerBalance(0.62);
+    });
+    at(6000, () => {
+      seg("Speaker 2", "They were powerful, but my reps just… never actually used them.", "negative", "awkward", "objection", "adoption risk");
+      setCurrentTone("negative");
+      setLiveInsight("Real blocker is adoption, not features. Sell the behaviour change.");
+      setSpeakerBalance(0.30); rampE(73);
+    });
+    at(8000, () => {
+      setCurrentSuggestion("So the win isn't more features — it's your team actually using it on every call?");
+      rampQ(79);
+    });
+    at(10000, () => {
+      seg("Speaker 1", "So the real win is the team using it on every call — not more features?", "neutral", "neutral", "none", "");
+      setCoachingTip("Mirror and confirm — you're framing the problem in their own words.");
+      setSpeakerBalance(0.60);
+    });
+    at(12200, () => {
+      seg("Speaker 2", "Exactly. Though I'll be honest — the price is higher than I budgeted.", "negative", "negative", "objection", "price");
+      setCurrentTone("negative");
+      setCurrentSuggestion("");
+      setCoachingTip("Don't discount. Quantify the ROI before you talk numbers.");
+      setSpeakerBalance(0.32);
+    });
+    at(14000, () => {
+      setCurrentSuggestion("Before price — how many deals slipped last quarter from a call going sideways?");
+      setLiveInsight("Shift the frame from cost to cost-of-inaction.");
+      rampQ(83);
+    });
+    at(15800, () => {
+      seg("Speaker 1", "Before we get to price — how many deals slipped last quarter from a call going sideways?", "neutral", "neutral", "none", "");
+      setSpeakerBalance(0.57);
+    });
+    at(18000, () => {
+      seg("Speaker 2", "Probably three or four we should have won.", "positive", "positive", "opportunity", "pain quantified");
+      setCurrentTone("positive");
+      setLiveInsight("Prospect quantified the pain (3–4 lost deals). Anchor the ROI right here.");
+      setSpeakerBalance(0.34); rampE(85);
+    });
+    at(20000, () => {
+      setCurrentSuggestion("At your ACV, winning back one of those covers Tonvo for a year. Worth a shot?");
+      setCoachingTip("Tie the price to a number they just gave you.");
+      rampQ(88);
+    });
+    at(22000, () => {
+      seg("Speaker 2", "How flexible is the pricing if we commit annually?", "positive", "very_positive", "opportunity", "buying signal");
+      setCurrentTone("positive");
+      setLiveInsight("Pricing + annual commitment = buying signal. Move to the close.");
+      setSpeakerBalance(0.30); rampE(91);
+    });
+    at(24000, () => {
+      setCurrentSuggestion("Buying signal. Offer annual = 2 months free, then ask for the verbal yes now.");
+      setSuggestedResponses([{ label: "Close", intent: "ask_for_commitment", text: "Annual gets you two months free — want me to send it over today?" }]);
+      rampQ(91);
+    });
+    at(26000, () => {
+      seg("Speaker 1", "Annual gets you two months free. Want me to send it over today?", "positive", "positive", "none", "");
+      setCoachingTip("Clean ask. Now stay silent and let them answer.");
+      setSuggestedResponses([]);
+      setSpeakerBalance(0.60);
+    });
+    at(28300, () => {
+      seg("Speaker 2", "Yeah — send it through.", "positive", "very_positive", "agreement", "verbal yes");
+      setCurrentTone("positive");
+      setSpeakerBalance(0.44); rampQ(93); rampE(94);
+    });
+    at(29600, () => {
+      setCurrentSuggestion("Sending now — I'll add a 14-day onboarding so your reps adopt fast.");
+      setLiveInsight("Verbal yes secured. Send the agreement while momentum is high.");
+      setCoachingTip("Lock the next step before you hang up.");
+    });
+
+    return () => {
+      timeouts.forEach(clearTimeout);
+      intervals.forEach(clearInterval);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isDemo]);
+
+  // Keep the demo transcript scrolled to the newest line.
+  useEffect(() => {
+    if (!isDemo) return;
+    const el = demoTranscriptRef.current;
+    if (el) el.scrollTo({ top: el.scrollHeight, behavior: "smooth" });
+  }, [isDemo, segments]);
+
   // Session time limit countdown for free plan users
   useEffect(() => {
-    if (!isRecording || !hasSessionTimeLimit || !sessionStart) {
+    if (isDemo || !isRecording || !hasSessionTimeLimit || !sessionStart) {
       // Clean up timer when session stops
       if (sessionTimerRef.current) {
         clearInterval(sessionTimerRef.current);
@@ -1296,8 +1464,61 @@ export default function SessionPage() {
   const classConfig = CLASSIFICATION_CONFIG[classification];
   const delayConfig = DELAY_CONFIG[responseDelay] || DELAY_CONFIG.normal;
 
+  // Merged transcript stream (consecutive same-speaker segments combined). Shared
+  // by the Transcript tab and, in demo mode, the live-grid main column.
+  const transcriptStream = (
+    <>
+      {segments.reduce<{ speaker?: string; texts: string[]; tone: TranscriptSegment["tone"]; timestamp: number; signals: Array<{ signal: ConversationSignal; label: string }> }[]>((merged, seg) => {
+        const last = merged[merged.length - 1];
+        if (last && last.speaker === seg.speaker && seg.timestamp - last.timestamp < 30000) {
+          last.texts.push(seg.text);
+          last.tone = seg.tone;
+          if (seg.tone.signal && seg.tone.signal !== "none") {
+            last.signals.push({ signal: seg.tone.signal, label: seg.tone.signalLabel || SIGNAL_CONFIG[seg.tone.signal].label });
+          }
+        } else {
+          merged.push({
+            speaker: seg.speaker,
+            texts: [seg.text],
+            tone: seg.tone,
+            timestamp: seg.timestamp,
+            signals: seg.tone.signal && seg.tone.signal !== "none" ? [{ signal: seg.tone.signal, label: seg.tone.signalLabel || SIGNAL_CONFIG[seg.tone.signal].label }] : [],
+          });
+        }
+        return merged;
+      }, []).map((group, i) => (
+        <div key={i} className="p-4 flex items-start gap-4 segment-enter">
+          <ToneIndicator tone={group.tone.tone} size="sm" showLabel={false} />
+          <div className="flex-1">
+            {group.signals.length > 0 && (
+              <div className="mb-1 flex flex-wrap gap-1">
+                {group.signals.map((s, si) => (
+                  <span key={si} className="text-xs px-2 py-0.5 rounded font-medium" style={{ backgroundColor: SIGNAL_CONFIG[s.signal].bg, color: SIGNAL_CONFIG[s.signal].color }}>
+                    {s.label}
+                  </span>
+                ))}
+              </div>
+            )}
+            <p className="text-sm m-0" style={{ color: "var(--color-text)" }}>
+              {group.speaker && <span className="text-xs font-semibold mr-2" style={{ color: group.speaker === "Speaker 1" ? "#818cf8" : "var(--color-accent-light)" }}>{group.speaker === "Speaker 1" ? t("copilot.you") : group.speaker === "Speaker 2" ? t("copilot.them") : group.speaker}:</span>}
+              {group.texts.join(" ")}
+            </p>
+            <div className="flex items-center gap-3 mt-1">
+              <span className="text-xs" style={{ color: "var(--color-text-muted)" }}>{new Date(group.timestamp).toLocaleTimeString()}</span>
+              {group.tone.classification && (
+                <span className="text-xs px-1.5 py-0.5 rounded" style={{ backgroundColor: CLASSIFICATION_CONFIG[group.tone.classification].bg, color: CLASSIFICATION_CONFIG[group.tone.classification].color }}>
+                  {CLASSIFICATION_CONFIG[group.tone.classification].label}
+                </span>
+              )}
+            </div>
+          </div>
+        </div>
+      ))}
+    </>
+  );
+
   return (
-    <AppShell>
+    <AppShell allowAnonymous={isDemo}>
       <div style={{ maxWidth: 1340, margin: "0 auto", position: "relative" }}>
         {/* Ambient orb — state-tinted */}
         <motion.div
@@ -1429,8 +1650,8 @@ export default function SessionPage() {
                 style={{ color: "var(--color-text-muted)", maxWidth: 460 }}
               >
                 {isRecording
-                  ? "Tonvo écoute. Reste focus sur la conversation, l'analyse arrive en temps réel."
-                  : "Configure la capture et appuie pour passer en live."}
+                  ? t("session.recordingHint", "Tonvo is listening. Stay focused on the conversation — the analysis arrives in real time.")
+                  : t("session.idleHint", "Configure capture and press to go live.")}
               </p>
             </div>
 
@@ -2235,7 +2456,7 @@ export default function SessionPage() {
         {/* ============================================================ */}
         {/*  LIVE COMMAND CENTER — translation stream + copilot sidebar    */}
         {/* ============================================================ */}
-        {isRecording && audioEnabled && !can("coachingTips") && (
+        {isRecording && audioEnabled && !can("coachingTips") && !isDemo && (
           <div className="mb-6">
             <UpgradePrompt feature="AI Copilot — Live coaching, insights & signals" plan="Pro" />
           </div>
@@ -2251,7 +2472,7 @@ export default function SessionPage() {
             <LiveTranslationStream segments={segments} isRecording={isRecording} />
           </motion.div>
         )}
-        {isRecording && audioEnabled && can("coachingTips") && (
+        {isRecording && audioEnabled && (can("coachingTips") || isDemo) && (
           <motion.div
             className="live-grid mb-6"
             initial={{ opacity: 0, y: 12 }}
@@ -2259,7 +2480,21 @@ export default function SessionPage() {
             transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
           >
             <div className="live-grid__main">
-              <LiveTranslationStream segments={segments} isRecording={isRecording} />
+              {isDemo ? (
+                <div ref={demoTranscriptRef} className="rounded-xl border overflow-hidden" style={{ backgroundColor: "var(--color-surface)", borderColor: "var(--color-border)", maxHeight: 560, overflowY: "auto" }}>
+                  <div className="px-4 py-3 border-b flex items-center gap-2" style={{ borderColor: "var(--color-border)", position: "sticky", top: 0, backgroundColor: "var(--color-surface)", zIndex: 1 }}>
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--color-text-muted)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" /></svg>
+                    <span className="text-xs font-semibold uppercase tracking-wider" style={{ color: "var(--color-text-muted)", letterSpacing: "0.12em" }}>{t("session.transcriptTab", "Live transcript")}</span>
+                  </div>
+                  {segments.length === 0 ? (
+                    <div className="p-8 text-center"><p className="text-sm m-0" style={{ color: "var(--color-text-muted)" }}>{t("session.listeningTranscript")}</p></div>
+                  ) : (
+                    <div className="divide-y" style={{ borderColor: "var(--color-border)" }}>{transcriptStream}</div>
+                  )}
+                </div>
+              ) : (
+                <LiveTranslationStream segments={segments} isRecording={isRecording} />
+              )}
             </div>
             <div className="live-grid__aside">
               <LiveCopilotPanel
@@ -2545,53 +2780,7 @@ export default function SessionPage() {
                     </div>
                   )}
                   {/* Merge consecutive segments from the same speaker for cleaner display */}
-                  {segments.reduce<{ speaker?: string; texts: string[]; tone: TranscriptSegment["tone"]; timestamp: number; signals: Array<{ signal: ConversationSignal; label: string }> }[]>((merged, seg) => {
-                    const last = merged[merged.length - 1];
-                    if (last && last.speaker === seg.speaker && seg.timestamp - last.timestamp < 30000) {
-                      // Same speaker within 30s — merge texts
-                      last.texts.push(seg.text);
-                      last.tone = seg.tone; // Keep latest tone
-                      if (seg.tone.signal && seg.tone.signal !== "none") {
-                        last.signals.push({ signal: seg.tone.signal, label: seg.tone.signalLabel || SIGNAL_CONFIG[seg.tone.signal].label });
-                      }
-                    } else {
-                      merged.push({
-                        speaker: seg.speaker,
-                        texts: [seg.text],
-                        tone: seg.tone,
-                        timestamp: seg.timestamp,
-                        signals: seg.tone.signal && seg.tone.signal !== "none" ? [{ signal: seg.tone.signal, label: seg.tone.signalLabel || SIGNAL_CONFIG[seg.tone.signal].label }] : [],
-                      });
-                    }
-                    return merged;
-                  }, []).map((group, i) => (
-                    <div key={i} className="p-4 flex items-start gap-4 segment-enter">
-                      <ToneIndicator tone={group.tone.tone} size="sm" showLabel={false} />
-                      <div className="flex-1">
-                        {group.signals.length > 0 && (
-                          <div className="mb-1 flex flex-wrap gap-1">
-                            {group.signals.map((s, si) => (
-                              <span key={si} className="text-xs px-2 py-0.5 rounded font-medium" style={{ backgroundColor: SIGNAL_CONFIG[s.signal].bg, color: SIGNAL_CONFIG[s.signal].color }}>
-                                {s.label}
-                              </span>
-                            ))}
-                          </div>
-                        )}
-                        <p className="text-sm m-0" style={{ color: "var(--color-text)" }}>
-                          {group.speaker && <span className="text-xs font-semibold mr-2" style={{ color: group.speaker === "Speaker 1" ? "#818cf8" : "var(--color-accent-light)" }}>{group.speaker === "Speaker 1" ? t("copilot.you") : group.speaker === "Speaker 2" ? t("copilot.them") : group.speaker}:</span>}
-                          {group.texts.join(" ")}
-                        </p>
-                        <div className="flex items-center gap-3 mt-1">
-                          <span className="text-xs" style={{ color: "var(--color-text-muted)" }}>{new Date(group.timestamp).toLocaleTimeString()}</span>
-                          {group.tone.classification && (
-                            <span className="text-xs px-1.5 py-0.5 rounded" style={{ backgroundColor: CLASSIFICATION_CONFIG[group.tone.classification].bg, color: CLASSIFICATION_CONFIG[group.tone.classification].color }}>
-                              {CLASSIFICATION_CONFIG[group.tone.classification].label}
-                            </span>
-                          )}
-                        </div>
-                      </div>
-                    </div>
-                  ))}
+                  {transcriptStream}
                 </div>
               )}
             </div>

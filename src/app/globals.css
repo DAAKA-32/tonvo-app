@@ -1,4 +1,10 @@
-@import "tailwindcss";
+/* Scope Tailwind content scanning to the app source only. Without this,
+   Tailwind v4 auto-scans the whole repo (marketing/, scripts/, docs/ …) and
+   picks up stray arbitrary classes from generated files — e.g. a malformed
+   bg-[url(&#x27;/images/…&#x27;)] that emits an unresolvable url() and 500s the
+   entire app. The real UI classes all live under src/. */
+@import "tailwindcss" source(none);
+@source "../**/*.{js,jsx,ts,tsx,mdx}";
 
 /* Hide Vercel toolbar/feedback widget */
 #vercel-live-feedback,

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useTranslation } from "react-i18next";
@@ -10,7 +10,6 @@ import TonvoLogo from "@/components/Logo";
 import LandingNavbar from "@/components/landing/LandingNavbar";
 import ScrollProgressBar from "@/components/landing/ScrollProgressBar";
 import LandingHero from "@/components/landing/LandingHero";
-import DesktopDownloadHero from "@/components/landing/DesktopDownloadHero";
 import PricingSection from "@/components/landing/PricingSection";
 import UseCasesSection from "@/components/landing/UseCasesSection";
 import SolutionSection from "@/components/landing/SolutionSection";
@@ -70,6 +69,55 @@ function IconArrowRight({ className }: { className?: string }) {
       <path d="M5 12h14" />
       <path d="m12 5 7 7-7 7" />
     </svg>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/*  Product demo video — the REAL /session page running the scripted   */
+/*  demo (?demo=1), captured to /demo.mp4. Falls back to the static     */
+/*  CopilotMockup if the video can't load.                             */
+/* ------------------------------------------------------------------ */
+function DemoVideo() {
+  const [failed, setFailed] = useState(false);
+  if (failed) return <CopilotMockup />;
+  return (
+    <div
+      className="rounded-2xl overflow-hidden relative"
+      style={{
+        background: "rgba(10, 10, 14, 1)",
+        border: "1px solid rgba(255, 255, 255, 0.06)",
+        boxShadow: "0 40px 90px -30px rgba(0, 0, 0, 0.7)",
+      }}
+    >
+      {/* Browser title bar — matches the app's real chrome */}
+      <div className="flex items-center gap-2 px-4 py-2.5 border-b" style={{ borderColor: "var(--color-border)", backgroundColor: "rgba(20,20,24,0.95)" }}>
+        <div className="flex gap-1.5">
+          <div className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: "#f87171" }} />
+          <div className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: "#fbbf24" }} />
+          <div className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: "#34d399" }} />
+        </div>
+        <div className="flex-1 mx-2 py-1 px-3 rounded-md text-[10px] text-center flex items-center justify-center gap-1.5" style={{ background: "rgba(255,255,255,0.04)", color: "var(--color-text-muted)" }}>
+          <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{ opacity: 0.4 }}><rect x="3" y="11" width="18" height="11" rx="2" ry="2" /><path d="M7 11V7a5 5 0 0 1 10 0v4" /></svg>
+          tonvo.co/session
+        </div>
+        <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-md shrink-0" style={{ background: "rgba(239,68,68,0.10)" }}>
+          <div className="w-1.5 h-1.5 rounded-full pulse-positive" style={{ background: "#ef4444" }} />
+          <span className="text-[8px] font-medium" style={{ color: "#ef4444" }}>LIVE</span>
+        </div>
+      </div>
+      {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
+      <video
+        src="/demo.mp4"
+        poster="/demo-poster.jpg"
+        autoPlay
+        muted
+        loop
+        playsInline
+        preload="metadata"
+        onError={() => setFailed(true)}
+        style={{ display: "block", width: "100%", height: "auto" }}
+      />
+    </div>
   );
 }
 
@@ -324,9 +372,9 @@ export default function HomePage() {
           {/* ── Hero (client component: auth redirect + CurtainIntro) ── */}
           <LandingHero />
 
-          {/* ── Desktop download CTA (OS-detected) — hidden in production for now
-                 (Microsoft verification pending). Still visible in dev. ── */}
-          {process.env.NODE_ENV !== "production" && <DesktopDownloadHero />}
+          {/* ── Desktop download CTA removed from the landing for now (Microsoft
+                 verification pending). To bring it back, re-import DesktopDownloadHero
+                 from "@/components/landing/DesktopDownloadHero" and render it here. ── */}
         </div>
 
         {/* ── Divider ── */}
@@ -395,7 +443,7 @@ export default function HomePage() {
 
             <FadeIn className="mockup-container mockup-enter" y={32} duration={0.85} delay={0.05}>
               <div className="mockup-lift">
-                <CopilotMockup />
+                <DemoVideo />
               </div>
             </FadeIn>
           </div>

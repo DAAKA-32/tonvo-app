@@ -32,7 +32,8 @@ function IconArrowRight({ className }: { className?: string }) {
 /* ============================================================== */
 // Set to "/demo.mp4" (or any URL) once you drop a real video into /public.
 // While null, we render the rich app mockup directly without hitting the network.
-const DEMO_VIDEO_SRC: string | null = null;
+// /demo.mp4 is the scripted live-call capture (see scripts/capture-demo-call.mjs).
+const DEMO_VIDEO_SRC: string | null = "/demo.mp4";
 
 function HeroDemoStage() {
   const reduce = useReducedMotion();
@@ -74,13 +75,13 @@ function HeroDemoStage() {
         </div>
 
         {/* The actual demo (video if available, otherwise rich app mockup) */}
-        <div className="hero-stage-screen">
+        <div className={`hero-stage-screen${DEMO_VIDEO_SRC && !videoFailed ? " hero-stage-screen--video" : ""}`}>
           {DEMO_VIDEO_SRC && !videoFailed ? (
             <>
               <video
                 className="hero-stage-video"
                 src={DEMO_VIDEO_SRC}
-                poster="/og-image.png"
+                poster="/demo-poster.jpg"
                 autoPlay
                 muted
                 loop
@@ -698,7 +699,7 @@ export default function LandingHero() {
   const percentMatch = headline1.match(/^(.*?)(\d+%)(.*)$/);
 
   return (
-    <section className="hero-section relative z-10 px-4 sm:px-6 pt-32 sm:pt-36 pb-0 overflow-hidden">
+    <section className="hero-section relative z-10 px-4 sm:px-6 pt-32 sm:pt-36 pb-0">
       {/* ── HEADLINE BLOCK ── */}
       <div className="relative z-10 max-w-5xl mx-auto text-center">
         {/* Headline */}
@@ -1076,6 +1077,12 @@ export default function LandingHero() {
         :global(.hero-stage-screen) {
           position: relative;
           width: 100%;
+        }
+        /* When the demo video is active it's absolutely positioned, so the
+           screen has no in-flow content to give it height — pin the laptop
+           aspect ratio (matches the 1280x800 capture). */
+        :global(.hero-stage-screen--video) {
+          aspect-ratio: 1280 / 800;
         }
         :global(.hero-stage-video) {
           position: absolute;

@@ -427,7 +427,9 @@
     "modeNone": "Activez au moins l'écran ou l'audio pour démarrer une session.",
     "listeningInsights": "Écoute en cours... les insights apparaîtront ici au fil de la conversation.",
     "noAudioDetected": "Aucun audio détecté. Vérifiez votre source audio.",
-    "listeningTranscript": "Écoute en cours... parlez pour voir le transcript apparaître."
+    "listeningTranscript": "Écoute en cours... parlez pour voir le transcript apparaître.",
+    "recordingHint": "Tonvo écoute. Restez focus sur la conversation, l'analyse arrive en temps réel.",
+    "idleHint": "Configurez la capture et appuyez pour passer en live."
   },
   "analyzePage": {
     "title": "Analyser une conversation",

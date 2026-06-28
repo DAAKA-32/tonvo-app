@@ -10,9 +10,13 @@ import { TonvoLogoMark } from "@/components/Logo";
 
 interface AppShellProps {
   children: React.ReactNode;
+  /** When true, render the shell even without an authenticated user (used by
+   *  the public scripted demo at /session?demo=1). Defaults to false so every
+   *  other authenticated page keeps its normal login gate. */
+  allowAnonymous?: boolean;
 }
 
-export default function AppShell({ children }: AppShellProps) {
+export default function AppShell({ children, allowAnonymous = false }: AppShellProps) {
   const { user, loading } = useAuth();
   const router = useRouter();
   const pathname = usePathname();
@@ -29,12 +33,12 @@ export default function AppShell({ children }: AppShellProps) {
   });
 
   useEffect(() => {
-    if (!loading && !user) {
+    if (!loading && !user && !allowAnonymous) {
       router.push("/login")
     }
-  }, [user, loading, router]);
+  }, [user, loading, router, allowAnonymous]);
 
-  if (loading) {
+  if (loading && !allowAnonymous) {
     return (
       <div
         className="min-h-screen flex items-center justify-center"
@@ -48,7 +52,7 @@ export default function AppShell({ children }: AppShellProps) {
     );
   }
 
-  if (!user) return null;
+  if (!user && !allowAnonymous) return null;
 
   return (
     <div className="app-shell">
