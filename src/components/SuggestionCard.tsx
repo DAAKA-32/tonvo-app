@@ -11,7 +11,7 @@ export default function SuggestionCard({ suggestion, emotions }: SuggestionCardP
       className="relative overflow-hidden rounded-2xl p-5"
       style={{
         background:
-          "linear-gradient(135deg, rgba(167, 139, 250, 0.05) 0%, rgba(255, 255, 255, 0.01) 100%)",
+          "linear-gradient(135deg, rgba(167, 139, 250, 0.05) 0%, color-mix(in srgb, var(--color-text) 1%, transparent) 100%)",
         border: "1px solid rgba(167, 139, 250, 0.12)",
         backdropFilter: "blur(20px)",
         WebkitBackdropFilter: "blur(20px)",
@@ -30,7 +30,7 @@ export default function SuggestionCard({ suggestion, emotions }: SuggestionCardP
         <div className="flex items-center gap-2 mb-3">
           <span
             className="inline-flex w-1.5 h-1.5 rounded-full"
-            style={{ backgroundColor: "#c4b5fd" }}
+            style={{ backgroundColor: "var(--shimmer-accent-1)" }}
           />
           <span
             className="text-[10px] font-semibold uppercase tracking-[0.22em]"
@@ -52,8 +52,8 @@ export default function SuggestionCard({ suggestion, emotions }: SuggestionCardP
                 key={emotion}
                 className="text-[11px] px-2.5 py-1 rounded-full"
                 style={{
-                  background: "rgba(255, 255, 255, 0.04)",
-                  border: "1px solid rgba(255, 255, 255, 0.06)",
+                  background: "color-mix(in srgb, var(--color-text) 4%, transparent)",
+                  border: "1px solid color-mix(in srgb, var(--color-text) 6%, transparent)",
                   color: "var(--color-text-silver)",
                 }}
               >

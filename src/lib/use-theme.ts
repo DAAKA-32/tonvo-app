@@ -15,6 +15,16 @@ function getInitialTheme(): Theme {
   return "dark";
 }
 
+/** Keeps native browser chrome (color-scheme, mobile theme-color) in sync
+ *  with the in-app theme — CSS alone reacts to the data-theme attribute,
+ *  but the theme-color meta tag doesn't, so it needs a manual nudge. */
+function applyThemeSideEffects(t: Theme) {
+  document.documentElement.setAttribute("data-theme", t);
+  document.documentElement.style.colorScheme = t;
+  const meta = document.querySelector('meta[name="theme-color"]');
+  if (meta) meta.setAttribute("content", t === "light" ? "#fafafa" : "#09090b");
+}
+
 export function useTheme() {
   const [theme, setThemeState] = useState<Theme>(getInitialTheme);
   const { user } = useAuth();
@@ -25,7 +35,7 @@ export function useTheme() {
     const stored = localStorage.getItem("tonvo-theme") as Theme | null;
     if (stored && stored !== theme) {
       setThemeState(stored);
-      document.documentElement.setAttribute("data-theme", stored);
+      applyThemeSideEffects(stored);
     }
   }, []);
 
@@ -40,7 +50,7 @@ export function useTheme() {
         if (data.theme && (data.theme === "dark" || data.theme === "light")) {
           setThemeState(data.theme);
           localStorage.setItem("tonvo-theme", data.theme);
-          document.documentElement.setAttribute("data-theme", data.theme);
+          applyThemeSideEffects(data.theme);
         }
       })
       .catch(() => {});
@@ -54,7 +64,7 @@ export function useTheme() {
   const setTheme = (t: Theme) => {
     setThemeState(t);
     localStorage.setItem("tonvo-theme", t);
-    document.documentElement.setAttribute("data-theme", t);
+    applyThemeSideEffects(t);
 
     // Persist to server if logged in (fire-and-forget)
     if (user) {

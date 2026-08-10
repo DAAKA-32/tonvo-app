@@ -318,7 +318,7 @@ const webSiteJsonLd = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" dir="ltr" translate="no" className={`${inter.variable} notranslate`} style={{ backgroundColor: "#09090b" }} suppressHydrationWarning>
+    <html lang="en" dir="ltr" translate="no" className={`${inter.variable} notranslate`} suppressHydrationWarning>
       <head>
         <script
           type="application/ld+json"
@@ -351,11 +351,16 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 || p.indexOf('/features') === 0 || p.indexOf('/compare') === 0 || p.indexOf('/industries') === 0
                 || p.indexOf('/guides') === 0 || p.indexOf('/terms') === 0 || p.indexOf('/privacy') === 0
                 || p.indexOf('/cookies') === 0 || p.indexOf('/legal') === 0;
+              var meta = document.querySelector('meta[name="theme-color"]');
               if (isMarketing) {
                 document.documentElement.removeAttribute('data-theme');
               } else {
                 var t = localStorage.getItem('tonvo-theme');
-                if (t === 'light') document.documentElement.setAttribute('data-theme','light');
+                if (t === 'light') {
+                  document.documentElement.setAttribute('data-theme','light');
+                  document.documentElement.style.colorScheme = 'light';
+                  if (meta) meta.setAttribute('content', '#fafafa');
+                }
               }
             }catch(e){}})();`,
           }}

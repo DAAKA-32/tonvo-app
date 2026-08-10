@@ -75,6 +75,14 @@ html.translated-rtl {
   --color-neutral: #fbbf24;
   --color-negative: #f87171;
 
+  /* Shimmer accent stops — the violet/fuchsia pass through name/number
+     text-clip gradients. Dark default is a light pastel (reads against
+     near-black text); light override below is saturated so it still
+     reads against near-black text on a near-white page. */
+  --shimmer-accent-1: #c4b5fd;
+  --shimmer-accent-2: #f0abfc;
+  --info-accent: #60a5fa;
+
   /* Spacing tokens */
   --space-page: 48px;
   --space-section: 32px;
@@ -163,6 +171,20 @@ body {
   padding-left: env(safe-area-inset-left);
   padding-right: env(safe-area-inset-right);
   padding-bottom: env(safe-area-inset-bottom);
+}
+
+/* Light theme applies only within the in-app .app-shell scope (see below),
+   but html/body paint outside and beneath it — the safe-area insets on
+   notched phones, scroll overscroll/rubber-banding, and any inherited text
+   color all come straight from these two rules. Without a light override
+   here they stay black regardless of the user's chosen theme. */
+html[data-theme="light"] {
+  color-scheme: light;
+  background-color: #fafafa;
+}
+html[data-theme="light"] body {
+  background-color: #fafafa;
+  color: #09090b;
 }
 
 ::selection {
@@ -388,11 +410,11 @@ body {
     scroll-behavior: smooth;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: thin;
-    scrollbar-color: rgba(255, 255, 255, 0.15) transparent;
+    scrollbar-color: color-mix(in srgb, var(--color-text) 15%, transparent) transparent;
   }
   .features-scroll::-webkit-scrollbar { height: 4px; }
   .features-scroll::-webkit-scrollbar-track { background: transparent; }
-  .features-scroll::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.15); border-radius: 4px; }
+  .features-scroll::-webkit-scrollbar-thumb { background: color-mix(in srgb, var(--color-text) 15%, transparent); border-radius: 4px; }
   .features-scroll-card {
     min-width: calc(50vw - 60px);
     max-width: 340px;
@@ -585,10 +607,10 @@ body {
 }
 @media (prefers-reduced-motion: reduce) {
   .nav-link-premium:hover {
-    background-color: rgba(255, 255, 255, 0.04);
+    background-color: color-mix(in srgb, var(--color-text) 4%, transparent);
   }
   .nav-link-premium[data-active="true"] {
-    background-color: rgba(255, 255, 255, 0.05);
+    background-color: color-mix(in srgb, var(--color-text) 5%, transparent);
   }
 }
 
@@ -633,7 +655,7 @@ body {
   background: rgba(17, 17, 20, 0.6);
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  border: 1px solid color-mix(in srgb, var(--color-text) 6%, transparent);
   border-radius: 16px;
   transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
 }
@@ -643,7 +665,7 @@ body {
   background: rgba(17, 17, 20, 0.5);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  border: 1px solid color-mix(in srgb, var(--color-text) 5%, transparent);
   border-radius: 16px;
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
@@ -693,9 +715,78 @@ body {
 /* Grid bg */
 .grid-bg {
   background-image:
-    linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+    linear-gradient(color-mix(in srgb, var(--color-text) 3%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in srgb, var(--color-text) 3%, transparent) 1px, transparent 1px);
   background-size: 64px 64px;
+}
+
+/* ===== Landing hero backdrop ("horizon") =====
+   Near-black at the crown, light pooling behind the demo stage, easing back
+   to --color-bg at 100% so the join with the section below stays seamless.
+   Every alpha resolves against #09090b, so the layer is additive light only.
+   Landing hero exclusively — applied on the wrapper in src/app/page.tsx. */
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-color: var(--color-bg);
+  background-image:
+    /* 1. Edge vignette — funnels the light inward, reads as depth. Kept light
+          enough that the horizon still spills into the side gutters. */
+    radial-gradient(
+      120% 90% at 50% 62%,
+      transparent 42%,
+      rgba(0, 0, 0, 0.24) 78%,
+      rgba(0, 0, 0, 0.42) 100%
+    ),
+    /* 2. Horizon core — the light source sitting behind the product */
+    radial-gradient(
+      135% 62% at 50% 84%,
+      rgba(200, 200, 216, 0.2) 0%,
+      rgba(170, 170, 198, 0.115) 30%,
+      rgba(118, 118, 148, 0.05) 56%,
+      transparent 78%
+    ),
+    /* 3. Violet cast — echoes .hero-stage-blob--violet, keeps the pool from
+          going flat grey */
+    radial-gradient(
+      90% 45% at 50% 78%,
+      rgba(129, 140, 248, 0.06) 0%,
+      transparent 70%
+    ),
+    /* 4. Atmosphere — the vertical lift. Onset is early and the stops are
+          dense on purpose: starting later leaves the headline on dead black,
+          and a sparse ramp bands visibly on 8-bit panels. */
+    linear-gradient(
+      180deg,
+      rgba(92, 92, 110, 0) 0%,
+      rgba(92, 92, 110, 0.03) 8%,
+      rgba(94, 94, 114, 0.07) 18%,
+      rgba(96, 96, 118, 0.115) 28%,
+      rgba(100, 100, 122, 0.165) 37%,
+      rgba(104, 104, 128, 0.22) 46%,
+      rgba(110, 110, 136, 0.275) 55%,
+      rgba(116, 116, 144, 0.325) 64%,
+      rgba(122, 122, 152, 0.365) 72%,
+      rgba(126, 126, 158, 0.385) 79%,
+      rgba(116, 116, 146, 0.3) 87%,
+      rgba(96, 96, 120, 0.145) 94%,
+      rgba(72, 72, 92, 0) 100%
+    );
+}
+
+/* Dither — kills residual banding across the wide vertical ramp. Static tile,
+   rasterized once; blends against .hero-bg's own paint (z-index makes it a
+   stacking context). */
+.hero-bg::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
+  opacity: 0.035;
+  mix-blend-mode: overlay;
 }
 
 /* Tone bar animation — uses transform: scaleX instead of width for GPU compositing */
@@ -826,7 +917,7 @@ body {
   position: absolute;
   inset: 0;
   opacity: 0.3;
-  background-image: radial-gradient(circle, rgba(255, 255, 255, 0.07) 1px, transparent 1px);
+  background-image: radial-gradient(circle, color-mix(in srgb, var(--color-text) 7%, transparent) 1px, transparent 1px);
   background-size: 24px 24px;
   mask-image: radial-gradient(ellipse 70% 60% at 50% 40%, black 20%, transparent 70%);
   -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 40%, black 20%, transparent 70%);
@@ -871,7 +962,7 @@ body {
 }
 .auth-nav-link:hover {
   color: var(--color-text);
-  background-color: rgba(255, 255, 255, 0.04);
+  background-color: color-mix(in srgb, var(--color-text) 4%, transparent);
 }
 
 /* Main container */
@@ -920,7 +1011,7 @@ body {
   line-height: 1.5;
   color: var(--color-text);
   background-color: var(--color-bg);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid color-mix(in srgb, var(--color-text) 8%, transparent);
   border-radius: 0.625rem;
   outline: none;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
@@ -972,11 +1063,11 @@ body {
   font-weight: 600;
   color: #fff;
   background: linear-gradient(180deg, #6e6e82 0%, #5c5c6e 100%);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid color-mix(in srgb, var(--color-text) 8%, transparent);
   border-radius: 0.625rem;
   cursor: pointer;
   transition: all 0.2s ease;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3), inset 0 1px 0 color-mix(in srgb, var(--color-text) 6%, transparent);
 }
 
 /* Secondary button */
@@ -985,7 +1076,7 @@ body {
   align-items: center;
   justify-content: center;
   background-color: transparent;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid color-mix(in srgb, var(--color-text) 8%, transparent);
   border-radius: 0.625rem;
   color: var(--color-text-muted);
   cursor: pointer;
@@ -1004,7 +1095,7 @@ body {
   font-weight: 500;
   color: var(--color-text);
   background-color: var(--color-surface);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid color-mix(in srgb, var(--color-text) 8%, transparent);
   border-radius: 0.625rem;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -1020,7 +1111,7 @@ body {
 .auth-divider-line {
   flex: 1;
   height: 1px;
-  background-color: rgba(255, 255, 255, 0.06);
+  background-color: color-mix(in srgb, var(--color-text) 6%, transparent);
 }
 .auth-divider-text {
   font-size: 0.75rem;
@@ -1128,10 +1219,10 @@ body {
   max-height: 90vh;
   overflow-y: auto;
   background: var(--color-surface);
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  border: 1px solid color-mix(in srgb, var(--color-text) 6%, transparent);
   border-radius: 1rem;
   padding: 2rem;
-  box-shadow: 0 32px 80px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.03);
+  box-shadow: 0 32px 80px rgba(0, 0, 0, 0.5), 0 0 0 1px color-mix(in srgb, var(--color-text) 3%, transparent);
   transition: opacity 0.25s ease, transform 0.3s cubic-bezier(0.23, 1, 0.32, 1);
 }
 .upgrade-modal--compact {
@@ -1153,7 +1244,7 @@ body {
 }
 .upgrade-close:hover {
   color: var(--color-text);
-  background-color: rgba(255, 255, 255, 0.06);
+  background-color: color-mix(in srgb, var(--color-text) 6%, transparent);
 }
 
 /* Success icon */
@@ -1199,7 +1290,7 @@ body {
   gap: 0.25rem;
   padding: 0.25rem;
   border-radius: 9999px;
-  background: rgba(255, 255, 255, 0.04);
+  background: color-mix(in srgb, var(--color-text) 4%, transparent);
   border: 1px solid var(--color-border);
 }
 .upgrade-toggle-btn {
@@ -1240,7 +1331,7 @@ body {
   position: relative;
   padding: 1.25rem;
   border-radius: 0.75rem;
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  border: 1px solid color-mix(in srgb, var(--color-text) 6%, transparent);
   background: var(--color-surface-2);
   display: flex;
   flex-direction: column;
@@ -1365,12 +1456,12 @@ body {
 .upgrade-btn-primary {
   background: linear-gradient(180deg, #6e6e82 0%, #5c5c6e 100%);
   color: #fff;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3), inset 0 1px 0 color-mix(in srgb, var(--color-text) 6%, transparent);
 }
 .upgrade-btn-secondary {
   background: var(--color-surface-3);
   color: var(--color-text-silver);
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  border: 1px solid color-mix(in srgb, var(--color-text) 6%, transparent);
 }
 .upgrade-btn-current {
   background: rgba(52, 211, 153, 0.08) !important;
@@ -1423,15 +1514,15 @@ body {
 @media (hover: hover) {
   .upgrade-btn-primary:hover:not(:disabled) {
     background: linear-gradient(180deg, #7a7a90 0%, #6e6e82 100%);
-    box-shadow: 0 4px 14px rgba(92, 92, 110, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    box-shadow: 0 4px 14px rgba(92, 92, 110, 0.35), inset 0 1px 0 color-mix(in srgb, var(--color-text) 10%, transparent);
     transform: translateY(-1px);
   }
   .upgrade-btn-secondary:hover:not(:disabled):not(.upgrade-btn-current) {
-    border-color: rgba(255, 255, 255, 0.12);
+    border-color: color-mix(in srgb, var(--color-text) 12%, transparent);
     color: var(--color-text);
   }
   .upgrade-plan-card:hover:not(.upgrade-plan-card--popular) {
-    border-color: rgba(255, 255, 255, 0.1);
+    border-color: color-mix(in srgb, var(--color-text) 10%, transparent);
   }
 }
 
@@ -1440,7 +1531,7 @@ body {
   background-color: transparent;
 }
 .conversation-link:hover {
-  background-color: rgba(255, 255, 255, 0.03);
+  background-color: color-mix(in srgb, var(--color-text) 3%, transparent);
 }
 
 /* ===== App Shell (Sidebar layout) ===== */
@@ -1459,8 +1550,8 @@ body {
   padding-top: env(safe-area-inset-top);
   z-index: 40;
   background: rgba(14, 14, 17, 0.97);
-  border-right: 1px solid rgba(255, 255, 255, 0.04);
-  box-shadow: inset -1px 0 0 rgba(255, 255, 255, 0.02);
+  border-right: 1px solid color-mix(in srgb, var(--color-text) 4%, transparent);
+  box-shadow: inset -1px 0 0 color-mix(in srgb, var(--color-text) 2%, transparent);
   display: flex;
   flex-direction: column;
   padding: 24px 16px;
@@ -1510,7 +1601,7 @@ body {
   position: absolute;
   inset: 0;
   border-radius: 10px;
-  background: rgba(255, 255, 255, 0.06);
+  background: color-mix(in srgb, var(--color-text) 6%, transparent);
   box-shadow: inset 0 0 12px rgba(200, 200, 216, 0.04);
   z-index: 0;
 }
@@ -1530,7 +1621,7 @@ body {
    when the JS-driven pill is suppressed. */
 @media (prefers-reduced-motion: reduce) {
   .sidebar-link.active {
-    background: rgba(255, 255, 255, 0.06);
+    background: color-mix(in srgb, var(--color-text) 6%, transparent);
     box-shadow: inset 0 0 12px rgba(200, 200, 216, 0.04);
   }
   .sidebar-link.active::before {
@@ -1650,7 +1741,7 @@ body {
   background: rgba(17, 17, 20, 0.5);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  border: 1px solid color-mix(in srgb, var(--color-text) 5%, transparent);
   border-radius: 14px;
   padding: 20px 24px;
   transition: all 0.25s ease;
@@ -1750,7 +1841,7 @@ body {
   background: rgba(17, 17, 20, 0.4);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.04);
+  border: 1px solid color-mix(in srgb, var(--color-text) 4%, transparent);
   border-radius: 12px;
   width: fit-content;
 }
@@ -1853,7 +1944,7 @@ body {
   color: var(--color-text-muted);
   padding: 2px 7px;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.04);
+  background: color-mix(in srgb, var(--color-text) 4%, transparent);
   border: 1px solid var(--color-border);
 }
 .history-day__rule {
@@ -1957,7 +2048,7 @@ body {
   color: var(--color-text);
   padding: 3px 8px;
   border-radius: 6px;
-  background: rgba(255, 255, 255, 0.04);
+  background: color-mix(in srgb, var(--color-text) 4%, transparent);
   border: 1px solid var(--color-border);
 }
 .history-event__duration {
@@ -2255,6 +2346,12 @@ html[data-theme="light"] .app-shell {
   --color-positive: #10b981;          /* emerald-500 — was #059669 (more saturated) */
   --color-neutral: #f59e0b;           /* amber-500 — was the fade #d97706 */
   --color-negative: #ef4444;          /* red-500 — was #dc2626 (more vibrant) */
+
+  /* Shimmer accents need more saturation to stay visible passing through
+     near-black text on a near-white page. */
+  --shimmer-accent-1: #8b5cf6;        /* violet-500 */
+  --shimmer-accent-2: #d946ef;        /* fuchsia-500 */
+  --info-accent: #2563eb;             /* blue-600 — was blue-400, too pale on white */
 
   background-color: var(--color-bg);
 }
@@ -2623,11 +2720,11 @@ html[data-theme="light"] .grid-bg {
   background: rgba(17, 17, 20, 0.88);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid color-mix(in srgb, var(--color-text) 8%, transparent);
   border-radius: 12px;
   box-shadow:
     0 8px 32px rgba(0, 0, 0, 0.4),
-    0 0 0 1px rgba(255, 255, 255, 0.03) inset;
+    0 0 0 1px color-mix(in srgb, var(--color-text) 3%, transparent) inset;
   pointer-events: auto;
   will-change: transform, opacity;
   max-width: 100%;
@@ -3045,12 +3142,12 @@ html[data-theme="light"] .grid-bg {
     border-color: rgba(200, 200, 216, 0.2);
   }
   .glass-card-static:hover {
-    border-color: rgba(255, 255, 255, 0.08);
+    border-color: color-mix(in srgb, var(--color-text) 8%, transparent);
   }
   .glass-card-hover:hover {
     transform: translateY(-2px);
     border-color: rgba(200, 200, 216, 0.15);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(255, 255, 255, 0.03) inset;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), 0 0 0 1px color-mix(in srgb, var(--color-text) 3%, transparent) inset;
   }
   .glass-card-glow:hover {
     box-shadow: 0 0 24px rgba(200, 200, 216, 0.06), 0 8px 32px rgba(0, 0, 0, 0.3);
@@ -3101,7 +3198,7 @@ html[data-theme="light"] .grid-bg {
   }
   .auth-btn-primary:hover:not(:disabled) {
     background: linear-gradient(180deg, #7a7a90 0%, #6e6e82 100%);
-    box-shadow: 0 4px 16px rgba(92, 92, 110, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    box-shadow: 0 4px 16px rgba(92, 92, 110, 0.4), inset 0 1px 0 color-mix(in srgb, var(--color-text) 10%, transparent);
     transform: translateY(-1px);
   }
   .auth-btn-primary:active:not(:disabled) {
@@ -3109,12 +3206,12 @@ html[data-theme="light"] .grid-bg {
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
   }
   .auth-btn-secondary:hover {
-    border-color: rgba(255, 255, 255, 0.14);
+    border-color: color-mix(in srgb, var(--color-text) 14%, transparent);
     color: var(--color-text);
   }
   .auth-btn-google:hover {
     background-color: var(--color-surface-2);
-    border-color: rgba(255, 255, 255, 0.12);
+    border-color: color-mix(in srgb, var(--color-text) 12%, transparent);
   }
   .auth-btn-google:active {
     transform: translateY(0);
@@ -3122,21 +3219,21 @@ html[data-theme="light"] .grid-bg {
   }
   .sidebar-link:hover {
     color: var(--color-text);
-    background: rgba(255, 255, 255, 0.04);
+    background: color-mix(in srgb, var(--color-text) 4%, transparent);
   }
   .kpi-card:hover {
-    border-color: rgba(255, 255, 255, 0.08);
+    border-color: color-mix(in srgb, var(--color-text) 8%, transparent);
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
   }
   .data-table tbody tr:hover {
-    background: rgba(255, 255, 255, 0.02);
+    background: color-mix(in srgb, var(--color-text) 2%, transparent);
   }
   .filter-chip:hover {
     color: var(--color-text);
-    background: rgba(255, 255, 255, 0.04);
+    background: color-mix(in srgb, var(--color-text) 4%, transparent);
   }
   .toast-close:hover {
-    background: rgba(255, 255, 255, 0.06);
+    background: color-mix(in srgb, var(--color-text) 6%, transparent);
     color: var(--color-text);
   }
   .mic-toggle:hover {
@@ -3173,12 +3270,12 @@ html[data-theme="light"] .grid-bg {
   background: rgba(10, 10, 14, 0.94);
   backdrop-filter: blur(28px) saturate(1.3);
   -webkit-backdrop-filter: blur(28px) saturate(1.3);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid color-mix(in srgb, var(--color-text) 8%, transparent);
   border-radius: 20px;
   box-shadow:
     0 24px 64px rgba(0, 0, 0, 0.55),
     0 4px 16px rgba(0, 0, 0, 0.3),
-    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    inset 0 1px 0 color-mix(in srgb, var(--color-text) 5%, transparent);
   animation: smartOverlayIn 0.35s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -3194,7 +3291,7 @@ html[data-theme="light"] .grid-bg {
   background: rgba(10, 10, 14, 0.92);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid color-mix(in srgb, var(--color-text) 8%, transparent);
   border-radius: 14px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
   cursor: pointer;
@@ -3202,7 +3299,7 @@ html[data-theme="light"] .grid-bg {
   transition: all 0.25s ease;
 }
 .smart-overlay--collapsed:hover {
-  border-color: rgba(255, 255, 255, 0.14);
+  border-color: color-mix(in srgb, var(--color-text) 14%, transparent);
   transform: scale(1.03);
 }
 
@@ -3285,7 +3382,7 @@ html[data-theme="light"] .grid-bg {
   width: 26px;
   height: 26px;
   border: none;
-  background: rgba(255, 255, 255, 0.04);
+  background: color-mix(in srgb, var(--color-text) 4%, transparent);
   border-radius: 8px;
   display: flex;
   align-items: center;
@@ -3295,13 +3392,13 @@ html[data-theme="light"] .grid-bg {
   transition: background 0.2s;
 }
 .smart-overlay__collapse-btn:hover {
-  background: rgba(255, 255, 255, 0.1);
+  background: color-mix(in srgb, var(--color-text) 10%, transparent);
 }
 
 /* --- Participants list (copilot overlay) --- */
 .participants-list {
   padding: 6px 16px 8px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  border-bottom: 1px solid color-mix(in srgb, var(--color-text) 5%, transparent);
   flex-shrink: 0;
 }
 .participants-list__header {
@@ -3365,7 +3462,7 @@ html[data-theme="light"] .grid-bg {
 }
 .smart-overlay__content::-webkit-scrollbar { width: 4px; }
 .smart-overlay__content::-webkit-scrollbar-track { background: transparent; }
-.smart-overlay__content::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.08); border-radius: 4px; }
+.smart-overlay__content::-webkit-scrollbar-thumb { background: color-mix(in srgb, var(--color-text) 8%, transparent); border-radius: 4px; }
 
 /* --- Responses view --- */
 .smart-overlay__responses {
@@ -3385,13 +3482,13 @@ html[data-theme="light"] .grid-bg {
   position: relative;
   padding: 12px 14px;
   border-radius: 14px;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  background: color-mix(in srgb, var(--color-text) 3%, transparent);
+  border: 1px solid color-mix(in srgb, var(--color-text) 6%, transparent);
   transition: border-color 0.2s, background 0.2s;
 }
 .smart-overlay__response-card:hover {
-  border-color: rgba(255, 255, 255, 0.12);
-  background: rgba(255, 255, 255, 0.05);
+  border-color: color-mix(in srgb, var(--color-text) 12%, transparent);
+  background: color-mix(in srgb, var(--color-text) 5%, transparent);
 }
 .smart-overlay__response-card:first-child {
   background: rgba(52, 211, 153, 0.05);
@@ -3424,7 +3521,7 @@ html[data-theme="light"] .grid-bg {
   width: 24px;
   height: 24px;
   border: none;
-  background: rgba(255, 255, 255, 0.04);
+  background: color-mix(in srgb, var(--color-text) 4%, transparent);
   border-radius: 6px;
   display: flex;
   align-items: center;
@@ -3435,7 +3532,7 @@ html[data-theme="light"] .grid-bg {
   flex-shrink: 0;
 }
 .smart-overlay__copy-btn:hover {
-  background: rgba(255, 255, 255, 0.1);
+  background: color-mix(in srgb, var(--color-text) 10%, transparent);
   color: var(--color-text);
 }
 .smart-overlay__copy-btn--copied {
@@ -3533,15 +3630,15 @@ html[data-theme="light"] .grid-bg {
   justify-content: center;
   width: 28px;
   height: 28px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid color-mix(in srgb, var(--color-text) 10%, transparent);
   border-radius: 8px;
-  background: rgba(255, 255, 255, 0.04);
+  background: color-mix(in srgb, var(--color-text) 4%, transparent);
   color: var(--color-text);
   cursor: pointer;
   transition: background 0.15s;
 }
 .smart-overlay__pause-btn:hover {
-  background: rgba(255, 255, 255, 0.1);
+  background: color-mix(in srgb, var(--color-text) 10%, transparent);
 }
 .smart-overlay__pause-btn--paused {
   background: rgba(52, 211, 153, 0.15);
@@ -3575,8 +3672,8 @@ html[data-theme="light"] .grid-bg {
   flex: 1;
   padding: 7px 10px;
   border-radius: 8px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid color-mix(in srgb, var(--color-text) 10%, transparent);
+  background: color-mix(in srgb, var(--color-text) 4%, transparent);
   color: var(--color-text);
   font-size: 11px;
   outline: none;
@@ -3696,7 +3793,7 @@ html[data-theme="light"] .grid-bg {
   line-height: 1.5;
   padding: 8px 0;
   text-align: center;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  border-bottom: 1px solid color-mix(in srgb, var(--color-text) 5%, transparent);
 }
 .smart-overlay__prep-section {
   display: flex;
@@ -3714,8 +3811,8 @@ html[data-theme="light"] .grid-bg {
   gap: 10px;
   padding: 8px 10px;
   border-radius: 10px;
-  background: rgba(255, 255, 255, 0.02);
-  border: 1px solid rgba(255, 255, 255, 0.04);
+  background: color-mix(in srgb, var(--color-text) 2%, transparent);
+  border: 1px solid color-mix(in srgb, var(--color-text) 4%, transparent);
 }
 .smart-overlay__prep-tip-icon {
   font-size: 14px;
@@ -3751,8 +3848,8 @@ html[data-theme="light"] .grid-bg {
   gap: 4px;
   padding: 8px 10px;
   border-radius: 10px;
-  background: rgba(255, 255, 255, 0.02);
-  border: 1px solid rgba(255, 255, 255, 0.04);
+  background: color-mix(in srgb, var(--color-text) 2%, transparent);
+  border: 1px solid color-mix(in srgb, var(--color-text) 4%, transparent);
 }
 .smart-overlay__prep-q {
   display: flex;
@@ -3854,7 +3951,7 @@ html[data-theme="light"] .grid-bg {
   padding: 16px 18px;
   border-radius: 14px;
   background: rgba(200, 200, 216, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  border: 1px solid color-mix(in srgb, var(--color-text) 6%, transparent);
 }
 .meeting-link__header {
   display: flex;
@@ -3895,8 +3992,8 @@ html[data-theme="light"] .grid-bg {
   width: 100%;
   padding: 10px 14px;
   border-radius: 10px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid color-mix(in srgb, var(--color-text) 8%, transparent);
+  background: color-mix(in srgb, var(--color-text) 3%, transparent);
   color: var(--color-text);
   font-size: 13px;
   font-family: inherit;
@@ -3916,8 +4013,8 @@ html[data-theme="light"] .grid-bg {
   gap: 6px;
   padding: 10px 18px;
   border-radius: 10px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid color-mix(in srgb, var(--color-text) 10%, transparent);
+  background: color-mix(in srgb, var(--color-text) 4%, transparent);
   color: var(--color-text-muted);
   font-size: 12px;
   font-weight: 600;
@@ -3928,7 +4025,7 @@ html[data-theme="light"] .grid-bg {
   flex-shrink: 0;
 }
 .meeting-link__btn:hover:not(:disabled) {
-  background: rgba(255, 255, 255, 0.08);
+  background: color-mix(in srgb, var(--color-text) 8%, transparent);
 }
 .meeting-link__btn:disabled {
   opacity: 0.35;
@@ -3963,7 +4060,7 @@ html[data-theme="light"] .grid-bg {
   background: rgba(12, 12, 16, 0.85);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  border: 1px solid color-mix(in srgb, var(--color-text) 6%, transparent);
   font-size: 11px;
   font-weight: 500;
   color: var(--color-text-muted);
@@ -4025,7 +4122,7 @@ html[data-theme="light"] .grid-bg {
   align-items: center;
   justify-content: space-between;
   padding-bottom: 10px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  border-bottom: 1px solid color-mix(in srgb, var(--color-text) 6%, transparent);
   margin-bottom: 12px;
 }
 .copilot-inline__header-left {
@@ -4086,7 +4183,7 @@ html[data-theme="light"] .grid-bg {
 }
 .copilot-inline__participants {
   padding: 8px 0;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  border-bottom: 1px solid color-mix(in srgb, var(--color-text) 6%, transparent);
   margin-bottom: 10px;
 }
 .copilot-inline__participants-header {
@@ -4147,15 +4244,15 @@ html[data-theme="light"] .grid-bg {
   padding: 12px 14px;
   border-radius: 12px;
   margin-bottom: 6px;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  background: color-mix(in srgb, var(--color-text) 3%, transparent);
+  border: 1px solid color-mix(in srgb, var(--color-text) 6%, transparent);
   cursor: pointer;
   transition: background 0.15s;
   color: inherit;
   font: inherit;
 }
 .copilot-inline__response-card:active {
-  background: rgba(255, 255, 255, 0.08);
+  background: color-mix(in srgb, var(--color-text) 8%, transparent);
 }
 .copilot-inline__response-card--primary {
   background: rgba(52, 211, 153, 0.06);
@@ -4251,16 +4348,16 @@ html[data-theme="light"] .grid-bg {
   justify-content: center;
   width: 32px;
   height: 32px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid color-mix(in srgb, var(--color-text) 10%, transparent);
   border-radius: 8px;
-  background: rgba(255, 255, 255, 0.04);
+  background: color-mix(in srgb, var(--color-text) 4%, transparent);
   color: var(--color-text);
   cursor: pointer;
   transition: background 0.15s;
   flex-shrink: 0;
 }
 .copilot-inline__pause-btn:active {
-  background: rgba(255, 255, 255, 0.12);
+  background: color-mix(in srgb, var(--color-text) 12%, transparent);
 }
 .copilot-inline__pause-btn--active {
   background: rgba(52, 211, 153, 0.15);
@@ -4294,8 +4391,8 @@ html[data-theme="light"] .grid-bg {
   flex: 1;
   padding: 9px 12px;
   border-radius: 10px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid color-mix(in srgb, var(--color-text) 10%, transparent);
+  background: color-mix(in srgb, var(--color-text) 4%, transparent);
   color: var(--color-text);
   font-size: 12px;
   outline: none;
@@ -4377,7 +4474,7 @@ html[data-theme="light"] .grid-bg {
 
 @media (hover: hover) {
   .smart-overlay--expanded:hover {
-    border-color: rgba(255, 255, 255, 0.12);
+    border-color: color-mix(in srgb, var(--color-text) 12%, transparent);
   }
 }
 
@@ -4486,7 +4583,7 @@ html[data-theme="light"] .grid-bg {
   gap: 4px;
   padding: 4px;
   background: rgba(17, 17, 20, 0.5);
-  border: 1px solid rgba(255, 255, 255, 0.04);
+  border: 1px solid color-mix(in srgb, var(--color-text) 4%, transparent);
   border-radius: 12px;
   margin-bottom: 20px;
 }
@@ -4509,7 +4606,7 @@ html[data-theme="light"] .grid-bg {
   min-height: 44px;
 }
 .analyze-tab.active {
-  background: rgba(255, 255, 255, 0.08);
+  background: color-mix(in srgb, var(--color-text) 8%, transparent);
   color: var(--color-text);
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
 }
@@ -4526,7 +4623,7 @@ html[data-theme="light"] .grid-bg {
   justify-content: center;
   gap: 10px;
   padding: 40px 24px;
-  border: 1.5px dashed rgba(255, 255, 255, 0.1);
+  border: 1.5px dashed color-mix(in srgb, var(--color-text) 10%, transparent);
   border-radius: 14px;
   background: rgba(17, 17, 20, 0.3);
   cursor: pointer;
@@ -4546,7 +4643,7 @@ html[data-theme="light"] .grid-bg {
   aspect-ratio: 1;
   border-radius: 10px;
   overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  border: 1px solid color-mix(in srgb, var(--color-text) 6%, transparent);
 }
 .analyze-image-thumb img {
   width: 100%;
@@ -4576,7 +4673,7 @@ html[data-theme="light"] .grid-bg {
   justify-content: center;
   aspect-ratio: 1;
   border-radius: 10px;
-  border: 1.5px dashed rgba(255, 255, 255, 0.1);
+  border: 1.5px dashed color-mix(in srgb, var(--color-text) 10%, transparent);
   background: rgba(17, 17, 20, 0.3);
   color: var(--color-text-muted);
   cursor: pointer;
@@ -4644,7 +4741,7 @@ html[data-theme="light"] .grid-bg {
 }
 .analyze-mode-chip.active {
   border-color: rgba(200, 200, 216, 0.25);
-  background: rgba(255, 255, 255, 0.08);
+  background: color-mix(in srgb, var(--color-text) 8%, transparent);
   color: var(--color-text);
 }
 
@@ -4698,7 +4795,7 @@ html[data-theme="light"] .grid-bg {
   height: 32px;
   border: none;
   border-radius: 8px;
-  background: rgba(255, 255, 255, 0.04);
+  background: color-mix(in srgb, var(--color-text) 4%, transparent);
   color: var(--color-text-muted);
   display: flex;
   align-items: center;
@@ -4710,7 +4807,7 @@ html[data-theme="light"] .grid-bg {
 .analyze-spinner {
   width: 18px;
   height: 18px;
-  border: 2px solid rgba(255, 255, 255, 0.2);
+  border: 2px solid color-mix(in srgb, var(--color-text) 20%, transparent);
   border-top-color: #fff;
   border-radius: 50%;
   animation: toastSpin 0.8s linear infinite;
@@ -4801,7 +4898,7 @@ html[data-theme="light"] .grid-bg {
   width: 100%;
   height: 4px;
   border-radius: 2px;
-  background: rgba(255, 255, 255, 0.06);
+  background: color-mix(in srgb, var(--color-text) 6%, transparent);
   overflow: hidden;
 }
 
@@ -4828,15 +4925,15 @@ html[data-theme="light"] .grid-bg {
 /* ── Hover states (desktop only) ── */
 @media (hover: hover) and (pointer: fine) {
   .analyze-upload-zone:hover {
-    border-color: rgba(255, 255, 255, 0.2);
+    border-color: color-mix(in srgb, var(--color-text) 20%, transparent);
     background: rgba(17, 17, 20, 0.5);
   }
   .analyze-image-add:hover {
-    border-color: rgba(255, 255, 255, 0.2);
+    border-color: color-mix(in srgb, var(--color-text) 20%, transparent);
   }
   .analyze-tab:hover:not(.active) {
     color: var(--color-text);
-    background: rgba(255, 255, 255, 0.04);
+    background: color-mix(in srgb, var(--color-text) 4%, transparent);
   }
   .analyze-mode-chip:hover:not(.active) {
     border-color: var(--color-border-light);
@@ -4848,14 +4945,14 @@ html[data-theme="light"] .grid-bg {
   }
   .analyze-cta-secondary:hover:not(:disabled) {
     border-color: var(--color-border-light);
-    background: rgba(255, 255, 255, 0.04);
+    background: color-mix(in srgb, var(--color-text) 4%, transparent);
   }
   .analyze-back-btn:hover {
     border-color: var(--color-border-light);
     color: var(--color-text);
   }
   .analyze-icon-btn:hover {
-    background: rgba(255, 255, 255, 0.08);
+    background: color-mix(in srgb, var(--color-text) 8%, transparent);
     color: var(--color-text);
   }
 }
@@ -4870,7 +4967,7 @@ html[data-theme="light"] .grid-bg {
   background: rgba(17, 17, 20, 0.6);
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  border: 1px solid color-mix(in srgb, var(--color-text) 6%, transparent);
   border-radius: 18px;
   transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1),
               border-color 0.4s ease;
@@ -5000,8 +5097,8 @@ html[data-theme="light"] .grid-bg {
   background: linear-gradient(
     115deg,
     transparent 30%,
-    rgba(255, 255, 255, 0.18) 48%,
-    rgba(255, 255, 255, 0.05) 56%,
+    color-mix(in srgb, var(--color-text) 18%, transparent) 48%,
+    color-mix(in srgb, var(--color-text) 5%, transparent) 56%,
     transparent 72%
   );
   transform: translateX(-110%);

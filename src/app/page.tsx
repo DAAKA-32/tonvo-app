@@ -365,6 +365,9 @@ export default function HomePage() {
             and the grid ends exactly where this group ends (no bleed into the
             sections below). */}
         <div className="relative">
+          {/* Horizon backdrop — sits under the grid, fades back to --color-bg
+              at the section boundary. See .hero-bg in globals.css. */}
+          <div aria-hidden className="hero-bg" />
           <div
             aria-hidden
             className="absolute inset-0 pointer-events-none grid-bg"

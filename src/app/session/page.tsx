@@ -77,7 +77,7 @@ const SIGNAL_CONFIG: Record<ConversationSignal, { label: string; color: string; 
 };
 
 const CLASSIFICATION_CONFIG: Record<ConversationClassification, { label: string; color: string; bg: string }> = {
-  very_positive: { label: "Excellent",  color: "#34d399", bg: "rgba(52, 211, 153, 0.12)" },
+  very_positive: { label: "Excellent",  color: "var(--color-positive)", bg: "rgba(52, 211, 153, 0.12)" },
   positive:      { label: "Positive",   color: "#6ee7b7", bg: "rgba(110, 231, 183, 0.1)" },
   neutral:       { label: "Neutral",    color: "#fbbf24", bg: "rgba(251, 191, 36, 0.1)" },
   awkward:       { label: "Awkward",    color: "#fb923c", bg: "rgba(251, 146, 60, 0.1)" },
@@ -1532,7 +1532,7 @@ export default function SessionPage() {
             borderRadius: "50%",
             background: isRecording
               ? "radial-gradient(circle, rgba(239, 68, 68, 0.12), transparent 65%)"
-              : "radial-gradient(circle, rgba(255, 255, 255, 0.05), transparent 65%)",
+              : "radial-gradient(circle, color-mix(in srgb, var(--color-text) 5%, transparent), transparent 65%)",
             filter: "blur(70px)",
             pointerEvents: "none",
             zIndex: 0,
@@ -1550,19 +1550,19 @@ export default function SessionPage() {
               <span
                 className="absolute inset-0 rounded-full"
                 style={{
-                  backgroundColor: isRecording ? "#ef4444" : "rgba(255, 255, 255, 0.85)",
+                  backgroundColor: isRecording ? "var(--color-negative)" : "color-mix(in srgb, var(--color-text) 85%, transparent)",
                   opacity: 0.5,
                   animation: "pulseRing 1.8s ease-in-out infinite",
                 }}
               />
               <span
                 className="relative w-1.5 h-1.5 rounded-full"
-                style={{ backgroundColor: isRecording ? "#ef4444" : "rgba(255, 255, 255, 0.9)" }}
+                style={{ backgroundColor: isRecording ? "var(--color-negative)" : "color-mix(in srgb, var(--color-text) 90%, transparent)" }}
               />
             </span>
             <span
               className="text-[10px] font-semibold uppercase tracking-[0.22em]"
-              style={{ color: isRecording ? "#fca5a5" : "var(--color-text-muted)" }}
+              style={{ color: isRecording ? "var(--color-negative)" : "var(--color-text-muted)" }}
             >
               {isRecording ? "Live · in progress" : t("session.title")}
             </span>
@@ -1573,7 +1573,7 @@ export default function SessionPage() {
                 className="text-[9px] uppercase tracking-[0.18em] px-2 py-0.5 rounded-full"
                 style={{
                   backgroundColor: "rgba(52, 211, 153, 0.12)",
-                  color: "#34d399",
+                  color: "var(--color-positive)",
                   border: "1px solid rgba(52, 211, 153, 0.25)",
                 }}
               >
@@ -1595,7 +1595,7 @@ export default function SessionPage() {
                   backgroundColor: timeRemaining <= 60
                     ? "rgba(239, 68, 68, 0.15)"
                     : "rgba(251, 146, 60, 0.10)",
-                  color: timeRemaining <= 60 ? "#ef4444" : "#fb923c",
+                  color: timeRemaining <= 60 ? "var(--color-negative)" : "#fb923c",
                   transition: "background-color 0.3s ease, color 0.3s ease",
                 }}
               >
@@ -1635,7 +1635,7 @@ export default function SessionPage() {
                     letterSpacing: "-0.035em",
                     lineHeight: 1.05,
                     background:
-                      "linear-gradient(115deg, #fafafa 0%, #fafafa 30%, #d4d4d8 50%, #fafafa 70%, #fafafa 100%)",
+                      "linear-gradient(115deg, var(--color-text) 0%, var(--color-text) 30%, var(--color-text-silver) 50%, var(--color-text) 70%, var(--color-text) 100%)",
                     backgroundSize: "240% 100%",
                     WebkitBackgroundClip: "text",
                     WebkitTextFillColor: "transparent",
@@ -1666,13 +1666,13 @@ export default function SessionPage() {
               style={{
                 background: isRecording
                   ? "linear-gradient(135deg, rgba(239, 68, 68, 0.18) 0%, rgba(239, 68, 68, 0.04) 100%)"
-                  : "linear-gradient(135deg, rgba(52, 211, 153, 0.20) 0%, rgba(255, 255, 255, 0.04) 100%)",
+                  : "linear-gradient(135deg, rgba(52, 211, 153, 0.20) 0%, color-mix(in srgb, var(--color-text) 4%, transparent) 100%)",
                 border: isRecording
                   ? "1px solid rgba(239, 68, 68, 0.4)"
                   : "1px solid rgba(52, 211, 153, 0.4)",
                 boxShadow: isRecording
-                  ? "0 30px 70px -25px rgba(239, 68, 68, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.08)"
-                  : "0 30px 70px -25px rgba(52, 211, 153, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.08)",
+                  ? "0 30px 70px -25px rgba(239, 68, 68, 0.55), inset 0 1px 0 color-mix(in srgb, var(--color-text) 8%, transparent)"
+                  : "0 30px 70px -25px rgba(52, 211, 153, 0.55), inset 0 1px 0 color-mix(in srgb, var(--color-text) 8%, transparent)",
                 color: "var(--color-text)",
                 minWidth: 240,
                 minHeight: 80,
@@ -1730,7 +1730,7 @@ export default function SessionPage() {
               <span className="flex flex-col items-start gap-0.5 min-w-0">
                 <span
                   className="text-[10px] uppercase tracking-[0.22em]"
-                  style={{ color: isRecording ? "#fca5a5" : "rgba(110, 231, 183, 0.85)" }}
+                  style={{ color: isRecording ? "var(--color-negative)" : "rgba(110, 231, 183, 0.85)" }}
                 >
                   {isRecording ? "Recording" : "Ready"}
                 </span>
@@ -1752,8 +1752,8 @@ export default function SessionPage() {
               <div
                 className="relative inline-flex items-center p-1 rounded-full overflow-x-auto"
                 style={{
-                  background: "rgba(255, 255, 255, 0.025)",
-                  border: "1px solid rgba(255, 255, 255, 0.06)",
+                  background: "color-mix(in srgb, var(--color-text) 2.5%, transparent)",
+                  border: "1px solid color-mix(in srgb, var(--color-text) 6%, transparent)",
                   scrollbarWidth: "none",
                 }}
               >
@@ -1783,8 +1783,8 @@ export default function SessionPage() {
                           className="absolute inset-0 rounded-full"
                           style={{
                             background:
-                              "linear-gradient(135deg, rgba(255, 255, 255, 0.10), rgba(255, 255, 255, 0.04))",
-                            border: "1px solid rgba(255, 255, 255, 0.14)",
+                              "linear-gradient(135deg, color-mix(in srgb, var(--color-text) 10%, transparent), color-mix(in srgb, var(--color-text) 4%, transparent))",
+                            border: "1px solid color-mix(in srgb, var(--color-text) 14%, transparent)",
                             boxShadow: "0 6px 20px -8px rgba(0, 0, 0, 0.5)",
                             zIndex: -1,
                           }}
@@ -1815,8 +1815,8 @@ export default function SessionPage() {
                   }}
                   className="flex items-center gap-2.5 px-3.5 py-1.5 rounded-full text-[11px] font-medium cursor-pointer"
                   style={{
-                    background: "rgba(255, 255, 255, 0.025)",
-                    border: "1px solid rgba(255, 255, 255, 0.06)",
+                    background: "color-mix(in srgb, var(--color-text) 2.5%, transparent)",
+                    border: "1px solid color-mix(in srgb, var(--color-text) 6%, transparent)",
                     color:
                       screenEnabled && features.screenAnalysis ? "var(--color-text)" : "var(--color-text-muted)",
                     opacity: !features.screenAnalysis ? 0.5 : 1,
@@ -1830,7 +1830,7 @@ export default function SessionPage() {
                     height="13"
                     viewBox="0 0 24 24"
                     fill="none"
-                    stroke={screenEnabled && features.screenAnalysis ? "#34d399" : "currentColor"}
+                    stroke={screenEnabled && features.screenAnalysis ? "var(--color-positive)" : "currentColor"}
                     strokeWidth="2"
                     strokeLinecap="round"
                     strokeLinejoin="round"
@@ -1849,8 +1849,8 @@ export default function SessionPage() {
                       background:
                         screenEnabled && features.screenAnalysis
                           ? "linear-gradient(135deg, #34d399, #6ee7b7)"
-                          : "rgba(255, 255, 255, 0.08)",
-                      border: "1px solid rgba(255, 255, 255, 0.04)",
+                          : "color-mix(in srgb, var(--color-text) 8%, transparent)",
+                      border: "1px solid color-mix(in srgb, var(--color-text) 4%, transparent)",
                       boxShadow:
                         screenEnabled && features.screenAnalysis
                           ? "0 4px 12px -4px rgba(52, 211, 153, 0.5)"
@@ -1868,7 +1868,7 @@ export default function SessionPage() {
                       style={{
                         width: 10,
                         height: 10,
-                        background: screenEnabled && features.screenAnalysis ? "#0a0a0a" : "#fafafa",
+                        background: screenEnabled && features.screenAnalysis ? "var(--color-bg)" : "var(--color-text-muted)",
                       }}
                     />
                   </span>
@@ -1879,8 +1879,8 @@ export default function SessionPage() {
                 onClick={() => setAudioEnabled((p) => !p)}
                 className="flex items-center gap-2.5 px-3.5 py-1.5 rounded-full text-[11px] font-medium cursor-pointer"
                 style={{
-                  background: "rgba(255, 255, 255, 0.025)",
-                  border: "1px solid rgba(255, 255, 255, 0.06)",
+                  background: "color-mix(in srgb, var(--color-text) 2.5%, transparent)",
+                  border: "1px solid color-mix(in srgb, var(--color-text) 6%, transparent)",
                   color: audioEnabled ? "var(--color-text)" : "var(--color-text-muted)",
                   minHeight: 32,
                   transition: "all 0.2s ease",
@@ -1888,7 +1888,7 @@ export default function SessionPage() {
                 aria-pressed={audioEnabled}
               >
                 {audioEnabled ? (
-                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#34d399" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--color-positive)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <rect x="9" y="1" width="6" height="12" rx="3" />
                     <path d="M19 10v1a7 7 0 0 1-14 0v-1" />
                     <line x1="12" y1="19" x2="12" y2="23" />
@@ -1912,8 +1912,8 @@ export default function SessionPage() {
                     padding: 1,
                     background: audioEnabled
                       ? "linear-gradient(135deg, #34d399, #6ee7b7)"
-                      : "rgba(255, 255, 255, 0.08)",
-                    border: "1px solid rgba(255, 255, 255, 0.04)",
+                      : "color-mix(in srgb, var(--color-text) 8%, transparent)",
+                    border: "1px solid color-mix(in srgb, var(--color-text) 4%, transparent)",
                     boxShadow: audioEnabled ? "0 4px 12px -4px rgba(52, 211, 153, 0.5)" : "none",
                     transition: "background 0.25s ease, box-shadow 0.25s ease",
                   }}
@@ -1926,7 +1926,7 @@ export default function SessionPage() {
                     style={{
                       width: 10,
                       height: 10,
-                      background: audioEnabled ? "#0a0a0a" : "#fafafa",
+                      background: audioEnabled ? "var(--color-bg)" : "var(--color-text-muted)",
                     }}
                   />
                 </span>
@@ -1940,15 +1940,15 @@ export default function SessionPage() {
                     onChange={(e) => setAudioLang(e.target.value)}
                     className="appearance-none text-[11px] font-medium pl-3 pr-8 py-1.5 rounded-full cursor-pointer"
                     style={{
-                      background: "rgba(255, 255, 255, 0.025)",
-                      border: "1px solid rgba(255, 255, 255, 0.06)",
+                      background: "color-mix(in srgb, var(--color-text) 2.5%, transparent)",
+                      border: "1px solid color-mix(in srgb, var(--color-text) 6%, transparent)",
                       color: "var(--color-text)",
                       transition: "all 0.2s ease",
                     }}
                     aria-label="Audio transcription language"
                   >
                     {AUDIO_LANGS.map((l) => (
-                      <option key={l.code} value={l.code} style={{ background: "#111114", color: "#fafafa" }}>
+                      <option key={l.code} value={l.code} style={{ background: "var(--color-surface-2)", color: "var(--color-text)" }}>
                         {l.flag} {l.label}
                       </option>
                     ))}
@@ -1980,16 +1980,16 @@ export default function SessionPage() {
                 <div
                   className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11px]"
                   style={{
-                    background: !screenAnalysisCompleted ? "rgba(52, 211, 153, 0.10)" : "rgba(255, 255, 255, 0.04)",
+                    background: !screenAnalysisCompleted ? "rgba(52, 211, 153, 0.10)" : "color-mix(in srgb, var(--color-text) 4%, transparent)",
                     border: !screenAnalysisCompleted
                       ? "1px solid rgba(52, 211, 153, 0.25)"
-                      : "1px solid rgba(255, 255, 255, 0.06)",
-                    color: !screenAnalysisCompleted ? "#34d399" : "var(--color-text-muted)",
+                      : "1px solid color-mix(in srgb, var(--color-text) 6%, transparent)",
+                    color: !screenAnalysisCompleted ? "var(--color-positive)" : "var(--color-text-muted)",
                   }}
                 >
                   <span
                     className="w-1.5 h-1.5 rounded-full"
-                    style={{ backgroundColor: !screenAnalysisCompleted ? "#34d399" : "var(--color-text-muted)" }}
+                    style={{ backgroundColor: !screenAnalysisCompleted ? "var(--color-positive)" : "var(--color-text-muted)" }}
                   />
                   <span>{screenAnalysisCompleted ? "Screen Done" : "Screen"}</span>
                 </div>
@@ -1999,16 +1999,16 @@ export default function SessionPage() {
                 style={{
                   background: (audioService.current?.hasAudio ?? false)
                     ? "rgba(52, 211, 153, 0.10)"
-                    : "rgba(255, 255, 255, 0.04)",
+                    : "color-mix(in srgb, var(--color-text) 4%, transparent)",
                   border: (audioService.current?.hasAudio ?? false)
                     ? "1px solid rgba(52, 211, 153, 0.25)"
-                    : "1px solid rgba(255, 255, 255, 0.06)",
-                  color: (audioService.current?.hasAudio ?? false) ? "#34d399" : "var(--color-text-muted)",
+                    : "1px solid color-mix(in srgb, var(--color-text) 6%, transparent)",
+                  color: (audioService.current?.hasAudio ?? false) ? "var(--color-positive)" : "var(--color-text-muted)",
                 }}
               >
                 <span
                   className="w-1.5 h-1.5 rounded-full"
-                  style={{ backgroundColor: (audioService.current?.hasAudio ?? false) ? "#34d399" : "var(--color-text-muted)" }}
+                  style={{ backgroundColor: (audioService.current?.hasAudio ?? false) ? "var(--color-positive)" : "var(--color-text-muted)" }}
                 />
                 <span>
                   {audioService.current?.audioEnabled
@@ -2024,10 +2024,10 @@ export default function SessionPage() {
                   style={{
                     background: "rgba(52, 211, 153, 0.10)",
                     border: "1px solid rgba(52, 211, 153, 0.25)",
-                    color: "#34d399",
+                    color: "var(--color-positive)",
                   }}
                 >
-                  <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: "#34d399" }} />
+                  <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: "var(--color-positive)" }} />
                   <span>System Audio</span>
                 </div>
               )}
@@ -2041,25 +2041,25 @@ export default function SessionPage() {
             className="relative overflow-hidden rounded-2xl p-3 mb-4 text-xs flex items-center justify-between gap-3"
             style={{
               background: timeRemaining <= 60
-                ? "linear-gradient(135deg, rgba(239, 68, 68, 0.08) 0%, rgba(255, 255, 255, 0.01) 100%)"
-                : "linear-gradient(135deg, rgba(251, 146, 60, 0.06) 0%, rgba(255, 255, 255, 0.01) 100%)",
+                ? "linear-gradient(135deg, rgba(239, 68, 68, 0.08) 0%, color-mix(in srgb, var(--color-text) 1%, transparent) 100%)"
+                : "linear-gradient(135deg, rgba(251, 146, 60, 0.06) 0%, color-mix(in srgb, var(--color-text) 1%, transparent) 100%)",
               border: timeRemaining <= 60
                 ? "1px solid rgba(239, 68, 68, 0.3)"
                 : "1px solid rgba(251, 146, 60, 0.22)",
-              color: timeRemaining <= 60 ? "#fca5a5" : "var(--color-text-silver)",
+              color: timeRemaining <= 60 ? "var(--color-negative)" : "var(--color-text-silver)",
               transition: "background 0.4s ease, border-color 0.4s ease, color 0.4s ease",
             }}
           >
             <div className="flex items-center gap-2.5">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke={timeRemaining <= 60 ? "#ef4444" : "#fb923c"} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0 }}>
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke={timeRemaining <= 60 ? "var(--color-negative)" : "#fb923c"} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0 }}>
                 <circle cx="12" cy="12" r="10" />
                 <polyline points="12 6 12 12 16 14" />
               </svg>
               <span>
-                <span className="text-[10px] uppercase tracking-[0.18em] font-semibold mr-2" style={{ color: timeRemaining <= 60 ? "#ef4444" : "#fb923c" }}>
+                <span className="text-[10px] uppercase tracking-[0.18em] font-semibold mr-2" style={{ color: timeRemaining <= 60 ? "var(--color-negative)" : "#fb923c" }}>
                   Free plan
                 </span>
-                <strong className="tabular-nums" style={{ color: timeRemaining <= 60 ? "#ef4444" : "#fb923c" }}>
+                <strong className="tabular-nums" style={{ color: timeRemaining <= 60 ? "var(--color-negative)" : "#fb923c" }}>
                   {Math.floor(timeRemaining / 60)}:{(timeRemaining % 60).toString().padStart(2, "0")}
                 </strong>
                 <span style={{ color: "var(--color-text-muted)" }}>
@@ -2072,8 +2072,8 @@ export default function SessionPage() {
               href="/pricing"
               className="text-[11px] font-semibold px-3 py-1.5 rounded-full no-underline whitespace-nowrap"
               style={{
-                background: "rgba(255, 255, 255, 0.06)",
-                border: "1px solid rgba(255, 255, 255, 0.12)",
+                background: "color-mix(in srgb, var(--color-text) 6%, transparent)",
+                border: "1px solid color-mix(in srgb, var(--color-text) 12%, transparent)",
                 color: "var(--color-text)",
                 transition: "all 0.2s ease",
               }}
@@ -2088,7 +2088,7 @@ export default function SessionPage() {
           <div
             className="flex items-start gap-2.5 mb-6 px-1 text-xs"
             style={{
-              color: !screenEnabled && !audioEnabled ? "#fca5a5" : "var(--color-text-muted)",
+              color: !screenEnabled && !audioEnabled ? "var(--color-negative)" : "var(--color-text-muted)",
             }}
           >
             <svg
@@ -2129,18 +2129,18 @@ export default function SessionPage() {
           <div
             className="relative overflow-hidden rounded-2xl p-4 mb-3 flex items-start gap-3 text-xs"
             style={{
-              background: "linear-gradient(135deg, rgba(52, 211, 153, 0.05) 0%, rgba(255, 255, 255, 0.01) 100%)",
+              background: "linear-gradient(135deg, rgba(52, 211, 153, 0.05) 0%, color-mix(in srgb, var(--color-text) 1%, transparent) 100%)",
               border: "1px solid rgba(52, 211, 153, 0.18)",
               color: "var(--color-text-silver)",
             }}
           >
             <span aria-hidden className="absolute -top-10 -right-10 w-28 h-28 rounded-full pointer-events-none"
               style={{ background: "radial-gradient(circle, rgba(52, 211, 153, 0.22), transparent 70%)", filter: "blur(24px)", opacity: 0.6 }} />
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" style={{ color: "#34d399", flexShrink: 0, marginTop: 2 }}>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" style={{ color: "var(--color-positive)", flexShrink: 0, marginTop: 2 }}>
               <path d="M11 5L6 9H2v6h4l5 4V5z" /><path d="M19.07 4.93a10 10 0 0 1 0 14.14" /><path d="M15.54 8.46a5 5 0 0 1 0 7.07" />
             </svg>
             <div className="relative">
-              <span className="text-[10px] font-semibold uppercase tracking-[0.18em] block mb-1.5" style={{ color: "#34d399" }}>Speaker mode recommended</span>
+              <span className="text-[10px] font-semibold uppercase tracking-[0.18em] block mb-1.5" style={{ color: "var(--color-positive)" }}>Speaker mode recommended</span>
               <p className="m-0 leading-relaxed" style={{ color: "var(--color-text-muted)" }}>Put your phone call on speaker so Tonvo can hear both sides through the microphone. Best results that way.</p>
             </div>
           </div>
@@ -2151,8 +2151,8 @@ export default function SessionPage() {
           <div
             className="rounded-2xl p-4 mb-3 flex items-start gap-3 text-xs"
             style={{
-              background: "rgba(255, 255, 255, 0.02)",
-              border: "1px solid rgba(255, 255, 255, 0.05)",
+              background: "color-mix(in srgb, var(--color-text) 2%, transparent)",
+              border: "1px solid color-mix(in srgb, var(--color-text) 5%, transparent)",
               color: "var(--color-text-muted)",
             }}
           >
@@ -2160,7 +2160,7 @@ export default function SessionPage() {
               <rect x="3" y="3" width="18" height="18" rx="2" ry="2" /><circle cx="8.5" cy="8.5" r="1.5" /><polyline points="21 15 16 10 5 21" />
             </svg>
             <span style={{ lineHeight: 1.6 }}>
-              Pour analyser une conversation texte (Instagram, Snap, WhatsApp), utilise <a href="/analyze-text" style={{ color: "#c4b5fd", textDecoration: "underline", textUnderlineOffset: 2 }}>Analyze Conversation</a>.
+              Pour analyser une conversation texte (Instagram, Snap, WhatsApp), utilise <a href="/analyze-text" style={{ color: "var(--shimmer-accent-1)", textDecoration: "underline", textUnderlineOffset: 2 }}>Analyze Conversation</a>.
             </span>
           </div>
         )}
@@ -2169,7 +2169,7 @@ export default function SessionPage() {
           <div
             className="relative overflow-hidden rounded-2xl p-4 mb-3 text-xs"
             style={{
-              background: "linear-gradient(135deg, rgba(52, 211, 153, 0.05) 0%, rgba(255, 255, 255, 0.01) 100%)",
+              background: "linear-gradient(135deg, rgba(52, 211, 153, 0.05) 0%, color-mix(in srgb, var(--color-text) 1%, transparent) 100%)",
               border: "1px solid rgba(52, 211, 153, 0.18)",
               color: "var(--color-text-silver)",
             }}
@@ -2177,8 +2177,8 @@ export default function SessionPage() {
             <span aria-hidden className="absolute -top-10 -right-10 w-32 h-32 rounded-full pointer-events-none"
               style={{ background: "radial-gradient(circle, rgba(52, 211, 153, 0.22), transparent 70%)", filter: "blur(24px)", opacity: 0.6 }} />
             <div className="relative flex items-center gap-2 mb-2">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ color: "#34d399", flexShrink: 0 }}><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z" /><path d="M19 10v2a7 7 0 0 1-14 0v-2" /></svg>
-              <span className="text-[10px] font-semibold uppercase tracking-[0.18em]" style={{ color: "#34d399" }}>Capture audio from Discord, Zoom, Meet…</span>
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ color: "var(--color-positive)", flexShrink: 0 }}><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z" /><path d="M19 10v2a7 7 0 0 1-14 0v-2" /></svg>
+              <span className="text-[10px] font-semibold uppercase tracking-[0.18em]" style={{ color: "var(--color-positive)" }}>Capture audio from Discord, Zoom, Meet…</span>
             </div>
             <p className="relative m-0 leading-relaxed" style={{ color: "var(--color-text-muted)" }}>
               Quand la fenêtre de partage apparaît, coche <strong style={{ color: "var(--color-text)" }}>« Share system audio »</strong> ou <strong style={{ color: "var(--color-text)" }}>« Also share tab audio »</strong>. Ça permet à Tonvo d&apos;entendre les deux interlocuteurs.
@@ -2190,8 +2190,8 @@ export default function SessionPage() {
           <div
             className="rounded-2xl p-4 mb-3 flex items-center gap-3 text-xs"
             style={{
-              background: "rgba(255, 255, 255, 0.02)",
-              border: "1px solid rgba(255, 255, 255, 0.05)",
+              background: "color-mix(in srgb, var(--color-text) 2%, transparent)",
+              border: "1px solid color-mix(in srgb, var(--color-text) 5%, transparent)",
               color: "var(--color-text-muted)",
             }}
           >
@@ -2206,7 +2206,7 @@ export default function SessionPage() {
           <div
             className="relative overflow-hidden rounded-2xl p-4 mb-6 flex items-center gap-3 text-sm"
             style={{
-              background: "linear-gradient(135deg, rgba(251, 146, 60, 0.06) 0%, rgba(255, 255, 255, 0.01) 100%)",
+              background: "linear-gradient(135deg, rgba(251, 146, 60, 0.06) 0%, color-mix(in srgb, var(--color-text) 1%, transparent) 100%)",
               border: "1px solid rgba(251, 146, 60, 0.28)",
               color: "#fb923c",
             }}
@@ -2242,14 +2242,14 @@ export default function SessionPage() {
               transition={{ type: "spring", stiffness: 320, damping: 26 }}
               className="group relative p-4 sm:p-5 rounded-2xl overflow-hidden flex flex-col items-center justify-center min-h-35"
               style={{
-                background: "linear-gradient(135deg, rgba(255, 255, 255, 0.03) 0%, rgba(255, 255, 255, 0.01) 100%)",
-                border: "1px solid rgba(255, 255, 255, 0.06)",
+                background: "linear-gradient(135deg, color-mix(in srgb, var(--color-text) 3%, transparent) 0%, color-mix(in srgb, var(--color-text) 1%, transparent) 100%)",
+                border: "1px solid color-mix(in srgb, var(--color-text) 6%, transparent)",
                 backdropFilter: "blur(20px)",
                 WebkitBackdropFilter: "blur(20px)",
               }}
             >
               <span aria-hidden className="absolute -top-12 -right-12 w-32 h-32 rounded-full opacity-30 group-hover:opacity-70 transition-opacity duration-700"
-                style={{ background: "radial-gradient(circle, rgba(255, 255, 255, 0.16), transparent 70%)", filter: "blur(28px)" }} />
+                style={{ background: "radial-gradient(circle, color-mix(in srgb, var(--color-text) 16%, transparent), transparent 70%)", filter: "blur(28px)" }} />
               <div className="relative flex flex-col items-center gap-3">
                 <span className="text-[10px] font-semibold uppercase tracking-[0.22em]" style={{ color: "var(--color-text-muted)" }}>Tone</span>
                 <div className="flex items-center gap-3">
@@ -2258,13 +2258,13 @@ export default function SessionPage() {
                     style={{
                       width: 48,
                       height: 48,
-                      background: "rgba(255, 255, 255, 0.015)",
-                      border: "1px dashed rgba(255, 255, 255, 0.12)",
+                      background: "color-mix(in srgb, var(--color-text) 1.5%, transparent)",
+                      border: "1px dashed color-mix(in srgb, var(--color-text) 12%, transparent)",
                     }}
                   >
                     <span
                       className="text-xl font-extralight leading-none"
-                      style={{ color: "rgba(255, 255, 255, 0.35)" }}
+                      style={{ color: "color-mix(in srgb, var(--color-text) 35%, transparent)" }}
                     >
                       —
                     </span>
@@ -2286,14 +2286,14 @@ export default function SessionPage() {
               transition={{ type: "spring", stiffness: 320, damping: 26 }}
               className="group relative p-4 sm:p-5 rounded-2xl overflow-hidden flex flex-col items-center justify-center min-h-35"
               style={{
-                background: "linear-gradient(135deg, rgba(255, 255, 255, 0.03) 0%, rgba(255, 255, 255, 0.01) 100%)",
-                border: "1px solid rgba(255, 255, 255, 0.06)",
+                background: "linear-gradient(135deg, color-mix(in srgb, var(--color-text) 3%, transparent) 0%, color-mix(in srgb, var(--color-text) 1%, transparent) 100%)",
+                border: "1px solid color-mix(in srgb, var(--color-text) 6%, transparent)",
                 backdropFilter: "blur(20px)",
                 WebkitBackdropFilter: "blur(20px)",
               }}
             >
               <span aria-hidden className="absolute -top-12 -right-12 w-32 h-32 rounded-full opacity-30 group-hover:opacity-70 transition-opacity duration-700"
-                style={{ background: "radial-gradient(circle, rgba(255, 255, 255, 0.14), transparent 70%)", filter: "blur(28px)" }} />
+                style={{ background: "radial-gradient(circle, color-mix(in srgb, var(--color-text) 14%, transparent), transparent 70%)", filter: "blur(28px)" }} />
               <div className="relative flex flex-col items-center gap-3">
                 <span className="text-[10px] font-semibold uppercase tracking-[0.22em]" style={{ color: "var(--color-text-muted)" }}>Idle</span>
                 <AudioWave active={false} />
@@ -2307,7 +2307,7 @@ export default function SessionPage() {
               transition={{ type: "spring", stiffness: 320, damping: 26 }}
               className="group relative p-4 sm:p-5 rounded-2xl overflow-hidden flex flex-col items-center justify-center min-h-35"
               style={{
-                background: "linear-gradient(135deg, rgba(96, 165, 250, 0.05) 0%, rgba(255, 255, 255, 0.01) 100%)",
+                background: "linear-gradient(135deg, rgba(96, 165, 250, 0.05) 0%, color-mix(in srgb, var(--color-text) 1%, transparent) 100%)",
                 border: "1px solid rgba(96, 165, 250, 0.12)",
                 backdropFilter: "blur(20px)",
                 WebkitBackdropFilter: "blur(20px)",
@@ -2326,7 +2326,7 @@ export default function SessionPage() {
                     fontWeight: 200,
                     letterSpacing: "-0.04em",
                     background: qualityScore > 0
-                      ? "linear-gradient(115deg, #60a5fa 0%, #93c5fd 30%, #60a5fa 50%, #93c5fd 70%, #60a5fa 100%)"
+                      ? "linear-gradient(115deg, var(--info-accent) 0%, color-mix(in srgb, var(--info-accent) 55%, transparent) 30%, var(--info-accent) 50%, color-mix(in srgb, var(--info-accent) 55%, transparent) 70%, var(--info-accent) 100%)"
                       : "linear-gradient(180deg, var(--color-text-muted) 0%, rgba(113, 113, 122, 0.5) 100%)",
                     backgroundSize: qualityScore > 0 ? "200% 100%" : undefined,
                     WebkitBackgroundClip: "text",
@@ -2346,7 +2346,7 @@ export default function SessionPage() {
               transition={{ type: "spring", stiffness: 320, damping: 26 }}
               className="group relative p-4 sm:p-5 rounded-2xl overflow-hidden flex flex-col items-center justify-center min-h-35"
               style={{
-                background: "linear-gradient(135deg, rgba(167, 139, 250, 0.05) 0%, rgba(255, 255, 255, 0.01) 100%)",
+                background: "linear-gradient(135deg, rgba(167, 139, 250, 0.05) 0%, color-mix(in srgb, var(--color-text) 1%, transparent) 100%)",
                 border: "1px solid rgba(167, 139, 250, 0.12)",
                 backdropFilter: "blur(20px)",
                 WebkitBackdropFilter: "blur(20px)",
@@ -2364,7 +2364,7 @@ export default function SessionPage() {
                     fontSize: "clamp(34px, 4.5vw, 52px)",
                     fontWeight: 200,
                     letterSpacing: "-0.04em",
-                    background: "linear-gradient(115deg, #fafafa 0%, #fafafa 30%, #d4d4d8 50%, #fafafa 70%, #fafafa 100%)",
+                    background: "linear-gradient(115deg, var(--color-text) 0%, var(--color-text) 30%, var(--color-text-silver) 50%, var(--color-text) 70%, var(--color-text) 100%)",
                     backgroundSize: "200% 100%",
                     WebkitBackgroundClip: "text",
                     WebkitTextFillColor: "transparent",
@@ -2416,7 +2416,7 @@ export default function SessionPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
             style={{
-              background: "linear-gradient(135deg, rgba(52, 211, 153, 0.08) 0%, rgba(255, 255, 255, 0.01) 100%)",
+              background: "linear-gradient(135deg, rgba(52, 211, 153, 0.08) 0%, color-mix(in srgb, var(--color-text) 1%, transparent) 100%)",
               border: "1px solid rgba(52, 211, 153, 0.32)",
               boxShadow: "0 18px 40px -20px rgba(52, 211, 153, 0.4)",
             }}
@@ -2427,12 +2427,12 @@ export default function SessionPage() {
               <div className="flex items-center gap-3">
                 <span className="relative inline-flex w-8 h-8 items-center justify-center rounded-full"
                   style={{ background: "rgba(52, 211, 153, 0.15)", border: "1px solid rgba(52, 211, 153, 0.3)" }}>
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ color: "#34d399" }}>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ color: "var(--color-positive)" }}>
                     <polyline points="20 6 9 17 4 12" />
                   </svg>
                 </span>
                 <div>
-                  <p className="text-sm font-semibold m-0" style={{ color: "#34d399" }}>Analyse prête</p>
+                  <p className="text-sm font-semibold m-0" style={{ color: "var(--color-positive)" }}>Analyse prête</p>
                   <p className="text-xs m-0 mt-1" style={{ color: "var(--color-text-muted)" }}>
                     {segments.length > 0 ? `${segments.length} segments analysés.` : "Écran analysé."} Session toujours active — stoppe quand tu es prêt.
                   </p>

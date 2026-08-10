@@ -38,21 +38,21 @@ export default function LanguageSelector() {
         onClick={() => setOpen(!open)}
         className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs border-none cursor-pointer"
         style={{
-          background: open ? "rgba(255, 255, 255, 0.06)" : "rgba(255, 255, 255, 0.025)",
-          border: `1px solid rgba(255, 255, 255, ${open ? 0.18 : 0.08})`,
+          background: open ? "color-mix(in srgb, var(--color-text) 6%, transparent)" : "color-mix(in srgb, var(--color-text) 2.5%, transparent)",
+          border: `1px solid color-mix(in srgb, var(--color-text) ${open ? 18 : 8}%, transparent)`,
           color: "var(--color-text-silver)",
           transition: "background 0.25s ease, border-color 0.25s ease, color 0.25s ease",
         }}
         onMouseEnter={(e) => {
           if (open) return;
-          e.currentTarget.style.background = "rgba(255, 255, 255, 0.06)";
-          e.currentTarget.style.borderColor = "rgba(255, 255, 255, 0.18)";
+          e.currentTarget.style.background = "color-mix(in srgb, var(--color-text) 6%, transparent)";
+          e.currentTarget.style.borderColor = "color-mix(in srgb, var(--color-text) 18%, transparent)";
           e.currentTarget.style.color = "var(--color-text)";
         }}
         onMouseLeave={(e) => {
           if (open) return;
-          e.currentTarget.style.background = "rgba(255, 255, 255, 0.025)";
-          e.currentTarget.style.borderColor = "rgba(255, 255, 255, 0.08)";
+          e.currentTarget.style.background = "color-mix(in srgb, var(--color-text) 2.5%, transparent)";
+          e.currentTarget.style.borderColor = "color-mix(in srgb, var(--color-text) 8%, transparent)";
           e.currentTarget.style.color = "var(--color-text-silver)";
         }}
         aria-label="Change language"
@@ -85,12 +85,12 @@ export default function LanguageSelector() {
           className="absolute right-0 top-full mt-2 py-1.5 rounded-2xl z-50 min-w-42.5 overflow-hidden"
           style={{
             background:
-              "linear-gradient(135deg, rgba(20, 20, 24, 0.96) 0%, rgba(15, 15, 18, 0.96) 100%)",
+              "linear-gradient(135deg, color-mix(in srgb, var(--color-surface-2) 96%, transparent) 0%, color-mix(in srgb, var(--color-surface) 96%, transparent) 100%)",
             backdropFilter: "blur(20px) saturate(160%)",
             WebkitBackdropFilter: "blur(20px) saturate(160%)",
-            border: "1px solid rgba(255, 255, 255, 0.08)",
+            border: "1px solid color-mix(in srgb, var(--color-text) 8%, transparent)",
             boxShadow:
-              "0 24px 60px -20px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.04)",
+              "0 24px 60px -20px rgba(0, 0, 0, 0.7), inset 0 1px 0 color-mix(in srgb, var(--color-text) 4%, transparent)",
           }}
         >
           {SUPPORTED_LANGUAGES.map((lang) => {
@@ -101,14 +101,14 @@ export default function LanguageSelector() {
                 onClick={() => select(lang.code)}
                 className="flex items-center gap-2.5 w-full px-3.5 py-2 text-left text-sm border-none cursor-pointer"
                 style={{
-                  background: active ? "rgba(255, 255, 255, 0.06)" : "transparent",
+                  background: active ? "color-mix(in srgb, var(--color-text) 6%, transparent)" : "transparent",
                   color: active ? "var(--color-text)" : "var(--color-text-silver)",
                   fontWeight: active ? 600 : 400,
                   transition: "background 0.2s ease, color 0.2s ease",
                 }}
                 onMouseEnter={(e) => {
                   if (active) return;
-                  e.currentTarget.style.background = "rgba(255, 255, 255, 0.04)";
+                  e.currentTarget.style.background = "color-mix(in srgb, var(--color-text) 4%, transparent)";
                   e.currentTarget.style.color = "var(--color-text)";
                 }}
                 onMouseLeave={(e) => {
@@ -126,7 +126,7 @@ export default function LanguageSelector() {
                     height="13"
                     viewBox="0 0 24 24"
                     fill="none"
-                    stroke="#34d399"
+                    stroke="var(--color-positive)"
                     strokeWidth="2.5"
                     strokeLinecap="round"
                     strokeLinejoin="round"

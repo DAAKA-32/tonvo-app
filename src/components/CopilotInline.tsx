@@ -114,17 +114,17 @@ export default function CopilotInline({
           className="copilot-inline__question"
           style={{
             background: detectedQuestion.urgency === "high"
-              ? "rgba(248,113,113,0.08)"
-              : "rgba(251,191,36,0.06)",
+              ? "color-mix(in srgb, var(--color-negative) 8%, transparent)"
+              : "color-mix(in srgb, var(--color-neutral) 6%, transparent)",
             borderColor: detectedQuestion.urgency === "high"
-              ? "rgba(248,113,113,0.25)"
-              : "rgba(251,191,36,0.2)",
+              ? "color-mix(in srgb, var(--color-negative) 25%, transparent)"
+              : "color-mix(in srgb, var(--color-neutral) 20%, transparent)",
           }}
         >
           <div className="copilot-inline__question-header">
             <span
               className="copilot-inline__question-speaker"
-              style={{ color: detectedQuestion.urgency === "high" ? "#f87171" : "#fbbf24" }}
+              style={{ color: detectedQuestion.urgency === "high" ? "var(--color-negative)" : "var(--color-neutral)" }}
             >
               {detectedQuestion.speaker}
             </span>
@@ -172,7 +172,7 @@ export default function CopilotInline({
       {suggestedResponses.length > 0 ? (
         <div className="copilot-inline__responses">
           <div className="copilot-inline__responses-header">
-            <span className="copilot-inline__dot" style={{ background: "#34d399" }} />
+            <span className="copilot-inline__dot" style={{ background: "var(--color-positive)" }} />
             {l.sayThis}
           </div>
           {suggestedResponses.map((r, i) => (
@@ -209,7 +209,7 @@ export default function CopilotInline({
       {/* Quick Tip */}
       {suggestion && (
         <div className="copilot-inline__tip">
-          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#34d399" strokeWidth="2.5">
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="var(--color-positive)" strokeWidth="2.5">
             <path d="M12 2L2 7l10 5 10-5-10-5z" />
             <path d="M2 17l10 5 10-5" />
             <path d="M2 12l10 5 10-5" />

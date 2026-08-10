@@ -43,22 +43,22 @@ function useGreeting() {
    amber (not aggressive orange), soft coral (not alarm red). */
 const TONE_PALETTE = {
   positive: {
-    color: "#34d399",
-    soft: "rgba(110, 231, 183, 0.85)",
+    color: "var(--color-positive)",
+    soft: "color-mix(in srgb, var(--color-positive) 85%, transparent)",
     rgba: "52, 211, 153",
-    glow: "rgba(52, 211, 153, 0.45)",
+    glow: "color-mix(in srgb, var(--color-positive) 45%, transparent)",
   },
   neutral: {
-    color: "#fbbf24",
-    soft: "rgba(252, 211, 77, 0.9)",
+    color: "var(--color-neutral)",
+    soft: "color-mix(in srgb, var(--color-neutral) 90%, transparent)",
     rgba: "251, 191, 36",
-    glow: "rgba(251, 191, 36, 0.45)",
+    glow: "color-mix(in srgb, var(--color-neutral) 45%, transparent)",
   },
   negative: {
-    color: "#fb7185",
-    soft: "rgba(252, 165, 165, 0.9)",
+    color: "var(--color-negative)",
+    soft: "color-mix(in srgb, var(--color-negative) 90%, transparent)",
     rgba: "251, 113, 133",
-    glow: "rgba(251, 113, 133, 0.45)",
+    glow: "color-mix(in srgb, var(--color-negative) 45%, transparent)",
   },
 } as const;
 
@@ -118,7 +118,7 @@ function ToneWheel({
             cy={size / 2}
             r={radius}
             fill="none"
-            stroke="rgba(255, 255, 255, 0.04)"
+            stroke="color-mix(in srgb, var(--color-text) 4%, transparent)"
             strokeWidth={stroke}
           />
           {!empty && !loading && (
@@ -318,7 +318,7 @@ function Vital({
       transition={SPRING_HOVER}
       className="group relative p-4 sm:p-5 rounded-2xl overflow-hidden"
       style={{
-        background: `linear-gradient(135deg, rgba(${accentRgba}, 0.05) 0%, rgba(255, 255, 255, 0.01) 100%)`,
+        background: `linear-gradient(135deg, rgba(${accentRgba}, 0.05) 0%, color-mix(in srgb, var(--color-text) 1%, transparent) 100%)`,
         border: `1px solid rgba(${accentRgba}, 0.12)`,
         backdropFilter: "blur(20px)",
         WebkitBackdropFilter: "blur(20px)",
@@ -339,8 +339,7 @@ function Vital({
         className="absolute inset-0 opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity duration-500"
         style={{
           background:
-            "linear-gradient(115deg, transparent 30%, rgba(255, 255, 255, 0.05) 50%, transparent 70%)",
-          mixBlendMode: "screen",
+            "linear-gradient(115deg, transparent 30%, color-mix(in srgb, var(--color-text) 5%, transparent) 50%, transparent 70%)",
         }}
       />
       <div className="relative">
@@ -381,7 +380,7 @@ function Vital({
             letterSpacing: "-0.04em",
             backgroundImage: tonePalette
               ? `linear-gradient(180deg, ${tonePalette.color} 0%, ${tonePalette.soft} 100%)`
-              : "linear-gradient(115deg, #fafafa 0%, #fafafa 30%, #d4d4d8 50%, #fafafa 70%, #fafafa 100%)",
+              : "linear-gradient(115deg, var(--color-text) 0%, var(--color-text) 30%, var(--color-text-silver) 50%, var(--color-text) 70%, var(--color-text) 100%)",
             backgroundSize: tonePalette ? undefined : "200% 100%",
             WebkitBackgroundClip: "text",
             WebkitTextFillColor: "transparent",
@@ -404,7 +403,7 @@ function SectionLabel({ children, action }: { children: React.ReactNode; action?
       <span className="text-[10px] font-semibold uppercase tracking-[0.22em]" style={{ color: "var(--color-text-muted)" }}>
         {children}
       </span>
-      <span aria-hidden className="flex-1 h-px" style={{ background: "linear-gradient(90deg, rgba(255, 255, 255, 0.08), transparent 80%)" }} />
+      <span aria-hidden className="flex-1 h-px" style={{ background: "linear-gradient(90deg, color-mix(in srgb, var(--color-text) 8%, transparent), transparent 80%)" }} />
       {action}
     </div>
   );
@@ -435,10 +434,10 @@ function BroadcastButton({
         className="no-underline group relative flex items-center gap-4 sm:gap-5 px-5 py-4 sm:pl-6 sm:pr-8 sm:py-5 rounded-[28px] overflow-hidden w-full"
         style={{
           background:
-            "linear-gradient(135deg, rgba(255, 255, 255, 0.10) 0%, rgba(255, 255, 255, 0.02) 100%)",
-          border: "1px solid rgba(255, 255, 255, 0.12)",
+            "linear-gradient(135deg, color-mix(in srgb, var(--color-text) 10%, transparent) 0%, color-mix(in srgb, var(--color-text) 2%, transparent) 100%)",
+          border: "1px solid color-mix(in srgb, var(--color-text) 12%, transparent)",
           boxShadow:
-            "0 30px 70px -25px rgba(255, 255, 255, 0.10), 0 0 0 1px rgba(255, 255, 255, 0.02), inset 0 1px 0 rgba(255, 255, 255, 0.10)",
+            "0 30px 70px -25px color-mix(in srgb, var(--color-text) 10%, transparent), 0 0 0 1px color-mix(in srgb, var(--color-text) 2%, transparent), inset 0 1px 0 color-mix(in srgb, var(--color-text) 10%, transparent)",
           color: "var(--color-text)",
           minWidth: 280,
           minHeight: 76,
@@ -457,8 +456,7 @@ function BroadcastButton({
           style={{
             width: "60%",
             background:
-              "linear-gradient(105deg, transparent 30%, rgba(255, 255, 255, 0.10) 50%, transparent 70%)",
-            mixBlendMode: "screen",
+              "linear-gradient(105deg, transparent 30%, color-mix(in srgb, var(--color-text) 10%, transparent) 50%, transparent 70%)",
           }}
         />
 
@@ -472,7 +470,7 @@ function BroadcastButton({
               style={{
                 width: 56,
                 height: 56,
-                border: "1px solid rgba(255, 255, 255, 0.45)",
+                border: "1px solid color-mix(in srgb, var(--color-text) 45%, transparent)",
               }}
               animate={
                 reduce
@@ -494,7 +492,7 @@ function BroadcastButton({
               width: 28,
               height: 28,
               background:
-                "radial-gradient(circle, rgba(255, 255, 255, 0.35) 0%, rgba(255, 255, 255, 0.08) 60%, transparent 100%)",
+                "radial-gradient(circle, color-mix(in srgb, var(--color-text) 35%, transparent) 0%, color-mix(in srgb, var(--color-text) 8%, transparent) 60%, transparent 100%)",
               filter: "blur(2px)",
             }}
           />
@@ -505,9 +503,9 @@ function BroadcastButton({
             style={{
               width: 12,
               height: 12,
-              background: "linear-gradient(180deg, #fafafa 0%, #d4d4d8 100%)",
+              background: "linear-gradient(180deg, var(--color-text) 0%, var(--color-text-silver) 100%)",
               boxShadow:
-                "0 0 14px rgba(255, 255, 255, 0.6), inset 0 -1px 2px rgba(0, 0, 0, 0.2)",
+                "0 0 14px color-mix(in srgb, var(--color-text) 60%, transparent), inset 0 -1px 2px rgba(0, 0, 0, 0.2)",
             }}
           />
         </span>
@@ -520,12 +518,12 @@ function BroadcastButton({
           >
             <span
               className="relative inline-flex w-1.5 h-1.5 rounded-full"
-              style={{ backgroundColor: "#86efac" }}
+              style={{ backgroundColor: "var(--color-positive)" }}
             >
               <span
                 className="absolute inset-0 rounded-full"
                 style={{
-                  backgroundColor: "#86efac",
+                  backgroundColor: "var(--color-positive)",
                   opacity: 0.5,
                   animation: "pulseRing 1.8s ease-in-out infinite",
                 }}
@@ -537,7 +535,7 @@ function BroadcastButton({
             className="text-base sm:text-lg font-medium leading-tight"
             style={{
               backgroundImage:
-                "linear-gradient(115deg, #fafafa 0%, #d4d4d8 50%, #fafafa 100%)",
+                "linear-gradient(115deg, var(--color-text) 0%, var(--color-text-silver) 50%, var(--color-text) 100%)",
               WebkitBackgroundClip: "text",
               WebkitTextFillColor: "transparent",
               backgroundClip: "text",
@@ -593,8 +591,8 @@ function GhostButton({
         href={href}
         className="no-underline group relative flex items-center gap-3 sm:gap-4 px-5 py-4 rounded-[28px] overflow-hidden w-full"
         style={{
-          background: "rgba(255, 255, 255, 0.015)",
-          border: "1px solid rgba(255, 255, 255, 0.06)",
+          background: "color-mix(in srgb, var(--color-text) 1.5%, transparent)",
+          border: "1px solid color-mix(in srgb, var(--color-text) 6%, transparent)",
           color: "var(--color-text)",
           minHeight: 76,
         }}
@@ -602,8 +600,8 @@ function GhostButton({
         <span
           className="relative flex items-center justify-center w-11 h-11 rounded-2xl shrink-0"
           style={{
-            background: "rgba(255, 255, 255, 0.04)",
-            border: "1px solid rgba(255, 255, 255, 0.04)",
+            background: "color-mix(in srgb, var(--color-text) 4%, transparent)",
+            border: "1px solid color-mix(in srgb, var(--color-text) 4%, transparent)",
             color: "var(--color-text-silver)",
           }}
         >
@@ -713,7 +711,7 @@ export default function DashboardPage() {
             width: 560,
             height: 560,
             borderRadius: "50%",
-            background: "radial-gradient(circle, rgba(255, 255, 255, 0.06), transparent 65%)",
+            background: "radial-gradient(circle, color-mix(in srgb, var(--color-text) 6%, transparent), transparent 65%)",
             filter: "blur(70px)",
             pointerEvents: "none",
             zIndex: 0,
@@ -730,7 +728,7 @@ export default function DashboardPage() {
             width: 380,
             height: 380,
             borderRadius: "50%",
-            background: "radial-gradient(circle, rgba(255, 255, 255, 0.04), transparent 65%)",
+            background: "radial-gradient(circle, color-mix(in srgb, var(--color-text) 4%, transparent), transparent 65%)",
             filter: "blur(70px)",
             pointerEvents: "none",
             zIndex: 0,
@@ -750,9 +748,9 @@ export default function DashboardPage() {
             <span className="relative inline-flex w-1.5 h-1.5">
               <span
                 className="absolute inset-0 rounded-full"
-                style={{ backgroundColor: "rgba(255, 255, 255, 0.7)", opacity: 0.4, animation: "pulseRing 2.4s ease-in-out infinite" }}
+                style={{ backgroundColor: "color-mix(in srgb, var(--color-text) 70%, transparent)", opacity: 0.4, animation: "pulseRing 2.4s ease-in-out infinite" }}
               />
-              <span className="relative w-1.5 h-1.5 rounded-full" style={{ backgroundColor: "rgba(255, 255, 255, 0.85)" }} />
+              <span className="relative w-1.5 h-1.5 rounded-full" style={{ backgroundColor: "color-mix(in srgb, var(--color-text) 85%, transparent)" }} />
             </span>
             <span
               className="text-[10px] font-semibold uppercase tracking-[0.22em]"
@@ -803,7 +801,7 @@ export default function DashboardPage() {
               style={{
                 display: "inline-block",
                 backgroundImage:
-                  "linear-gradient(115deg, #fafafa 0%, #fafafa 28%, #c4b5fd 45%, #f0abfc 55%, #fafafa 72%, #fafafa 100%)",
+                  "linear-gradient(115deg, var(--color-text) 0%, var(--color-text) 28%, var(--shimmer-accent-1) 45%, var(--shimmer-accent-2) 55%, var(--color-text) 72%, var(--color-text) 100%)",
                 backgroundSize: "240% 100%",
                 WebkitBackgroundClip: "text",
                 WebkitTextFillColor: "transparent",
@@ -917,10 +915,10 @@ export default function DashboardPage() {
               }
               accentColor={
                 empty
-                  ? "#a1a1aa"
+                  ? "var(--color-text-silver)"
                   : dominantTone === "positive"
-                    ? "#34d399"
-                    : "#fb7185"
+                    ? "var(--color-positive)"
+                    : "var(--color-negative)"
               }
               icon={
                 <>
@@ -980,7 +978,7 @@ export default function DashboardPage() {
             {loadingData ? (
               <div className="space-y-2">
                 {[1, 2, 3].map((i) => (
-                  <div key={i} className="h-16 rounded-2xl shimmer" style={{ backgroundColor: "rgba(255, 255, 255, 0.02)" }} />
+                  <div key={i} className="h-16 rounded-2xl shimmer" style={{ backgroundColor: "color-mix(in srgb, var(--color-text) 2%, transparent)" }} />
                 ))}
               </div>
             ) : conversations.length === 0 ? (
@@ -1003,8 +1001,11 @@ export default function DashboardPage() {
                     : conv.overall_tone === "hesitant"
                       ? TONE_PALETTE.neutral
                       : null;
-                  const railColor = tonePalette?.color ?? "rgba(255, 255, 255, 0.15)";
-                  const railRgba = tonePalette?.rgba ?? "255, 255, 255";
+                  const railColor = tonePalette?.color ?? "color-mix(in srgb, var(--color-text) 15%, transparent)";
+                  const railEnd = tonePalette ? `rgba(${tonePalette.rgba}, 0.4)` : "transparent";
+                  const railShadow = tonePalette
+                    ? `rgba(${tonePalette.rgba}, 0.3)`
+                    : "color-mix(in srgb, var(--color-text) 12%, transparent)";
                   const created = new Date(conv.created_at);
                   return (
                     <motion.li
@@ -1019,8 +1020,8 @@ export default function DashboardPage() {
                         href={`/summary/${conv.id}`}
                         className="no-underline flex items-stretch gap-3 sm:gap-4 p-3 sm:p-4 rounded-2xl group relative overflow-hidden"
                         style={{
-                          background: "rgba(255, 255, 255, 0.02)",
-                          border: "1px solid rgba(255, 255, 255, 0.04)",
+                          background: "color-mix(in srgb, var(--color-text) 2%, transparent)",
+                          border: "1px solid color-mix(in srgb, var(--color-text) 4%, transparent)",
                           transition: "background 0.3s ease, border-color 0.3s ease",
                         }}
                       >
@@ -1029,8 +1030,8 @@ export default function DashboardPage() {
                           aria-hidden
                           className="shrink-0 self-stretch w-0.75 rounded-full"
                           style={{
-                            background: `linear-gradient(180deg, ${railColor}, rgba(${railRgba}, 0.4))`,
-                            boxShadow: `0 0 14px rgba(${railRgba}, 0.3)`,
+                            background: `linear-gradient(180deg, ${railColor}, ${railEnd})`,
+                            boxShadow: `0 0 14px ${railShadow}`,
                           }}
                         />
                         <div
@@ -1104,22 +1105,22 @@ export default function DashboardPage() {
                   whileHover={reduce ? undefined : { y: -2 }}
                   className="group flex items-start gap-4 p-5 rounded-2xl relative overflow-hidden"
                   style={{
-                    background: "rgba(255, 255, 255, 0.02)",
-                    border: "1px solid rgba(255, 255, 255, 0.04)",
+                    background: "color-mix(in srgb, var(--color-text) 2%, transparent)",
+                    border: "1px solid color-mix(in srgb, var(--color-text) 4%, transparent)",
                   }}
                 >
                   <span
                     aria-hidden
                     className="absolute -bottom-12 -right-12 w-32 h-32 rounded-full opacity-0 group-hover:opacity-50 transition-opacity duration-500"
                     style={{
-                      background: "radial-gradient(circle, rgba(255, 255, 255, 0.12), transparent 70%)",
+                      background: "radial-gradient(circle, color-mix(in srgb, var(--color-text) 12%, transparent), transparent 70%)",
                       filter: "blur(24px)",
                     }}
                   />
                   <span
                     className="text-3xl font-extralight tabular-nums shrink-0 leading-none -mt-1 relative"
                     style={{
-                      backgroundImage: "linear-gradient(180deg, #fafafa 0%, #71717a 100%)",
+                      backgroundImage: "linear-gradient(180deg, var(--color-text) 0%, var(--color-text-muted) 100%)",
                       WebkitBackgroundClip: "text",
                       WebkitTextFillColor: "transparent",
                       backgroundClip: "text",
@@ -1149,10 +1150,10 @@ export default function DashboardPage() {
           transition={{ duration: 0.6, ease: EASE, delay: 0.9 }}
           className="flex items-center gap-2 p-2 rounded-full pointer-events-auto"
           style={{
-            background: "rgba(15, 15, 18, 0.92)",
+            background: "color-mix(in srgb, var(--color-surface) 92%, transparent)",
             backdropFilter: "blur(24px) saturate(160%)",
             WebkitBackdropFilter: "blur(24px) saturate(160%)",
-            border: "1px solid rgba(255, 255, 255, 0.06)",
+            border: "1px solid color-mix(in srgb, var(--color-text) 6%, transparent)",
             boxShadow: "0 30px 70px -25px rgba(0, 0, 0, 0.7)",
           }}
         >
@@ -1160,17 +1161,17 @@ export default function DashboardPage() {
             href="/session"
             className="flex-1 no-underline flex items-center justify-center gap-2.5 px-4 py-3 rounded-full text-sm font-semibold relative overflow-hidden"
             style={{
-              background: "linear-gradient(135deg, #fafafa, #d4d4d8)",
-              color: "#0a0a0a",
-              boxShadow: "0 8px 24px -10px rgba(255, 255, 255, 0.4)",
+              background: "linear-gradient(135deg, var(--color-text), var(--color-text-silver))",
+              color: "var(--color-bg)",
+              boxShadow: "0 8px 24px -10px color-mix(in srgb, var(--color-text) 40%, transparent)",
             }}
           >
             <span className="relative inline-flex w-1.5 h-1.5">
               <span
                 className="absolute inset-0 rounded-full"
-                style={{ backgroundColor: "#0a0a0a", opacity: 0.4, animation: "pulseRing 2s ease-in-out infinite" }}
+                style={{ backgroundColor: "var(--color-bg)", opacity: 0.4, animation: "pulseRing 2s ease-in-out infinite" }}
               />
-              <span className="relative w-1.5 h-1.5 rounded-full bg-black" />
+              <span className="relative w-1.5 h-1.5 rounded-full" style={{ backgroundColor: "var(--color-bg)" }} />
             </span>
             {t("dashboard.startSession")}
           </Link>
@@ -1178,8 +1179,8 @@ export default function DashboardPage() {
             href="/analyze-text"
             className="no-underline flex items-center justify-center w-12 h-12 rounded-full shrink-0"
             style={{
-              background: "rgba(255, 255, 255, 0.04)",
-              border: "1px solid rgba(255, 255, 255, 0.06)",
+              background: "color-mix(in srgb, var(--color-text) 4%, transparent)",
+              border: "1px solid color-mix(in srgb, var(--color-text) 6%, transparent)",
               color: "var(--color-text-silver)",
             }}
             aria-label={t("dashboard.analyzeText")}
@@ -1193,8 +1194,8 @@ export default function DashboardPage() {
             href="/history"
             className="no-underline flex items-center justify-center w-12 h-12 rounded-full shrink-0"
             style={{
-              background: "rgba(255, 255, 255, 0.04)",
-              border: "1px solid rgba(255, 255, 255, 0.06)",
+              background: "color-mix(in srgb, var(--color-text) 4%, transparent)",
+              border: "1px solid color-mix(in srgb, var(--color-text) 6%, transparent)",
               color: "var(--color-text-silver)",
             }}
             aria-label={t("dashboard.recentSessions")}

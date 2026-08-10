@@ -50,7 +50,7 @@ function ScoreRing({ value, size = 144, reduce }: { value: number; size?: number
           cy={size / 2}
           r={radius}
           fill="none"
-          stroke="rgba(255, 255, 255, 0.05)"
+          stroke="color-mix(in srgb, var(--color-text) 5%, transparent)"
           strokeWidth={stroke}
         />
         <motion.circle
@@ -113,7 +113,7 @@ function ScoreBar({ label, value, delay = 0, reduce }: { label: string; value: n
       </span>
       <div
         className="flex-1 relative rounded-full overflow-hidden"
-        style={{ height: 4, background: "rgba(255, 255, 255, 0.04)" }}
+        style={{ height: 4, background: "color-mix(in srgb, var(--color-text) 4%, transparent)" }}
       >
         <motion.span
           className="absolute inset-y-0 left-0 rounded-full"
@@ -140,9 +140,9 @@ function ScoreBar({ label, value, delay = 0, reduce }: { label: string; value: n
 /*  Helpers                                                            */
 /* ------------------------------------------------------------------ */
 function getScoreColor(score: number) {
-  if (score >= 70) return "#34d399";
+  if (score >= 70) return "var(--color-positive)";
   if (score >= 40) return "#fb923c";
-  return "#ef4444";
+  return "var(--color-negative)";
 }
 
 function getScoreRgba(score: number) {
@@ -174,11 +174,11 @@ function formatDate(dateStr: string) {
 /*  Classification config — vibrant green / orange / red               */
 /* ------------------------------------------------------------------ */
 const CLASSIFICATION_COLORS: Record<ConversationClassification, { color: string; bg: string; border: string }> = {
-  very_positive: { color: "#34d399", bg: "rgba(52, 211, 153, 0.12)", border: "rgba(52, 211, 153, 0.28)" },
-  positive:      { color: "#34d399", bg: "rgba(52, 211, 153, 0.08)", border: "rgba(52, 211, 153, 0.22)" },
+  very_positive: { color: "var(--color-positive)", bg: "rgba(52, 211, 153, 0.12)", border: "rgba(52, 211, 153, 0.28)" },
+  positive:      { color: "var(--color-positive)", bg: "rgba(52, 211, 153, 0.08)", border: "rgba(52, 211, 153, 0.22)" },
   neutral:       { color: "#fb923c", bg: "rgba(251, 146, 60, 0.08)", border: "rgba(251, 146, 60, 0.22)" },
   awkward:       { color: "#fb923c", bg: "rgba(251, 146, 60, 0.12)", border: "rgba(251, 146, 60, 0.28)" },
-  negative:      { color: "#ef4444", bg: "rgba(239, 68, 68, 0.12)", border: "rgba(239, 68, 68, 0.28)" },
+  negative:      { color: "var(--color-negative)", bg: "rgba(239, 68, 68, 0.12)", border: "rgba(239, 68, 68, 0.28)" },
 };
 
 /* ================================================================== */
@@ -310,7 +310,7 @@ export default function SummaryPage() {
             width: 480,
             height: 480,
             borderRadius: "50%",
-            background: "radial-gradient(circle, rgba(255, 255, 255, 0.05), transparent 65%)",
+            background: "radial-gradient(circle, color-mix(in srgb, var(--color-text) 5%, transparent), transparent 65%)",
             filter: "blur(70px)",
             pointerEvents: "none",
             zIndex: 0,
@@ -323,7 +323,7 @@ export default function SummaryPage() {
           {loadingData ? (
             <div className="space-y-3">
               {[1, 2, 3].map((i) => (
-                <div key={i} className="h-24 rounded-2xl shimmer" style={{ backgroundColor: "rgba(255, 255, 255, 0.02)" }} />
+                <div key={i} className="h-24 rounded-2xl shimmer" style={{ backgroundColor: "color-mix(in srgb, var(--color-text) 2%, transparent)" }} />
               ))}
             </div>
           ) : !conversation ? (
@@ -333,8 +333,8 @@ export default function SummaryPage() {
                 href="/dashboard"
                 className="inline-flex items-center gap-1.5 text-sm no-underline px-4 py-2 rounded-full"
                 style={{
-                  background: "rgba(255, 255, 255, 0.04)",
-                  border: "1px solid rgba(255, 255, 255, 0.08)",
+                  background: "color-mix(in srgb, var(--color-text) 4%, transparent)",
+                  border: "1px solid color-mix(in srgb, var(--color-text) 8%, transparent)",
                   color: "var(--color-text)",
                 }}
               >
@@ -375,14 +375,14 @@ export default function SummaryPage() {
                     <span
                       className="absolute inset-0 rounded-full"
                       style={{
-                        backgroundColor: "rgba(255, 255, 255, 0.85)",
+                        backgroundColor: "color-mix(in srgb, var(--color-text) 85%, transparent)",
                         opacity: 0.5,
                         animation: "pulseRing 2.4s ease-in-out infinite",
                       }}
                     />
                     <span
                       className="relative w-1.5 h-1.5 rounded-full"
-                      style={{ backgroundColor: "rgba(255, 255, 255, 0.9)" }}
+                      style={{ backgroundColor: "color-mix(in srgb, var(--color-text) 90%, transparent)" }}
                     />
                   </span>
                   <span
@@ -407,7 +407,7 @@ export default function SummaryPage() {
                     letterSpacing: "-0.035em",
                     lineHeight: 1.08,
                     background:
-                      "linear-gradient(115deg, #fafafa 0%, #fafafa 30%, #d4d4d8 50%, #fafafa 70%, #fafafa 100%)",
+                      "linear-gradient(115deg, var(--color-text) 0%, var(--color-text) 30%, var(--color-text-silver) 50%, var(--color-text) 70%, var(--color-text) 100%)",
                     backgroundSize: "240% 100%",
                     WebkitBackgroundClip: "text",
                     WebkitTextFillColor: "transparent",
@@ -435,8 +435,8 @@ export default function SummaryPage() {
                     <span
                       className="inline-flex items-center gap-1.5 text-[10px] uppercase tracking-[0.18em] font-semibold px-2.5 py-1 rounded-full"
                       style={{
-                        background: "rgba(255, 255, 255, 0.04)",
-                        border: "1px solid rgba(255, 255, 255, 0.06)",
+                        background: "color-mix(in srgb, var(--color-text) 4%, transparent)",
+                        border: "1px solid color-mix(in srgb, var(--color-text) 6%, transparent)",
                         color: "var(--color-text-silver)",
                       }}
                     >
@@ -457,8 +457,8 @@ export default function SummaryPage() {
                 className="relative overflow-hidden rounded-2xl p-5 sm:p-6 mb-4"
                 style={{
                   background:
-                    "linear-gradient(135deg, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0.01) 100%)",
-                  border: "1px solid rgba(255, 255, 255, 0.06)",
+                    "linear-gradient(135deg, color-mix(in srgb, var(--color-text) 4%, transparent) 0%, color-mix(in srgb, var(--color-text) 1%, transparent) 100%)",
+                  border: "1px solid color-mix(in srgb, var(--color-text) 6%, transparent)",
                   backdropFilter: "blur(20px)",
                   WebkitBackdropFilter: "blur(20px)",
                 }}
@@ -469,7 +469,7 @@ export default function SummaryPage() {
                   style={{
                     background: score
                       ? `radial-gradient(circle, rgba(${getScoreRgba(score.overall)}, 0.20), transparent 70%)`
-                      : "radial-gradient(circle, rgba(255, 255, 255, 0.10), transparent 70%)",
+                      : "radial-gradient(circle, color-mix(in srgb, var(--color-text) 10%, transparent), transparent 70%)",
                     filter: "blur(28px)",
                     opacity: 0.6,
                   }}
@@ -496,7 +496,7 @@ export default function SummaryPage() {
 
                 {/* Tone distribution ribbon */}
                 {segments.length > 0 && (
-                  <div className="relative mt-6 pt-5" style={{ borderTop: "1px solid rgba(255, 255, 255, 0.05)" }}>
+                  <div className="relative mt-6 pt-5" style={{ borderTop: "1px solid color-mix(in srgb, var(--color-text) 5%, transparent)" }}>
                     <div className="flex items-center gap-3 mb-3">
                       <span
                         className="text-[10px] uppercase tracking-[0.22em] font-semibold"
@@ -508,20 +508,20 @@ export default function SummaryPage() {
                         aria-hidden
                         className="flex-1 h-px"
                         style={{
-                          background: "linear-gradient(90deg, rgba(255, 255, 255, 0.06), transparent 80%)",
+                          background: "linear-gradient(90deg, color-mix(in srgb, var(--color-text) 6%, transparent), transparent 80%)",
                         }}
                       />
                     </div>
                     <div
                       className="relative rounded-full overflow-hidden flex"
-                      style={{ height: 6, background: "rgba(255, 255, 255, 0.04)" }}
+                      style={{ height: 6, background: "color-mix(in srgb, var(--color-text) 4%, transparent)" }}
                     >
                       {Object.entries(toneCount).map(([tone, count]) => {
                         const c =
                           tone === "positive"
-                            ? "#34d399"
+                            ? "var(--color-positive)"
                             : tone === "negative"
-                              ? "#ef4444"
+                              ? "var(--color-negative)"
                               : "#fb923c";
                         const rgba =
                           tone === "positive"
@@ -549,9 +549,9 @@ export default function SummaryPage() {
                       {Object.entries(toneCount).map(([tone, count]) => {
                         const c =
                           tone === "positive"
-                            ? "#34d399"
+                            ? "var(--color-positive)"
                             : tone === "negative"
-                              ? "#ef4444"
+                              ? "var(--color-negative)"
                               : "#fb923c";
                         return (
                           <div key={tone} className="flex items-center gap-1.5">
@@ -584,7 +584,7 @@ export default function SummaryPage() {
                   className="relative overflow-hidden rounded-2xl p-5 sm:p-6 mb-4"
                   style={{
                     background:
-                      "linear-gradient(135deg, rgba(167, 139, 250, 0.05) 0%, rgba(255, 255, 255, 0.01) 100%)",
+                      "linear-gradient(135deg, rgba(167, 139, 250, 0.05) 0%, color-mix(in srgb, var(--color-text) 1%, transparent) 100%)",
                     border: "1px solid rgba(167, 139, 250, 0.14)",
                     backdropFilter: "blur(20px)",
                     WebkitBackdropFilter: "blur(20px)",
@@ -604,7 +604,7 @@ export default function SummaryPage() {
                     <div className="flex items-center gap-2 mb-4">
                       <span
                         className="inline-flex w-1.5 h-1.5 rounded-full"
-                        style={{ backgroundColor: "#c4b5fd" }}
+                        style={{ backgroundColor: "var(--shimmer-accent-1)" }}
                       />
                       <span
                         className="text-[10px] font-semibold uppercase tracking-[0.22em]"
@@ -648,7 +648,7 @@ export default function SummaryPage() {
                               <span
                                 className="text-2xl font-extralight tabular-nums shrink-0 leading-none -mt-0.5"
                                 style={{
-                                  background: "linear-gradient(180deg, #c4b5fd 0%, rgba(167, 139, 250, 0.5) 100%)",
+                                  background: "linear-gradient(180deg, var(--shimmer-accent-1) 0%, rgba(167, 139, 250, 0.5) 100%)",
                                   WebkitBackgroundClip: "text",
                                   WebkitTextFillColor: "transparent",
                                   backgroundClip: "text",
@@ -674,7 +674,7 @@ export default function SummaryPage() {
                       <div
                         className="relative overflow-hidden rounded-2xl p-4 mt-1"
                         style={{
-                          background: "linear-gradient(135deg, rgba(52, 211, 153, 0.08) 0%, rgba(255, 255, 255, 0.01) 100%)",
+                          background: "linear-gradient(135deg, rgba(52, 211, 153, 0.08) 0%, color-mix(in srgb, var(--color-text) 1%, transparent) 100%)",
                           border: "1px solid rgba(52, 211, 153, 0.22)",
                         }}
                       >
@@ -700,7 +700,7 @@ export default function SummaryPage() {
                               height="13"
                               viewBox="0 0 24 24"
                               fill="none"
-                              stroke="#34d399"
+                              stroke="var(--color-positive)"
                               strokeWidth="2"
                             >
                               <path d="M12 2L2 7l10 5 10-5-10-5z" />
@@ -736,7 +736,7 @@ export default function SummaryPage() {
                           className="relative overflow-hidden rounded-2xl p-5"
                           style={{
                             background:
-                              "linear-gradient(135deg, rgba(52, 211, 153, 0.06) 0%, rgba(255, 255, 255, 0.01) 100%)",
+                              "linear-gradient(135deg, rgba(52, 211, 153, 0.06) 0%, color-mix(in srgb, var(--color-text) 1%, transparent) 100%)",
                             border: "1px solid rgba(52, 211, 153, 0.18)",
                             backdropFilter: "blur(20px)",
                             WebkitBackdropFilter: "blur(20px)",
@@ -753,10 +753,10 @@ export default function SummaryPage() {
                           />
                           <div className="relative">
                             <div className="flex items-center gap-2 mb-4">
-                              <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: "#34d399" }} />
+                              <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: "var(--color-positive)" }} />
                               <span
                                 className="text-[10px] font-semibold uppercase tracking-[0.22em]"
-                                style={{ color: "#34d399" }}
+                                style={{ color: "var(--color-positive)" }}
                               >
                                 {t("report.strengths")}
                               </span>
@@ -776,7 +776,7 @@ export default function SummaryPage() {
                                       height="10"
                                       viewBox="0 0 24 24"
                                       fill="none"
-                                      stroke="#34d399"
+                                      stroke="var(--color-positive)"
                                       strokeWidth="2.5"
                                     >
                                       <polyline points="20 6 9 17 4 12" />
@@ -799,7 +799,7 @@ export default function SummaryPage() {
                           className="relative overflow-hidden rounded-2xl p-5"
                           style={{
                             background:
-                              "linear-gradient(135deg, rgba(251, 146, 60, 0.06) 0%, rgba(255, 255, 255, 0.01) 100%)",
+                              "linear-gradient(135deg, rgba(251, 146, 60, 0.06) 0%, color-mix(in srgb, var(--color-text) 1%, transparent) 100%)",
                             border: "1px solid rgba(251, 146, 60, 0.20)",
                             backdropFilter: "blur(20px)",
                             WebkitBackdropFilter: "blur(20px)",
@@ -866,8 +866,8 @@ export default function SummaryPage() {
                       className="relative overflow-hidden rounded-2xl p-5"
                       style={{
                         background:
-                          "linear-gradient(135deg, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0.01) 100%)",
-                        border: "1px solid rgba(255, 255, 255, 0.06)",
+                          "linear-gradient(135deg, color-mix(in srgb, var(--color-text) 4%, transparent) 0%, color-mix(in srgb, var(--color-text) 1%, transparent) 100%)",
+                        border: "1px solid color-mix(in srgb, var(--color-text) 6%, transparent)",
                         backdropFilter: "blur(20px)",
                         WebkitBackdropFilter: "blur(20px)",
                       }}
@@ -876,7 +876,7 @@ export default function SummaryPage() {
                         aria-hidden
                         className="absolute -top-10 -right-10 w-32 h-32 rounded-full pointer-events-none"
                         style={{
-                          background: "radial-gradient(circle, rgba(255, 255, 255, 0.14), transparent 70%)",
+                          background: "radial-gradient(circle, color-mix(in srgb, var(--color-text) 14%, transparent), transparent 70%)",
                           filter: "blur(24px)",
                           opacity: 0.4,
                         }}
@@ -885,7 +885,7 @@ export default function SummaryPage() {
                         <div className="flex items-center gap-2 mb-4">
                           <span
                             className="w-1.5 h-1.5 rounded-full"
-                            style={{ backgroundColor: "rgba(255, 255, 255, 0.85)" }}
+                            style={{ backgroundColor: "color-mix(in srgb, var(--color-text) 85%, transparent)" }}
                           />
                           <span
                             className="text-[10px] font-semibold uppercase tracking-[0.22em]"
@@ -900,8 +900,8 @@ export default function SummaryPage() {
                               <span
                                 className="inline-flex items-center justify-center w-5 h-5 rounded-md shrink-0 mt-0.5 text-[10px] tabular-nums"
                                 style={{
-                                  background: "rgba(255, 255, 255, 0.05)",
-                                  border: "1px solid rgba(255, 255, 255, 0.08)",
+                                  background: "color-mix(in srgb, var(--color-text) 5%, transparent)",
+                                  border: "1px solid color-mix(in srgb, var(--color-text) 8%, transparent)",
                                   color: "var(--color-text-muted)",
                                 }}
                               >
@@ -929,8 +929,8 @@ export default function SummaryPage() {
                 onClick={() => setTranscriptOpen(!transcriptOpen)}
                 className="w-full text-left flex items-center justify-between cursor-pointer rounded-2xl px-5 py-4 mb-1"
                 style={{
-                  background: transcriptOpen ? "rgba(255, 255, 255, 0.04)" : "rgba(255, 255, 255, 0.02)",
-                  border: "1px solid rgba(255, 255, 255, 0.06)",
+                  background: transcriptOpen ? "color-mix(in srgb, var(--color-text) 4%, transparent)" : "color-mix(in srgb, var(--color-text) 2%, transparent)",
+                  border: "1px solid color-mix(in srgb, var(--color-text) 6%, transparent)",
                   color: "var(--color-text)",
                   transition: "background 0.2s ease",
                 }}
@@ -945,8 +945,8 @@ export default function SummaryPage() {
                   <span
                     className="text-[10px] tabular-nums px-2 py-0.5 rounded-full"
                     style={{
-                      background: "rgba(255, 255, 255, 0.04)",
-                      border: "1px solid rgba(255, 255, 255, 0.06)",
+                      background: "color-mix(in srgb, var(--color-text) 4%, transparent)",
+                      border: "1px solid color-mix(in srgb, var(--color-text) 6%, transparent)",
                       color: "var(--color-text-muted)",
                     }}
                   >
@@ -979,8 +979,8 @@ export default function SummaryPage() {
                   <div
                     className="rounded-2xl overflow-hidden"
                     style={{
-                      background: "rgba(255, 255, 255, 0.02)",
-                      border: "1px solid rgba(255, 255, 255, 0.05)",
+                      background: "color-mix(in srgb, var(--color-text) 2%, transparent)",
+                      border: "1px solid color-mix(in srgb, var(--color-text) 5%, transparent)",
                     }}
                   >
                     {segments.length === 0 ? (
@@ -997,7 +997,7 @@ export default function SummaryPage() {
                             className="p-4 flex items-start gap-3"
                             style={{
                               borderTop:
-                                idx === 0 ? "none" : "1px solid rgba(255, 255, 255, 0.04)",
+                                idx === 0 ? "none" : "1px solid color-mix(in srgb, var(--color-text) 4%, transparent)",
                             }}
                           >
                             <ToneIndicator tone={seg.tone} size="sm" showLabel={false} />

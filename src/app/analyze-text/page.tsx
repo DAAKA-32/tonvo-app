@@ -122,9 +122,9 @@ function IconArrowUp({ size = 14 }: { size?: number }) {
 /*  Score helpers — vibrant green / orange / red                       */
 /* ------------------------------------------------------------------ */
 function getScoreColor(score: number) {
-  if (score >= 70) return "#34d399";
+  if (score >= 70) return "var(--color-positive)";
   if (score >= 40) return "#fb923c";
-  return "#ef4444";
+  return "var(--color-negative)";
 }
 
 function getScoreRgba(score: number) {
@@ -134,18 +134,18 @@ function getScoreRgba(score: number) {
 }
 
 function getToneColor(tone: string) {
-  if (tone === "positive" || tone === "very_positive") return "#34d399";
-  if (tone === "negative") return "#ef4444";
+  if (tone === "positive" || tone === "very_positive") return "var(--color-positive)";
+  if (tone === "negative") return "var(--color-negative)";
   if (tone === "hesitant" || tone === "awkward") return "#fb923c";
   return "var(--color-text-muted)";
 }
 
 const CLASSIFICATION_STYLES: Record<string, { key: string; color: string; bg: string; border: string }> = {
-  very_positive: { key: "analyzePage.veryPositive", color: "#34d399", bg: "rgba(52, 211, 153, 0.14)", border: "rgba(52, 211, 153, 0.3)" },
-  positive:      { key: "analyzePage.positive",      color: "#34d399", bg: "rgba(52, 211, 153, 0.10)", border: "rgba(52, 211, 153, 0.24)" },
+  very_positive: { key: "analyzePage.veryPositive", color: "var(--color-positive)", bg: "rgba(52, 211, 153, 0.14)", border: "rgba(52, 211, 153, 0.3)" },
+  positive:      { key: "analyzePage.positive",      color: "var(--color-positive)", bg: "rgba(52, 211, 153, 0.10)", border: "rgba(52, 211, 153, 0.24)" },
   neutral:       { key: "analyzePage.neutral",       color: "#fb923c", bg: "rgba(251, 146, 60, 0.10)", border: "rgba(251, 146, 60, 0.24)" },
   awkward:       { key: "analyzePage.awkward",       color: "#fb923c", bg: "rgba(251, 146, 60, 0.14)", border: "rgba(251, 146, 60, 0.30)" },
-  negative:      { key: "analyzePage.negative",      color: "#ef4444", bg: "rgba(239, 68, 68, 0.12)",  border: "rgba(239, 68, 68, 0.28)" },
+  negative:      { key: "analyzePage.negative",      color: "var(--color-negative)", bg: "rgba(239, 68, 68, 0.12)",  border: "rgba(239, 68, 68, 0.28)" },
 };
 
 const MODE_KEYS: { value: AnalysisMode; key: string }[] = [
@@ -317,7 +317,7 @@ export default function AnalyzePage() {
             borderRadius: "50%",
             background: result
               ? `radial-gradient(circle, rgba(${getScoreRgba(result.score.overall)}, 0.10), transparent 65%)`
-              : "radial-gradient(circle, rgba(255, 255, 255, 0.05), transparent 65%)",
+              : "radial-gradient(circle, color-mix(in srgb, var(--color-text) 5%, transparent), transparent 65%)",
             filter: "blur(70px)",
             pointerEvents: "none",
             zIndex: 0,
@@ -341,14 +341,14 @@ export default function AnalyzePage() {
                   <span
                     className="absolute inset-0 rounded-full"
                     style={{
-                      backgroundColor: "rgba(255, 255, 255, 0.85)",
+                      backgroundColor: "color-mix(in srgb, var(--color-text) 85%, transparent)",
                       opacity: 0.5,
                       animation: "pulseRing 2.4s ease-in-out infinite",
                     }}
                   />
                   <span
                     className="relative w-1.5 h-1.5 rounded-full"
-                    style={{ backgroundColor: "rgba(255, 255, 255, 0.9)" }}
+                    style={{ backgroundColor: "color-mix(in srgb, var(--color-text) 90%, transparent)" }}
                   />
                 </span>
                 <span
@@ -373,7 +373,7 @@ export default function AnalyzePage() {
                   letterSpacing: "-0.035em",
                   lineHeight: 1.05,
                   background:
-                    "linear-gradient(115deg, #fafafa 0%, #fafafa 30%, #d4d4d8 50%, #fafafa 70%, #fafafa 100%)",
+                    "linear-gradient(115deg, var(--color-text) 0%, var(--color-text) 30%, var(--color-text-silver) 50%, var(--color-text) 70%, var(--color-text) 100%)",
                   backgroundSize: "240% 100%",
                   WebkitBackgroundClip: "text",
                   WebkitTextFillColor: "transparent",
@@ -423,8 +423,8 @@ export default function AnalyzePage() {
                 transition={{ duration: 0.5, ease: EASE_OUT, delay: 0.1 }}
                 className="relative inline-flex items-center p-1 rounded-full mb-5"
                 style={{
-                  background: "rgba(255, 255, 255, 0.025)",
-                  border: "1px solid rgba(255, 255, 255, 0.06)",
+                  background: "color-mix(in srgb, var(--color-text) 2.5%, transparent)",
+                  border: "1px solid color-mix(in srgb, var(--color-text) 6%, transparent)",
                 }}
               >
                 {([
@@ -450,8 +450,8 @@ export default function AnalyzePage() {
                           className="absolute inset-0 rounded-full"
                           style={{
                             background:
-                              "linear-gradient(135deg, rgba(255, 255, 255, 0.10), rgba(255, 255, 255, 0.04))",
-                            border: "1px solid rgba(255, 255, 255, 0.14)",
+                              "linear-gradient(135deg, color-mix(in srgb, var(--color-text) 10%, transparent), color-mix(in srgb, var(--color-text) 4%, transparent))",
+                            border: "1px solid color-mix(in srgb, var(--color-text) 14%, transparent)",
                             boxShadow: "0 6px 20px -8px rgba(0, 0, 0, 0.5)",
                             zIndex: -1,
                           }}
@@ -483,8 +483,8 @@ export default function AnalyzePage() {
                       className="relative w-full overflow-hidden rounded-2xl flex flex-col items-center justify-center gap-3 cursor-pointer text-center"
                       style={{
                         background:
-                          "linear-gradient(135deg, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0.01) 100%)",
-                        border: "1px dashed rgba(255, 255, 255, 0.15)",
+                          "linear-gradient(135deg, color-mix(in srgb, var(--color-text) 4%, transparent) 0%, color-mix(in srgb, var(--color-text) 1%, transparent) 100%)",
+                        border: "1px dashed color-mix(in srgb, var(--color-text) 15%, transparent)",
                         padding: "44px 24px",
                         backdropFilter: "blur(20px)",
                         WebkitBackdropFilter: "blur(20px)",
@@ -494,7 +494,7 @@ export default function AnalyzePage() {
                         aria-hidden
                         className="absolute -top-12 -right-12 w-44 h-44 rounded-full pointer-events-none"
                         style={{
-                          background: "radial-gradient(circle, rgba(255, 255, 255, 0.10), transparent 70%)",
+                          background: "radial-gradient(circle, color-mix(in srgb, var(--color-text) 10%, transparent), transparent 70%)",
                           filter: "blur(28px)",
                           opacity: 0.5,
                         }}
@@ -502,8 +502,8 @@ export default function AnalyzePage() {
                       <span
                         className="relative inline-flex items-center justify-center w-14 h-14 rounded-2xl"
                         style={{
-                          background: "rgba(255, 255, 255, 0.04)",
-                          border: "1px solid rgba(255, 255, 255, 0.08)",
+                          background: "color-mix(in srgb, var(--color-text) 4%, transparent)",
+                          border: "1px solid color-mix(in srgb, var(--color-text) 8%, transparent)",
                           color: "var(--color-text-silver)",
                         }}
                       >
@@ -526,7 +526,7 @@ export default function AnalyzePage() {
                           <div
                             key={i}
                             className="relative aspect-square overflow-hidden rounded-2xl group"
-                            style={{ border: "1px solid rgba(255, 255, 255, 0.06)" }}
+                            style={{ border: "1px solid color-mix(in srgb, var(--color-text) 6%, transparent)" }}
                           >
                             <img src={src} alt={`Screenshot ${i + 1}`} className="w-full h-full object-cover" />
                             <button
@@ -534,7 +534,7 @@ export default function AnalyzePage() {
                               className="absolute top-1.5 right-1.5 inline-flex items-center justify-center w-6 h-6 rounded-full opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer"
                               style={{
                                 background: "rgba(0, 0, 0, 0.7)",
-                                border: "1px solid rgba(255, 255, 255, 0.15)",
+                                border: "1px solid color-mix(in srgb, var(--color-text) 15%, transparent)",
                                 color: "#fafafa",
                                 backdropFilter: "blur(8px)",
                               }}
@@ -550,8 +550,8 @@ export default function AnalyzePage() {
                             transition={{ type: "spring", stiffness: 400, damping: 28 }}
                             className="aspect-square rounded-2xl flex items-center justify-center cursor-pointer"
                             style={{
-                              background: "rgba(255, 255, 255, 0.025)",
-                              border: "1px dashed rgba(255, 255, 255, 0.12)",
+                              background: "color-mix(in srgb, var(--color-text) 2.5%, transparent)",
+                              border: "1px dashed color-mix(in srgb, var(--color-text) 12%, transparent)",
                               color: "var(--color-text-muted)",
                             }}
                           >
@@ -587,8 +587,8 @@ export default function AnalyzePage() {
                   className="mb-5 relative overflow-hidden rounded-2xl"
                   style={{
                     background:
-                      "linear-gradient(135deg, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0.01) 100%)",
-                    border: "1px solid rgba(255, 255, 255, 0.06)",
+                      "linear-gradient(135deg, color-mix(in srgb, var(--color-text) 4%, transparent) 0%, color-mix(in srgb, var(--color-text) 1%, transparent) 100%)",
+                    border: "1px solid color-mix(in srgb, var(--color-text) 6%, transparent)",
                     backdropFilter: "blur(20px)",
                     WebkitBackdropFilter: "blur(20px)",
                   }}
@@ -634,19 +634,19 @@ export default function AnalyzePage() {
                     paddingLeft: 16,
                     paddingRight: 16,
                     height: 44,
-                    background: "rgba(255, 255, 255, 0.025)",
-                    border: "1px solid rgba(255, 255, 255, 0.06)",
+                    background: "color-mix(in srgb, var(--color-text) 2.5%, transparent)",
+                    border: "1px solid color-mix(in srgb, var(--color-text) 6%, transparent)",
                     color: "var(--color-text)",
                     outline: "none",
                     transition: "border-color 0.2s ease, background 0.2s ease",
                   }}
                   onFocus={(e) => {
-                    e.currentTarget.style.borderColor = "rgba(255, 255, 255, 0.18)";
-                    e.currentTarget.style.background = "rgba(255, 255, 255, 0.04)";
+                    e.currentTarget.style.borderColor = "color-mix(in srgb, var(--color-text) 18%, transparent)";
+                    e.currentTarget.style.background = "color-mix(in srgb, var(--color-text) 4%, transparent)";
                   }}
                   onBlur={(e) => {
-                    e.currentTarget.style.borderColor = "rgba(255, 255, 255, 0.06)";
-                    e.currentTarget.style.background = "rgba(255, 255, 255, 0.025)";
+                    e.currentTarget.style.borderColor = "color-mix(in srgb, var(--color-text) 6%, transparent)";
+                    e.currentTarget.style.background = "color-mix(in srgb, var(--color-text) 2.5%, transparent)";
                   }}
                 />
               </motion.div>
@@ -667,8 +667,8 @@ export default function AnalyzePage() {
                 <div
                   className="relative inline-flex items-center p-1 rounded-full overflow-x-auto"
                   style={{
-                    background: "rgba(255, 255, 255, 0.025)",
-                    border: "1px solid rgba(255, 255, 255, 0.06)",
+                    background: "color-mix(in srgb, var(--color-text) 2.5%, transparent)",
+                    border: "1px solid color-mix(in srgb, var(--color-text) 6%, transparent)",
                     scrollbarWidth: "none",
                     maxWidth: "100%",
                   }}
@@ -693,8 +693,8 @@ export default function AnalyzePage() {
                             className="absolute inset-0 rounded-full"
                             style={{
                               background:
-                                "linear-gradient(135deg, rgba(255, 255, 255, 0.10), rgba(255, 255, 255, 0.04))",
-                              border: "1px solid rgba(255, 255, 255, 0.14)",
+                                "linear-gradient(135deg, color-mix(in srgb, var(--color-text) 10%, transparent), color-mix(in srgb, var(--color-text) 4%, transparent))",
+                              border: "1px solid color-mix(in srgb, var(--color-text) 14%, transparent)",
                               boxShadow: "0 6px 20px -8px rgba(0, 0, 0, 0.5)",
                               zIndex: -1,
                             }}
@@ -721,15 +721,15 @@ export default function AnalyzePage() {
                 style={{
                   background:
                     canAnalyze && !analyzing
-                      ? "linear-gradient(135deg, rgba(52, 211, 153, 0.20) 0%, rgba(255, 255, 255, 0.04) 100%)"
-                      : "rgba(255, 255, 255, 0.025)",
+                      ? "linear-gradient(135deg, rgba(52, 211, 153, 0.20) 0%, color-mix(in srgb, var(--color-text) 4%, transparent) 100%)"
+                      : "color-mix(in srgb, var(--color-text) 2.5%, transparent)",
                   border:
                     canAnalyze && !analyzing
                       ? "1px solid rgba(52, 211, 153, 0.4)"
-                      : "1px solid rgba(255, 255, 255, 0.06)",
+                      : "1px solid color-mix(in srgb, var(--color-text) 6%, transparent)",
                   boxShadow:
                     canAnalyze && !analyzing
-                      ? "0 30px 70px -25px rgba(52, 211, 153, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.08)"
+                      ? "0 30px 70px -25px rgba(52, 211, 153, 0.55), inset 0 1px 0 color-mix(in srgb, var(--color-text) 8%, transparent)"
                       : "none",
                   color: "var(--color-text)",
                   minWidth: 240,
@@ -765,7 +765,7 @@ export default function AnalyzePage() {
                       background:
                         canAnalyze && !analyzing
                           ? "radial-gradient(circle, rgba(52, 211, 153, 0.5) 0%, rgba(52, 211, 153, 0.1) 60%, transparent 100%)"
-                          : "rgba(255, 255, 255, 0.04)",
+                          : "color-mix(in srgb, var(--color-text) 4%, transparent)",
                       filter: canAnalyze && !analyzing ? "blur(2px)" : undefined,
                     }}
                   />
@@ -778,8 +778,8 @@ export default function AnalyzePage() {
                       style={{
                         width: 14,
                         height: 14,
-                        border: "1.5px solid rgba(255, 255, 255, 0.15)",
-                        borderTopColor: "rgba(255, 255, 255, 0.85)",
+                        border: "1.5px solid color-mix(in srgb, var(--color-text) 15%, transparent)",
+                        borderTopColor: "color-mix(in srgb, var(--color-text) 85%, transparent)",
                       }}
                     />
                   ) : (
@@ -792,7 +792,7 @@ export default function AnalyzePage() {
                         background:
                           canAnalyze
                             ? "linear-gradient(180deg, #34d399 0%, #059669 100%)"
-                            : "rgba(255, 255, 255, 0.2)",
+                            : "color-mix(in srgb, var(--color-text) 20%, transparent)",
                         boxShadow: canAnalyze
                           ? "0 0 16px rgba(52, 211, 153, 0.7), inset 0 -1px 2px rgba(0, 0, 0, 0.2)"
                           : "none",
@@ -864,7 +864,7 @@ function ScoreRing({ value, reduce, size = 144 }: { value: number; reduce: boole
             </feMerge>
           </filter>
         </defs>
-        <circle cx={size / 2} cy={size / 2} r={radius} fill="none" stroke="rgba(255, 255, 255, 0.05)" strokeWidth={stroke} />
+        <circle cx={size / 2} cy={size / 2} r={radius} fill="none" stroke="color-mix(in srgb, var(--color-text) 5%, transparent)" strokeWidth={stroke} />
         <motion.circle
           cx={size / 2}
           cy={size / 2}
@@ -920,7 +920,7 @@ function ScoreBar({ label, value, delay = 0, reduce }: { label: string; value: n
       >
         {label}
       </span>
-      <div className="flex-1 relative rounded-full overflow-hidden" style={{ height: 4, background: "rgba(255, 255, 255, 0.04)" }}>
+      <div className="flex-1 relative rounded-full overflow-hidden" style={{ height: 4, background: "color-mix(in srgb, var(--color-text) 4%, transparent)" }}>
         <motion.span
           className="absolute inset-y-0 left-0 rounded-full"
           initial={reduce ? { width: `${value}%` } : { width: 0 }}
@@ -966,7 +966,7 @@ function GlassPanel({
       transition={{ duration: 0.5, ease: EASE_OUT, delay }}
       className={`relative overflow-hidden rounded-2xl ${className}`}
       style={{
-        background: `linear-gradient(135deg, rgba(${rgba}, ${opacity}) 0%, rgba(255, 255, 255, 0.01) 100%)`,
+        background: `linear-gradient(135deg, rgba(${rgba}, ${opacity}) 0%, color-mix(in srgb, var(--color-text) 1%, transparent) 100%)`,
         border: `1px solid rgba(${rgba}, ${rgba === "255, 255, 255" ? 0.06 : 0.18})`,
         backdropFilter: "blur(20px)",
         WebkitBackdropFilter: "blur(20px)",
@@ -1013,8 +1013,8 @@ function ResultsView({ result, t, reduce }: { result: AnalysisResult; t: (key: s
         transition={{ duration: 0.6, ease: EASE_OUT }}
         className="relative overflow-hidden rounded-2xl p-5 sm:p-6"
         style={{
-          background: "linear-gradient(135deg, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0.01) 100%)",
-          border: "1px solid rgba(255, 255, 255, 0.06)",
+          background: "linear-gradient(135deg, color-mix(in srgb, var(--color-text) 4%, transparent) 0%, color-mix(in srgb, var(--color-text) 1%, transparent) 100%)",
+          border: "1px solid color-mix(in srgb, var(--color-text) 6%, transparent)",
           backdropFilter: "blur(20px)",
           WebkitBackdropFilter: "blur(20px)",
         }}
@@ -1069,7 +1069,7 @@ function ResultsView({ result, t, reduce }: { result: AnalysisResult; t: (key: s
       {/* ─── DIAGNOSIS (violet AI accent) ─── */}
       {result.diagnosis && (
         <GlassPanel rgba="167, 139, 250" opacity={0.05} haloOpacity={0.22} delay={0.1} reduce={reduce}>
-          <PanelLabel color="var(--color-text-muted)" dotColor="#c4b5fd">
+          <PanelLabel color="var(--color-text-muted)" dotColor="var(--shimmer-accent-1)">
             {t("analyzePage.diagnosis")}
           </PanelLabel>
           <p className="text-sm m-0 leading-relaxed" style={{ color: "var(--color-text)" }}>
@@ -1081,12 +1081,12 @@ function ResultsView({ result, t, reduce }: { result: AnalysisResult; t: (key: s
       {/* ─── TONE TIMELINE ─── */}
       {result.toneTimeline && result.toneTimeline.length > 0 && (
         <GlassPanel delay={0.15} reduce={reduce}>
-          <PanelLabel dotColor="rgba(255, 255, 255, 0.7)">{t("analyzePage.toneFlow")}</PanelLabel>
+          <PanelLabel dotColor="color-mix(in srgb, var(--color-text) 70%, transparent)">{t("analyzePage.toneFlow")}</PanelLabel>
           <div className="space-y-3 relative">
             <span
               aria-hidden
               className="absolute left-1 top-2 bottom-2 w-px"
-              style={{ background: "linear-gradient(180deg, transparent, rgba(255, 255, 255, 0.06), transparent)" }}
+              style={{ background: "linear-gradient(180deg, transparent, color-mix(in srgb, var(--color-text) 6%, transparent), transparent)" }}
             />
             {result.toneTimeline.map((entry, i) => {
               const c = getToneColor(entry.tone);
@@ -1129,7 +1129,7 @@ function ResultsView({ result, t, reduce }: { result: AnalysisResult; t: (key: s
       {/* ─── SPEAKER BREAKDOWN ─── */}
       {result.speakerBreakdown?.speakers && result.speakerBreakdown.speakers.length > 0 && (
         <GlassPanel delay={0.2} reduce={reduce}>
-          <PanelLabel dotColor="rgba(255, 255, 255, 0.7)">{t("analyzePage.speakers")}</PanelLabel>
+          <PanelLabel dotColor="color-mix(in srgb, var(--color-text) 70%, transparent)">{t("analyzePage.speakers")}</PanelLabel>
           <div className="space-y-4">
             {result.speakerBreakdown.speakers.map((s, i) => {
               const c = getToneColor(s.dominantTone);
@@ -1154,8 +1154,8 @@ function ResultsView({ result, t, reduce }: { result: AnalysisResult; t: (key: s
                       <span
                         className="text-[10px] uppercase tracking-[0.14em] px-2 py-0.5 rounded-full"
                         style={{
-                          background: "rgba(255, 255, 255, 0.04)",
-                          border: "1px solid rgba(255, 255, 255, 0.06)",
+                          background: "color-mix(in srgb, var(--color-text) 4%, transparent)",
+                          border: "1px solid color-mix(in srgb, var(--color-text) 6%, transparent)",
                           color: "var(--color-text-muted)",
                         }}
                       >
@@ -1164,7 +1164,7 @@ function ResultsView({ result, t, reduce }: { result: AnalysisResult; t: (key: s
                     </div>
                     <div
                       className="relative rounded-full overflow-hidden"
-                      style={{ height: 4, background: "rgba(255, 255, 255, 0.04)" }}
+                      style={{ height: 4, background: "color-mix(in srgb, var(--color-text) 4%, transparent)" }}
                     >
                       <motion.span
                         className="absolute inset-y-0 left-0 rounded-full"
@@ -1194,16 +1194,16 @@ function ResultsView({ result, t, reduce }: { result: AnalysisResult; t: (key: s
       {/* ─── KEY POINTS ─── */}
       {result.keyPoints?.length > 0 && (
         <GlassPanel delay={0.25} reduce={reduce}>
-          <PanelLabel dotColor="rgba(255, 255, 255, 0.7)">{t("analyzePage.keyPoints")}</PanelLabel>
+          <PanelLabel dotColor="color-mix(in srgb, var(--color-text) 70%, transparent)">{t("analyzePage.keyPoints")}</PanelLabel>
           <ul className="space-y-3 m-0 pl-0" style={{ listStyle: "none" }}>
             {result.keyPoints.map((p, i) => (
               <li key={i} className="flex items-start gap-3">
                 <span
                   className="inline-flex items-center justify-center w-5 h-5 rounded-full shrink-0 mt-0.5"
                   style={{
-                    background: "rgba(255, 255, 255, 0.04)",
-                    border: "1px solid rgba(255, 255, 255, 0.08)",
-                    color: "rgba(255, 255, 255, 0.85)",
+                    background: "color-mix(in srgb, var(--color-text) 4%, transparent)",
+                    border: "1px solid color-mix(in srgb, var(--color-text) 8%, transparent)",
+                    color: "color-mix(in srgb, var(--color-text) 85%, transparent)",
                   }}
                 >
                   <IconCheck size={11} />
@@ -1220,7 +1220,7 @@ function ResultsView({ result, t, reduce }: { result: AnalysisResult; t: (key: s
       {/* ─── INSIGHTS (numbered, violet gradient) ─── */}
       {result.insights?.length > 0 && (
         <GlassPanel rgba="167, 139, 250" opacity={0.05} haloOpacity={0.22} delay={0.3} reduce={reduce}>
-          <PanelLabel color="var(--color-text-muted)" dotColor="#c4b5fd">
+          <PanelLabel color="var(--color-text-muted)" dotColor="var(--shimmer-accent-1)">
             {t("analyzePage.insights")}
           </PanelLabel>
           <div className="grid gap-3">
@@ -1236,7 +1236,7 @@ function ResultsView({ result, t, reduce }: { result: AnalysisResult; t: (key: s
                   className="text-2xl font-extralight tabular-nums shrink-0 leading-none -mt-0.5"
                   style={{
                     background:
-                      "linear-gradient(180deg, #c4b5fd 0%, rgba(167, 139, 250, 0.5) 100%)",
+                      "linear-gradient(180deg, var(--shimmer-accent-1) 0%, rgba(167, 139, 250, 0.5) 100%)",
                     WebkitBackgroundClip: "text",
                     WebkitTextFillColor: "transparent",
                     backgroundClip: "text",
@@ -1257,12 +1257,12 @@ function ResultsView({ result, t, reduce }: { result: AnalysisResult; t: (key: s
       {/* ─── SIGNALS ─── */}
       {result.signals?.length > 0 && (
         <GlassPanel delay={0.35} reduce={reduce}>
-          <PanelLabel dotColor="rgba(255, 255, 255, 0.7)">{t("analyzePage.signalsDetected")}</PanelLabel>
+          <PanelLabel dotColor="color-mix(in srgb, var(--color-text) 70%, transparent)">{t("analyzePage.signalsDetected")}</PanelLabel>
           <div className="flex flex-wrap gap-2">
             {result.signals.map((s, i) => {
               const isPositive = s.type === "opportunity" || s.type === "agreement";
               const isNegative = s.type === "objection" || s.type === "hesitation";
-              const sigColor = isPositive ? "#34d399" : isNegative ? "#ef4444" : "#fb923c";
+              const sigColor = isPositive ? "var(--color-positive)" : isNegative ? "var(--color-negative)" : "#fb923c";
               const sigRgba = isPositive ? "52, 211, 153" : isNegative ? "239, 68, 68" : "251, 146, 60";
               return (
                 <span
@@ -1287,7 +1287,7 @@ function ResultsView({ result, t, reduce }: { result: AnalysisResult; t: (key: s
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         {result.strengths?.length > 0 && (
           <GlassPanel rgba="52, 211, 153" opacity={0.06} haloOpacity={0.22} delay={0.4} reduce={reduce}>
-            <PanelLabel color="#34d399" dotColor="#34d399">
+            <PanelLabel color="var(--color-positive)" dotColor="var(--color-positive)">
               {t("analyzePage.strengths")}
             </PanelLabel>
             <ul className="space-y-2.5 m-0 pl-0" style={{ listStyle: "none" }}>
@@ -1300,7 +1300,7 @@ function ResultsView({ result, t, reduce }: { result: AnalysisResult; t: (key: s
                       border: "1px solid rgba(52, 211, 153, 0.25)",
                     }}
                   >
-                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#34d399" strokeWidth="2.5">
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="var(--color-positive)" strokeWidth="2.5">
                       <polyline points="20 6 9 17 4 12" />
                     </svg>
                   </span>
@@ -1353,7 +1353,7 @@ function ResultsView({ result, t, reduce }: { result: AnalysisResult; t: (key: s
                 border: "1px solid rgba(52, 211, 153, 0.3)",
               }}
             >
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#34d399" strokeWidth="2">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--color-positive)" strokeWidth="2">
                 <path d="M12 2L2 7l10 5 10-5-10-5z" />
                 <path d="M2 17l10 5 10-5" />
                 <path d="M2 12l10 5 10-5" />
@@ -1362,7 +1362,7 @@ function ResultsView({ result, t, reduce }: { result: AnalysisResult; t: (key: s
             <div className="flex-1 min-w-0">
               <span
                 className="text-[10px] font-semibold uppercase tracking-[0.22em] block mb-2"
-                style={{ color: "#34d399" }}
+                style={{ color: "var(--color-positive)" }}
               >
                 {t("analyzePage.recommendation")}
               </span>

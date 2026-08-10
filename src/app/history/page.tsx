@@ -67,10 +67,10 @@ function groupByDay(items: Conversation[]): { dayKey: string; date: Date; items:
 }
 
 const TONE_COLORS: Record<string, { dot: string; bg: string; label: string; rgba: string }> = {
-  positive: { dot: "#34d399", bg: "rgba(52, 211, 153, 0.10)", label: "Positive", rgba: "52, 211, 153" },
-  neutral: { dot: "#fbbf24", bg: "rgba(251, 191, 36, 0.10)", label: "Neutral", rgba: "251, 191, 36" },
-  negative: { dot: "#fb7185", bg: "rgba(251, 113, 133, 0.10)", label: "Negative", rgba: "251, 113, 133" },
-  hesitant: { dot: "#fbbf24", bg: "rgba(251, 191, 36, 0.10)", label: "Hesitant", rgba: "251, 191, 36" },
+  positive: { dot: "var(--color-positive)", bg: "rgba(52, 211, 153, 0.10)", label: "Positive", rgba: "52, 211, 153" },
+  neutral: { dot: "var(--color-neutral)", bg: "rgba(251, 191, 36, 0.10)", label: "Neutral", rgba: "251, 191, 36" },
+  negative: { dot: "var(--color-negative)", bg: "rgba(251, 113, 133, 0.10)", label: "Negative", rgba: "251, 113, 133" },
+  hesitant: { dot: "var(--color-neutral)", bg: "rgba(251, 191, 36, 0.10)", label: "Hesitant", rgba: "251, 191, 36" },
 };
 
 /* ----------------------------------------------------------------- */
@@ -102,8 +102,8 @@ function FilterChip({ active, onClick, layoutId, reduce, children }: ChipProps) 
           className="absolute inset-0 rounded-full"
           style={{
             background:
-              "linear-gradient(135deg, rgba(255, 255, 255, 0.10), rgba(255, 255, 255, 0.04))",
-            border: "1px solid rgba(255, 255, 255, 0.14)",
+              "linear-gradient(135deg, color-mix(in srgb, var(--color-text) 10%, transparent), color-mix(in srgb, var(--color-text) 4%, transparent))",
+            border: "1px solid color-mix(in srgb, var(--color-text) 14%, transparent)",
             boxShadow: "0 6px 20px -8px rgba(0, 0, 0, 0.5)",
             zIndex: -1,
           }}
@@ -116,8 +116,8 @@ function FilterChip({ active, onClick, layoutId, reduce, children }: ChipProps) 
           className="absolute inset-0 rounded-full"
           style={{
             background:
-              "linear-gradient(135deg, rgba(255, 255, 255, 0.10), rgba(255, 255, 255, 0.04))",
-            border: "1px solid rgba(255, 255, 255, 0.14)",
+              "linear-gradient(135deg, color-mix(in srgb, var(--color-text) 10%, transparent), color-mix(in srgb, var(--color-text) 4%, transparent))",
+            border: "1px solid color-mix(in srgb, var(--color-text) 14%, transparent)",
             zIndex: -1,
           }}
         />
@@ -142,15 +142,15 @@ function EventCard({ conv, expanded, onToggle, reduce }: EventCardProps) {
   const duration = formatDuration(conv.created_at, conv.ended_at);
   const toneInfo = conv.overall_tone ? TONE_COLORS[conv.overall_tone] : null;
   const score = conv.score?.overall;
-  const railColor = toneInfo?.dot ?? "rgba(255, 255, 255, 0.15)";
-  const railRgba = toneInfo?.rgba ?? "255, 255, 255";
+  const railColor = toneInfo?.dot ?? "color-mix(in srgb, var(--color-text) 15%, transparent)";
+  const railEnd = toneInfo ? `rgba(${toneInfo.rgba}, 0.4)` : "transparent";
   const scoreColor =
     typeof score === "number"
       ? score >= 70
-        ? "#34d399"
+        ? "var(--color-positive)"
         : score >= 40
           ? "#fb923c"
-          : "#ef4444"
+          : "var(--color-negative)"
       : "var(--color-text-muted)";
 
   return (
@@ -159,8 +159,8 @@ function EventCard({ conv, expanded, onToggle, reduce }: EventCardProps) {
       transition={{ type: "spring", stiffness: 400, damping: 32 }}
       className="relative overflow-hidden rounded-2xl"
       style={{
-        background: "rgba(255, 255, 255, 0.02)",
-        border: "1px solid rgba(255, 255, 255, 0.04)",
+        background: "color-mix(in srgb, var(--color-text) 2%, transparent)",
+        border: "1px solid color-mix(in srgb, var(--color-text) 4%, transparent)",
         transition: "background 0.3s ease, border-color 0.3s ease",
       }}
     >
@@ -175,8 +175,8 @@ function EventCard({ conv, expanded, onToggle, reduce }: EventCardProps) {
           aria-hidden
           className="shrink-0 self-stretch w-[3px] rounded-full"
           style={{
-            background: `linear-gradient(180deg, ${railColor}, rgba(${railRgba}, 0.4))`,
-            boxShadow: toneInfo ? `0 0 14px rgba(${railRgba}, 0.35)` : "none",
+            background: `linear-gradient(180deg, ${railColor}, ${railEnd})`,
+            boxShadow: toneInfo ? `0 0 14px rgba(${toneInfo.rgba}, 0.35)` : "none",
           }}
         />
 
@@ -230,8 +230,8 @@ function EventCard({ conv, expanded, onToggle, reduce }: EventCardProps) {
           aria-hidden
           className="shrink-0 self-center inline-flex items-center justify-center w-7 h-7 rounded-full opacity-50 group-hover:opacity-100 transition-opacity"
           style={{
-            background: "rgba(255, 255, 255, 0.04)",
-            border: "1px solid rgba(255, 255, 255, 0.06)",
+            background: "color-mix(in srgb, var(--color-text) 4%, transparent)",
+            border: "1px solid color-mix(in srgb, var(--color-text) 6%, transparent)",
             color: "var(--color-text-muted)",
           }}
           animate={{ rotate: expanded ? 90 : 0 }}
@@ -256,7 +256,7 @@ function EventCard({ conv, expanded, onToggle, reduce }: EventCardProps) {
           >
             <div
               className="px-4 pb-4 pl-[44px] sm:pl-[80px] pt-1 flex flex-col gap-3"
-              style={{ borderTop: "1px solid rgba(255, 255, 255, 0.04)", marginTop: 4 }}
+              style={{ borderTop: "1px solid color-mix(in srgb, var(--color-text) 4%, transparent)", marginTop: 4 }}
             >
               {conv.summary ? (
                 <p
@@ -277,8 +277,8 @@ function EventCard({ conv, expanded, onToggle, reduce }: EventCardProps) {
                 href={`/summary/${conv.id}`}
                 className="inline-flex items-center gap-1.5 text-[11px] font-semibold no-underline self-start px-3 py-1.5 rounded-full"
                 style={{
-                  background: "rgba(255, 255, 255, 0.06)",
-                  border: "1px solid rgba(255, 255, 255, 0.1)",
+                  background: "color-mix(in srgb, var(--color-text) 6%, transparent)",
+                  border: "1px solid color-mix(in srgb, var(--color-text) 10%, transparent)",
                   color: "var(--color-text)",
                   transition: "all 0.2s ease",
                 }}
@@ -408,7 +408,7 @@ export default function HistoryPage() {
             width: 500,
             height: 500,
             borderRadius: "50%",
-            background: "radial-gradient(circle, rgba(255, 255, 255, 0.05), transparent 65%)",
+            background: "radial-gradient(circle, color-mix(in srgb, var(--color-text) 5%, transparent), transparent 65%)",
             filter: "blur(70px)",
             pointerEvents: "none",
             zIndex: 0,
@@ -430,12 +430,12 @@ export default function HistoryPage() {
                 <span
                   className="absolute inset-0 rounded-full"
                   style={{
-                    backgroundColor: "rgba(255, 255, 255, 0.85)",
+                    backgroundColor: "color-mix(in srgb, var(--color-text) 85%, transparent)",
                     opacity: 0.5,
                     animation: "pulseRing 2.4s ease-in-out infinite",
                   }}
                 />
-                <span className="relative w-1.5 h-1.5 rounded-full" style={{ backgroundColor: "rgba(255, 255, 255, 0.9)" }} />
+                <span className="relative w-1.5 h-1.5 rounded-full" style={{ backgroundColor: "color-mix(in srgb, var(--color-text) 90%, transparent)" }} />
               </span>
               <span
                 className="text-[10px] font-semibold uppercase tracking-[0.22em]"
@@ -460,7 +460,7 @@ export default function HistoryPage() {
                 letterSpacing: "-0.035em",
                 lineHeight: 1.05,
                 background:
-                  "linear-gradient(115deg, #fafafa 0%, #fafafa 30%, #d4d4d8 50%, #fafafa 70%, #fafafa 100%)",
+                  "linear-gradient(115deg, var(--color-text) 0%, var(--color-text) 30%, var(--color-text-silver) 50%, var(--color-text) 70%, var(--color-text) 100%)",
                 backgroundSize: "240% 100%",
                 WebkitBackgroundClip: "text",
                 WebkitTextFillColor: "transparent",
@@ -508,19 +508,19 @@ export default function HistoryPage() {
                 paddingLeft: 40,
                 paddingRight: search ? 40 : 16,
                 height: 44,
-                background: "rgba(255, 255, 255, 0.025)",
-                border: "1px solid rgba(255, 255, 255, 0.06)",
+                background: "color-mix(in srgb, var(--color-text) 2.5%, transparent)",
+                border: "1px solid color-mix(in srgb, var(--color-text) 6%, transparent)",
                 color: "var(--color-text)",
                 outline: "none",
                 transition: "border-color 0.2s ease, background 0.2s ease",
               }}
               onFocus={(e) => {
-                e.currentTarget.style.borderColor = "rgba(255, 255, 255, 0.18)";
-                e.currentTarget.style.background = "rgba(255, 255, 255, 0.04)";
+                e.currentTarget.style.borderColor = "color-mix(in srgb, var(--color-text) 18%, transparent)";
+                e.currentTarget.style.background = "color-mix(in srgb, var(--color-text) 4%, transparent)";
               }}
               onBlur={(e) => {
-                e.currentTarget.style.borderColor = "rgba(255, 255, 255, 0.06)";
-                e.currentTarget.style.background = "rgba(255, 255, 255, 0.025)";
+                e.currentTarget.style.borderColor = "color-mix(in srgb, var(--color-text) 6%, transparent)";
+                e.currentTarget.style.background = "color-mix(in srgb, var(--color-text) 2.5%, transparent)";
               }}
             />
             {search && (
@@ -528,8 +528,8 @@ export default function HistoryPage() {
                 onClick={() => setSearch("")}
                 className="absolute right-3 top-1/2 -translate-y-1/2 inline-flex items-center justify-center w-6 h-6 rounded-full cursor-pointer"
                 style={{
-                  background: "rgba(255, 255, 255, 0.06)",
-                  border: "1px solid rgba(255, 255, 255, 0.08)",
+                  background: "color-mix(in srgb, var(--color-text) 6%, transparent)",
+                  border: "1px solid color-mix(in srgb, var(--color-text) 8%, transparent)",
                   color: "var(--color-text-muted)",
                 }}
                 aria-label="Clear search"
@@ -553,8 +553,8 @@ export default function HistoryPage() {
             <div
               className="relative inline-flex items-center p-1 rounded-full overflow-x-auto"
               style={{
-                background: "rgba(255, 255, 255, 0.025)",
-                border: "1px solid rgba(255, 255, 255, 0.06)",
+                background: "color-mix(in srgb, var(--color-text) 2.5%, transparent)",
+                border: "1px solid color-mix(in srgb, var(--color-text) 6%, transparent)",
                 scrollbarWidth: "none",
               }}
             >
@@ -586,8 +586,8 @@ export default function HistoryPage() {
             <div
               className="relative inline-flex items-center p-1 rounded-full overflow-x-auto"
               style={{
-                background: "rgba(255, 255, 255, 0.025)",
-                border: "1px solid rgba(255, 255, 255, 0.06)",
+                background: "color-mix(in srgb, var(--color-text) 2.5%, transparent)",
+                border: "1px solid color-mix(in srgb, var(--color-text) 6%, transparent)",
                 scrollbarWidth: "none",
               }}
             >
@@ -599,9 +599,9 @@ export default function HistoryPage() {
               </span>
               {([
                 { key: "all", label: t("common.all"), count: conversations.length, color: null },
-                { key: "positive", label: t("common.positive"), count: toneCounts.positive, color: "#34d399" },
-                { key: "neutral", label: t("common.neutral"), count: toneCounts.neutral, color: "#fbbf24" },
-                { key: "negative", label: t("common.negative"), count: toneCounts.negative, color: "#fb7185" },
+                { key: "positive", label: t("common.positive"), count: toneCounts.positive, color: "var(--color-positive)" },
+                { key: "neutral", label: t("common.neutral"), count: toneCounts.neutral, color: "var(--color-neutral)" },
+                { key: "negative", label: t("common.negative"), count: toneCounts.negative, color: "var(--color-negative)" },
               ] as { key: ToneFilter; label: string; count: number; color: string | null }[]).map((chip) => (
                 <FilterChip
                   key={chip.key}
@@ -640,7 +640,7 @@ export default function HistoryPage() {
                   <div
                     key={i}
                     className="h-16 rounded-2xl shimmer"
-                    style={{ backgroundColor: "rgba(255, 255, 255, 0.02)" }}
+                    style={{ backgroundColor: "color-mix(in srgb, var(--color-text) 2%, transparent)" }}
                   />
                 ))}
               </motion.div>
@@ -653,15 +653,15 @@ export default function HistoryPage() {
                 exit={reduce ? { opacity: 0 } : { opacity: 0, scale: 0.97 }}
                 transition={{ duration: 0.3, ease: EASE_OUT }}
                 style={{
-                  background: "linear-gradient(135deg, rgba(255, 255, 255, 0.03) 0%, rgba(255, 255, 255, 0.01) 100%)",
-                  border: "1px solid rgba(255, 255, 255, 0.05)",
+                  background: "linear-gradient(135deg, color-mix(in srgb, var(--color-text) 3%, transparent) 0%, color-mix(in srgb, var(--color-text) 1%, transparent) 100%)",
+                  border: "1px solid color-mix(in srgb, var(--color-text) 5%, transparent)",
                 }}
               >
                 <span
                   aria-hidden
                   className="absolute -top-12 -right-12 w-40 h-40 rounded-full pointer-events-none"
                   style={{
-                    background: "radial-gradient(circle, rgba(255, 255, 255, 0.10), transparent 70%)",
+                    background: "radial-gradient(circle, color-mix(in srgb, var(--color-text) 10%, transparent), transparent 70%)",
                     filter: "blur(28px)",
                     opacity: 0.4,
                   }}
@@ -670,8 +670,8 @@ export default function HistoryPage() {
                   <div
                     className="inline-flex items-center justify-center w-12 h-12 mx-auto mb-4 rounded-2xl"
                     style={{
-                      background: "rgba(255, 255, 255, 0.04)",
-                      border: "1px solid rgba(255, 255, 255, 0.06)",
+                      background: "color-mix(in srgb, var(--color-text) 4%, transparent)",
+                      border: "1px solid color-mix(in srgb, var(--color-text) 6%, transparent)",
                     }}
                   >
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" style={{ color: "var(--color-text-muted)" }}>
@@ -733,8 +733,8 @@ export default function HistoryPage() {
                         className="text-[10px] tabular-nums font-semibold uppercase tracking-[0.18em] px-2 py-0.5 rounded-full"
                         style={{
                           color: "var(--color-text-muted)",
-                          background: "rgba(255, 255, 255, 0.04)",
-                          border: "1px solid rgba(255, 255, 255, 0.06)",
+                          background: "color-mix(in srgb, var(--color-text) 4%, transparent)",
+                          border: "1px solid color-mix(in srgb, var(--color-text) 6%, transparent)",
                         }}
                       >
                         {group.items.length}
@@ -743,7 +743,7 @@ export default function HistoryPage() {
                         aria-hidden
                         className="flex-1 h-px"
                         style={{
-                          background: "linear-gradient(90deg, rgba(255, 255, 255, 0.08), transparent 80%)",
+                          background: "linear-gradient(90deg, color-mix(in srgb, var(--color-text) 8%, transparent), transparent 80%)",
                         }}
                       />
                     </div>

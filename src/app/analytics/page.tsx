@@ -38,9 +38,9 @@ interface AnalyticsData {
 type MetricKey = "overall" | "engagement" | "tone" | "fluidity" | "interest" | "social";
 
 function getScoreColor(score: number) {
-  if (score >= 70) return "#34d399";
+  if (score >= 70) return "var(--color-positive)";
   if (score >= 40) return "#fb923c";
-  return "#ef4444";
+  return "var(--color-negative)";
 }
 
 function getScoreRgba(score: number) {
@@ -50,17 +50,17 @@ function getScoreRgba(score: number) {
 }
 
 const TREND_CONFIG = {
-  improving: { key: "improving", color: "#34d399", rgba: "52, 211, 153", arrow: "↑" },
-  declining: { key: "declining", color: "#ef4444", rgba: "239, 68, 68", arrow: "↓" },
+  improving: { key: "improving", color: "var(--color-positive)", rgba: "52, 211, 153", arrow: "↑" },
+  declining: { key: "declining", color: "var(--color-negative)", rgba: "239, 68, 68", arrow: "↓" },
   stable: { key: "stable", color: "#fb923c", rgba: "251, 146, 60", arrow: "→" },
 };
 
 const CLASSIFICATION_COLORS: Record<string, string> = {
-  very_positive: "#34d399",
-  positive: "#34d399",
+  very_positive: "var(--color-positive)",
+  positive: "var(--color-positive)",
   neutral: "#fb923c",
   awkward: "#fb923c",
-  negative: "#ef4444",
+  negative: "var(--color-negative)",
 };
 
 const CLASSIFICATION_RGBA: Record<string, string> = {
@@ -218,7 +218,7 @@ function BarChart({
                 x={x + barWidth / 2}
                 y={height - 6}
                 textAnchor="middle"
-                fill="rgba(255, 255, 255, 0.4)"
+                fill="color-mix(in srgb, var(--color-text) 40%, transparent)"
                 fontSize="9"
                 fontWeight="500"
                 style={{ letterSpacing: "0.06em", textTransform: "uppercase" }}
@@ -260,7 +260,7 @@ function ScoreBar({
       </span>
       <div
         className="flex-1 relative rounded-full overflow-hidden"
-        style={{ height: 4, background: "rgba(255, 255, 255, 0.04)" }}
+        style={{ height: 4, background: "color-mix(in srgb, var(--color-text) 4%, transparent)" }}
       >
         <motion.div
           className="absolute inset-y-0 left-0 rounded-full"
@@ -315,7 +315,7 @@ function VitalCard({
       transition={{ type: "spring", stiffness: 320, damping: 26 }}
       className="group relative p-4 sm:p-5 rounded-2xl overflow-hidden"
       style={{
-        background: `linear-gradient(135deg, rgba(${rgba}, 0.05) 0%, rgba(255, 255, 255, 0.01) 100%)`,
+        background: `linear-gradient(135deg, rgba(${rgba}, 0.05) 0%, color-mix(in srgb, var(--color-text) 1%, transparent) 100%)`,
         border: `1px solid rgba(${rgba}, ${rgba === "255, 255, 255" ? 0.06 : 0.14})`,
         backdropFilter: "blur(20px)",
         WebkitBackdropFilter: "blur(20px)",
@@ -375,7 +375,7 @@ function GlassPanel({
       transition={{ duration: 0.55, ease: EASE_OUT, delay }}
       className={`relative overflow-hidden rounded-2xl ${className}`}
       style={{
-        background: `linear-gradient(135deg, rgba(${rgba}, 0.04) 0%, rgba(255, 255, 255, 0.01) 100%)`,
+        background: `linear-gradient(135deg, rgba(${rgba}, 0.04) 0%, color-mix(in srgb, var(--color-text) 1%, transparent) 100%)`,
         border: `1px solid rgba(${rgba}, ${rgba === "255, 255, 255" ? 0.06 : 0.14})`,
         backdropFilter: "blur(20px)",
         WebkitBackdropFilter: "blur(20px)",
@@ -487,7 +487,7 @@ export default function AnalyticsPage() {
             background:
               data && data.totalSessions > 0
                 ? `radial-gradient(circle, rgba(${avgRgba}, 0.10), transparent 65%)`
-                : "radial-gradient(circle, rgba(255, 255, 255, 0.05), transparent 65%)",
+                : "radial-gradient(circle, color-mix(in srgb, var(--color-text) 5%, transparent), transparent 65%)",
             filter: "blur(70px)",
             pointerEvents: "none",
             zIndex: 0,
@@ -510,14 +510,14 @@ export default function AnalyticsPage() {
                 <span
                   className="absolute inset-0 rounded-full"
                   style={{
-                    backgroundColor: "rgba(255, 255, 255, 0.85)",
+                    backgroundColor: "color-mix(in srgb, var(--color-text) 85%, transparent)",
                     opacity: 0.5,
                     animation: "pulseRing 2.4s ease-in-out infinite",
                   }}
                 />
                 <span
                   className="relative w-1.5 h-1.5 rounded-full"
-                  style={{ backgroundColor: "rgba(255, 255, 255, 0.9)" }}
+                  style={{ backgroundColor: "color-mix(in srgb, var(--color-text) 90%, transparent)" }}
                 />
               </span>
               <span
@@ -542,7 +542,7 @@ export default function AnalyticsPage() {
                 letterSpacing: "-0.035em",
                 lineHeight: 1.05,
                 background:
-                  "linear-gradient(115deg, #fafafa 0%, #fafafa 30%, #d4d4d8 50%, #fafafa 70%, #fafafa 100%)",
+                  "linear-gradient(115deg, var(--color-text) 0%, var(--color-text) 30%, var(--color-text-silver) 50%, var(--color-text) 70%, var(--color-text) 100%)",
                 backgroundSize: "240% 100%",
                 WebkitBackgroundClip: "text",
                 WebkitTextFillColor: "transparent",
@@ -559,7 +559,7 @@ export default function AnalyticsPage() {
                 <div
                   key={i}
                   className="h-24 rounded-2xl shimmer"
-                  style={{ backgroundColor: "rgba(255, 255, 255, 0.02)" }}
+                  style={{ backgroundColor: "color-mix(in srgb, var(--color-text) 2%, transparent)" }}
                 />
               ))}
             </div>
@@ -571,15 +571,15 @@ export default function AnalyticsPage() {
               transition={{ duration: 0.4, ease: EASE_OUT }}
               style={{
                 background:
-                  "linear-gradient(135deg, rgba(255, 255, 255, 0.03) 0%, rgba(255, 255, 255, 0.01) 100%)",
-                border: "1px solid rgba(255, 255, 255, 0.05)",
+                  "linear-gradient(135deg, color-mix(in srgb, var(--color-text) 3%, transparent) 0%, color-mix(in srgb, var(--color-text) 1%, transparent) 100%)",
+                border: "1px solid color-mix(in srgb, var(--color-text) 5%, transparent)",
               }}
             >
               <span
                 aria-hidden
                 className="absolute -top-12 -right-12 w-40 h-40 rounded-full pointer-events-none"
                 style={{
-                  background: "radial-gradient(circle, rgba(255, 255, 255, 0.10), transparent 70%)",
+                  background: "radial-gradient(circle, color-mix(in srgb, var(--color-text) 10%, transparent), transparent 70%)",
                   filter: "blur(28px)",
                   opacity: 0.4,
                 }}
@@ -588,8 +588,8 @@ export default function AnalyticsPage() {
                 <div
                   className="inline-flex items-center justify-center w-12 h-12 mx-auto mb-4 rounded-2xl"
                   style={{
-                    background: "rgba(255, 255, 255, 0.04)",
-                    border: "1px solid rgba(255, 255, 255, 0.06)",
+                    background: "color-mix(in srgb, var(--color-text) 4%, transparent)",
+                    border: "1px solid color-mix(in srgb, var(--color-text) 6%, transparent)",
                   }}
                 >
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" style={{ color: "var(--color-text-muted)" }}>
@@ -633,7 +633,7 @@ export default function AnalyticsPage() {
                       fontWeight: 200,
                       letterSpacing: "-0.04em",
                       background:
-                        "linear-gradient(115deg, #fafafa 0%, #fafafa 30%, #d4d4d8 50%, #fafafa 70%, #fafafa 100%)",
+                        "linear-gradient(115deg, var(--color-text) 0%, var(--color-text) 30%, var(--color-text-silver) 50%, var(--color-text) 70%, var(--color-text) 100%)",
                       backgroundSize: "200% 100%",
                       WebkitBackgroundClip: "text",
                       WebkitTextFillColor: "transparent",
@@ -673,7 +673,7 @@ export default function AnalyticsPage() {
                   haloOpacity={0.24}
                   label={t("analytics.trend")}
                   hint={delta !== 0 ? `${delta > 0 ? "+" : ""}${delta} ${t("analytics.vsAvg")}` : undefined}
-                  hintColor={delta > 0 ? "#34d399" : delta < 0 ? "#ef4444" : undefined}
+                  hintColor={delta > 0 ? "var(--color-positive)" : delta < 0 ? "var(--color-negative)" : undefined}
                 >
                   {trend && (
                     <div className="flex items-baseline gap-2">
@@ -723,7 +723,7 @@ export default function AnalyticsPage() {
                       fontSize: "clamp(34px, 4.5vw, 52px)",
                       fontWeight: 200,
                       letterSpacing: "-0.04em",
-                      color: "#c4b5fd",
+                      color: "var(--shimmer-accent-1)",
                       textShadow: "0 0 20px rgba(167, 139, 250, 0.35)",
                     }}
                   >
@@ -735,14 +735,14 @@ export default function AnalyticsPage() {
             {/* ========== Progression Chart ========== */}
             <GlassPanel reduce={!!reduce} delay={0.35} className="mb-5">
               <div className="flex items-center justify-between mb-5 flex-wrap gap-3">
-                <PanelLabel dotColor="rgba(255, 255, 255, 0.7)">
+                <PanelLabel dotColor="color-mix(in srgb, var(--color-text) 70%, transparent)">
                   {t("analytics.scoreProgression")}
                 </PanelLabel>
                 <div
                   className="relative inline-flex items-center p-1 rounded-full overflow-x-auto"
                   style={{
-                    background: "rgba(255, 255, 255, 0.03)",
-                    border: "1px solid rgba(255, 255, 255, 0.06)",
+                    background: "color-mix(in srgb, var(--color-text) 3%, transparent)",
+                    border: "1px solid color-mix(in srgb, var(--color-text) 6%, transparent)",
                     scrollbarWidth: "none",
                   }}
                 >
@@ -767,8 +767,8 @@ export default function AnalyticsPage() {
                             className="absolute inset-0 rounded-full"
                             style={{
                               background:
-                                "linear-gradient(135deg, rgba(255, 255, 255, 0.10), rgba(255, 255, 255, 0.04))",
-                              border: "1px solid rgba(255, 255, 255, 0.14)",
+                                "linear-gradient(135deg, color-mix(in srgb, var(--color-text) 10%, transparent), color-mix(in srgb, var(--color-text) 4%, transparent))",
+                              border: "1px solid color-mix(in srgb, var(--color-text) 14%, transparent)",
                               boxShadow: "0 6px 20px -8px rgba(0, 0, 0, 0.5)",
                               zIndex: -1,
                             }}
@@ -819,7 +819,7 @@ export default function AnalyticsPage() {
             {/* ========== Averages + Tone Distribution ========== */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-5">
               <GlassPanel reduce={!!reduce} delay={0.5}>
-                <PanelLabel dotColor="rgba(255, 255, 255, 0.7)">{t("analytics.averagePerformance")}</PanelLabel>
+                <PanelLabel dotColor="color-mix(in srgb, var(--color-text) 70%, transparent)">{t("analytics.averagePerformance")}</PanelLabel>
                 <div className="space-y-3">
                   {METRIC_KEYS.map((m, i) => (
                     <ScoreBar
@@ -835,20 +835,20 @@ export default function AnalyticsPage() {
               </GlassPanel>
 
               <GlassPanel reduce={!!reduce} delay={0.55}>
-                <PanelLabel dotColor="rgba(255, 255, 255, 0.7)">{t("analytics.toneDistribution")}</PanelLabel>
+                <PanelLabel dotColor="color-mix(in srgb, var(--color-text) 70%, transparent)">{t("analytics.toneDistribution")}</PanelLabel>
                 {(() => {
                   const total = Object.values((data.toneDistribution || {})).reduce((a, b) => a + b, 0) || 1;
                   const tones = [
-                    { key: "positive", label: t("analytics.positive"), color: "#34d399", rgba: "52, 211, 153" },
+                    { key: "positive", label: t("analytics.positive"), color: "var(--color-positive)", rgba: "52, 211, 153" },
                     { key: "neutral", label: t("analytics.neutral"), color: "#fb923c", rgba: "251, 146, 60" },
-                    { key: "negative", label: t("analytics.negative"), color: "#ef4444", rgba: "239, 68, 68" },
+                    { key: "negative", label: t("analytics.negative"), color: "var(--color-negative)", rgba: "239, 68, 68" },
                     { key: "hesitant", label: t("analytics.hesitant"), color: "#fb923c", rgba: "251, 146, 60" },
                   ];
                   return (
                     <div className="space-y-4">
                       <div
                         className="relative rounded-full overflow-hidden flex"
-                        style={{ height: 8, background: "rgba(255, 255, 255, 0.04)" }}
+                        style={{ height: 8, background: "color-mix(in srgb, var(--color-text) 4%, transparent)" }}
                       >
                         {tones.map((tone, i) => {
                           const pct = (((data.toneDistribution || {})[tone.key] || 0) / total) * 100;
@@ -909,19 +909,19 @@ export default function AnalyticsPage() {
             {/* ========== Weekly Activity + Tone Breakdown ========== */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-5">
               <GlassPanel reduce={!!reduce} delay={0.65}>
-                <PanelLabel dotColor="rgba(255, 255, 255, 0.7)">{t("analytics.weeklyActivity")}</PanelLabel>
+                <PanelLabel dotColor="color-mix(in srgb, var(--color-text) 70%, transparent)">{t("analytics.weeklyActivity")}</PanelLabel>
                 <BarChart
                   data={(data.weeklyActivity || []).map((w) => ({
                     label: w.week.split(" ")[1] || w.week,
                     value: w.count,
                     color:
                       w.avgScore >= 70
-                        ? "#34d399"
+                        ? "var(--color-positive)"
                         : w.avgScore >= 40
                           ? "#fb923c"
                           : w.count > 0
-                            ? "#ef4444"
-                            : "rgba(255, 255, 255, 0.1)",
+                            ? "var(--color-negative)"
+                            : "color-mix(in srgb, var(--color-text) 10%, transparent)",
                   }))}
                   width={340}
                   height={110}
@@ -938,7 +938,7 @@ export default function AnalyticsPage() {
               </GlassPanel>
 
               <GlassPanel reduce={!!reduce} delay={0.7}>
-                <PanelLabel dotColor="rgba(255, 255, 255, 0.7)">{t("analytics.toneBreakdown")}</PanelLabel>
+                <PanelLabel dotColor="color-mix(in srgb, var(--color-text) 70%, transparent)">{t("analytics.toneBreakdown")}</PanelLabel>
                 <div className="space-y-3">
                   {Object.entries((data.toneBreakdown || {}))
                     .sort(([, a], [, b]) => b - a)
@@ -957,7 +957,7 @@ export default function AnalyticsPage() {
                           </span>
                           <div
                             className="flex-1 relative rounded-full overflow-hidden"
-                            style={{ height: 4, background: "rgba(255, 255, 255, 0.04)" }}
+                            style={{ height: 4, background: "color-mix(in srgb, var(--color-text) 4%, transparent)" }}
                           >
                             <motion.div
                               className="absolute inset-y-0 left-0 rounded-full"
@@ -993,8 +993,8 @@ export default function AnalyticsPage() {
                 transition={{ duration: 0.55, delay: 0.8, ease: EASE_OUT }}
                 style={{
                   background:
-                    "linear-gradient(135deg, rgba(255, 255, 255, 0.03) 0%, rgba(255, 255, 255, 0.01) 100%)",
-                  border: "1px solid rgba(255, 255, 255, 0.06)",
+                    "linear-gradient(135deg, color-mix(in srgb, var(--color-text) 3%, transparent) 0%, color-mix(in srgb, var(--color-text) 1%, transparent) 100%)",
+                  border: "1px solid color-mix(in srgb, var(--color-text) 6%, transparent)",
                   backdropFilter: "blur(20px)",
                   WebkitBackdropFilter: "blur(20px)",
                 }}
@@ -1003,16 +1003,16 @@ export default function AnalyticsPage() {
                   aria-hidden
                   className="absolute -top-14 -right-14 w-44 h-44 rounded-full pointer-events-none"
                   style={{
-                    background: "radial-gradient(circle, rgba(255, 255, 255, 0.10), transparent 70%)",
+                    background: "radial-gradient(circle, color-mix(in srgb, var(--color-text) 10%, transparent), transparent 70%)",
                     filter: "blur(28px)",
                     opacity: 0.4,
                   }}
                 />
                 <div
                   className="relative px-5 sm:px-6 py-4"
-                  style={{ borderBottom: "1px solid rgba(255, 255, 255, 0.05)" }}
+                  style={{ borderBottom: "1px solid color-mix(in srgb, var(--color-text) 5%, transparent)" }}
                 >
-                  <PanelLabel dotColor="rgba(255, 255, 255, 0.7)">
+                  <PanelLabel dotColor="color-mix(in srgb, var(--color-text) 70%, transparent)">
                     {t("analytics.sessionHistory")}
                   </PanelLabel>
                 </div>
@@ -1036,8 +1036,8 @@ export default function AnalyticsPage() {
                             className="text-[10px] uppercase tracking-[0.18em] font-semibold text-left px-4 py-3"
                             style={{
                               color: "var(--color-text-muted)",
-                              borderBottom: "1px solid rgba(255, 255, 255, 0.04)",
-                              background: "rgba(255, 255, 255, 0.015)",
+                              borderBottom: "1px solid color-mix(in srgb, var(--color-text) 4%, transparent)",
+                              background: "color-mix(in srgb, var(--color-text) 1.5%, transparent)",
                             }}
                           >
                             {h}
@@ -1071,15 +1071,15 @@ export default function AnalyticsPage() {
                             }}
                             className="group"
                             style={{ transition: "background 0.2s ease" }}
-                            onMouseEnter={(e) => { e.currentTarget.style.background = "rgba(255, 255, 255, 0.02)"; }}
+                            onMouseEnter={(e) => { e.currentTarget.style.background = "color-mix(in srgb, var(--color-text) 2%, transparent)"; }}
                             onMouseLeave={(e) => { e.currentTarget.style.background = "transparent"; }}
                           >
-                            <td className="px-4 py-3" style={{ borderBottom: "1px solid rgba(255, 255, 255, 0.03)" }}>
+                            <td className="px-4 py-3" style={{ borderBottom: "1px solid color-mix(in srgb, var(--color-text) 3%, transparent)" }}>
                               <span className="text-xs tabular-nums" style={{ color: "var(--color-text-silver)" }}>
                                 {new Date(p.date).toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" })}
                               </span>
                             </td>
-                            <td className="px-4 py-3" style={{ borderBottom: "1px solid rgba(255, 255, 255, 0.03)" }}>
+                            <td className="px-4 py-3" style={{ borderBottom: "1px solid color-mix(in srgb, var(--color-text) 3%, transparent)" }}>
                               <span
                                 className="text-sm font-medium tabular-nums"
                                 style={{
@@ -1090,16 +1090,16 @@ export default function AnalyticsPage() {
                                 {p.overall}
                               </span>
                             </td>
-                            <td className="px-4 py-3" style={{ borderBottom: "1px solid rgba(255, 255, 255, 0.03)" }}>
+                            <td className="px-4 py-3" style={{ borderBottom: "1px solid color-mix(in srgb, var(--color-text) 3%, transparent)" }}>
                               <span className="text-xs tabular-nums" style={{ color: getScoreColor(p.engagement) }}>{p.engagement}</span>
                             </td>
-                            <td className="px-4 py-3" style={{ borderBottom: "1px solid rgba(255, 255, 255, 0.03)" }}>
+                            <td className="px-4 py-3" style={{ borderBottom: "1px solid color-mix(in srgb, var(--color-text) 3%, transparent)" }}>
                               <span className="text-xs tabular-nums" style={{ color: getScoreColor(p.tone) }}>{p.tone}</span>
                             </td>
-                            <td className="px-4 py-3" style={{ borderBottom: "1px solid rgba(255, 255, 255, 0.03)" }}>
+                            <td className="px-4 py-3" style={{ borderBottom: "1px solid color-mix(in srgb, var(--color-text) 3%, transparent)" }}>
                               <span className="text-xs tabular-nums" style={{ color: getScoreColor(p.social) }}>{p.social}</span>
                             </td>
-                            <td className="px-4 py-3" style={{ borderBottom: "1px solid rgba(255, 255, 255, 0.03)" }}>
+                            <td className="px-4 py-3" style={{ borderBottom: "1px solid color-mix(in srgb, var(--color-text) 3%, transparent)" }}>
                               <span
                                 className="text-[10px] uppercase tracking-[0.16em] capitalize font-semibold px-2.5 py-1 rounded-full"
                                 style={{

@@ -282,7 +282,7 @@ export default function LiveTranslationStream({ segments, isRecording, compact =
       <style jsx>{`
         .lts-root {
           position: relative;
-          background: linear-gradient(135deg, rgba(167, 139, 250, 0.04) 0%, rgba(255, 255, 255, 0.01) 100%);
+          background: linear-gradient(135deg, rgba(167, 139, 250, 0.04) 0%, color-mix(in srgb, var(--color-text) 1%, transparent) 100%);
           border: 1px solid rgba(167, 139, 250, 0.12);
           border-radius: 20px;
           padding: 20px;
@@ -325,7 +325,7 @@ export default function LiveTranslationStream({ segments, isRecording, compact =
           display: flex;
           align-items: center;
           justify-content: center;
-          color: #c4b5fd;
+          color: var(--shimmer-accent-1);
           background: rgba(167, 139, 250, 0.12);
           border: 1px solid rgba(167, 139, 250, 0.2);
         }
@@ -346,15 +346,15 @@ export default function LiveTranslationStream({ segments, isRecording, compact =
           text-transform: uppercase;
           padding: 4px 9px;
           border-radius: 999px;
-          background: rgba(239, 68, 68, 0.12);
-          color: #ef4444;
-          border: 1px solid rgba(239, 68, 68, 0.25);
+          background: color-mix(in srgb, var(--color-negative) 12%, transparent);
+          color: var(--color-negative);
+          border: 1px solid color-mix(in srgb, var(--color-negative) 25%, transparent);
         }
         .lts-live-dot {
           width: 6px;
           height: 6px;
           border-radius: 50%;
-          background: #ef4444;
+          background: var(--color-negative);
           animation: ltsPulse 1.4s ease-in-out infinite;
         }
 
@@ -369,8 +369,8 @@ export default function LiveTranslationStream({ segments, isRecording, compact =
           -webkit-appearance: none;
           -moz-appearance: none;
           padding: 7px 28px 7px 12px;
-          border: 1px solid rgba(255, 255, 255, 0.06);
-          background-color: rgba(255, 255, 255, 0.03);
+          border: 1px solid color-mix(in srgb, var(--color-text) 6%, transparent);
+          background-color: color-mix(in srgb, var(--color-text) 3%, transparent);
           background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='%23a1a1aa' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9' /></svg>");
           background-repeat: no-repeat;
           background-position: right 10px center;
@@ -392,7 +392,7 @@ export default function LiveTranslationStream({ segments, isRecording, compact =
           border-color: rgba(167, 139, 250, 0.4);
         }
         .lts-lang-select option {
-          background: #111114;
+          background: var(--color-surface-2);
           color: var(--color-text);
         }
 
@@ -400,8 +400,8 @@ export default function LiveTranslationStream({ segments, isRecording, compact =
           width: 38px;
           height: 22px;
           border-radius: 999px;
-          background: rgba(255, 255, 255, 0.04);
-          border: 1px solid rgba(255, 255, 255, 0.08);
+          background: color-mix(in srgb, var(--color-text) 4%, transparent);
+          border: 1px solid color-mix(in srgb, var(--color-text) 8%, transparent);
           padding: 2px;
           cursor: pointer;
           position: relative;
@@ -417,12 +417,12 @@ export default function LiveTranslationStream({ segments, isRecording, compact =
           width: 16px;
           height: 16px;
           border-radius: 50%;
-          background: #fafafa;
+          background: var(--color-text-muted);
           transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
         }
         .lts-toggle.is-on .lts-toggle-dot {
           transform: translateX(16px);
-          background: #0a0a0a;
+          background: var(--color-bg);
         }
 
         .lts-mode-row {
@@ -435,21 +435,21 @@ export default function LiveTranslationStream({ segments, isRecording, compact =
           padding: 6px 12px;
           font-size: 11px;
           font-weight: 500;
-          background: rgba(255, 255, 255, 0.02);
+          background: color-mix(in srgb, var(--color-text) 2%, transparent);
           color: var(--color-text-muted);
-          border: 1px solid rgba(255, 255, 255, 0.04);
+          border: 1px solid color-mix(in srgb, var(--color-text) 4%, transparent);
           border-radius: 999px;
           cursor: pointer;
           transition: all 0.2s ease;
         }
         .lts-mode-chip:hover {
           color: var(--color-text);
-          border-color: rgba(255, 255, 255, 0.1);
+          border-color: color-mix(in srgb, var(--color-text) 10%, transparent);
         }
         .lts-mode-chip.is-active {
           color: var(--color-text);
-          border-color: rgba(255, 255, 255, 0.16);
-          background: rgba(255, 255, 255, 0.08);
+          border-color: color-mix(in srgb, var(--color-text) 16%, transparent);
+          background: color-mix(in srgb, var(--color-text) 8%, transparent);
         }
 
         .lts-error {
@@ -474,7 +474,7 @@ export default function LiveTranslationStream({ segments, isRecording, compact =
           align-items: center;
           justify-content: center;
           border-radius: 16px;
-          color: #c4b5fd;
+          color: var(--shimmer-accent-1);
           background: rgba(167, 139, 250, 0.10);
           border: 1px solid rgba(167, 139, 250, 0.18);
         }
