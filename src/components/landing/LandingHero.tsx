@@ -856,12 +856,14 @@ export default function LandingHero() {
           position: relative;
           display: inline-block;
           vertical-align: bottom;
+          max-width: 100%;
         }
         :global(.fade-rotation-ghost) {
           visibility: hidden;
           display: inline-block;
           white-space: nowrap;
           pointer-events: none;
+          max-width: 100%;
         }
         :global(.fade-rotation-current) {
           position: absolute;
@@ -872,6 +874,13 @@ export default function LandingHero() {
           display: inline-block;
           white-space: nowrap;
           will-change: opacity, transform, filter;
+        }
+        @media (max-width: 640px) {
+          :global(.fade-rotation-ghost),
+          :global(.fade-rotation-current) {
+            white-space: normal;
+            overflow-wrap: break-word;
+          }
         }
 
         .hero-eyebrow {

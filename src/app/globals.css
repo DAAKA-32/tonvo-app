@@ -532,11 +532,14 @@ html[data-theme="light"] body {
 
 /* Hero-specific heading — extra large with tighter tracking */
 .hero-heading {
-  font-size: clamp(2.5rem, 6vw, 4.5rem);
+  font-size: clamp(1.9rem, 7vw, 4.5rem);
   font-weight: 800;
   line-height: 1.06;
   letter-spacing: -0.03em;
   color: var(--color-text);
+  overflow-wrap: break-word;
+  word-break: normal;
+  max-width: 100%;
 }
 
 /* Card title */
