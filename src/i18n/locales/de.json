@@ -1024,5 +1024,14 @@
       "it": "Italienisch", "pt": "Portugiesisch", "nl": "Niederländisch",
       "ja": "Japanisch", "ko": "Koreanisch", "zh": "Chinesisch"
     }
+  },
+  "socialProof": {
+    "region": "Neue Abonnements",
+    "justJoined": "<name>{{name}}</name> hat gerade <plan>{{plan}}</plan> gewählt",
+    "joined": "<name>{{name}}</name> hat <plan>{{plan}}</plan> gewählt",
+    "justJoinedAnonymous": "Jemand hat gerade <plan>{{plan}}</plan> gewählt",
+    "joinedAnonymous": "Jemand hat <plan>{{plan}}</plan> gewählt",
+    "demo": "Demo",
+    "dismiss": "Benachrichtigungen ausblenden"
   }
 }

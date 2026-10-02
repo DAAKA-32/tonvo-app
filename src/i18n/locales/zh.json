@@ -1024,5 +1024,14 @@
       "it": "意大利语", "pt": "葡萄牙语", "nl": "荷兰语",
       "ja": "日语", "ko": "韩语", "zh": "中文"
     }
+  },
+  "socialProof": {
+    "region": "最近订阅",
+    "justJoined": "<name>{{name}}</name> 刚刚加入了 <plan>{{plan}}</plan>",
+    "joined": "<name>{{name}}</name> 加入了 <plan>{{plan}}</plan>",
+    "justJoinedAnonymous": "有人刚刚加入了 <plan>{{plan}}</plan>",
+    "joinedAnonymous": "有人加入了 <plan>{{plan}}</plan>",
+    "demo": "演示",
+    "dismiss": "隐藏通知"
   }
 }

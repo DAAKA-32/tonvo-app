@@ -15,6 +15,7 @@ import UseCasesSection from "@/components/landing/UseCasesSection";
 import SolutionSection from "@/components/landing/SolutionSection";
 import ProblemSection from "@/components/landing/ProblemSection";
 import TestimonialsSection from "@/components/landing/TestimonialsSection";
+import SubscriptionNotifications from "@/components/social-proof/SubscriptionNotifications";
 import { FadeIn, Stagger, StaggerItem, MotionLink, RevealLine } from "@/components/motion";
 
 /* ------------------------------------------------------------------ */
@@ -636,6 +637,9 @@ export default function HomePage() {
           </div>
         </footer>
       </main>
+
+      {/* Recent subscriptions: real ones when available, otherwise demo examples badged "Demo" */}
+      <SubscriptionNotifications />
     </>
   );
 }

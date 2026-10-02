@@ -1024,5 +1024,14 @@
       "it": "イタリア語", "pt": "ポルトガル語", "nl": "オランダ語",
       "ja": "日本語", "ko": "韓国語", "zh": "中国語"
     }
+  },
+  "socialProof": {
+    "region": "最近の登録",
+    "justJoined": "<name>{{name}}</name>さんがたった今<plan>{{plan}}</plan>に登録しました",
+    "joined": "<name>{{name}}</name>さんが<plan>{{plan}}</plan>に登録しました",
+    "justJoinedAnonymous": "どなたかがたった今<plan>{{plan}}</plan>に登録しました",
+    "joinedAnonymous": "どなたかが<plan>{{plan}}</plan>に登録しました",
+    "demo": "デモ",
+    "dismiss": "通知を非表示"
   }
 }

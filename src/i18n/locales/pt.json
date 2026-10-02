@@ -1024,5 +1024,14 @@
       "it": "Italiano", "pt": "Português", "nl": "Neerlandês",
       "ja": "Japonês", "ko": "Coreano", "zh": "Chinês"
     }
+  },
+  "socialProof": {
+    "region": "Subscrições recentes",
+    "justJoined": "<name>{{name}}</name> acabou de aderir ao <plan>{{plan}}</plan>",
+    "joined": "<name>{{name}}</name> aderiu ao <plan>{{plan}}</plan>",
+    "justJoinedAnonymous": "Alguém acabou de aderir ao <plan>{{plan}}</plan>",
+    "joinedAnonymous": "Alguém aderiu ao <plan>{{plan}}</plan>",
+    "demo": "Demo",
+    "dismiss": "Ocultar notificações"
   }
 }
