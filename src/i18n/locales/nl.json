@@ -1024,5 +1024,14 @@
       "it": "Italiaans", "pt": "Portugees", "nl": "Nederlands",
       "ja": "Japans", "ko": "Koreaans", "zh": "Chinees"
     }
+  },
+  "socialProof": {
+    "region": "Recente abonnementen",
+    "justJoined": "<name>{{name}}</name> koos net voor <plan>{{plan}}</plan>",
+    "joined": "<name>{{name}}</name> koos voor <plan>{{plan}}</plan>",
+    "justJoinedAnonymous": "Iemand koos net voor <plan>{{plan}}</plan>",
+    "joinedAnonymous": "Iemand koos voor <plan>{{plan}}</plan>",
+    "demo": "Demo",
+    "dismiss": "Meldingen verbergen"
   }
 }

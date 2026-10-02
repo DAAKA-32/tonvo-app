@@ -1026,5 +1026,14 @@
       "it": "Italien", "pt": "Portugais", "nl": "Néerlandais",
       "ja": "Japonais", "ko": "Coréen", "zh": "Chinois"
     }
+  },
+  "socialProof": {
+    "region": "Abonnements récents",
+    "justJoined": "<name>{{name}}</name> vient de rejoindre <plan>{{plan}}</plan>",
+    "joined": "<name>{{name}}</name> a rejoint <plan>{{plan}}</plan>",
+    "justJoinedAnonymous": "Quelqu'un vient de rejoindre <plan>{{plan}}</plan>",
+    "joinedAnonymous": "Quelqu'un a rejoint <plan>{{plan}}</plan>",
+    "demo": "Démo",
+    "dismiss": "Masquer les notifications"
   }
 }

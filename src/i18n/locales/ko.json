@@ -1024,5 +1024,14 @@
       "it": "이탈리아어", "pt": "포르투갈어", "nl": "네덜란드어",
       "ja": "일본어", "ko": "한국어", "zh": "중국어"
     }
+  },
+  "socialProof": {
+    "region": "최근 가입",
+    "justJoined": "<name>{{name}}</name>님이 방금 <plan>{{plan}}</plan>에 가입했습니다",
+    "joined": "<name>{{name}}</name>님이 <plan>{{plan}}</plan>에 가입했습니다",
+    "justJoinedAnonymous": "누군가 방금 <plan>{{plan}}</plan>에 가입했습니다",
+    "joinedAnonymous": "누군가 <plan>{{plan}}</plan>에 가입했습니다",
+    "demo": "데모",
+    "dismiss": "알림 숨기기"
   }
 }
