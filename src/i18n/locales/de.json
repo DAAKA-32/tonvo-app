@@ -271,7 +271,13 @@
     "copilotInvisible": "KI-Copilot läuft — unsichtbar bei Bildschirmfreigabe.",
     "copilotSeparateWindow": "Copilot in separatem Fenster. Tipp: Teilen Sie ein einzelnes Fenster, damit er verborgen bleibt.",
     "copilotBlocked": "Copilot-Fenster vom Browser blockiert. Pop-ups erlauben oder Chrome für unsichtbares PiP nutzen.",
-    "copilotInline": "Copilot wird unten inline angezeigt — nach unten scrollen für Vorschläge."
+    "copilotInline": "Copilot wird unten inline angezeigt — nach unten scrollen für Vorschläge.",
+    "questionToAnswer": "Offene Frage",
+    "copyReply": "Kopieren",
+    "copied": "Kopiert",
+    "proLockedTitle": "Live-Coaching",
+    "proLockedText": "Coaching-Tipps, Kaufsignale und Redeanteil, live während des Gesprächs.",
+    "proLockedCta": "Pläne ansehen"
   },
   "auth": {
     "welcomeBack": "Willkommen zurück",
@@ -427,7 +433,25 @@
     "modeNone": "Aktivieren Sie mindestens Bildschirm oder Audio, um eine Session zu starten.",
     "listeningInsights": "Hört zu… Insights erscheinen, sobald das Gespräch analysiert wird.",
     "noAudioDetected": "Kein Audio erkannt. Bitte Audioquelle prüfen.",
-    "listeningTranscript": "Hört zu… Sprechen Sie, um das Transkript zu sehen."
+    "listeningTranscript": "Hört zu… Sprechen Sie, um das Transkript zu sehen.",
+    "liveInProgress": "Live",
+    "statusCopilotDown": "Copilot nicht verfügbar",
+    "statusLive": "Live-Transkription",
+    "statusFallback": "Ersatzmodus",
+    "statusReconnecting": "Verbinde neu...",
+    "statusConnecting": "Verbinde...",
+    "retry": "Erneut versuchen",
+    "fallbackMode": "Live-Transkription unterbrochen. Ersatzmodus aktiv, mit leichter Verzögerung.",
+    "screenShareEnded": "Freigabe beendet: Tonvo hört jetzt nur noch Ihr Mikrofon.",
+    "shareMeetingHint": "Geben Sie den Meeting-Tab frei und aktivieren Sie \"Tab-Audio teilen\", damit Tonvo Ihr Gegenüber hört.",
+    "shareScreenToggle": "Bildschirm",
+    "shareMeetingToggle": "Meeting-Audio",
+    "meetingAudioTitle": "Beide Seiten Ihres Meet-, Zoom- oder Teams-Calls hören",
+    "meetingAudioHint": "Wenn das Freigabefenster erscheint, wählen Sie den Meeting-Tab und aktivieren Sie \"Tab-Audio teilen\" (oder \"Systemaudio teilen\" für eine Desktop-App). Dann hört Tonvo Ihr Gegenüber, auch mit Headset.",
+    "transcriptTab": "Live-Transkript",
+    "starting": "Wird gestartet...",
+    "recordingHint": "Tonvo hört zu. Bleiben Sie beim Gespräch, die Vorschläge kommen in Echtzeit.",
+    "idleHint": "Aufnahme einrichten und live gehen."
   },
   "analyzePage": {
     "title": "Gespräch analysieren",
@@ -734,7 +758,7 @@
       "cta": "Meinen ersten Deal closen",
       "features": [
         "3 Live-Closing-Sessions pro Monat",
-        "Kaufsignal-Erkennung",
+        "Erkennung von Kundenfragen",
         "Kern-Closing-Lines",
         "Deal-Review (7 Tage Verlauf)"
       ]

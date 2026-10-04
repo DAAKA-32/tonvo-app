@@ -271,7 +271,13 @@
     "copilotInvisible": "AI Copilot running — invisible to screen share.",
     "copilotSeparateWindow": "Copilot in a separate window. Tip: share a specific window to keep it hidden.",
     "copilotBlocked": "Copilot window blocked by browser. Allow popups or use Chrome for invisible PiP.",
-    "copilotInline": "Copilot shown inline below — scroll down to see suggestions."
+    "copilotInline": "Copilot shown inline below — scroll down to see suggestions.",
+    "questionToAnswer": "Question to answer",
+    "copyReply": "Copy",
+    "copied": "Copied",
+    "proLockedTitle": "Live coaching",
+    "proLockedText": "Coaching tips, buying signals and talk-time balance, live during the call.",
+    "proLockedCta": "See plans"
   },
   "auth": {
     "welcomeBack": "Welcome back",
@@ -427,7 +433,25 @@
     "modeNone": "Enable at least Screen or Audio to start a session.",
     "listeningInsights": "Listening... insights will appear here as conversation is analyzed.",
     "noAudioDetected": "No audio detected. Check your audio source.",
-    "listeningTranscript": "Listening... speak to see the transcript here."
+    "listeningTranscript": "Listening... speak to see the transcript here.",
+    "liveInProgress": "Live",
+    "statusCopilotDown": "Copilot unavailable",
+    "statusLive": "Live transcription",
+    "statusFallback": "Backup mode",
+    "statusReconnecting": "Reconnecting...",
+    "statusConnecting": "Connecting...",
+    "retry": "Retry",
+    "fallbackMode": "Live transcription interrupted. Backup mode on, with a slight delay.",
+    "screenShareEnded": "Sharing stopped: Tonvo now only hears your microphone.",
+    "shareMeetingHint": "Share the meeting tab and tick \"Also share tab audio\" so Tonvo hears the other side.",
+    "shareScreenToggle": "Screen",
+    "shareMeetingToggle": "Meeting audio",
+    "meetingAudioTitle": "Hear both sides of your Meet, Zoom or Teams call",
+    "meetingAudioHint": "When the share window opens, pick your meeting tab and tick \"Also share tab audio\" (or \"Share system audio\" for a desktop app). Tonvo then hears the other side, even on a headset.",
+    "transcriptTab": "Live transcript",
+    "starting": "Starting...",
+    "recordingHint": "Tonvo is listening. Stay focused on the conversation, suggestions arrive in real time.",
+    "idleHint": "Set up capture and press to go live."
   },
   "analyzePage": {
     "title": "Analyze Conversation",
@@ -734,7 +758,7 @@
       "cta": "Close my first deal",
       "features": [
         "3 live closing sessions per month",
-        "Buying-signal detection",
+        "Prospect question detection",
         "Core closing lines",
         "Deal review (7-day history)"
       ]

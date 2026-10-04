@@ -38,6 +38,8 @@ export interface DetectedQuestion {
 }
 
 export interface ToneResult {
+  /** True when the server could not parse the model reply: keep previous suggestions. */
+  degraded?: boolean;
   tone: Tone;
   confidence: number;
   suggestion: string;
@@ -60,6 +62,8 @@ export interface ToneResult {
 }
 
 export interface TranscriptSegment {
+  /** Stable id of the live turn that produced this segment (live sessions only). */
+  id?: string;
   text: string;
   timestamp: number;
   tone: ToneResult;

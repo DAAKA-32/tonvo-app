@@ -6,11 +6,32 @@ import {
   getClientIp,
   rateLimitGuard,
 } from "@/lib/security";
+import type { SpeakerSegment } from "@/types/analysis";
+import {
+  isEmptyAudioError,
+  toLanguageCode,
+  toSpeakerSegments,
+  type AaiUtterance,
+} from "@/lib/transcribe-utils";
 
-const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
+/**
+ * POST /api/transcribe
+ *
+ * Batch transcription of one recorded chunk (~5 s). Used as the fallback when
+ * live streaming is unavailable. Backed by AssemblyAI pre-recorded:
+ * upload → create transcript → poll. Typical latency 2.5–5 s.
+ *
+ * Returns: { text, language, speakerSegments }
+ */
 
-// Allow-list of audio MIME types. Anything else is rejected before we burn
-// an OpenAI call on it.
+export const maxDuration = 30;
+
+const ASSEMBLYAI_API_KEY = process.env.ASSEMBLYAI_API_KEY;
+const AAI_BASE = "https://api.assemblyai.com/v2";
+const POLL_INTERVAL_MS = 400;
+const DEADLINE_MS = 20_000;
+
+// Allow-list of audio MIME types (compared without whitespace).
 const ALLOWED_AUDIO_MIME = new Set([
   "audio/webm",
   "audio/webm;codecs=opus",
@@ -23,89 +44,15 @@ const ALLOWED_AUDIO_MIME = new Set([
   "audio/flac",
 ]);
 
-/** Convert Whisper language name or locale to ISO-639-1 code. Returns null if unknown. */
-function toISO639(lang: string): string | null {
-  const l = lang.toLowerCase().trim();
-  // Already a 2-letter code
-  if (/^[a-z]{2}$/.test(l)) return l;
-  // Locale like "fr-FR" or "en-US"
-  if (/^[a-z]{2}[_-]/.test(l)) return l.slice(0, 2);
-  // Whisper full names → ISO codes (most common)
-  const map: Record<string, string> = {
-    english: "en", french: "fr", spanish: "es", german: "de", italian: "it",
-    portuguese: "pt", dutch: "nl", russian: "ru", chinese: "zh", japanese: "ja",
-    korean: "ko", arabic: "ar", hindi: "hi", turkish: "tr", polish: "pl",
-    swedish: "sv", danish: "da", norwegian: "no", finnish: "fi", greek: "el",
-    czech: "cs", romanian: "ro", hungarian: "hu", thai: "th", vietnamese: "vi",
-    indonesian: "id", malay: "ms", ukrainian: "uk", hebrew: "he", catalan: "ca",
-  };
-  return map[l] || null;
-}
+const EMPTY = { text: "", language: null, speakerSegments: [] as SpeakerSegment[] };
 
-// Simple pause-based speaker segmentation.
-// Whisper returns word-level timestamps; gaps > PAUSE_THRESHOLD suggest a speaker change.
-const PAUSE_THRESHOLD = 1.5; // seconds
-
-interface WhisperWord {
-  word: string;
-  start: number;
-  end: number;
-}
-
-interface WhisperVerboseResponse {
-  text: string;
-  language: string;
-  segments?: Array<{ start: number; end: number; text: string }>;
-  words?: WhisperWord[];
-}
-
-export interface SpeakerSegment {
-  speaker: string; // "Speaker 1", "Speaker 2"
-  text: string;
-  start: number;
-  end: number;
-}
-
-function segmentBySpeaker(words: WhisperWord[]): SpeakerSegment[] {
-  if (!words || words.length === 0) return [];
-
-  const segments: SpeakerSegment[] = [];
-  let currentSpeaker = 0; // 0-indexed
-  let currentWords: string[] = [words[0].word];
-  let segStart = words[0].start;
-  let prevEnd = words[0].end;
-
-  for (let i = 1; i < words.length; i++) {
-    const gap = words[i].start - prevEnd;
-
-    if (gap >= PAUSE_THRESHOLD) {
-      // Pause detected -> potential speaker switch
-      segments.push({
-        speaker: `Speaker ${currentSpeaker + 1}`,
-        text: currentWords.join(" ").trim(),
-        start: segStart,
-        end: prevEnd,
-      });
-      currentSpeaker = (currentSpeaker + 1) % 2; // alternate between 2 speakers
-      currentWords = [words[i].word];
-      segStart = words[i].start;
-    } else {
-      currentWords.push(words[i].word);
-    }
-    prevEnd = words[i].end;
-  }
-
-  // Push final segment
-  if (currentWords.length > 0) {
-    segments.push({
-      speaker: `Speaker ${currentSpeaker + 1}`,
-      text: currentWords.join(" ").trim(),
-      start: segStart,
-      end: prevEnd,
-    });
-  }
-
-  return segments;
+interface AaiTranscript {
+  id: string;
+  status: "queued" | "processing" | "completed" | "error";
+  text?: string | null;
+  language_code?: string | null;
+  utterances?: AaiUtterance[] | null;
+  error?: string;
 }
 
 export async function POST(req: NextRequest) {
@@ -114,17 +61,16 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  if (!OPENAI_API_KEY) {
+  if (!ASSEMBLYAI_API_KEY) {
     return NextResponse.json({ error: "Server misconfigured" }, { status: 500 });
   }
 
-  // Reject oversized payloads at the edge before formData() buffers anything.
+  // Reject oversized payloads before formData() buffers anything.
   const lenHeader = req.headers.get("content-length");
   if (lenHeader && Number(lenHeader) > AUDIO_BODY_LIMIT) {
     return NextResponse.json({ error: "Payload too large" }, { status: 413 });
   }
 
-  // Rate-limit by uid+ip (user-first, IP as tiebreaker).
   const ip = getClientIp(req);
   const rateLimited = await rateLimitGuard(
     "transcribe",
@@ -133,96 +79,107 @@ export async function POST(req: NextRequest) {
   );
   if (rateLimited) return rateLimited;
 
+  let audioFile: File | null;
+  let language: string | null;
   try {
     const formData = await req.formData();
-    const audioFile = formData.get("audio") as File | null;
-    const language = (formData.get("language") as string | null) || undefined;
+    audioFile = formData.get("audio") as File | null;
+    language = formData.get("language") as string | null;
+  } catch {
+    return NextResponse.json({ error: "Invalid form data" }, { status: 400 });
+  }
 
-    if (!audioFile) {
-      return NextResponse.json({ error: "No audio file provided" }, { status: 400 });
-    }
+  if (!audioFile) {
+    return NextResponse.json({ error: "No audio file provided" }, { status: 400 });
+  }
+  if (audioFile.size > AUDIO_BODY_LIMIT) {
+    return NextResponse.json({ error: "Audio file too large" }, { status: 413 });
+  }
+  // < 1 KB is almost certainly silence/noise
+  if (audioFile.size < 1000) {
+    return NextResponse.json(EMPTY);
+  }
 
-    // Hard size cap (defends against chunked transfers that bypass content-length)
-    if (audioFile.size > AUDIO_BODY_LIMIT) {
-      return NextResponse.json({ error: "Audio file too large" }, { status: 413 });
-    }
+  const mimeType = (audioFile.type || "audio/webm").toLowerCase().replace(/\s+/g, "");
+  if (!ALLOWED_AUDIO_MIME.has(mimeType)) {
+    return NextResponse.json({ error: "Unsupported audio format" }, { status: 415 });
+  }
 
-    // Reject empty or too-small audio blobs (< 1KB is almost certainly silence/noise)
-    if (audioFile.size < 1000) {
-      return NextResponse.json({ text: "", language: null, speakerSegments: [] });
-    }
+  const deadline = Date.now() + DEADLINE_MS;
+  const headers = { authorization: ASSEMBLYAI_API_KEY };
 
-    // Strict MIME allow-list — reject anything else before sending to OpenAI.
-    const mimeType = (audioFile.type || "audio/webm").toLowerCase();
-    if (!ALLOWED_AUDIO_MIME.has(mimeType)) {
-      return NextResponse.json({ error: "Unsupported audio format" }, { status: 415 });
-    }
-
-    // Map MIME → extension Whisper expects.
-    const extMap: Record<string, string> = {
-      "audio/webm": "webm",
-      "audio/webm;codecs=opus": "webm",
-      "audio/ogg": "ogg",
-      "audio/ogg;codecs=opus": "ogg",
-      "audio/mp4": "mp4",
-      "audio/mpeg": "mp3",
-      "audio/wav": "wav",
-      "audio/x-wav": "wav",
-      "audio/flac": "flac",
-    };
-    const ext = extMap[mimeType] || "webm";
-    const filename = `audio.${ext}`;
-
-    // Send the original File directly — do NOT re-wrap in a new Blob
-    // (re-wrapping strips the internal audio container headers Whisper needs)
-    const whisperForm = new FormData();
-    whisperForm.append("file", audioFile, filename);
-    whisperForm.append("model", "whisper-1");
-    whisperForm.append("response_format", "verbose_json");
-    whisperForm.append("timestamp_granularities[]", "word");
-
-    // If language specified, convert to ISO-639-1 code (Whisper returns full names like "french"
-    // but only accepts codes like "fr" as input)
-    if (language) {
-      const iso = toISO639(language);
-      if (iso) whisperForm.append("language", iso);
-    }
-
-    const response = await fetch("https://api.openai.com/v1/audio/transcriptions", {
+  try {
+    // 1) Upload the raw bytes
+    const uploadRes = await fetch(`${AAI_BASE}/upload`, {
       method: "POST",
-      headers: {
-        Authorization: `Bearer ${OPENAI_API_KEY}`,
-      },
-      body: whisperForm,
+      headers: { ...headers, "content-type": "application/octet-stream" },
+      body: Buffer.from(await audioFile.arrayBuffer()),
+      signal: AbortSignal.timeout(DEADLINE_MS),
     });
-
-    if (!response.ok) {
-      const errBody = await response.text();
-      console.error("Whisper API error:", response.status, errBody);
-      // Return empty transcript instead of 500 for transient Whisper errors
-      if (response.status === 400) {
-        // Bad audio format or too short -- return empty instead of crashing
-        return NextResponse.json({ text: "", language: null, speakerSegments: [] });
-      }
-      return NextResponse.json(
-        { error: `Whisper API error: ${response.status}` },
-        { status: response.status }
-      );
+    if (!uploadRes.ok) {
+      console.error("[transcribe] AssemblyAI upload error:", uploadRes.status);
+      return NextResponse.json({ error: "Transcription provider error" }, { status: 502 });
+    }
+    const { upload_url } = (await uploadRes.json()) as { upload_url?: string };
+    if (!upload_url) {
+      return NextResponse.json({ error: "Transcription provider error" }, { status: 502 });
     }
 
-    const data: WhisperVerboseResponse = await response.json();
+    // 2) Create the transcript job
+    const languageCode = toLanguageCode(language);
+    const createRes = await fetch(`${AAI_BASE}/transcript`, {
+      method: "POST",
+      headers: { ...headers, "content-type": "application/json" },
+      body: JSON.stringify({
+        audio_url: upload_url,
+        speech_models: ["universal-3-5-pro", "universal-2"],
+        speaker_labels: true,
+        ...(languageCode ? { language_code: languageCode } : { language_detection: true }),
+      }),
+      signal: AbortSignal.timeout(Math.max(1_000, deadline - Date.now())),
+    });
+    if (!createRes.ok) {
+      const detail = await createRes.text().catch(() => "");
+      console.error("[transcribe] AssemblyAI create error:", createRes.status, detail.slice(0, 200));
+      return NextResponse.json({ error: "Transcription provider error" }, { status: 502 });
+    }
+    let transcript = (await createRes.json()) as AaiTranscript;
 
-    // Build speaker segments from word-level timestamps
-    const speakerSegments = data.words ? segmentBySpeaker(data.words) : [];
+    // 3) Poll until done
+    while (transcript.status !== "completed" && transcript.status !== "error") {
+      if (Date.now() + POLL_INTERVAL_MS > deadline) {
+        console.error("[transcribe] AssemblyAI poll timeout");
+        return NextResponse.json({ error: "Transcription timeout" }, { status: 504 });
+      }
+      await new Promise((r) => setTimeout(r, POLL_INTERVAL_MS));
+      const pollRes = await fetch(`${AAI_BASE}/transcript/${transcript.id}`, {
+        headers,
+        signal: AbortSignal.timeout(Math.max(1_000, deadline - Date.now())),
+      });
+      if (!pollRes.ok) {
+        console.error("[transcribe] AssemblyAI poll error:", pollRes.status);
+        return NextResponse.json({ error: "Transcription provider error" }, { status: 502 });
+      }
+      transcript = (await pollRes.json()) as AaiTranscript;
+    }
+
+    if (transcript.status === "error") {
+      if (isEmptyAudioError(transcript.error)) return NextResponse.json(EMPTY);
+      console.error("[transcribe] AssemblyAI transcript error:", transcript.error?.slice(0, 200));
+      return NextResponse.json({ error: "Transcription failed" }, { status: 502 });
+    }
 
     return NextResponse.json({
-      text: data.text,
-      language: data.language || null,
-      speakerSegments,
+      text: transcript.text ?? "",
+      language: transcript.language_code ?? languageCode ?? null,
+      speakerSegments: toSpeakerSegments(transcript.utterances),
     });
   } catch (error) {
-    console.error("Transcription error:", error instanceof Error ? error.message : error);
-    // Return empty transcript on network/parsing errors to avoid crashing the session
-    return NextResponse.json({ text: "", language: null, speakerSegments: [] });
+    const isTimeout = error instanceof Error && (error.name === "TimeoutError" || error.name === "AbortError");
+    console.error("[transcribe] error:", error instanceof Error ? error.message : error);
+    return NextResponse.json(
+      { error: isTimeout ? "Transcription timeout" : "Transcription failed" },
+      { status: isTimeout ? 504 : 502 },
+    );
   }
 }

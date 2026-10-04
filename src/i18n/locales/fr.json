@@ -271,7 +271,13 @@
     "copilotInvisible": "Copilote IA actif — invisible en partage d'écran.",
     "copilotSeparateWindow": "Copilote dans une fenêtre à part. Astuce : partagez une fenêtre précise pour le garder caché.",
     "copilotBlocked": "Fenêtre du copilote bloquée par le navigateur. Autorisez les pop-ups, ou passez sur Chrome pour un PiP invisible.",
-    "copilotInline": "Copilote affiché ci-dessous — faites défiler pour voir les suggestions."
+    "copilotInline": "Copilote affiché ci-dessous — faites défiler pour voir les suggestions.",
+    "questionToAnswer": "Question à traiter",
+    "copyReply": "Copier",
+    "copied": "Copié",
+    "proLockedTitle": "Coaching en direct",
+    "proLockedText": "Conseils de coaching, signaux d'achat et équilibre du temps de parole, en direct pendant l'appel.",
+    "proLockedCta": "Voir les offres"
   },
   "auth": {
     "welcomeBack": "Content de vous revoir",
@@ -429,7 +435,23 @@
     "noAudioDetected": "Aucun audio détecté. Vérifiez votre source audio.",
     "listeningTranscript": "Écoute en cours... parlez pour voir le transcript apparaître.",
     "recordingHint": "Tonvo écoute. Restez focus sur la conversation, l'analyse arrive en temps réel.",
-    "idleHint": "Configurez la capture et appuyez pour passer en live."
+    "idleHint": "Configurez la capture et appuyez pour passer en live.",
+    "liveInProgress": "En direct",
+    "statusCopilotDown": "Copilot indisponible",
+    "statusLive": "Transcription en direct",
+    "statusFallback": "Mode secours",
+    "statusReconnecting": "Reconnexion...",
+    "statusConnecting": "Connexion...",
+    "retry": "Réessayer",
+    "fallbackMode": "Transcription en direct interrompue. Mode secours activé, avec un léger décalage.",
+    "screenShareEnded": "Partage arrêté : Tonvo n'entend plus que votre micro.",
+    "shareMeetingHint": "Partagez l'onglet du meeting et cochez « Partager aussi l'audio de l'onglet » pour que Tonvo entende votre interlocuteur.",
+    "shareScreenToggle": "Écran",
+    "shareMeetingToggle": "Audio du meeting",
+    "meetingAudioTitle": "Entendez les deux côtés de votre appel Meet, Zoom ou Teams",
+    "meetingAudioHint": "Quand la fenêtre de partage s'ouvre, choisissez l'onglet du meeting et cochez « Partager aussi l'audio de l'onglet » (ou « Partager l'audio du système » pour une application de bureau). Tonvo entend alors votre interlocuteur, même avec un casque.",
+    "transcriptTab": "Transcription en direct",
+    "starting": "Démarrage..."
   },
   "analyzePage": {
     "title": "Analyser une conversation",
@@ -736,7 +758,7 @@
       "cta": "Closer mon premier deal",
       "features": [
         "3 sessions de closing en live par mois",
-        "Détection des signaux d'achat",
+        "Détection des questions du prospect",
         "Phrases de closing essentielles",
         "Débrief post-call (historique 7 jours)"
       ]

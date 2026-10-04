@@ -271,7 +271,13 @@
     "copilotInvisible": "AIコパイロット稼働中 — 画面共有では映りません。",
     "copilotSeparateWindow": "コパイロットは別ウィンドウで動作中。ヒント：特定のウィンドウだけを共有すれば隠せます。",
     "copilotBlocked": "ブラウザがコパイロットウィンドウをブロックしました。ポップアップを許可するか、Chromeで非表示PiPをご利用ください。",
-    "copilotInline": "コパイロットを下に表示しています — スクロールして提案をご確認ください。"
+    "copilotInline": "コパイロットを下に表示しています — スクロールして提案をご確認ください。",
+    "questionToAnswer": "回答すべき質問",
+    "copyReply": "コピー",
+    "copied": "コピーしました",
+    "proLockedTitle": "ライブコーチング",
+    "proLockedText": "コーチングのヒント、購買シグナル、発話バランスを通話中にリアルタイムで表示。",
+    "proLockedCta": "プランを見る"
   },
   "auth": {
     "welcomeBack": "おかえりなさい",
@@ -427,7 +433,25 @@
     "modeNone": "セッションを開始するには、画面か音声のどちらかを有効にしてください。",
     "listeningInsights": "リスニング中... 会話の分析が進むとインサイトが表示されます。",
     "noAudioDetected": "音声が検出されません。音声ソースをご確認ください。",
-    "listeningTranscript": "リスニング中... 話すとトランスクリプトがここに表示されます。"
+    "listeningTranscript": "リスニング中... 話すとトランスクリプトがここに表示されます。",
+    "liveInProgress": "ライブ",
+    "statusCopilotDown": "Copilotを利用できません",
+    "statusLive": "ライブ文字起こし",
+    "statusFallback": "バックアップモード",
+    "statusReconnecting": "再接続中...",
+    "statusConnecting": "接続中...",
+    "retry": "再試行",
+    "fallbackMode": "ライブ文字起こしが中断されました。バックアップモードに切り替えました（わずかな遅延があります）。",
+    "screenShareEnded": "共有が停止しました。Tonvoはマイクの音声のみを聞いています。",
+    "shareMeetingHint": "会議のタブを共有し「タブの音声も共有する」にチェックすると、Tonvoが相手の声を聞けます。",
+    "shareScreenToggle": "画面",
+    "shareMeetingToggle": "会議の音声",
+    "meetingAudioTitle": "Meet、Zoom、Teamsの通話で相手の声も聞き取る",
+    "meetingAudioHint": "共有ウィンドウが開いたら会議のタブを選び「タブの音声も共有する」にチェックしてください（デスクトップアプリの場合は「システムの音声を共有」）。ヘッドセット使用時でもTonvoが相手の声を聞けます。",
+    "transcriptTab": "ライブ文字起こし",
+    "starting": "開始中...",
+    "recordingHint": "Tonvoが聞いています。会話に集中してください。提案はリアルタイムで届きます。",
+    "idleHint": "キャプチャを設定してライブを開始します。"
   },
   "analyzePage": {
     "title": "会話を分析",
@@ -734,7 +758,7 @@
       "cta": "最初のディールを決める",
       "features": [
         "月3回のライブ・クロージングセッション",
-        "購買シグナル検知",
+        "見込み客の質問を検知",
         "コア・クロージング・ライン",
         "ディールレビュー（履歴7日間）"
       ]

@@ -237,7 +237,7 @@ export default function LiveTranslationStream({ segments, isRecording, compact =
                       >
                         <div className="lts-bubble-meta">
                           {it.speaker && (
-                            <span className="lts-speaker">{it.speaker}</span>
+                            <span className="lts-speaker">{it.speaker === "me" ? t("copilot.you") : it.speaker === "them" ? t("copilot.them") : it.speaker}</span>
                           )}
                           <span className="lts-langflow">
                             {(it.sourceLang || "?").toUpperCase()}
@@ -279,7 +279,8 @@ export default function LiveTranslationStream({ segments, isRecording, compact =
         </>
       )}
 
-      <style jsx>{`
+      {/* Global (lts- prefixed): styled-jsx does not tag framer-motion elements. */}
+      <style jsx global>{`
         .lts-root {
           position: relative;
           background: linear-gradient(135deg, rgba(167, 139, 250, 0.04) 0%, color-mix(in srgb, var(--color-text) 1%, transparent) 100%);

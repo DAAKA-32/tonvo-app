@@ -271,7 +271,13 @@
     "copilotInvisible": "Copilota IA attivo — invisibile in screen share.",
     "copilotSeparateWindow": "Copilota in finestra separata. Tip: condivida una finestra specifica per tenerlo nascosto.",
     "copilotBlocked": "Finestra del copilota bloccata dal browser. Consenta i popup o usi Chrome per il PiP invisibile.",
-    "copilotInline": "Copilota mostrato qui sotto — scorra per vedere i suggerimenti."
+    "copilotInline": "Copilota mostrato qui sotto — scorra per vedere i suggerimenti.",
+    "questionToAnswer": "Domanda a cui rispondere",
+    "copyReply": "Copia",
+    "copied": "Copiato",
+    "proLockedTitle": "Coaching dal vivo",
+    "proLockedText": "Consigli di coaching, segnali di acquisto ed equilibrio del tempo di parola, dal vivo durante la chiamata.",
+    "proLockedCta": "Vedi i piani"
   },
   "auth": {
     "welcomeBack": "Bentornato",
@@ -427,7 +433,25 @@
     "modeNone": "Attivi almeno schermo o audio per avviare una sessione.",
     "listeningInsights": "In ascolto… gli insight appariranno qui mentre la conversazione viene analizzata.",
     "noAudioDetected": "Nessun audio rilevato. Verifichi la sua sorgente audio.",
-    "listeningTranscript": "In ascolto… parli per vedere il transcript qui."
+    "listeningTranscript": "In ascolto… parli per vedere il transcript qui.",
+    "liveInProgress": "Live",
+    "statusCopilotDown": "Copilot non disponibile",
+    "statusLive": "Trascrizione dal vivo",
+    "statusFallback": "Modalità di riserva",
+    "statusReconnecting": "Riconnessione...",
+    "statusConnecting": "Connessione...",
+    "retry": "Riprova",
+    "fallbackMode": "Trascrizione dal vivo interrotta. Modalità di riserva attiva, con un leggero ritardo.",
+    "screenShareEnded": "Condivisione interrotta: Tonvo ora sente solo il suo microfono.",
+    "shareMeetingHint": "Condivida la scheda della riunione e spunti \"Condividi anche l'audio della scheda\" perché Tonvo senta il suo interlocutore.",
+    "shareScreenToggle": "Schermo",
+    "shareMeetingToggle": "Audio della riunione",
+    "meetingAudioTitle": "Senta entrambe le parti della sua chiamata Meet, Zoom o Teams",
+    "meetingAudioHint": "Quando si apre la finestra di condivisione, scelga la scheda della riunione e spunti \"Condividi anche l'audio della scheda\" (o \"Condividi l'audio di sistema\" per un'app desktop). Così Tonvo sente il suo interlocutore, anche con le cuffie.",
+    "transcriptTab": "Trascrizione dal vivo",
+    "starting": "Avvio...",
+    "recordingHint": "Tonvo sta ascoltando. Resti concentrato sulla conversazione, i suggerimenti arrivano in tempo reale.",
+    "idleHint": "Configuri l'acquisizione e prema per andare live."
   },
   "analyzePage": {
     "title": "Analizzare conversazione",
@@ -734,7 +758,7 @@
       "cta": "Chiudere il mio primo deal",
       "features": [
         "3 sessioni di chiusura live al mese",
-        "Rilevamento dei signal di acquisto",
+        "Rilevamento delle domande del cliente",
         "Frasi di chiusura essenziali",
         "Debrief del deal (storico 7 giorni)"
       ]

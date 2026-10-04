@@ -271,7 +271,13 @@
     "copilotInvisible": "Copiloto IA a correr — invisível durante a partilha de ecrã.",
     "copilotSeparateWindow": "Copiloto numa janela separada. Dica: partilhe uma janela específica para o manter oculto.",
     "copilotBlocked": "Janela do copiloto bloqueada pelo navegador. Permita pop-ups ou use o Chrome para PiP invisível.",
-    "copilotInline": "Copiloto apresentado em linha por baixo — desça para ver as sugestões."
+    "copilotInline": "Copiloto apresentado em linha por baixo — desça para ver as sugestões.",
+    "questionToAnswer": "Pergunta por responder",
+    "copyReply": "Copiar",
+    "copied": "Copiado",
+    "proLockedTitle": "Coaching ao vivo",
+    "proLockedText": "Dicas de coaching, sinais de compra e equilíbrio do tempo de fala, ao vivo durante a chamada.",
+    "proLockedCta": "Ver planos"
   },
   "auth": {
     "welcomeBack": "Bem-vindo de volta",
@@ -427,7 +433,25 @@
     "modeNone": "Ative pelo menos o ecrã ou o áudio para iniciar uma sessão.",
     "listeningInsights": "A ouvir... os insights aparecerão aqui à medida que a conversa for analisada.",
     "noAudioDetected": "Nenhum áudio detetado. Verifique a sua fonte de áudio.",
-    "listeningTranscript": "A ouvir... fale para ver a transcrição aqui."
+    "listeningTranscript": "A ouvir... fale para ver a transcrição aqui.",
+    "liveInProgress": "Ao vivo",
+    "statusCopilotDown": "Copilot indisponível",
+    "statusLive": "Transcrição ao vivo",
+    "statusFallback": "Modo de reserva",
+    "statusReconnecting": "A religar...",
+    "statusConnecting": "A ligar...",
+    "retry": "Tentar novamente",
+    "fallbackMode": "Transcrição ao vivo interrompida. Modo de reserva ativo, com um ligeiro atraso.",
+    "screenShareEnded": "Partilha parada: a Tonvo agora só ouve o seu microfone.",
+    "shareMeetingHint": "Partilhe o separador da reunião e marque \"Partilhar também o áudio do separador\" para a Tonvo ouvir o seu interlocutor.",
+    "shareScreenToggle": "Ecrã",
+    "shareMeetingToggle": "Áudio da reunião",
+    "meetingAudioTitle": "Ouça os dois lados da sua chamada Meet, Zoom ou Teams",
+    "meetingAudioHint": "Quando a janela de partilha abrir, escolha o separador da reunião e marque \"Partilhar também o áudio do separador\" (ou \"Partilhar o áudio do sistema\" para uma app de computador). A Tonvo passa a ouvir o seu interlocutor, mesmo com auscultadores.",
+    "transcriptTab": "Transcrição ao vivo",
+    "starting": "A iniciar...",
+    "recordingHint": "A Tonvo está a ouvir. Concentre-se na conversa, as sugestões chegam em tempo real.",
+    "idleHint": "Configure a captura e carregue para começar."
   },
   "analyzePage": {
     "title": "Analisar conversa",
@@ -734,7 +758,7 @@
       "cta": "Fechar o meu primeiro deal",
       "features": [
         "3 sessões de fecho ao vivo por mês",
-        "Deteção de sinais de compra",
+        "Deteção das perguntas do cliente",
         "Frases de fecho essenciais",
         "Revisão de deal (histórico de 7 dias)"
       ]

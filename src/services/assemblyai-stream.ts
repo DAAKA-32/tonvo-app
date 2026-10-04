@@ -2,17 +2,25 @@
  * AssemblyAIStreamingService
  *
  * Browser-side wrapper around AssemblyAI's Universal Streaming v3 WebSocket
- * for live transcription. Drop-in replacement for `LiveSpeechService`
- * (Web Speech API) with much better quality and 10-language support.
+ * for live transcription.
  *
  * Architecture:
  *   1. Server mints a single-use temp token via /api/transcribe-token
  *   2. Browser opens WebSocket to wss://streaming.assemblyai.com/v3/ws?token=...
- *   3. Mic audio is captured via getUserMedia + AudioWorklet
- *   4. Audio is downsampled to 16kHz mono PCM16 and sent as binary frames
- *   5. AssemblyAI sends Turn events with partial / final transcripts
- *   6. On stop, we send {"type":"Terminate"} to close cleanly (avoids billing
- *      until the 3-hour cap)
+ *   3. `start()` resolves only once AssemblyAI sends `Begin` (rejects on Error,
+ *      close or timeout) so callers can fall back when streaming is unavailable
+ *   4. Audio is captured via AudioWorklet, downsampled to 16kHz mono PCM16 and
+ *      sent as binary frames
+ *   5. AssemblyAI sends Turn events; each finalized turn fires `onFinalTurn` once
+ *   6. Unexpected disconnects reconnect automatically with a fresh token
+ *   7. On stop, we send {"type":"Terminate"} (billing is per open session)
+ *
+ * Model choice (probed 2026-10-04):
+ *   - en/es/fr/de/it/pt/auto → universal-streaming-multilingual + language_detection
+ *     ($0.15/h). Do NOT send `prompt`: this model rejects it with error 3006.
+ *   - nl/zh/ja/ko → universal-3-5-pro + language_code ($0.45/h), the only
+ *     streaming model that covers them.
+ *   - Diarization param is `speaker_labels` (`speaker_diarization` is silently ignored).
  */
 
 import { authFetch } from "@/lib/api-client";
@@ -20,11 +28,11 @@ import { authFetch } from "@/lib/api-client";
 const WS_URL = "wss://streaming.assemblyai.com/v3/ws";
 const SAMPLE_RATE = 16_000;
 const CHUNK_MS = 100; // 50–1000 ms required by AssemblyAI
+const WORKLET_URL = "/worklets/aai-pump.js";
+const HANDSHAKE_TIMEOUT_MS = 6_000;
+const RECONNECT_DELAYS_MS = [500, 1_000, 2_000, 4_000, 4_000];
 
-/** Map a UI / i18n code to a target spoken language for AssemblyAI multilingual.
- *  "auto" → enable language_detection.
- *  Other codes are passed through as ISO 639-1 (e.g. "fr", "en"). */
-type LangCode =
+export type LangCode =
   | "auto"
   | "en"
   | "fr"
@@ -37,6 +45,14 @@ type LangCode =
   | "ja"
   | "ko";
 
+/** Languages covered by the cheaper universal-streaming-multilingual model. */
+const MULTILINGUAL_LANGS: ReadonlySet<LangCode> = new Set(["auto", "en", "fr", "es", "de", "it", "pt"]);
+
+export type StreamStatus = "connecting" | "live" | "reconnecting" | "failed" | "stopped";
+
+/** Which side of the call a stream carries (dual-stream meeting mode). */
+export type StreamLabel = "me" | "them";
+
 type TurnCallback = (text: string, isFinal: boolean) => void;
 
 /** Rich payload for finalized turns — sent to Claude for analysis. */
@@ -45,7 +61,7 @@ export interface FinalTurnEvent {
   text: string;
   /** Detected language code (ISO 639-1) — present when language_detection is on. */
   language?: string;
-  /** Speaker label when diarization is enabled (e.g. "A", "B"). */
+  /** "me" / "them" in dual-stream mode, else the diarization label ("A", "B"). */
   speaker?: string;
   /** Timestamp (ms since epoch) the turn was finalized. */
   timestamp: number;
@@ -53,66 +69,111 @@ export interface FinalTurnEvent {
 
 type FinalTurnCallback = (event: FinalTurnEvent) => void;
 
-interface StartOptions {
+export interface StartOptions {
   /** Audio language; `"auto"` triggers AssemblyAI's `language_detection`. */
-  language?: LangCode;
+  language?: string;
   /** Domain-specific terms to bias the model (max 100 entries, ≤50 chars each). */
   keyterms?: string[];
-  /** Optional callback fired when a turn is finalized — used for analysis pipeline. */
+  /** Fired once per finalized turn — drives the analysis pipeline. */
   onFinalTurn?: FinalTurnCallback;
+  /** Connection lifecycle, for the session status pill. */
+  onStatus?: (status: StreamStatus) => void;
   /**
-   * Optional pre-existing MediaStream to consume audio from.
-   * When provided we use this stream instead of calling `getUserMedia` ourselves —
-   * this is the way to capture *combined* audio (mic + screen-share system audio)
-   * so prospects on Zoom/Discord/Meet are transcribed too, not just the local user.
+   * Pre-existing MediaStream to consume audio from (e.g. mic+system audio mixed,
+   * or one side of the call). Its tracks are never stopped by this service.
    * If omitted, falls back to a fresh `getUserMedia({ audio: true })`.
    */
   audioStream?: MediaStream;
+  /** Tag every final turn with this side of the call; disables diarization. */
+  label?: StreamLabel;
 }
 
 interface AssemblyAITurnMessage {
   type: "Turn";
   transcript: string;
   end_of_turn: boolean;
-  /** Speaker label when diarization is on. */
+  turn_is_formatted?: boolean;
+  turn_order?: number;
   speaker_label?: string;
-  /** Detected language when language_detection is on. */
   language_code?: string;
 }
 
-interface AssemblyAIBeginMessage {
-  type: "Begin";
-  id: string;
-  expires_at: number;
+/** Build the WebSocket query params for a session. Exported for tests. */
+export function buildStreamingParams(
+  lang: LangCode,
+  keyterms: string[],
+  opts: { speakerLabels: boolean },
+): Record<string, string> {
+  const params: Record<string, string> = { sample_rate: String(SAMPLE_RATE) };
+  if (MULTILINGUAL_LANGS.has(lang)) {
+    params.speech_model = "universal-streaming-multilingual";
+    params.format_turns = "true";
+    params.language_detection = "true";
+  } else {
+    params.speech_model = "universal-3-5-pro";
+    params.language_code = lang;
+  }
+  if (opts.speakerLabels) {
+    params.speaker_labels = "true";
+  }
+  if (keyterms.length > 0) {
+    params.keyterms_prompt = JSON.stringify(keyterms.slice(0, 100));
+  }
+  return params;
 }
 
-interface AssemblyAITerminationMessage {
-  type: "Termination";
+/** Map a UI / i18n code to a supported streaming language. Exported for tests. */
+export function normalizeLang(lang: string | undefined | null): LangCode {
+  const l = (lang ?? "auto").toLowerCase().trim();
+  if (l === "auto") return "auto";
+  const short = l.slice(0, 2);
+  const known: LangCode[] = ["en", "fr", "es", "de", "it", "pt", "nl", "zh", "ja", "ko"];
+  return (known as string[]).includes(short) ? (short as LangCode) : "auto";
 }
 
-type AssemblyAIServerMessage =
-  | AssemblyAIBeginMessage
-  | AssemblyAITurnMessage
-  | AssemblyAITerminationMessage
-  | { type: string; [k: string]: unknown };
+/** AssemblyAI emits placeholder labels before diarization settles. */
+export function normalizeSpeakerLabel(label: string | undefined): string | undefined {
+  if (!label) return undefined;
+  const upper = label.toUpperCase();
+  if (upper === "PENDING" || upper === "UNKNOWN") return undefined;
+  return label;
+}
+
+/**
+ * Should this Turn message fire `onFinalTurn`? Only formatted end-of-turn
+ * messages with a non-empty transcript and a turn_order we haven't emitted.
+ * Exported for tests.
+ */
+export function isNewFinalTurn(msg: AssemblyAITurnMessage, lastEmittedOrder: number): boolean {
+  if (!msg.end_of_turn || !msg.turn_is_formatted) return false;
+  if (!msg.transcript || !msg.transcript.trim()) return false;
+  if (typeof msg.turn_order === "number" && msg.turn_order <= lastEmittedOrder) return false;
+  return true;
+}
 
 export class AssemblyAIStreamingService {
   private ws: WebSocket | null = null;
   private audioContext: AudioContext | null = null;
   private mediaStream: MediaStream | null = null;
+  private ownsStream = false;
   private workletNode: AudioWorkletNode | null = null;
   private sourceNode: MediaStreamAudioSourceNode | null = null;
   private onResult: TurnCallback | null = null;
   private onFinalTurn: FinalTurnCallback | null = null;
+  private onStatus: ((status: StreamStatus) => void) | null = null;
   private currentLanguage: LangCode = "auto";
   private currentKeyterms: string[] = [];
-  private terminated = false;
-  private starting = false;
-  // When the consumer provides their own MediaStream we must NOT stop its tracks
-  // on cleanup — they're owned by the caller (typically AudioCaptureService).
-  private streamOwnedByCaller = false;
+  private label: StreamLabel | undefined;
+  private callerStream: MediaStream | null = null;
+  private active = false;
+  private stopped = true;
+  private lastEmittedOrder = -1;
+  private lastServerError = "";
+  private reconnectAttempts = 0;
+  private reconnectTimer: ReturnType<typeof setTimeout> | null = null;
+  private status: StreamStatus = "stopped";
 
-  /** Always supported in modern browsers (requires WebSocket + AudioContext + getUserMedia). */
+  /** Requires WebSocket + AudioContext + getUserMedia. */
   get supported(): boolean {
     if (typeof window === "undefined") return false;
     return (
@@ -122,172 +183,240 @@ export class AssemblyAIStreamingService {
     );
   }
 
-  /** Set the spoken-audio language. Restarts the session if running. */
+  get currentStatus(): StreamStatus {
+    return this.status;
+  }
+
+  /** Set the spoken-audio language. Reconnects if a session is running. */
   setLanguage(lang: string): void {
     const next = normalizeLang(lang);
     if (next === this.currentLanguage) return;
     this.currentLanguage = next;
-    if (this.ws && this.ws.readyState === WebSocket.OPEN) {
-      // Mid-session language change requires a reconnect (AssemblyAI fixes language at handshake)
-      this.restart();
+    if (this.active && !this.stopped) {
+      this.dropSocket();
+      this.reconnectAttempts = 0;
+      this.scheduleReconnect(0);
     }
   }
 
   /**
-   * Start a streaming session. `onResult(text, isFinal)` is fired:
-   *   - With `isFinal=false` for partial turns (interim captions)
-   *   - With `isFinal=true` for completed turns (formatted final text)
+   * Start a streaming session. Resolves once AssemblyAI has accepted the
+   * session (`Begin`). Rejects if the token, handshake or audio pump fails —
+   * callers should then fall back to batch transcription.
+   *
+   * `onResult(text, isFinal)` fires for partial turns (isFinal=false) and once
+   * per finalized turn (isFinal=true).
    */
   async start(onResult: TurnCallback, opts: StartOptions = {}): Promise<void> {
-    if (this.starting || this.ws) return;
-    this.starting = true;
-    this.terminated = false;
+    if (this.active) return;
+    this.active = true;
+    this.stopped = false;
     this.onResult = onResult;
     this.onFinalTurn = opts.onFinalTurn ?? null;
-    if (opts.language) this.currentLanguage = opts.language;
-    if (opts.keyterms) this.currentKeyterms = opts.keyterms.slice(0, 100);
+    this.onStatus = opts.onStatus ?? null;
+    this.currentLanguage = normalizeLang(opts.language);
+    this.currentKeyterms = (opts.keyterms ?? []).slice(0, 100);
+    this.label = opts.label;
+    this.callerStream = opts.audioStream ?? null;
+    this.reconnectAttempts = 0;
 
-    // If the caller passed an existing stream (e.g. mic+system audio combined),
-    // reuse it instead of grabbing a fresh getUserMedia inside startMicPump.
-    if (opts.audioStream) {
-      this.mediaStream = opts.audioStream;
-      this.streamOwnedByCaller = true;
-    } else {
-      this.streamOwnedByCaller = false;
-    }
-
+    this.setStatus("connecting");
     try {
-      // 1) Mint a temp token from our server (raw API key never leaves backend)
-      const tokenRes = await authFetch("/api/transcribe-token", { method: "POST" });
-      if (!tokenRes.ok) {
-        throw new Error(`Token mint failed: ${tokenRes.status}`);
-      }
-      const { token } = (await tokenRes.json()) as { token: string };
+      await this.connect();
+      await this.ensureAudioPump();
+    } catch (err) {
+      this.teardown();
+      this.setStatus("failed");
+      throw err;
+    }
+  }
 
-      // 2) Build the WebSocket URL with streaming params
-      const url = new URL(WS_URL);
-      url.searchParams.set("token", token);
-      url.searchParams.set("sample_rate", String(SAMPLE_RATE));
-      url.searchParams.set("speech_model", "universal-streaming-multilingual");
-      url.searchParams.set("format_turns", "true");
-      // Identify who said what — used by the Speaker Breakdown in the post-call report.
-      // Silently ignored on streaming variants that don't support it.
-      url.searchParams.set("speaker_diarization", "true");
-      if (this.currentLanguage === "auto") {
-        url.searchParams.set("language_detection", "true");
-      } else {
-        // Steer the multilingual model toward a specific language via prompt
-        url.searchParams.set(
-          "prompt",
-          `Transcribe ${LANG_NAME[this.currentLanguage] ?? "the conversation"}.`,
-        );
-      }
-      if (this.currentKeyterms.length > 0) {
-        // The streaming v3 endpoint accepts keyterms_prompt as a JSON array
-        url.searchParams.set("keyterms_prompt", JSON.stringify(this.currentKeyterms));
-      }
+  /** Stop the session gracefully. Sends Terminate, closes WS, releases audio. */
+  stop(): void {
+    if (!this.active && this.stopped) return;
+    this.stopped = true;
+    this.teardown();
+    this.setStatus("stopped");
+    this.onResult = null;
+    this.onFinalTurn = null;
+    this.onStatus = null;
+  }
 
-      // 3) Open the WebSocket
-      const ws = new WebSocket(url.toString());
-      this.ws = ws;
+  /* ------------------------------------------------------------------ */
+  /*  Connection                                                         */
+  /* ------------------------------------------------------------------ */
 
-      ws.onopen = async () => {
-        // 4) Start capturing mic audio and pumping PCM16 frames
-        try {
-          await this.startMicPump();
-        } catch (err) {
-          console.error("[assemblyai-stream] mic pump failed:", err);
-          this.stop();
-        }
+  /** Mint a token, open the socket and wait for `Begin`. */
+  private async connect(): Promise<void> {
+    const tokenRes = await authFetch("/api/transcribe-token", { method: "POST" });
+    if (!tokenRes.ok) {
+      throw new Error(`Token mint failed: ${tokenRes.status}`);
+    }
+    const { token } = (await tokenRes.json()) as { token?: string };
+    if (!token) throw new Error("Token mint returned no token");
+    if (this.stopped) throw new Error("Stream stopped during connect");
+
+    const url = new URL(WS_URL);
+    url.searchParams.set("token", token);
+    const params = buildStreamingParams(this.currentLanguage, this.currentKeyterms, {
+      speakerLabels: !this.label,
+    });
+    for (const [k, v] of Object.entries(params)) url.searchParams.set(k, v);
+
+    const ws = new WebSocket(url.toString());
+    ws.binaryType = "arraybuffer";
+    this.ws = ws;
+    this.lastEmittedOrder = -1;
+    this.lastServerError = "";
+
+    await new Promise<void>((resolve, reject) => {
+      let settled = false;
+      const timer = setTimeout(() => fail(new Error("AssemblyAI handshake timeout")), HANDSHAKE_TIMEOUT_MS);
+      const succeed = () => {
+        if (settled) return;
+        settled = true;
+        clearTimeout(timer);
+        resolve();
+      };
+      const fail = (err: Error) => {
+        if (settled) return;
+        settled = true;
+        clearTimeout(timer);
+        if (this.ws === ws) this.ws = null;
+        try { ws.close(); } catch { /* ignored */ }
+        reject(err);
       };
 
       ws.onmessage = (event) => {
-        let msg: AssemblyAIServerMessage;
-        try {
-          msg = JSON.parse(typeof event.data === "string" ? event.data : "") as AssemblyAIServerMessage;
-        } catch {
-          return; // ignore non-JSON frames
+        if (ws !== this.ws) return; // stale socket
+        const msg = parseMessage(event.data);
+        if (!msg) return;
+        if (msg.type === "Begin") {
+          succeed();
+        } else if (msg.type === "Error") {
+          const code = (msg as { error_code?: unknown }).error_code;
+          const text = (msg as { error?: unknown }).error;
+          this.lastServerError = `${String(code ?? "")} ${String(text ?? "")}`.trim();
+          fail(new Error(`AssemblyAI error ${this.lastServerError}`));
+        } else if (msg.type === "Turn") {
+          this.handleTurn(msg as unknown as AssemblyAITurnMessage);
         }
-        if (msg.type === "Turn") {
-          const turn = msg as AssemblyAITurnMessage;
-          if (turn.transcript) {
-            // Always fire the lightweight interim/final callback for UI
-            this.onResult?.(turn.transcript, !!turn.end_of_turn);
-            // Fire the rich callback only on finalized turns (for analysis pipeline)
-            if (turn.end_of_turn && this.onFinalTurn) {
-              this.onFinalTurn({
-                text: turn.transcript,
-                language: turn.language_code,
-                speaker: turn.speaker_label,
-                timestamp: Date.now(),
-              });
-            }
-          }
-        } else if (msg.type === "Termination") {
-          this.terminated = true;
-        }
-      };
-
-      ws.onerror = (err) => {
-        console.error("[assemblyai-stream] WebSocket error:", err);
       };
 
       ws.onclose = (event) => {
-        // 1008 unauthorized, 3007 chunk size, 3008 expired, etc. — see AssemblyAI docs
-        if (!this.terminated && event.code !== 1000) {
-          console.warn(
-            `[assemblyai-stream] WebSocket closed unexpectedly (${event.code}): ${event.reason}`,
-          );
+        if (!settled) {
+          fail(new Error(`AssemblyAI closed (${event.code}) ${event.reason || this.lastServerError}`.trim()));
+          return;
         }
-        this.cleanupAudio();
-        this.ws = null;
+        this.handleClose(ws, event);
       };
-    } finally {
-      this.starting = false;
-    }
+
+      ws.onerror = () => {
+        // A close event always follows; handled there.
+      };
+    });
+
+    this.reconnectAttempts = 0;
+    this.setStatus("live");
   }
 
-  /** Stop the session gracefully. Sends Terminate, closes WS, releases mic. */
-  stop(): void {
-    if (this.ws) {
+  private handleTurn(turn: AssemblyAITurnMessage): void {
+    const text = turn.transcript;
+    if (!text) return;
+    if (!turn.end_of_turn) {
+      this.onResult?.(text, false);
+      return;
+    }
+    if (!isNewFinalTurn(turn, this.lastEmittedOrder)) return;
+    if (typeof turn.turn_order === "number") this.lastEmittedOrder = turn.turn_order;
+    this.onResult?.(text, true);
+    this.onFinalTurn?.({
+      text,
+      language: turn.language_code || undefined,
+      speaker: this.label ?? normalizeSpeakerLabel(turn.speaker_label),
+      timestamp: Date.now(),
+    });
+  }
+
+  private handleClose(ws: WebSocket, event: CloseEvent): void {
+    if (ws !== this.ws) return; // a newer socket already replaced this one
+    this.ws = null;
+    if (this.stopped) return;
+    console.warn(
+      `[assemblyai-stream] socket closed (${event.code}) ${event.reason || this.lastServerError}; reconnecting`,
+    );
+    this.scheduleReconnect();
+  }
+
+  private scheduleReconnect(delayOverride?: number): void {
+    if (this.stopped) return;
+    if (this.reconnectTimer) return;
+    if (this.reconnectAttempts >= RECONNECT_DELAYS_MS.length) {
+      console.error("[assemblyai-stream] reconnect attempts exhausted");
+      this.teardown();
+      this.active = false;
+      this.setStatus("failed");
+      return;
+    }
+    const delay = delayOverride ?? RECONNECT_DELAYS_MS[this.reconnectAttempts];
+    this.reconnectAttempts += 1;
+    this.setStatus("reconnecting");
+    this.reconnectTimer = setTimeout(async () => {
+      this.reconnectTimer = null;
+      if (this.stopped) return;
       try {
-        if (this.ws.readyState === WebSocket.OPEN) {
-          this.ws.send(JSON.stringify({ type: "Terminate" }));
-        }
-        this.ws.close(1000, "client stop");
-      } catch {
-        // ignored
+        await this.connect();
+      } catch (err) {
+        console.warn("[assemblyai-stream] reconnect failed:", err instanceof Error ? err.message : err);
+        this.scheduleReconnect();
       }
-    }
-    this.cleanupAudio();
-    this.onResult = null;
-    this.onFinalTurn = null;
+    }, delay);
   }
 
-  /** Internal: tear down and re-open with current settings (used on language change). */
-  private async restart(): Promise<void> {
-    const cb = this.onResult;
-    const finalCb = this.onFinalTurn;
-    const lang = this.currentLanguage;
-    const kt = this.currentKeyterms.slice();
-    this.stop();
-    if (cb) {
-      // small delay to let the WS close
-      await new Promise((r) => setTimeout(r, 80));
-      await this.start(cb, {
-        language: lang,
-        keyterms: kt,
-        onFinalTurn: finalCb ?? undefined,
-      });
+  /** Close the current socket without triggering a reconnect from its close event. */
+  private dropSocket(): void {
+    const ws = this.ws;
+    this.ws = null;
+    if (!ws) return;
+    try {
+      if (ws.readyState === WebSocket.OPEN) ws.send(JSON.stringify({ type: "Terminate" }));
+      ws.close(1000, "client stop");
+    } catch {
+      // ignored
     }
   }
+
+  private teardown(): void {
+    if (this.reconnectTimer) {
+      clearTimeout(this.reconnectTimer);
+      this.reconnectTimer = null;
+    }
+    this.dropSocket();
+    this.cleanupAudio();
+    this.active = false;
+  }
+
+  private setStatus(status: StreamStatus): void {
+    if (this.status === status) return;
+    this.status = status;
+    this.onStatus?.(status);
+  }
+
+  /* ------------------------------------------------------------------ */
+  /*  Audio pump                                                         */
+  /* ------------------------------------------------------------------ */
 
   /** Capture audio → AudioWorklet → PCM16 16kHz mono → ws.send(binary).
-   *  Uses caller-provided MediaStream when available (mic + system audio combined),
-   *  otherwise falls back to a fresh getUserMedia for mic-only capture. */
-  private async startMicPump(): Promise<void> {
-    if (!this.mediaStream) {
-      const stream = await navigator.mediaDevices.getUserMedia({
+   *  Built once per session and kept across reconnects: frames go to whatever
+   *  socket is current. Uses the caller's MediaStream when provided. */
+  private async ensureAudioPump(): Promise<void> {
+    if (this.workletNode) return;
+
+    if (this.callerStream) {
+      this.mediaStream = this.callerStream;
+      this.ownsStream = false;
+    } else {
+      this.mediaStream = await navigator.mediaDevices.getUserMedia({
         audio: {
           echoCancellation: true,
           noiseSuppression: true,
@@ -295,73 +424,16 @@ export class AssemblyAIStreamingService {
           channelCount: 1,
         },
       });
-      this.mediaStream = stream;
-      this.streamOwnedByCaller = false;
+      this.ownsStream = true;
     }
 
-    // Create an AudioContext at native rate (usually 44.1k or 48k); we'll downsample to 16k.
     const ctx = new AudioContext({ latencyHint: "interactive" });
     this.audioContext = ctx;
     if (ctx.state === "suspended") await ctx.resume();
 
-    // Inline the AudioWorklet processor as a Blob URL — no static asset needed.
-    const workletCode = `
-      class AAIPump extends AudioWorkletProcessor {
-        constructor(opts) {
-          super();
-          this.targetRate = opts.processorOptions.targetRate;
-          this.chunkSamples = Math.round(this.targetRate * (opts.processorOptions.chunkMs / 1000));
-          this.buffer = new Float32Array(0);
-        }
-        process(inputs) {
-          const input = inputs[0];
-          if (!input || input.length === 0 || !input[0]) return true;
-          const channelData = input[0];
-
-          // Downsample (linear) from sampleRate (global) to targetRate
-          const ratio = sampleRate / this.targetRate;
-          const downsampledLen = Math.floor(channelData.length / ratio);
-          const downsampled = new Float32Array(downsampledLen);
-          for (let i = 0; i < downsampledLen; i++) {
-            const srcIdx = i * ratio;
-            const i0 = Math.floor(srcIdx);
-            const i1 = Math.min(i0 + 1, channelData.length - 1);
-            const frac = srcIdx - i0;
-            downsampled[i] = channelData[i0] * (1 - frac) + channelData[i1] * frac;
-          }
-
-          // Append to ring buffer
-          const merged = new Float32Array(this.buffer.length + downsampled.length);
-          merged.set(this.buffer, 0);
-          merged.set(downsampled, this.buffer.length);
-          this.buffer = merged;
-
-          // Emit chunks of chunkSamples
-          while (this.buffer.length >= this.chunkSamples) {
-            const chunk = this.buffer.slice(0, this.chunkSamples);
-            this.buffer = this.buffer.slice(this.chunkSamples);
-
-            // Float32 [-1,1] → Int16 little-endian
-            const pcm16 = new Int16Array(chunk.length);
-            for (let i = 0; i < chunk.length; i++) {
-              const s = Math.max(-1, Math.min(1, chunk[i]));
-              pcm16[i] = s < 0 ? s * 0x8000 : s * 0x7fff;
-            }
-            this.port.postMessage(pcm16.buffer, [pcm16.buffer]);
-          }
-          return true;
-        }
-      }
-      registerProcessor("aai-pump", AAIPump);
-    `;
-    const blobUrl = URL.createObjectURL(
-      new Blob([workletCode], { type: "application/javascript" }),
-    );
-    try {
-      await ctx.audioWorklet.addModule(blobUrl);
-    } finally {
-      URL.revokeObjectURL(blobUrl);
-    }
+    // Static module (public/worklets/aai-pump.js): the CSP script-src allows
+    // 'self' but not blob: URLs, and worklets are governed by script-src.
+    await ctx.audioWorklet.addModule(WORKLET_URL);
 
     const source = ctx.createMediaStreamSource(this.mediaStream);
     const node = new AudioWorkletNode(ctx, "aai-pump", {
@@ -386,16 +458,16 @@ export class AssemblyAIStreamingService {
   private cleanupAudio(): void {
     try { this.workletNode?.disconnect(); } catch { /* ignored */ }
     try { this.sourceNode?.disconnect(); } catch { /* ignored */ }
-    // Only stop tracks we created ourselves — don't kill caller-owned streams
-    if (!this.streamOwnedByCaller) {
+    // Only stop tracks we created ourselves — never kill caller-owned streams
+    if (this.ownsStream) {
       try { this.mediaStream?.getTracks().forEach((t) => t.stop()); } catch { /* ignored */ }
     }
-    try { this.audioContext?.close(); } catch { /* ignored */ }
+    try { void this.audioContext?.close(); } catch { /* ignored */ }
     this.workletNode = null;
     this.sourceNode = null;
     this.mediaStream = null;
     this.audioContext = null;
-    this.streamOwnedByCaller = false;
+    this.ownsStream = false;
   }
 }
 
@@ -403,31 +475,15 @@ export class AssemblyAIStreamingService {
 /*  Helpers                                                         */
 /* --------------------------------------------------------------- */
 
-function normalizeLang(lang: string): LangCode {
-  const l = lang.toLowerCase().trim();
-  if (l === "auto") return "auto";
-  // Accept locale strings ("fr-FR" → "fr")
-  const short = l.slice(0, 2);
-  if (
-    short === "en" || short === "fr" || short === "es" || short === "de" ||
-    short === "it" || short === "pt" || short === "nl" || short === "zh" ||
-    short === "ja" || short === "ko"
-  ) {
-    return short as LangCode;
+function parseMessage(data: unknown): ({ type: string } & Record<string, unknown>) | null {
+  if (typeof data !== "string") return null;
+  try {
+    const msg = JSON.parse(data) as unknown;
+    if (msg && typeof msg === "object" && typeof (msg as { type?: unknown }).type === "string") {
+      return msg as { type: string } & Record<string, unknown>;
+    }
+  } catch {
+    // ignore non-JSON frames
   }
-  // Unknown — fall back to auto-detect
-  return "auto";
+  return null;
 }
-
-const LANG_NAME: Record<Exclude<LangCode, "auto">, string> = {
-  en: "English",
-  fr: "French",
-  es: "Spanish",
-  de: "German",
-  it: "Italian",
-  pt: "Portuguese",
-  nl: "Dutch",
-  zh: "Chinese",
-  ja: "Japanese",
-  ko: "Korean",
-};

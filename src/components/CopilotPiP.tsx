@@ -16,6 +16,10 @@ export interface CopilotPiPLabels {
   participantCountPlural: string;
   paused?: string;
   askPlaceholder?: string;
+  /** Label for the other side of the call (speaker tag "them"). */
+  them?: string;
+  /** Label for the user (speaker tag "me"). */
+  you?: string;
 }
 
 interface CopilotPiPProps {
@@ -207,7 +211,10 @@ function buildBodyContent(props: CopilotPiPProps): string {
     participantCountPlural: labels?.participantCountPlural || "{{count}} participants",
     paused: labels?.paused || "Paused",
     askPlaceholder: labels?.askPlaceholder || "Ask the copilot...",
+    them: labels?.them || "Prospect",
+    you: labels?.you || "You",
   };
+  const speakerName = (raw: string) => (raw === "them" ? l.them : raw === "me" ? l.you : raw);
 
   const pCount = participants.length > 1
     ? l.participantCountPlural.replace("{{count}}", String(participants.length))
@@ -218,7 +225,7 @@ function buildBodyContent(props: CopilotPiPProps): string {
     <div class="header-left">
       <div class="pulse ${paused ? "pulse--paused" : ""}"></div>
       <span class="title">${escapeHTML(l.title)}</span>
-      <span class="timer">${formatTime(elapsed)}</span>
+      <span class="timer" id="pipTimer">${formatTime(elapsed)}</span>
       ${paused ? `<span class="paused-badge">${escapeHTML(l.paused)}</span>` : ""}
     </div>
     <button class="pause-btn ${paused ? "pause-btn--paused" : ""}" id="pauseBtn">
@@ -232,7 +239,7 @@ function buildBodyContent(props: CopilotPiPProps): string {
   ${detectedQuestion && detectedQuestion.text ? `
   <div class="detected-question" style="background:${detectedQuestion.urgency === "high" ? "rgba(248,113,113,0.08)" : "rgba(251,191,36,0.06)"};border:1px solid ${detectedQuestion.urgency === "high" ? "rgba(248,113,113,0.25)" : "rgba(251,191,36,0.2)"}">
     <div class="dq-header">
-      <span class="dq-speaker" style="color:${detectedQuestion.urgency === "high" ? "#f87171" : "#fbbf24"}">${escapeHTML(detectedQuestion.speaker)}</span>
+      <span class="dq-speaker" style="color:${detectedQuestion.urgency === "high" ? "#f87171" : "#fbbf24"}">${escapeHTML(speakerName(detectedQuestion.speaker))}</span>
       ${detectedQuestion.urgency === "high" ? `<span class="dq-urgent">${escapeHTML(l.respondNow)}</span>` : ""}
     </div>
     <p class="dq-text">&ldquo;${escapeHTML(detectedQuestion.text)}&rdquo;</p>
@@ -322,6 +329,8 @@ function buildFullHTML(props: CopilotPiPProps): string {
 export interface CopilotPiPHandle {
   /** Must be called from a user gesture (click handler) to enable Document PiP */
   requestOpen: () => Promise<void>;
+  /** Close the window if it is open (e.g. the session failed to start). */
+  close: () => void;
 }
 
 /**
@@ -368,6 +377,21 @@ const CopilotPiP = forwardRef<CopilotPiPHandle, CopilotPiPProps>(function Copilo
         }
       }
     });
+  }, []);
+
+  // Re-render the window body, keeping the user's half-typed question and focus.
+  const renderBody = useCallback((win: Window) => {
+    const doc = win.document;
+    const input = doc.getElementById("askInput") as HTMLInputElement | null;
+    const draft = input?.value ?? "";
+    const hadFocus = !!input && doc.activeElement === input;
+    doc.body.innerHTML = buildBodyContent(propsRef.current);
+    const next = doc.getElementById("askInput") as HTMLInputElement | null;
+    if (next && draft) next.value = draft;
+    if (next && hadFocus) {
+      next.focus();
+      next.setSelectionRange(draft.length, draft.length);
+    }
   }, []);
 
   // Try Document PiP first, fallback to window.open
@@ -450,10 +474,21 @@ const CopilotPiP = forwardRef<CopilotPiPHandle, CopilotPiPProps>(function Copilo
     propsRef.current.onPiPStateChange?.(true, "popup");
   }, [wireButtons]);
 
+  const closePiP = useCallback(() => {
+    const win = pipWindowRef.current;
+    if (updateTimerRef.current) { clearInterval(updateTimerRef.current); updateTimerRef.current = null; }
+    if (!win) return;
+    try { win.close(); } catch {}
+    pipWindowRef.current = null;
+    modeRef.current = null;
+    propsRef.current.onPiPStateChange?.(false);
+  }, []);
+
   // Expose requestOpen to parent — MUST be called from a user gesture (click)
   useImperativeHandle(ref, () => ({
     requestOpen: openPiP,
-  }), [openPiP]);
+    close: closePiP,
+  }), [openPiP, closePiP]);
 
   // Close PiP when active becomes false (opening is handled by parent via ref.requestOpen)
   useEffect(() => {
@@ -473,25 +508,25 @@ const CopilotPiP = forwardRef<CopilotPiPHandle, CopilotPiPProps>(function Copilo
     if (!win) return;
 
     try {
-      if (modeRef.current === "documentPiP") {
-        // Document PiP: update body innerHTML directly (styles persist)
-        win.document.body.innerHTML = buildBodyContent(props);
-        wireButtons(win);
-      } else if (modeRef.current === "windowOpen") {
-        // window.open: rewrite entire document
-        win.document.open();
-        win.document.write(buildFullHTML(props));
-        win.document.close();
-        wireButtons(win);
-      }
+      // Both modes: swap the body only. Styles in <head> persist, and the
+      // document-level listeners from wireButtons stay attached (rewriting the
+      // whole popup document used to drop them).
+      renderBody(win);
     } catch {
       pipWindowRef.current = null;
       modeRef.current = null;
     }
   }, [
-    props.active, props.suggestion, props.suggestedResponses,
-    props.elapsed, props.participants, props.paused, props.asking, props.answer, wireButtons,
+    props.active, props.suggestion, props.suggestedResponses, props.detectedQuestion,
+    props.participants, props.paused, props.asking, props.answer, renderBody,
   ]);
+
+  // The timer ticks every second: update its text only, so the window isn't
+  // rebuilt (which used to wipe the question being typed).
+  useEffect(() => {
+    const el = pipWindowRef.current?.document.getElementById("pipTimer");
+    if (el) el.textContent = formatTime(props.elapsed);
+  }, [props.elapsed]);
 
   // Close on unmount
   useEffect(() => {

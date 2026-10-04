@@ -271,7 +271,13 @@
     "copilotInvisible": "AI-copilot draait — onzichtbaar tijdens screen share.",
     "copilotSeparateWindow": "Copilot in een apart venster. Tip: deel een specifiek venster om hem verborgen te houden.",
     "copilotBlocked": "Copilot-venster geblokkeerd door je browser. Sta pop-ups toe of gebruik Chrome voor onzichtbare PiP.",
-    "copilotInline": "Copilot wordt hieronder getoond — scroll voor de suggesties."
+    "copilotInline": "Copilot wordt hieronder getoond — scroll voor de suggesties.",
+    "questionToAnswer": "Open vraag",
+    "copyReply": "Kopiëren",
+    "copied": "Gekopieerd",
+    "proLockedTitle": "Live coaching",
+    "proLockedText": "Coachingtips, koopsignalen en spreektijdverhouding, live tijdens het gesprek.",
+    "proLockedCta": "Bekijk abonnementen"
   },
   "auth": {
     "welcomeBack": "Welkom terug",
@@ -427,7 +433,25 @@
     "modeNone": "Activeer minimaal Scherm of Audio om een sessie te starten.",
     "listeningInsights": "Luisteren... insights verschijnen hier zodra het gesprek wordt geanalyseerd.",
     "noAudioDetected": "Geen audio gedetecteerd. Check je audiobron.",
-    "listeningTranscript": "Luisteren... begin te praten om je transcript te zien."
+    "listeningTranscript": "Luisteren... begin te praten om je transcript te zien.",
+    "liveInProgress": "Live",
+    "statusCopilotDown": "Copilot niet beschikbaar",
+    "statusLive": "Live transcriptie",
+    "statusFallback": "Reservemodus",
+    "statusReconnecting": "Opnieuw verbinden...",
+    "statusConnecting": "Verbinden...",
+    "retry": "Opnieuw proberen",
+    "fallbackMode": "Live transcriptie onderbroken. Reservemodus aan, met een kleine vertraging.",
+    "screenShareEnded": "Delen gestopt: Tonvo hoort nu alleen je microfoon.",
+    "shareMeetingHint": "Deel het tabblad van de meeting en vink \"Ook tabbladaudio delen\" aan zodat Tonvo de andere kant hoort.",
+    "shareScreenToggle": "Scherm",
+    "shareMeetingToggle": "Meeting-audio",
+    "meetingAudioTitle": "Hoor beide kanten van je Meet-, Zoom- of Teams-gesprek",
+    "meetingAudioHint": "Als het deelvenster opent, kies je het tabblad van de meeting en vink je \"Ook tabbladaudio delen\" aan (of \"Systeemaudio delen\" voor een desktop-app). Dan hoort Tonvo de andere kant, ook met een headset.",
+    "transcriptTab": "Live transcript",
+    "starting": "Starten...",
+    "recordingHint": "Tonvo luistert. Blijf bij het gesprek, de suggesties komen in realtime.",
+    "idleHint": "Stel de opname in en druk om live te gaan."
   },
   "analyzePage": {
     "title": "Gesprek analyseren",
@@ -734,7 +758,7 @@
       "cta": "Sluit mijn eerste deal",
       "features": [
         "3 live closing-sessies per maand",
-        "Detectie van koopsignalen",
+        "Detectie van vragen van de prospect",
         "Essentiële closing-zinnen",
         "Deal-review (7 dagen geschiedenis)"
       ]
