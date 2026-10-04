@@ -44,7 +44,7 @@ export const PRICING_PLANS: PricingPlan[] = [
     discountPercent: 0,
     features: [
       "3 live closing sessions per month",
-      "Buying-signal detection",
+      "Prospect question detection",
       "Core closing lines",
       "Deal review (7-day history)",
     ],

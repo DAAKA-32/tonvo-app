@@ -37,12 +37,14 @@ export function useParticipants(labelYou = "You", labelParticipant = "Participan
         existing.totalSegments += 1;
         changed = true;
       } else {
-        // First speaker detected is assumed to be the user
-        const isUser = seenSpeakers.current.size === 0;
+        // Meeting mode tags each side explicitly ("me" = mic, "them" = shared tab).
+        // Otherwise the first speaker detected is assumed to be the user.
+        const isUser = key === "me" || (key !== "them" && seenSpeakers.current.size === 0);
         const participantIndex = seenSpeakers.current.size;
+        const othersSeen = Array.from(seenSpeakers.current.values()).filter((p) => !p.isUser).length;
         const participant: Participant = {
           id: `speaker_${participantIndex + 1}`,
-          label: isUser ? labelYou : labelParticipant.replace("{{n}}", String(participantIndex)),
+          label: isUser ? labelYou : labelParticipant.replace("{{n}}", String(othersSeen + 1)),
           isUser,
           lastActive: now,
           totalSegments: 1,

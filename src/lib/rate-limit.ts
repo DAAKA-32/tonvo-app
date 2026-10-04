@@ -14,13 +14,33 @@ import { Ratelimit } from "@upstash/ratelimit";
 let redis: Redis | null = null;
 const upstashLimiters = new Map<string, Ratelimit>();
 
+// Circuit breaker: when Redis is unreachable (deleted DB, DNS failure, outage)
+// we fall back to the in-memory limiter instead of failing the request, and
+// skip Redis entirely for a short window so callers don't pay the timeout on
+// every request.
+const REDIS_TIMEOUT_MS = 800;
+const REDIS_COOLDOWN_MS = 60_000;
+let redisDownUntil = 0;
+
+function markRedisDown(err: unknown): void {
+  const now = Date.now();
+  if (now >= redisDownUntil) {
+    console.warn(
+      "[rate-limit] Redis unavailable, using in-memory limiter for 60s:",
+      err instanceof Error ? err.message : String(err),
+    );
+  }
+  redisDownUntil = now + REDIS_COOLDOWN_MS;
+}
+
 function getRedis(): Redis | null {
   if (redis) return redis;
   // Support multiple env var naming conventions (Vercel KV integration adds prefix)
   const url = process.env.UPSTASH_REDIS_REST_URL || process.env.UPSTASH_REDIS_REST_KV_REST_API_URL || process.env.KV_REST_API_URL;
   const token = process.env.UPSTASH_REDIS_REST_TOKEN || process.env.UPSTASH_REDIS_REST_KV_REST_API_TOKEN || process.env.KV_REST_API_TOKEN;
   if (!url || !token) return null;
-  redis = new Redis({ url, token });
+  // One quick retry only — the default backoff adds ~5s before throwing.
+  redis = new Redis({ url, token, retry: { retries: 1, backoff: () => 100 } });
   return redis;
 }
 
@@ -117,7 +137,7 @@ export function checkRateLimit(key: string, config: RateLimitConfig): RateLimitR
   //    non-contournable per-instance backstop.
   const localResult = checkInMemory(key, config);
 
-  if (!limiter) return localResult;
+  if (!limiter || Date.now() < redisDownUntil) return localResult;
 
   // 2) Previous async Redis denial?
   const denied = store.get(`deny:${key}`);
@@ -136,37 +156,57 @@ export function checkRateLimit(key: string, config: RateLimitConfig): RateLimitR
     } else {
       store.delete(`deny:${key}`);
     }
-  }).catch(() => {});
+  }).catch(markRedisDown);
 
   // Local already counted this hit and decides allow/deny for this call.
   return localResult;
 }
 
 /**
- * Async version — fully enforces Redis rate limit (use in routes that can await).
+ * Async version — enforces the Redis rate limit when Redis is reachable.
+ * Never throws: if Redis errors or is slow, falls back to the in-memory
+ * limiter so a dead cache can't take the API down.
  */
 export async function checkRateLimitAsync(key: string, config: RateLimitConfig): Promise<RateLimitResult> {
   const prefix = key.split(":")[0] || "default";
-  const limiter = getUpstashLimiter(prefix, config);
+  const limiter = Date.now() < redisDownUntil ? null : getUpstashLimiter(prefix, config);
 
   if (limiter) {
-    const result = await limiter.limit(key);
-    return {
-      allowed: result.success,
-      remaining: result.remaining,
-      retryAfterMs: result.success ? undefined : result.reset * 1000 - Date.now(),
-    };
+    let timer: ReturnType<typeof setTimeout> | undefined;
+    try {
+      const timeout = new Promise<never>((_, reject) => {
+        timer = setTimeout(() => reject(new Error(`Redis timeout after ${REDIS_TIMEOUT_MS}ms`)), REDIS_TIMEOUT_MS);
+      });
+      const result = await Promise.race([limiter.limit(key), timeout]);
+      return {
+        allowed: result.success,
+        remaining: result.remaining,
+        retryAfterMs: result.success ? undefined : result.reset - Date.now(),
+      };
+    } catch (err) {
+      markRedisDown(err);
+    } finally {
+      if (timer) clearTimeout(timer);
+    }
   }
 
   return checkInMemory(key, config);
+}
+
+/** Test-only: reset breaker + cached clients. */
+export function __resetRateLimitForTests(): void {
+  redis = null;
+  upstashLimiters.clear();
+  redisDownUntil = 0;
+  store.clear();
 }
 
 // Preset configs for different endpoints
 export const RATE_LIMITS = {
   /** Transcribe: 20 requests per minute */
   transcribe: { maxRequests: 20, windowMs: 60_000 } as RateLimitConfig,
-  /** Analyze: 20 requests per minute */
-  analyze: { maxRequests: 20, windowMs: 60_000 } as RateLimitConfig,
+  /** Analyze: 40 requests per minute (live turns are coalesced client-side) */
+  analyze: { maxRequests: 40, windowMs: 60_000 } as RateLimitConfig,
   /** Summarize: 5 per minute (only called at session end) */
   summarize: { maxRequests: 5, windowMs: 60_000 } as RateLimitConfig,
   /** Screen analysis: 10 per minute */

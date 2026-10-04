@@ -5,6 +5,12 @@ export interface CaptureOptions {
   audioEnabled: boolean;
   /** Capture system audio from other apps (Discord, Zoom, etc.) */
   systemAudioEnabled?: boolean;
+  /**
+   * Called when the user stops the screen/tab share from the browser bar.
+   * The mic keeps running; `micStillLive` tells the caller whether any audio
+   * is left to transcribe.
+   */
+  onShareEnded?: (info: { micStillLive: boolean }) => void;
 }
 
 export class AudioCaptureService {
@@ -30,6 +36,9 @@ export class AudioCaptureService {
   // Track peak audio energy per recording cycle to detect silence
   private peakLevelInCycle = 0;
   private levelSampleTimer: ReturnType<typeof setInterval> | null = null;
+  // Raw per-side streams (meeting mode feeds each to its own transcription stream)
+  private _micStream: MediaStream | null = null;
+  private _systemAudioStream: MediaStream | null = null;
 
   /** Whether audio capture is active AND producing audio data. */
   get hasAudio(): boolean {
@@ -63,6 +72,16 @@ export class AudioCaptureService {
     return this.stream;
   }
 
+  /** The local user's microphone only (null if unavailable). */
+  get micStream(): MediaStream | null {
+    return this._micStream;
+  }
+
+  /** The shared tab/screen audio only — the other side of the call (null if none). */
+  get systemAudioStream(): MediaStream | null {
+    return this._systemAudioStream;
+  }
+
   /** Current audio energy level (0-1). Use to detect true silence vs Whisper noise. */
   get audioLevel(): number {
     if (!this.analyserNode) return 0;
@@ -80,7 +99,7 @@ export class AudioCaptureService {
 
   async start(onChunkReady: (blob: Blob) => Promise<void> | void, options: CaptureOptions): Promise<void> {
     this.onChunkReady = onChunkReady;
-    const { screenEnabled, audioEnabled, systemAudioEnabled = true } = options;
+    const { screenEnabled, audioEnabled, systemAudioEnabled = true, onShareEnded } = options;
     this._audioEnabled = audioEnabled;
     this._stopped = false;
 
@@ -147,10 +166,13 @@ export class AudioCaptureService {
         this._hasSystemAudio = hasScreenAudio;
         const hasMic = micStream !== null;
         this._hasAudio = hasScreenAudio || hasMic;
+        this._micStream = micStream;
+        this._systemAudioStream = hasScreenAudio ? new MediaStream(screenAudioTracks) : null;
 
         if (this._hasAudio) {
           const audioContext = new AudioContext();
           this.audioContext = audioContext;
+          if (audioContext.state === "suspended") await audioContext.resume().catch(() => {});
           const destination = audioContext.createMediaStreamDestination();
 
           // Create analyser for energy detection
@@ -159,7 +181,7 @@ export class AudioCaptureService {
 
           if (hasScreenAudio) {
             const screenSource = audioContext.createMediaStreamSource(
-              new MediaStream(screenAudioTracks)
+              this._systemAudioStream!
             );
             screenSource.connect(destination);
             screenSource.connect(this.analyserNode!);
@@ -180,9 +202,19 @@ export class AudioCaptureService {
         this._hasAudio = false;
       }
 
-      // Listen for screen share ending
+      // Screen share ended from the browser bar ("Stop sharing"): drop the
+      // shared tab's video + audio but keep the mic running. The caller decides
+      // whether the session continues.
       displayStream.getVideoTracks().forEach((track) => {
-        track.onended = () => { this.stop(); };
+        track.onended = () => {
+          if (this._stopped) return;
+          this.stopScreenCapture();
+          this._systemAudioStream?.getTracks().forEach((t) => t.stop());
+          this._systemAudioStream = null;
+          this._hasSystemAudio = false;
+          const micStillLive = !!this._micStream?.getAudioTracks().some((t) => t.readyState === "live");
+          onShareEnded?.({ micStillLive });
+        };
       });
 
     } else if (audioEnabled) {
@@ -192,10 +224,12 @@ export class AudioCaptureService {
           audio: { echoCancellation: true, noiseSuppression: true },
         });
         this._hasAudio = true;
+        this._micStream = micStream;
 
         // Set up AudioContext + AnalyserNode for energy detection (same as screen+audio mode)
         const audioContext = new AudioContext();
         this.audioContext = audioContext;
+        if (audioContext.state === "suspended") await audioContext.resume().catch(() => {});
         const destination = audioContext.createMediaStreamDestination();
         this.analyserNode = audioContext.createAnalyser();
         this.analyserNode.fftSize = 256;
@@ -400,6 +434,14 @@ export class AudioCaptureService {
       this.displayStream.getTracks().forEach((track) => track.stop());
       this.displayStream = null;
     }
+
+    // The mixed stream above is a Web Audio destination: stopping it does not
+    // release the real mic / shared-audio tracks, so stop those explicitly.
+    this._micStream?.getTracks().forEach((track) => track.stop());
+    this._micStream = null;
+    this._systemAudioStream?.getTracks().forEach((track) => track.stop());
+    this._systemAudioStream = null;
+    this._hasSystemAudio = false;
 
     if (this.videoRef) {
       this.videoRef.srcObject = null;

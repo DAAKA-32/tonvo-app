@@ -271,7 +271,13 @@
     "copilotInvisible": "Copiloto IA en marcha — invisible al compartir pantalla.",
     "copilotSeparateWindow": "Copiloto en ventana aparte. Truco: comparta solo una ventana concreta para mantenerla oculta.",
     "copilotBlocked": "Su navegador bloqueó la ventana del copiloto. Permita las ventanas emergentes o use Chrome para PiP invisible.",
-    "copilotInline": "Copiloto integrado abajo — desplácese para ver las sugerencias."
+    "copilotInline": "Copiloto integrado abajo — desplácese para ver las sugerencias.",
+    "questionToAnswer": "Pregunta por responder",
+    "copyReply": "Copiar",
+    "copied": "Copiado",
+    "proLockedTitle": "Coaching en directo",
+    "proLockedText": "Consejos de coaching, señales de compra y equilibrio del tiempo de palabra, en directo durante la llamada.",
+    "proLockedCta": "Ver planes"
   },
   "auth": {
     "welcomeBack": "Bienvenido de vuelta",
@@ -427,7 +433,25 @@
     "modeNone": "Active al menos pantalla o audio para iniciar una sesión.",
     "listeningInsights": "Escuchando... los insights aparecerán aquí según se analice la conversación.",
     "noAudioDetected": "No se detecta audio. Revise su fuente de audio.",
-    "listeningTranscript": "Escuchando... hable y verá la transcripción aquí."
+    "listeningTranscript": "Escuchando... hable y verá la transcripción aquí.",
+    "liveInProgress": "En directo",
+    "statusCopilotDown": "Copilot no disponible",
+    "statusLive": "Transcripción en directo",
+    "statusFallback": "Modo de respaldo",
+    "statusReconnecting": "Reconectando...",
+    "statusConnecting": "Conectando...",
+    "retry": "Reintentar",
+    "fallbackMode": "Transcripción en directo interrumpida. Modo de respaldo activado, con un ligero retraso.",
+    "screenShareEnded": "Uso compartido detenido: Tonvo ahora solo oye su micrófono.",
+    "shareMeetingHint": "Comparta la pestaña de la reunión y marque \"Compartir también el audio de la pestaña\" para que Tonvo oiga a su interlocutor.",
+    "shareScreenToggle": "Pantalla",
+    "shareMeetingToggle": "Audio de la reunión",
+    "meetingAudioTitle": "Oiga a ambas partes de su llamada de Meet, Zoom o Teams",
+    "meetingAudioHint": "Cuando se abra la ventana para compartir, elija la pestaña de la reunión y marque \"Compartir también el audio de la pestaña\" (o \"Compartir el audio del sistema\" para una aplicación de escritorio). Así Tonvo oye a su interlocutor, incluso con auriculares.",
+    "transcriptTab": "Transcripción en directo",
+    "starting": "Iniciando...",
+    "recordingHint": "Tonvo está escuchando. Concéntrese en la conversación, las sugerencias llegan en tiempo real.",
+    "idleHint": "Configure la captura y pulse para empezar."
   },
   "analyzePage": {
     "title": "Analizar conversación",
@@ -734,7 +758,7 @@
       "cta": "Cerrar mi primer deal",
       "features": [
         "3 sesiones de cierre en directo al mes",
-        "Detección de signals de compra",
+        "Detección de las preguntas del cliente",
         "Frases de cierre esenciales",
         "Revisión de deal (historial 7 días)"
       ]

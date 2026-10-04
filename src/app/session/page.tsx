@@ -9,7 +9,14 @@ import { useAuth } from "@/lib/auth-context";
 import { authFetch, authFetchFormData } from "@/lib/api-client";
 import { AudioCaptureService, type CaptureOptions } from "@/services/audio-capture";
 import { LiveSpeechService } from "@/services/live-speech";
-import { AssemblyAIStreamingService } from "@/services/assemblyai-stream";
+import {
+  AssemblyAIStreamingService,
+  type FinalTurnEvent,
+  type StreamLabel,
+  type StreamStatus,
+} from "@/services/assemblyai-stream";
+import { CopilotAnalysisQueue, type AnalyzeOutcome, type CopilotTurn } from "@/lib/copilot-queue";
+import { EchoFilter } from "@/lib/echo-filter";
 import { supabase } from "@/lib/supabase";
 import AppShell from "@/components/AppShell";
 import { useToast } from "@/components/Toast";
@@ -23,7 +30,6 @@ import LiveTranslationStream from "@/components/LiveTranslationStream";
 import LiveCopilotPanel from "@/components/LiveCopilotPanel";
 import { motion, AnimatePresence } from "framer-motion";
 // motion: live-grid + KPI strip entrance; AnimatePresence: tab transitions
-import UpgradePrompt from "@/components/UpgradePrompt";
 import { usePlan } from "@/hooks/usePlan";
 import { useParticipants } from "@/hooks/useParticipants";
 import type {
@@ -137,6 +143,48 @@ const AUDIO_LANGS: { code: string; flag: string; label: string }[] = [
   { code: "ko", flag: "🇰🇷", label: "한국어" },
 ];
 
+/** Live transcription state shown in the session header. */
+type TranscriptionStatus = "idle" | "connecting" | "live" | "reconnecting" | "fallback";
+
+/** Render state read by long-lived callbacks (streams, analysis queue). */
+interface LiveContext {
+  conversationMode: ConversationMode;
+  screenAnalysis: ScreenAnalysis | null;
+  detectedQuestion: DetectedQuestion | null;
+  suggestedResponses: Array<{ text: string; intent: string; label: string }>;
+  detectedLanguage: string | null;
+  audioLang: string;
+  uiLanguage: string;
+}
+
+// Placeholder tone for a turn whose analysis hasn't arrived (or was skipped).
+const NEUTRAL_TONE: ToneResult = {
+  tone: "neutral", confidence: 0.5, suggestion: "", emotions: [],
+  signal: "none", signalLabel: "", qualityScore: 0, classification: "neutral",
+  coachingTip: "", liveInsight: "", engagementScore: 0, responseDelay: "normal",
+};
+
+const ANALYZE_TIMEOUT_MS = 12_000;
+// How long a mic ("me") turn waits for a matching shared-tab turn before it counts as real speech.
+const ECHO_HOLD_MS = 1_500;
+
+function newTurnId(): string {
+  return `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`;
+}
+
+// Phrases batch transcription invents on silence / background music.
+const SILENCE_HALLUCINATIONS = ["sous-titres","amara.org","sous-titrage","merci d'avoir regard","merci de votre visionnage","thank you for watching","thanks for watching","subtitles by","transcrit par","please subscribe","like and subscribe","video/content end","end of video","fin de la vidéo","ご視聴","チャンネル登録"];
+
+/** Empty, too short, or a known silence hallucination (incl. wrong-script output). */
+function isLikelyNoise(text: string, detectedLanguage: string | null): boolean {
+  const lower = text.trim().toLowerCase();
+  if (lower.length < 3) return true;
+  if (SILENCE_HALLUCINATIONS.some((h) => lower.includes(h))) return true;
+  const hasNonLatinScript = /[　-鿿가-힯؀-ۿ]/.test(text);
+  const expectsLatinScript = !detectedLanguage || /^(fr|en|es|pt|de|it|nl|pl|ro|cs|sv|da|no|fi|hu|tr|vi|id|ms)/.test(detectedLanguage);
+  return hasNonLatinScript && expectsLatinScript;
+}
+
 // i18n key maps for labels (used inside component where t() is available)
 const SIGNAL_I18N: Record<ConversationSignal, string> = {
   objection: "session.signalObjection", question: "session.signalQuestion",
@@ -171,10 +219,22 @@ export default function SessionPage() {
   const demoTranscriptRef = useRef<HTMLDivElement>(null);
   const audioService = useRef<AudioCaptureService | null>(null);
   const liveSpeech = useRef<LiveSpeechService | null>(null);
-  const aaiStream = useRef<AssemblyAIStreamingService | null>(null);
-  // True when AssemblyAI is providing transcription — short-circuits the legacy
-  // Whisper pipeline so we don't double-pay or duplicate segments.
+  // Live AssemblyAI streams: one mixed stream, or "me" (mic) + "them" (shared tab) in meetings.
+  const aaiStreams = useRef<AssemblyAIStreamingService[]>([]);
+  const streamStatuses = useRef(new Map<AssemblyAIStreamingService, StreamStatus>());
+  const streamLabels = useRef(new Map<AssemblyAIStreamingService, StreamLabel>());
+  const dualStreamRef = useRef(false);
+  const echoFilter = useRef(new EchoFilter());
+  // True when AssemblyAI is providing transcription — short-circuits the batch
+  // fallback pipeline so we don't double-pay or duplicate segments.
   const useAssemblyAIForAnalysis = useRef(false);
+  const analysisQueue = useRef<CopilotAnalysisQueue<ToneResult> | null>(null);
+  const [transcriptionStatus, setTranscriptionStatus] = useState<TranscriptionStatus>("idle");
+  const [copilotFailures, setCopilotFailures] = useState(0);
+  const [transcribeDown, setTranscribeDown] = useState(false);
+  const transcribeFailures = useRef(0);
+  const summaryBackoffMs = useRef(0);
+  const summaryRetryTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const processingToastId = useRef<string | null>(null);
   const screenAnalysisTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -198,13 +258,19 @@ export default function SessionPage() {
 
   const [isMobile, setIsMobile] = useState(false);
   const [isIOS, setIsIOS] = useState(false);
-  const [screenEnabled, setScreenEnabled] = useState(features.screenAnalysis);
+  // Sharing the meeting tab is how Tonvo hears the other side of a call.
+  // On by default on desktop; the choice is remembered per browser.
+  const [screenEnabled, setScreenEnabled] = useState(true);
   const [audioEnabled, setAudioEnabled] = useState(true);
-
-  // Sync screenEnabled with plan — disable if plan doesn't allow it
   useEffect(() => {
-    if (!features.screenAnalysis) setScreenEnabled(false);
-  }, [features.screenAnalysis]);
+    try {
+      const saved = localStorage.getItem("tonvo-share-meeting");
+      if (saved !== null) setScreenEnabled(saved === "1");
+    } catch { /* storage unavailable */ }
+  }, []);
+  useEffect(() => {
+    try { localStorage.setItem("tonvo-share-meeting", screenEnabled ? "1" : "0"); } catch { /* storage unavailable */ }
+  }, [screenEnabled]);
 
   // Detect platform capabilities
   useEffect(() => {
@@ -508,12 +574,11 @@ export default function SessionPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isDemo]);
 
-  // Keep the demo transcript scrolled to the newest line.
+  // Keep the live transcript scrolled to the newest line.
   useEffect(() => {
-    if (!isDemo) return;
     const el = demoTranscriptRef.current;
     if (el) el.scrollTo({ top: el.scrollHeight, behavior: "smooth" });
-  }, [isDemo, segments]);
+  }, [segments, interimText]);
 
   // Session time limit countdown for free plan users
   useEffect(() => {
@@ -587,10 +652,16 @@ export default function SessionPage() {
         liveSpeech.current.stop();
         liveSpeech.current = null;
       }
-      if (aaiStream.current) {
-        aaiStream.current.stop();
-        aaiStream.current = null;
-        useAssemblyAIForAnalysis.current = false;
+      for (const s of aaiStreams.current) {
+        try { s.stop(); } catch { /* ignored */ }
+      }
+      aaiStreams.current = [];
+      useAssemblyAIForAnalysis.current = false;
+      analysisQueue.current?.stop();
+      analysisQueue.current = null;
+      if (summaryRetryTimer.current) {
+        clearTimeout(summaryRetryTimer.current);
+        summaryRetryTimer.current = null;
       }
       conversationSummary.current = "";
       unsummarizedSegments.current = [];
@@ -797,12 +868,12 @@ export default function SessionPage() {
     finally { setAnalyzingScreen(false); }
   }, [screenAnalysisCompleted, pauseScreenAnalysis, screenAnalysis, generateScreenSummary]);
 
-  // Flush queued segments to rolling summary — re-triggers if more segments arrived during update
+  // Flush queued segments to the rolling summary. Backs off on errors so a
+  // failing endpoint isn't hammered; re-triggers if more segments arrived.
   function flushSummaryQueue() {
-    if (summaryUpdatePending.current || unsummarizedSegments.current.length < 2) return;
+    if (summaryUpdatePending.current || summaryRetryTimer.current || unsummarizedSegments.current.length < 2) return;
     summaryUpdatePending.current = true;
-    const segsToSummarize = [...unsummarizedSegments.current];
-    unsummarizedSegments.current = [];
+    const segsToSummarize = unsummarizedSegments.current.splice(0, 12);
     authFetch("/api/conversation-context", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -815,375 +886,349 @@ export default function SessionPage() {
       .then((r) => { if (!r.ok) throw new Error(`Context API: ${r.status}`); return r.json(); })
       .then((data) => {
         if (data.summary) conversationSummary.current = data.summary;
+        summaryBackoffMs.current = 0;
       })
       .catch((err) => {
         console.error("Rolling summary error:", err);
         unsummarizedSegments.current.unshift(...segsToSummarize);
+        // Keep the queue bounded: the oldest lines matter least to a rolling summary.
+        const overflow = unsummarizedSegments.current.length - 40;
+        if (overflow > 0) unsummarizedSegments.current.splice(0, overflow);
+        summaryBackoffMs.current = Math.min(60_000, Math.max(5_000, summaryBackoffMs.current * 2));
       })
       .finally(() => {
         summaryUpdatePending.current = false;
-        // If more segments queued during this update, flush again
-        if (unsummarizedSegments.current.length >= 2) {
+        if (unsummarizedSegments.current.length < 2) return;
+        if (summaryBackoffMs.current > 0) {
+          summaryRetryTimer.current = setTimeout(() => {
+            summaryRetryTimer.current = null;
+            flushSummaryQueue();
+          }, summaryBackoffMs.current);
+        } else {
           flushSummaryQueue();
         }
       });
   }
 
   /* ----------------------------------------------------------------- */
-  /*  AssemblyAI final-turn handler                                     */
-  /*  When the live WebSocket emits a finalized turn, we already have   */
-  /*  clean punctuated text + (optional) speaker label + language —     */
-  /*  no Whisper round-trip needed. We jump straight to Claude analysis */
-  /*  and commit the segment. Mirrors processAudioChunk's analyze block */
-  /*  without the transcription, dedup, and hallucination filtering     */
-  /*  steps (AssemblyAI's finals are already authoritative).            */
+  /*  Live copilot pipeline                                             */
+  /*  Transcription (AssemblyAI streams, or the batch fallback) yields  */
+  /*  final turns. Each turn is committed to the transcript at once,    */
+  /*  then CopilotAnalysisQueue sends turns to /api/analyze (one request */
+  /*  in flight, later turns merged) and applyAnalysis updates the UI.  */
+  /*  A failed analysis never loses the transcript.                     */
   /* ----------------------------------------------------------------- */
-  const processAssemblyAITurn = useCallback(async (turn: { text: string; language?: string; speaker?: string; timestamp: number }) => {
-    if (!audioService.current?.audioEnabled) return;
-    const text = turn.text?.trim();
-    if (!text || text.length < 2) return;
 
-    // Update detected language if AssemblyAI told us one
-    if (turn.language && !detectedLanguage) {
-      setDetectedLanguage(turn.language);
-    }
+  // Latest render state for callbacks owned by long-lived services.
+  const liveContext: LiveContext = {
+    conversationMode,
+    screenAnalysis,
+    detectedQuestion,
+    suggestedResponses,
+    detectedLanguage,
+    audioLang,
+    uiLanguage: i18n.language,
+  };
+  const liveContextRef = useRef(liveContext);
+  liveContextRef.current = liveContext;
+  const segmentsRef = useRef<TranscriptSegment[]>(segments);
+  segmentsRef.current = segments;
 
-    // Build a single-speaker SpeakerSegment when diarization is on
-    const speakerSegs: SpeakerSegment[] = turn.speaker
-      ? [{ speaker: turn.speaker, start: 0, end: 0, text }]
-      : [];
-    if (speakerSegs.length > 0) updateParticipants(speakerSegs);
-
-    consecutiveSilenceCount.current = 0;
-    lastSegmentText.current = text;
-    setInterimText("");
-
-    // Copilot paused → record segment with neutral tone, skip Claude
-    if (copilotPausedRef.current) {
-      const pausedTone: ToneResult = {
-        tone: "neutral", confidence: 0.5, suggestion: "", emotions: [],
-        signal: "none", signalLabel: "", qualityScore: 0, classification: "neutral",
-        coachingTip: "", liveInsight: "", engagementScore: 0, responseDelay: "normal",
-      };
-      setSegments((prev) => [...prev, {
-        text,
-        timestamp: turn.timestamp,
-        tone: pausedTone,
-        speaker: turn.speaker,
-        speakerSegments: speakerSegs.length > 0 ? speakerSegs : undefined,
-      }]);
-      return;
-    }
-
-    setProcessing(true);
+  async function analyzeBatch(batch: CopilotTurn[]): Promise<AnalyzeOutcome<ToneResult>> {
+    const ctx = liveContextRef.current;
+    const batchIds = new Set(batch.map((turn) => turn.id));
+    const recentSegs = segmentsRef.current
+      .filter((s) => !s.id || !batchIds.has(s.id))
+      .slice(-5)
+      .map((s) => ({ text: s.text, tone: s.tone.tone, speaker: s.speaker }));
+    const last = batch[batch.length - 1];
+    const language = (ctx.audioLang !== "auto" ? ctx.audioLang : (last?.language || ctx.detectedLanguage || ctx.uiLanguage) || "en")
+      .slice(0, 2)
+      .toLowerCase();
     try {
-      const recentSegs = segments.slice(-5).map((s) => ({ text: s.text, tone: s.tone.tone, speaker: s.speaker }));
-      const analyzeRes = await authFetch("/api/analyze", {
+      const res = await authFetch("/api/analyze", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
+        signal: AbortSignal.timeout(ANALYZE_TIMEOUT_MS),
         body: JSON.stringify({
-          text,
+          text: batch.map((turn) => turn.text).join(" "),
           conversationSummary: conversationSummary.current || undefined,
           recentSegments: recentSegs,
-          speakerSegments: speakerSegs.length > 0 ? speakerSegs : undefined,
-          mode: conversationMode,
-          screenContext: screenAnalysis?.context || undefined,
-          screenContentType: screenAnalysis?.contentType || undefined,
-          language: turn.language || i18n.language,
-          lastDetectedQuestion: detectedQuestion || undefined,
-          lastSuggestions: suggestedResponses.length > 0 ? suggestedResponses.map((r) => r.text) : undefined,
+          speakerSegments: batch.some((turn) => turn.speaker)
+            ? batch.map((turn) => ({ speaker: turn.speaker ?? "?", text: turn.text, start: 0, end: 0 }))
+            : undefined,
+          mode: ctx.conversationMode,
+          screenContext: ctx.screenAnalysis?.context || undefined,
+          screenContentType: ctx.screenAnalysis?.contentType || undefined,
+          language,
+          lastDetectedQuestion: ctx.detectedQuestion || undefined,
+          lastSuggestions: ctx.suggestedResponses.length > 0 ? ctx.suggestedResponses.map((r) => r.text) : undefined,
         }),
       });
-      if (!analyzeRes.ok) throw new Error(`Analyze API error: ${analyzeRes.status}`);
-      const analysis: ToneResult = await analyzeRes.json();
+      if (!res.ok) return { ok: false, status: res.status };
+      return { ok: true, analysis: (await res.json()) as ToneResult };
+    } catch (err) {
+      const timedOut = err instanceof DOMException && (err.name === "TimeoutError" || err.name === "AbortError");
+      return { ok: false, status: timedOut ? "timeout" : "network" };
+    }
+  }
 
-      const segment: TranscriptSegment = {
-        text,
-        timestamp: turn.timestamp,
-        tone: analysis,
-        speaker: turn.speaker,
-        speakerSegments: speakerSegs.length > 0 ? speakerSegs : undefined,
-        detectedLanguage: turn.language,
-      };
-      setSegments((prev) => [...prev, segment]);
-
-      setTimeline((prev) => {
-        const events: TimelineEvent[] = [...prev, {
-          timestamp: turn.timestamp,
-          type: "transcript" as const,
-          text,
-          speaker: turn.speaker,
-          tone: analysis.tone,
-        }];
-        if (analysis.signal && analysis.signal !== "none") {
-          events.push({
-            timestamp: turn.timestamp,
-            type: "signal" as const,
-            signal: analysis.signal,
-            signalLabel: analysis.signalLabel,
-          });
-        }
-        return events.length > 200 ? events.slice(-200) : events;
-      });
-
+  function applyAnalysis(batch: CopilotTurn[], analysis: ToneResult) {
+    const ids = new Set(batch.map((turn) => turn.id));
+    const last = batch[batch.length - 1];
+    setSegments((prev) => prev.map((s) => (s.id && ids.has(s.id) ? { ...s, tone: analysis } : s)));
+    for (const turn of batch) {
       unsummarizedSegments.current.push({
-        text,
+        text: turn.text,
         tone: analysis.tone,
         speaker: turn.speaker,
         signal: analysis.signal,
         signalLabel: analysis.signalLabel,
       });
-      if (unsummarizedSegments.current.length >= 2 && !summaryUpdatePending.current) {
-        flushSummaryQueue();
-      }
-
-      setCurrentTone(analysis.tone);
-      setCurrentSuggestion(analysis.suggestion);
-      setCurrentEmotions(analysis.emotions || []);
-      if (Array.isArray(analysis.suggestedResponses) && analysis.suggestedResponses.length > 0) {
-        setSuggestedResponses(analysis.suggestedResponses);
-      }
-      if (analysis.detectedQuestion && analysis.detectedQuestion.text) {
-        setDetectedQuestion(analysis.detectedQuestion);
-      } else if (analysis.detectedQuestion === null) {
-        setDetectedQuestion(null);
-      }
-      if (analysis.classification) setClassification(analysis.classification);
-      if (analysis.coachingTip) setCoachingTip(analysis.coachingTip);
-      if (analysis.liveInsight) setLiveInsight(analysis.liveInsight);
-      if (analysis.responseDelay) setResponseDelay(analysis.responseDelay);
-      if (analysis.engagementScore != null) {
-        setEngagementScore((prev) => prev === 0 ? analysis.engagementScore : Math.round((prev + analysis.engagementScore) / 2));
-      }
-      if (analysis.qualityScore != null) {
-        setQualityScore((prev) => prev === 0 ? analysis.qualityScore : Math.round((prev + analysis.qualityScore) / 2));
-      }
-      if (analysis.speakerDynamics?.balanceRatio != null) {
-        setSpeakerBalance(analysis.speakerDynamics.balanceRatio);
-      }
-
-      const cfg = analysis.signal && analysis.signal !== "none" ? SIGNAL_CONFIG[analysis.signal] : undefined;
-      if (analysis.signal && analysis.signal !== "none" && cfg) {
-        const signalLabel = analysis.signalLabel || cfg.label;
-        setSignals((prev) => { const next = [...prev, { signal: analysis.signal, label: signalLabel, time: turn.timestamp }]; return next.length > 50 ? next.slice(-50) : next; });
-        setKeyMoments((prev) => { const next = [...prev, { timestamp: turn.timestamp, type: analysis.signal, label: signalLabel, text }]; return next.length > 30 ? next.slice(-30) : next; });
-      }
-    } catch (err) {
-      console.error("[session] AssemblyAI turn analysis error:", err);
-    } finally {
-      setProcessing(false);
     }
-  }, [segments, detectedLanguage, conversationMode, screenAnalysis, detectedQuestion, suggestedResponses, i18n.language]);
+    if (unsummarizedSegments.current.length >= 2) flushSummaryQueue();
+    // Unparseable model reply: keep the current copilot state as is.
+    if (analysis.degraded) return;
 
-  // Stable ref so the AssemblyAI streaming service always calls the freshest closure
-  const processAssemblyAITurnRef = useRef(processAssemblyAITurn);
-  processAssemblyAITurnRef.current = processAssemblyAITurn;
+    setCurrentTone(analysis.tone);
+    if (analysis.suggestion) setCurrentSuggestion(analysis.suggestion);
+    setCurrentEmotions(analysis.emotions || []);
+    if (Array.isArray(analysis.suggestedResponses) && analysis.suggestedResponses.length > 0) {
+      setSuggestedResponses(analysis.suggestedResponses);
+    }
+    // Only clear the question when the AI explicitly returned null (answered / no longer relevant)
+    if (analysis.detectedQuestion && analysis.detectedQuestion.text) {
+      setDetectedQuestion(analysis.detectedQuestion);
+    } else if (analysis.detectedQuestion === null) {
+      setDetectedQuestion(null);
+    }
+    if (analysis.classification) setClassification(analysis.classification);
+    if (analysis.coachingTip) setCoachingTip(analysis.coachingTip);
+    if (analysis.liveInsight) setLiveInsight(analysis.liveInsight);
+    if (analysis.responseDelay) setResponseDelay(analysis.responseDelay);
+    if (analysis.engagementScore != null) {
+      setEngagementScore((prev) => prev === 0 ? analysis.engagementScore : Math.round((prev + analysis.engagementScore) / 2));
+    }
+    if (analysis.qualityScore != null) {
+      setQualityScore((prev) => prev === 0 ? analysis.qualityScore : Math.round((prev + analysis.qualityScore) / 2));
+    }
+    if (analysis.speakerDynamics?.balanceRatio != null) {
+      setSpeakerBalance(analysis.speakerDynamics.balanceRatio);
+    }
 
-  const processAudioChunk = useCallback(async (blob: Blob) => {
+    const cfg = analysis.signal && analysis.signal !== "none" ? SIGNAL_CONFIG[analysis.signal] : undefined;
+    if (analysis.signal && analysis.signal !== "none" && cfg && last) {
+      const signalLabel = analysis.signalLabel || cfg.label;
+      setSignals((prev) => { const next = [...prev, { signal: analysis.signal, label: signalLabel, time: last.timestamp }]; return next.length > 50 ? next.slice(-50) : next; });
+      setKeyMoments((prev) => { const next = [...prev, { timestamp: last.timestamp, type: analysis.signal, label: signalLabel, text: last.text }]; return next.length > 30 ? next.slice(-30) : next; });
+      setTimeline((prev) => {
+        const next: TimelineEvent[] = [...prev, { timestamp: last.timestamp, type: "signal" as const, signal: analysis.signal, signalLabel: analysis.signalLabel }];
+        return next.length > 200 ? next.slice(-200) : next;
+      });
+    }
+  }
+
+  /** Append a finalized turn to the transcript right away (tone filled in later). */
+  function commitTurn(turn: CopilotTurn) {
+    const speakerSegs: SpeakerSegment[] = turn.speaker ? [{ speaker: turn.speaker, text: turn.text, start: 0, end: 0 }] : [];
+    if (speakerSegs.length > 0) updateParticipants(speakerSegs);
+    consecutiveSilenceCount.current = 0;
+    lastSegmentText.current = turn.text;
+    setSegments((prev) => [...prev, {
+      id: turn.id,
+      text: turn.text,
+      timestamp: turn.timestamp,
+      tone: NEUTRAL_TONE,
+      speaker: turn.speaker,
+      speakerSegments: speakerSegs.length > 0 ? speakerSegs : undefined,
+      detectedLanguage: turn.language,
+    }]);
+    setTimeline((prev) => {
+      const next: TimelineEvent[] = [...prev, { timestamp: turn.timestamp, type: "transcript" as const, text: turn.text, speaker: turn.speaker, tone: "neutral" as Tone }];
+      return next.length > 200 ? next.slice(-200) : next;
+    });
+  }
+
+  function acceptTurns(turns: CopilotTurn[]) {
+    if (turns.length === 0 || !audioService.current) return;
+    setInterimText("");
+    turns.forEach(commitTurn);
+    // Copilot paused → transcript still recorded, no AI call
+    if (copilotPausedRef.current) return;
+    analysisQueue.current?.push(...turns);
+  }
+
+  /** Final turn from an AssemblyAI stream. */
+  function handleFinalTurn(event: FinalTurnEvent) {
     if (!audioService.current?.audioEnabled) return;
-    // When AssemblyAI is the active transcription source, skip the legacy Whisper
-    // pipeline — analysis is driven directly by final-turn events instead.
+    const text = event.text?.trim();
+    if (!text || text.length < 2) return;
+    if (event.language && !liveContextRef.current.detectedLanguage) setDetectedLanguage(event.language);
+    const turn: CopilotTurn = { id: newTurnId(), text, speaker: event.speaker, language: event.language, timestamp: event.timestamp };
+
+    if (dualStreamRef.current && event.speaker === "them") {
+      echoFilter.current.addThem(text, event.timestamp);
+    } else if (dualStreamRef.current && event.speaker === "me") {
+      // On speakers (no headset) the mic also hears the prospect. Hold the
+      // user's turn briefly and drop it if the shared tab produced the same words.
+      setTimeout(() => {
+        if (echoFilter.current.isEcho(text, event.timestamp)) return;
+        acceptTurnsRef.current([turn]);
+      }, ECHO_HOLD_MS);
+      return;
+    }
+    acceptTurns([turn]);
+  }
+
+  /** Batch fallback: one recorded ~5 s chunk → /api/transcribe → turns. */
+  async function processAudioChunk(blob: Blob) {
+    if (!audioService.current?.audioEnabled) return;
+    // Live streaming active → the batch recorder's chunks are not needed.
     if (useAssemblyAIForAnalysis.current) return;
     setProcessing(true);
-    if (processingToastId.current) {
-      toast.update(processingToastId.current, t("session.transcribing"), { type: "processing" });
-    } else {
-      processingToastId.current = toast.show(t("session.transcribing"), { type: "processing" });
-    }
     try {
       const formData = new FormData();
-      // Use correct extension based on actual blob MIME type
       const blobExt = blob.type.includes("ogg") ? "ogg" : blob.type.includes("mp4") ? "mp4" : "webm";
       formData.append("audio", blob, `audio.${blobExt}`);
-      // Pass detected language if we already know it, otherwise let Whisper auto-detect
-      if (detectedLanguage) formData.append("language", detectedLanguage);
-      const transcribeRes = await authFetchFormData("/api/transcribe", formData, { method: "POST" });
-      if (!transcribeRes.ok) throw new Error(`Transcribe API error: ${transcribeRes.status}`);
-      const transcribeData = await transcribeRes.json();
-      let text: string = transcribeData.text;
-      const speakerSegs: SpeakerSegment[] = transcribeData.speakerSegments || [];
-      // Update participant tracking from detected speakers
-      if (speakerSegs.length > 0) updateParticipants(speakerSegs);
-      // Store detected language for subsequent chunks
-      if (transcribeData.language && !detectedLanguage) {
-        setDetectedLanguage(transcribeData.language);
-        // Update live speech language for better accuracy
-        liveSpeech.current?.setLanguage(transcribeData.language);
-        aaiStream.current?.setLanguage(transcribeData.language);
-      }
-      const WHISPER_HALLUCINATIONS = ["sous-titres","amara.org","sous-titrage","merci d'avoir regard","merci de votre visionnage","thank you for watching","thanks for watching","subtitles by","transcrit par","please subscribe","like and subscribe","music","video/content end","end of video","fin de la vidéo","ご視聴","ごちそうさま","お疲れ様","よろしくお願い","ありがとうございま","チャンネル登録","最後まで","見てくれて"];
-      const lower = (text || "").trim().toLowerCase();
-      // Detect non-Latin script hallucinations (Japanese, Chinese, Korean, Arabic, etc.)
-      // when no language has been detected yet or detected language uses Latin script
-      const hasNonLatinScript = /[\u3000-\u9FFF\uAC00-\uD7AF\u0600-\u06FF]/.test(text || "");
-      const expectsLatinScript = !detectedLanguage || /^(fr|en|es|pt|de|it|nl|pl|ro|cs|sv|da|no|fi|hu|tr|vi|id|ms)$/.test(detectedLanguage);
-      const isHallucination = !text || lower.length < 3 || WHISPER_HALLUCINATIONS.some((h) => lower.includes(h)) || (hasNonLatinScript && expectsLatinScript);
-      if (isHallucination) {
-        setProcessing(false);
-        if (processingToastId.current) { toast.dismiss(processingToastId.current); processingToastId.current = null; }
+      const ctx = liveContextRef.current;
+      const langHint = ctx.audioLang !== "auto" ? ctx.audioLang : ctx.detectedLanguage;
+      if (langHint) formData.append("language", langHint);
+      const res = await authFetchFormData("/api/transcribe", formData, { method: "POST" });
+      if (!res.ok) throw new Error(`Transcribe API error: ${res.status}`);
+      const data = (await res.json()) as { text?: string; language?: string | null; speakerSegments?: SpeakerSegment[] };
+      transcribeFailures.current = 0;
+      setTranscribeDown(false);
 
-        // Track consecutive silence (informational only -- no auto-stop in copilot mode)
+      const text = (data.text || "").trim();
+      if (data.language && !ctx.detectedLanguage) {
+        setDetectedLanguage(data.language);
+        liveSpeech.current?.setLanguage(data.language);
+      }
+      if (isLikelyNoise(text, ctx.detectedLanguage)) {
         consecutiveSilenceCount.current += 1;
         return;
       }
-
-      // --- Deduplication: skip duplicate or near-duplicate transcriptions ---
-      // Whisper can hallucinate the same text on silent chunks with minor whitespace differences.
+      // Skip a chunk that repeats the previous one verbatim
       const normalize = (s: string) => s.trim().toLowerCase().replace(/\s+/g, " ");
-      const prevText = lastSegmentText.current;
-      if (prevText && normalize(text) === normalize(prevText)) {
-        setProcessing(false);
-        if (processingToastId.current) { toast.dismiss(processingToastId.current); processingToastId.current = null; }
-        return;
-      }
-      lastSegmentText.current = text;
-      setInterimText(""); // Clear interim — Whisper result is authoritative
+      if (lastSegmentText.current && normalize(text) === normalize(lastSegmentText.current)) return;
 
-      // Reset silence counter on valid speech
-      consecutiveSilenceCount.current = 0;
-
-      // Skip AI analysis when copilot is paused — transcription still recorded
-      if (copilotPausedRef.current) {
-        const pausedTone: ToneResult = {
-          tone: "neutral", confidence: 0.5, suggestion: "", emotions: [],
-          signal: "none", signalLabel: "", qualityScore: 0, classification: "neutral",
-          coachingTip: "", liveInsight: "", engagementScore: 0, responseDelay: "normal",
-        };
-        const dominantSpeaker = speakerSegs.length > 0 ? speakerSegs[speakerSegs.length - 1].speaker : undefined;
-        setSegments((prev) => [...prev, { text, timestamp: Date.now(), tone: pausedTone, speaker: dominantSpeaker, speakerSegments: speakerSegs.length > 0 ? speakerSegs : undefined }]);
-        setProcessing(false);
-        if (processingToastId.current) { toast.update(processingToastId.current, t("session.copilotPausedStatus", "Copilot paused"), { type: "info", duration: 2000 }); processingToastId.current = null; }
-        return;
-      }
-
-      toast.update(processingToastId.current!, t("session.analyzing"), { type: "processing" });
-
-      // Send rolling summary + last 5 raw segments + copilot memory for richer context
-      const recentSegs = segments.slice(-5).map((s) => ({ text: s.text, tone: s.tone.tone, speaker: s.speaker }));
-      const analyzeRes = await authFetch("/api/analyze", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          text,
-          conversationSummary: conversationSummary.current || undefined,
-          recentSegments: recentSegs,
-          speakerSegments: speakerSegs.length > 0 ? speakerSegs : undefined,
-          mode: conversationMode,
-          screenContext: screenAnalysis?.context || undefined,
-          screenContentType: screenAnalysis?.contentType || undefined,
-          language: i18n.language,
-          lastDetectedQuestion: detectedQuestion || undefined,
-          lastSuggestions: suggestedResponses.length > 0 ? suggestedResponses.map((r) => r.text) : undefined,
-        }),
-      });
-      if (!analyzeRes.ok) throw new Error(`Analyze API error: ${analyzeRes.status}`);
-      const analysis: ToneResult = await analyzeRes.json();
-      const dominantSpeaker = speakerSegs.length > 0 ? speakerSegs[speakerSegs.length - 1].speaker : undefined;
-      const segment: TranscriptSegment = { text, timestamp: Date.now(), tone: analysis, speaker: dominantSpeaker, speakerSegments: speakerSegs.length > 0 ? speakerSegs : undefined, detectedLanguage: transcribeData.language || undefined };
-      // Windowed state: keep full segments for save, but cap timeline/signals to prevent memory bloat
-      setSegments((prev) => [...prev, segment]);
-
-      // Add transcript event to unified timeline (cap at 200 events for long sessions)
-      setTimeline((prev) => {
-        const events: TimelineEvent[] = [...prev, {
-          timestamp: Date.now(),
-          type: "transcript" as const,
-          text,
-          speaker: dominantSpeaker,
-          tone: analysis.tone,
-        }];
-        if (analysis.signal && analysis.signal !== "none") {
-          events.push({
-            timestamp: Date.now(),
-            type: "signal" as const,
-            signal: analysis.signal,
-            signalLabel: analysis.signalLabel,
-          });
-        }
-        return events.length > 200 ? events.slice(-200) : events;
-      });
-
-      // Queue segment for rolling summary update
-      unsummarizedSegments.current.push({
-        text,
-        tone: analysis.tone,
-        speaker: dominantSpeaker,
-        signal: analysis.signal,
-        signalLabel: analysis.signalLabel,
-      });
-
-      // Update rolling summary every 2 new segments (async, non-blocking)
-      if (unsummarizedSegments.current.length >= 2 && !summaryUpdatePending.current) {
-        flushSummaryQueue();
-      }
-      setCurrentTone(analysis.tone);
-      setCurrentSuggestion(analysis.suggestion);
-      setCurrentEmotions(analysis.emotions || []);
-      if (Array.isArray(analysis.suggestedResponses) && analysis.suggestedResponses.length > 0) {
-        setSuggestedResponses(analysis.suggestedResponses);
-      }
-      // Track detected question from other speaker
-      // Only update if a new question is detected; only clear if the AI explicitly returned null
-      // (meaning the question has been answered or is no longer relevant)
-      if (analysis.detectedQuestion && analysis.detectedQuestion.text) {
-        setDetectedQuestion(analysis.detectedQuestion);
-      } else if (analysis.detectedQuestion === null) {
-        setDetectedQuestion(null);
-      }
-
-      // Update classification and coaching
-      if (analysis.classification) setClassification(analysis.classification);
-      if (analysis.coachingTip) setCoachingTip(analysis.coachingTip);
-      if (analysis.liveInsight) setLiveInsight(analysis.liveInsight);
-      if (analysis.responseDelay) setResponseDelay(analysis.responseDelay);
-      if (analysis.engagementScore != null) {
-        setEngagementScore((prev) => prev === 0 ? analysis.engagementScore : Math.round((prev + analysis.engagementScore) / 2));
-      }
-
-      if (analysis.qualityScore != null) {
-        setQualityScore((prev) => prev === 0 ? analysis.qualityScore : Math.round((prev + analysis.qualityScore) / 2));
-      }
-      if (analysis.speakerDynamics?.balanceRatio != null) {
-        setSpeakerBalance(analysis.speakerDynamics.balanceRatio);
-      }
-
-      // Track key moments
-      const cfg = analysis.signal && analysis.signal !== "none" ? SIGNAL_CONFIG[analysis.signal] : undefined;
-      if (analysis.signal && analysis.signal !== "none" && cfg) {
-        const signalLabel = analysis.signalLabel || cfg.label;
-        setSignals((prev) => { const next = [...prev, { signal: analysis.signal, label: signalLabel, time: Date.now() }]; return next.length > 50 ? next.slice(-50) : next; });
-        setKeyMoments((prev) => { const next = [...prev, { timestamp: Date.now(), type: analysis.signal, label: signalLabel, text }]; return next.length > 30 ? next.slice(-30) : next; });
-        const tt = analysis.signal === "objection" ? "error" as const : (analysis.signal === "opportunity" || analysis.signal === "agreement") ? "success" as const : "info" as const;
-        toast.update(processingToastId.current!, cfg.label + (analysis.signalLabel ? `: ${analysis.signalLabel}` : ""), { type: tt, duration: 3000 });
-        processingToastId.current = null;
-      } else {
-        toast.update(processingToastId.current!, t("session.segmentAnalyzed"), { type: "success", duration: 2000 });
-        processingToastId.current = null;
-      }
+      const parts = data.speakerSegments && data.speakerSegments.length > 0
+        ? data.speakerSegments
+        : [{ speaker: "", text, start: 0, end: 0 }];
+      const now = Date.now();
+      const turns: CopilotTurn[] = parts
+        .filter((p) => p.text && p.text.trim())
+        .map((p, i) => ({
+          id: newTurnId(),
+          text: p.text.trim(),
+          speaker: p.speaker || undefined,
+          language: data.language || undefined,
+          timestamp: now + i,
+        }));
+      acceptTurns(turns);
     } catch (err) {
-      console.error("Processing error:", err);
-      if (processingToastId.current) { toast.update(processingToastId.current, t("session.analysisFailed"), { type: "error", duration: 4000 }); processingToastId.current = null; }
-    } finally { setProcessing(false); }
-  }, [toast, segments, detectedLanguage, conversationMode]);
+      console.error("[session] fallback transcription error:", err);
+      transcribeFailures.current += 1;
+      if (transcribeFailures.current >= 3) setTranscribeDown(true);
+    } finally {
+      setProcessing(false);
+    }
+  }
 
-  // Stable ref wrapper: always calls the latest processAudioChunk closure
-  // (AudioCaptureService stores onChunkReady once at start — without this ref,
-  //  subsequent chunks would call the stale initial closure with segments=[])
+  // Long-lived services (audio capture, streams, queue) keep the callback they
+  // were given at start: route them through refs to the latest closures.
+  const analyzeBatchRef = useRef(analyzeBatch);
+  analyzeBatchRef.current = analyzeBatch;
+  const applyAnalysisRef = useRef(applyAnalysis);
+  applyAnalysisRef.current = applyAnalysis;
+  const acceptTurnsRef = useRef(acceptTurns);
+  acceptTurnsRef.current = acceptTurns;
+  const handleFinalTurnRef = useRef(handleFinalTurn);
+  handleFinalTurnRef.current = handleFinalTurn;
   const processAudioChunkRef = useRef(processAudioChunk);
   processAudioChunkRef.current = processAudioChunk;
   const stableProcessAudioChunk = useCallback((blob: Blob) => {
     return processAudioChunkRef.current(blob);
   }, []);
 
+  /** Stop every live transcription stream. */
+  function stopStreams() {
+    for (const s of aaiStreams.current) {
+      try { s.stop(); } catch { /* ignored */ }
+    }
+    aaiStreams.current = [];
+    streamStatuses.current.clear();
+    streamLabels.current.clear();
+    useAssemblyAIForAnalysis.current = false;
+    dualStreamRef.current = false;
+  }
+
+  /** Live streaming is gone for good: switch to the batch fallback recorder. */
+  function switchToFallback() {
+    if (!useAssemblyAIForAnalysis.current) return;
+    stopStreams();
+    setTranscriptionStatus("fallback");
+    toast.show(t("session.fallbackMode", "Live transcription interrupted. Backup mode on, slight delay."), { type: "info", duration: 5000 });
+  }
+
+  function handleStreamStatus(stream: AssemblyAIStreamingService, status: StreamStatus) {
+    if (status === "stopped") return;
+    streamStatuses.current.set(stream, status);
+    // Initial start is handled by startSession; only react once streams are live.
+    if (!useAssemblyAIForAnalysis.current) return;
+    const all = Array.from(streamStatuses.current.values());
+    if (all.includes("failed")) switchToFallback();
+    else if (all.includes("reconnecting") || all.includes("connecting")) setTranscriptionStatus("reconnecting");
+    else setTranscriptionStatus("live");
+  }
+  const handleStreamStatusRef = useRef(handleStreamStatus);
+  handleStreamStatusRef.current = handleStreamStatus;
+
+  /** Open one AssemblyAI stream; resolves once it is live. */
+  async function openStream(audioStream: MediaStream | undefined, label: StreamLabel | undefined): Promise<AssemblyAIStreamingService> {
+    const stream = new AssemblyAIStreamingService();
+    if (!stream.supported) throw new Error("Live streaming not supported in this browser");
+    if (label) streamLabels.current.set(stream, label);
+    await stream.start(
+      (text, isFinal) => setInterimText(isFinal ? "" : text),
+      {
+        language: audioLang,
+        keyterms: buildKeyterms(conversationMode),
+        label,
+        audioStream,
+        onFinalTurn: (turn) => handleFinalTurnRef.current(turn),
+        onStatus: (status) => handleStreamStatusRef.current(stream, status),
+      },
+    );
+    return stream;
+  }
+
+  /** The user stopped sharing the meeting tab from Chrome's bar. */
+  function handleShareEnded({ micStillLive }: { micStillLive: boolean }) {
+    if (!micStillLive) {
+      stopSessionRef.current?.();
+      return;
+    }
+    const them = aaiStreams.current.find((s) => streamLabels.current.get(s) === "them");
+    if (them) {
+      them.stop();
+      aaiStreams.current = aaiStreams.current.filter((s) => s !== them);
+      streamStatuses.current.delete(them);
+    }
+    dualStreamRef.current = false;
+    toast.show(t("session.screenShareEnded", "Sharing stopped: Tonvo now only hears your microphone."), { type: "info", duration: 6000 });
+  }
+  const handleShareEndedRef = useRef(handleShareEnded);
+  handleShareEndedRef.current = handleShareEnded;
+
   async function startSession() {
     if (sessionStarting || isRecording) return;
-    setSessionStarting(true);
 
-    try {
-    // Block screen-only unless on Team plan (screenAnalysis gate, plan-features.ts)
-    const effectiveScreen = screenEnabled && features.screenAnalysis;
-    if (!effectiveScreen && !audioEnabled) {
-      if (screenEnabled && !features.screenAnalysis) {
+    // Sharing a tab/screen captures the meeting's audio for every plan. AI vision
+    // on the frames is a Team feature: screen-only sessions need it.
+    const effectiveScreen = screenEnabled && !isIOS;
+    if (!audioEnabled && (!effectiveScreen || !features.screenAnalysis)) {
+      if (effectiveScreen && !features.screenAnalysis) {
         toast.show(t("session.screenProOnly", "Screen analysis is available on the Team plan. Upgrade to unlock this feature!"), { type: "info", duration: 5000 });
       } else {
         toast.show(t("session.enableAtLeast"), { type: "error", duration: 4000 });
@@ -1191,7 +1236,15 @@ export default function SessionPage() {
       return;
     }
 
-    // Check subscription limit
+    // Open the copilot PiP first, while the click still counts as a user
+    // gesture: the permission prompts and requests below would expire it.
+    const wantsPiP = can("copilotPiP") && audioEnabled && !isMobile;
+    if (wantsPiP) void copilotPiPRef.current?.requestOpen();
+
+    setSessionStarting(true);
+    let started = false;
+    try {
+    // Check subscription limit (only an explicit "not allowed" blocks the session)
     if (user) {
       try {
         const subRes = await authFetch("/api/subscription", {
@@ -1200,7 +1253,7 @@ export default function SessionPage() {
           body: JSON.stringify({ userId: user.uid, action: "check-session" }),
         });
         const subCheck = await subRes.json();
-        if (!subCheck.allowed) {
+        if (subRes.ok && subCheck.allowed === false) {
           toast.show(subCheck.reason || t("session.sessionLimitReached"), { type: "error", duration: 6000 });
           return;
         }
@@ -1208,7 +1261,11 @@ export default function SessionPage() {
     }
 
     audioService.current = new AudioCaptureService();
-    const options: CaptureOptions = { screenEnabled: effectiveScreen, audioEnabled };
+    const options: CaptureOptions = {
+      screenEnabled: effectiveScreen,
+      audioEnabled,
+      onShareEnded: (info) => handleShareEndedRef.current(info),
+    };
     try {
       await audioService.current.start(stableProcessAudioChunk, options);
       setIsRecording(true); setSessionStart(new Date()); setSegments([]); setSignals([]); setKeyMoments([]); setTimeline([]); setDetectedLanguage(null);
@@ -1216,83 +1273,71 @@ export default function SessionPage() {
       setScreenSummary(null); screenSummaryRef.current = null; screenAnalysisHistory.current = [];
       setClassification("neutral"); setCoachingTip(""); setLiveInsight(""); setResponseDelay("normal"); setSpeakerBalance(undefined);
       setCopilotPaused(false); setCopilotAnswer(""); setCopilotAsking(false);
-      setSuggestedResponses([]); setDetectedQuestion(null);
+      setSuggestedResponses([]); setDetectedQuestion(null); setCurrentSuggestion("");
+      setCopilotFailures(0); setTranscribeDown(false); transcribeFailures.current = 0;
       resetParticipants();
       setActiveTab("insights");
       conversationSummary.current = "";
       unsummarizedSegments.current = [];
       summaryUpdatePending.current = false;
+      summaryBackoffMs.current = 0;
+      if (summaryRetryTimer.current) { clearTimeout(summaryRetryTimer.current); summaryRetryTimer.current = null; }
       consecutiveSilenceCount.current = 0;
       lastSegmentText.current = "";
+      echoFilter.current.reset();
       screenStableCount.current = 0;
       nonConversationalCount.current = 0;
       nonConversationalWarned.current = false;
       screenOnlyCaptureCount.current = 0;
       screenAnalysisStartTime.current = Date.now();
       setAnalysisStatus("running");
-      // Open Document PiP from user gesture context (click) — desktop only (mobile uses inline copilot)
-      if (can("copilotPiP") && audioEnabled && !isMobile) {
-        copilotPiPRef.current?.requestOpen();
-      }
-      // Start live transcription via AssemblyAI Universal-Streaming (multilingual).
-      // When this succeeds, AssemblyAI also drives the analysis pipeline (final turns
-      // → /api/analyze) — Whisper batch is skipped entirely. On failure we fall back
-      // to Web Speech API for live captions + Whisper batch for analysis.
+
+      // Copilot analysis queue for this session
+      analysisQueue.current?.stop();
+      analysisQueue.current = new CopilotAnalysisQueue<ToneResult>({
+        analyze: (batch) => analyzeBatchRef.current(batch),
+        onAnalysis: (batch, analysis) => applyAnalysisRef.current(batch, analysis),
+        onFailure: (n) => setCopilotFailures(n),
+        onRecovered: () => setCopilotFailures(0),
+        onBusyChange: (busy) => setProcessing(busy),
+      });
+
+      // Live transcription via AssemblyAI streaming. In a meeting (shared tab
+      // audio + mic) we open two streams so every turn is tagged "me" or
+      // "them"; otherwise one stream on the mixed audio with diarization.
+      // If streaming can't start, the 5 s batch recorder (/api/transcribe)
+      // takes over, with Web Speech for interim captions.
       if (audioEnabled) {
-        const aai = new AssemblyAIStreamingService();
-        if (aai.supported) {
-          const keyterms = buildKeyterms(conversationMode);
-          try {
-            await aai.start(
-              (text, isFinal) => {
-                if (!isFinal) {
-                  setInterimText(text);
-                } else {
-                  setInterimText("");
-                }
-              },
-              {
-                language: audioLang as "auto" | "en" | "fr" | "es" | "de" | "it" | "pt" | "nl" | "zh" | "ja" | "ko",
-                keyterms,
-                onFinalTurn: (turn) => {
-                  // Route final turns through the analysis pipeline
-                  processAssemblyAITurnRef.current(turn);
-                },
-                // CRITICAL: feed AssemblyAI the SAME combined audio that Whisper records,
-                // so it captures both sides of the conversation (mic + screen-share
-                // system audio from Zoom/Discord/Meet etc.) — not just the local mic.
-                // Falls back to its own getUserMedia if no stream is available yet.
-                audioStream: audioService.current?.audioStream ?? undefined,
-              },
-            );
-            aaiStream.current = aai;
-            useAssemblyAIForAnalysis.current = true;
-          } catch (err) {
-            console.warn("[session] AssemblyAI start failed, falling back to Web Speech API:", err);
-            // Fallback to browser-native Web Speech API
-            const ls = new LiveSpeechService();
-            if (ls.supported) {
-              ls.setLanguage(i18n.language || "en");
-              ls.start((text, isFinal) => {
-                if (!isFinal) setInterimText(text);
-                else setInterimText("");
-              });
-              liveSpeech.current = ls;
-            }
-          }
+        const capture = audioService.current;
+        const mic = capture.micStream;
+        const tab = capture.systemAudioStream;
+        const plan: Array<{ stream: MediaStream | undefined; label: StreamLabel | undefined }> =
+          mic && tab
+            ? [{ stream: mic, label: "me" }, { stream: tab, label: "them" }]
+            : [{ stream: capture.audioStream ?? undefined, label: undefined }];
+        setTranscriptionStatus("connecting");
+        const results = await Promise.allSettled(plan.map((p) => openStream(p.stream, p.label)));
+        const opened = results.flatMap((r) => (r.status === "fulfilled" ? [r.value] : []));
+        const failure = results.find((r): r is PromiseRejectedResult => r.status === "rejected");
+        if (!failure) {
+          aaiStreams.current = opened;
+          dualStreamRef.current = opened.length === 2;
+          useAssemblyAIForAnalysis.current = true;
+          setTranscriptionStatus("live");
         } else {
-          // AssemblyAI requires modern browser; fall back to Web Speech API
+          console.warn("[session] live streaming unavailable, using batch fallback:", failure.reason);
+          opened.forEach((s) => s.stop());
+          stopStreams();
+          setTranscriptionStatus("fallback");
           const ls = new LiveSpeechService();
           if (ls.supported) {
-            ls.setLanguage(i18n.language || "en");
-            ls.start((text, isFinal) => {
-              if (!isFinal) setInterimText(text);
-              else setInterimText("");
-            });
+            ls.setLanguage(audioLang !== "auto" ? audioLang : (i18n.language || "en"));
+            ls.start((text, isFinal) => setInterimText(isFinal ? "" : text));
             liveSpeech.current = ls;
           }
         }
       }
+      started = true;
       const hasAudio = audioService.current.hasAudio;
       const hasVideo = audioService.current.hasVideo;
       const hasSystemAudio = audioService.current.hasSystemAudio;
@@ -1301,7 +1346,7 @@ export default function SessionPage() {
       else if (hasVideo && !audioEnabled) toast.show(t("session.screenOnlyStarted"), { type: "info", duration: 5000 });
       else if (hasVideo && audioEnabled && !hasAudio) toast.show(t("session.screenNoAudio"), { type: "error", duration: 6000 });
       else if (hasAudio) toast.show(t("session.audioStarted"), { type: "success", duration: 3000 });
-      if (effectiveScreen && hasVideo) { screenAnalysisTimer.current = setTimeout(() => analyzeScreen(), 3000); }
+      if (features.screenAnalysis && hasVideo) { screenAnalysisTimer.current = setTimeout(() => analyzeScreen(), 3000); }
       if (user) {
         const { data } = await supabase.from("conversations").insert({ user_id: user.uid, title: `Session ${new Date().toLocaleString()}` }).select("id").single();
         if (data) setConversationId(data.id);
@@ -1316,7 +1361,10 @@ export default function SessionPage() {
       // Clean up partially initialized audio service
       if (audioService.current) { try { audioService.current.stop(); } catch {} audioService.current = null; }
       if (liveSpeech.current) { try { liveSpeech.current.stop(); } catch {} liveSpeech.current = null; }
-      if (aaiStream.current) { try { aaiStream.current.stop(); } catch {} aaiStream.current = null; useAssemblyAIForAnalysis.current = false; }
+      stopStreams();
+      analysisQueue.current?.stop();
+      analysisQueue.current = null;
+      setTranscriptionStatus("idle");
       const msg = err instanceof Error ? err.message : "";
       if (msg.includes("PERMISSION_DENIED:screen")) {
         toast.show(t("session.screenShareCancelled"), { type: "error", duration: 5000 });
@@ -1328,6 +1376,8 @@ export default function SessionPage() {
     }
     } finally {
       setSessionStarting(false);
+      // The PiP was opened optimistically before any await: close it if the session didn't start.
+      if (wantsPiP && !started) copilotPiPRef.current?.close();
     }
   }
 
@@ -1354,15 +1404,25 @@ export default function SessionPage() {
     let finalBlob: Blob | null = null;
     if (audioService.current) finalBlob = audioService.current.stop();
     if (liveSpeech.current) { liveSpeech.current.stop(); liveSpeech.current = null; }
-    if (aaiStream.current) { aaiStream.current.stop(); aaiStream.current = null; useAssemblyAIForAnalysis.current = false; }
+    // Only the batch fallback needs the recorder's last chunk; streams already have it.
+    const usedBatchFallback = !useAssemblyAIForAnalysis.current;
+    stopStreams();
     setInterimText("");
-    if (finalBlob && finalBlob.size > 1000) {
+    if (usedBatchFallback && finalBlob && finalBlob.size > 1000) {
       try { await stableProcessAudioChunk(finalBlob); } catch { /* best-effort */ }
     }
+    // Let in-flight analyses land so the saved transcript carries their tone.
+    await analysisQueue.current?.waitIdle(3_000);
+    analysisQueue.current?.stop();
+    analysisQueue.current = null;
+    if (summaryRetryTimer.current) { clearTimeout(summaryRetryTimer.current); summaryRetryTimer.current = null; }
+    setTranscriptionStatus("idle");
     setIsRecording(false); setSessionStart(null); setAnalysisStatus("idle");
     consecutiveSilenceCount.current = 0;
     screenAnalysisStartTime.current = 0;
     if (processingToastId.current) { toast.dismiss(processingToastId.current); processingToastId.current = null; }
+    // Read through the ref: analyses that just landed aren't in this render's closure.
+    const segments = segmentsRef.current;
     const hasAudioData = segments.length > 0;
     // Use ref for screenSummary to avoid stale closure (auto-stop fires before re-render)
     const currentScreenSummary = screenSummaryRef.current;
@@ -1466,6 +1526,10 @@ export default function SessionPage() {
 
   // Merged transcript stream (consecutive same-speaker segments combined). Shared
   // by the Transcript tab and, in demo mode, the live-grid main column.
+  const isUserSpeaker = (speaker: string) => speaker === "me" || speaker === "Speaker 1";
+  const speakerDisplay = (speaker: string) =>
+    isUserSpeaker(speaker) ? t("copilot.you") : speaker === "them" || speaker === "Speaker 2" ? t("copilot.them") : speaker;
+
   const transcriptStream = (
     <>
       {segments.reduce<{ speaker?: string; texts: string[]; tone: TranscriptSegment["tone"]; timestamp: number; signals: Array<{ signal: ConversationSignal; label: string }> }[]>((merged, seg) => {
@@ -1500,7 +1564,7 @@ export default function SessionPage() {
               </div>
             )}
             <p className="text-sm m-0" style={{ color: "var(--color-text)" }}>
-              {group.speaker && <span className="text-xs font-semibold mr-2" style={{ color: group.speaker === "Speaker 1" ? "#818cf8" : "var(--color-accent-light)" }}>{group.speaker === "Speaker 1" ? t("copilot.you") : group.speaker === "Speaker 2" ? t("copilot.them") : group.speaker}:</span>}
+              {group.speaker && <span className="text-xs font-semibold mr-2" style={{ color: isUserSpeaker(group.speaker) ? "#818cf8" : "var(--color-accent-light)" }}>{speakerDisplay(group.speaker)}:</span>}
               {group.texts.join(" ")}
             </p>
             <div className="flex items-center gap-3 mt-1">
@@ -1564,8 +1628,42 @@ export default function SessionPage() {
               className="text-[10px] font-semibold uppercase tracking-[0.22em]"
               style={{ color: isRecording ? "var(--color-negative)" : "var(--color-text-muted)" }}
             >
-              {isRecording ? "Live · in progress" : t("session.title")}
+              {isRecording ? t("session.liveInProgress", "Live") : t("session.title")}
             </span>
+
+            {/* Transcription / copilot health */}
+            {isRecording && audioEnabled && !isDemo && (() => {
+              const copilotDown = copilotFailures >= 3 || transcribeDown;
+              const pill = copilotDown
+                ? { text: t("session.statusCopilotDown", "Copilot unavailable"), color: "var(--color-negative)", bg: "rgba(248, 113, 113, 0.12)" }
+                : transcriptionStatus === "live"
+                  ? { text: t("session.statusLive", "Live transcription"), color: "var(--color-positive)", bg: "rgba(52, 211, 153, 0.12)" }
+                  : transcriptionStatus === "fallback"
+                    ? { text: t("session.statusFallback", "Backup mode"), color: "#f59e0b", bg: "rgba(245, 158, 11, 0.12)" }
+                    : transcriptionStatus === "reconnecting"
+                      ? { text: t("session.statusReconnecting", "Reconnecting..."), color: "#f59e0b", bg: "rgba(245, 158, 11, 0.12)" }
+                      : { text: t("session.statusConnecting", "Connecting..."), color: "var(--color-text-muted)", bg: "color-mix(in srgb, var(--color-text) 6%, transparent)" };
+              return (
+                <span className="inline-flex items-center gap-1.5 text-[9px] uppercase tracking-[0.18em] px-2 py-0.5 rounded-full" style={{ backgroundColor: pill.bg, color: pill.color }} role="status">
+                  {pill.text}
+                  {copilotDown && (
+                    <button
+                      type="button"
+                      className="underline cursor-pointer normal-case tracking-normal text-[10px]"
+                      style={{ color: pill.color }}
+                      onClick={() => {
+                        setCopilotFailures(0);
+                        setTranscribeDown(false);
+                        transcribeFailures.current = 0;
+                        analysisQueue.current?.retryNow();
+                      }}
+                    >
+                      {t("session.retry", "Retry")}
+                    </button>
+                  )}
+                </span>
+              );
+            })()}
 
             {/* Recording-state extra chips */}
             {isRecording && analysisStatus === "completed" && (
@@ -1800,37 +1898,25 @@ export default function SessionPage() {
               {/* Capture toggles — proper switches */}
               {!isIOS && (
                 <button
-                  onClick={() => {
-                    if (!features.screenAnalysis) {
-                      toast.show(
-                        t(
-                          "session.screenProOnly",
-                          "Screen analysis is available on the Team plan. Upgrade to unlock this feature!",
-                        ),
-                        { type: "info", duration: 5000 },
-                      );
-                      return;
-                    }
-                    setScreenEnabled((p) => !p);
-                  }}
+                  onClick={() => setScreenEnabled((p) => !p)}
+                  title={t("session.shareMeetingHint", "Share the meeting tab (tick \"Also share tab audio\") so Tonvo hears the other side.")}
                   className="flex items-center gap-2.5 px-3.5 py-1.5 rounded-full text-[11px] font-medium cursor-pointer"
                   style={{
                     background: "color-mix(in srgb, var(--color-text) 2.5%, transparent)",
                     border: "1px solid color-mix(in srgb, var(--color-text) 6%, transparent)",
                     color:
-                      screenEnabled && features.screenAnalysis ? "var(--color-text)" : "var(--color-text-muted)",
-                    opacity: !features.screenAnalysis ? 0.5 : 1,
+                      screenEnabled ? "var(--color-text)" : "var(--color-text-muted)",
                     minHeight: 32,
                     transition: "all 0.2s ease",
                   }}
-                  aria-pressed={screenEnabled && features.screenAnalysis}
+                  aria-pressed={screenEnabled}
                 >
                   <svg
                     width="13"
                     height="13"
                     viewBox="0 0 24 24"
                     fill="none"
-                    stroke={screenEnabled && features.screenAnalysis ? "var(--color-positive)" : "currentColor"}
+                    stroke={screenEnabled ? "var(--color-positive)" : "currentColor"}
                     strokeWidth="2"
                     strokeLinecap="round"
                     strokeLinejoin="round"
@@ -1839,7 +1925,7 @@ export default function SessionPage() {
                     <line x1="8" y1="21" x2="16" y2="21" />
                     <line x1="12" y1="17" x2="12" y2="21" />
                   </svg>
-                  <span>Screen</span>
+                  <span>{features.screenAnalysis ? t("session.shareScreenToggle", "Screen") : t("session.shareMeetingToggle", "Meeting audio")}</span>
                   <span
                     className="relative inline-flex shrink-0 items-center rounded-full"
                     style={{
@@ -1847,12 +1933,12 @@ export default function SessionPage() {
                       height: 14,
                       padding: 1,
                       background:
-                        screenEnabled && features.screenAnalysis
+                        screenEnabled
                           ? "linear-gradient(135deg, #34d399, #6ee7b7)"
                           : "color-mix(in srgb, var(--color-text) 8%, transparent)",
                       border: "1px solid color-mix(in srgb, var(--color-text) 4%, transparent)",
                       boxShadow:
-                        screenEnabled && features.screenAnalysis
+                        screenEnabled
                           ? "0 4px 12px -4px rgba(52, 211, 153, 0.5)"
                           : "none",
                       transition: "background 0.25s ease, box-shadow 0.25s ease",
@@ -1862,13 +1948,13 @@ export default function SessionPage() {
                       aria-hidden
                       className="rounded-full block"
                       animate={{
-                        x: screenEnabled && features.screenAnalysis ? 12 : 0,
+                        x: screenEnabled ? 12 : 0,
                       }}
                       transition={{ type: "spring", stiffness: 500, damping: 32 }}
                       style={{
                         width: 10,
                         height: 10,
-                        background: screenEnabled && features.screenAnalysis ? "var(--color-bg)" : "var(--color-text-muted)",
+                        background: screenEnabled ? "var(--color-bg)" : "var(--color-text-muted)",
                       }}
                     />
                   </span>
@@ -2178,10 +2264,10 @@ export default function SessionPage() {
               style={{ background: "radial-gradient(circle, rgba(52, 211, 153, 0.22), transparent 70%)", filter: "blur(24px)", opacity: 0.6 }} />
             <div className="relative flex items-center gap-2 mb-2">
               <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ color: "var(--color-positive)", flexShrink: 0 }}><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z" /><path d="M19 10v2a7 7 0 0 1-14 0v-2" /></svg>
-              <span className="text-[10px] font-semibold uppercase tracking-[0.18em]" style={{ color: "var(--color-positive)" }}>Capture audio from Discord, Zoom, Meet…</span>
+              <span className="text-[10px] font-semibold uppercase tracking-[0.18em]" style={{ color: "var(--color-positive)" }}>{t("session.meetingAudioTitle", "Hear both sides of your Meet, Zoom or Teams call")}</span>
             </div>
             <p className="relative m-0 leading-relaxed" style={{ color: "var(--color-text-muted)" }}>
-              Quand la fenêtre de partage apparaît, coche <strong style={{ color: "var(--color-text)" }}>« Share system audio »</strong> ou <strong style={{ color: "var(--color-text)" }}>« Also share tab audio »</strong>. Ça permet à Tonvo d&apos;entendre les deux interlocuteurs.
+              {t("session.meetingAudioHint", "When the share window opens, pick your meeting tab and tick \"Also share tab audio\" (or \"Share system audio\" for a desktop app). Tonvo then hears the other side, even on a headset.")}
             </p>
           </div>
         )}
@@ -2456,11 +2542,6 @@ export default function SessionPage() {
         {/* ============================================================ */}
         {/*  LIVE COMMAND CENTER — translation stream + copilot sidebar    */}
         {/* ============================================================ */}
-        {isRecording && audioEnabled && !can("coachingTips") && !isDemo && (
-          <div className="mb-6">
-            <UpgradePrompt feature="AI Copilot — Live coaching, insights & signals" plan="Pro" />
-          </div>
-        )}
         {/* Idle state: show Live Translation alone so the user can pick a language / mode before starting */}
         {!isRecording && can("copilotOverlay") && (
           <motion.div
@@ -2472,7 +2553,7 @@ export default function SessionPage() {
             <LiveTranslationStream segments={segments} isRecording={isRecording} />
           </motion.div>
         )}
-        {isRecording && audioEnabled && (can("coachingTips") || isDemo) && (
+        {isRecording && audioEnabled && (
           <motion.div
             className="live-grid mb-6"
             initial={{ opacity: 0, y: 12 }}
@@ -2480,20 +2561,24 @@ export default function SessionPage() {
             transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
           >
             <div className="live-grid__main">
-              {isDemo ? (
-                <div ref={demoTranscriptRef} className="rounded-xl border overflow-hidden" style={{ backgroundColor: "var(--color-surface)", borderColor: "var(--color-border)", maxHeight: 560, overflowY: "auto" }}>
+              <div ref={demoTranscriptRef} className="rounded-xl border overflow-hidden" style={{ backgroundColor: "var(--color-surface)", borderColor: "var(--color-border)", maxHeight: 560, overflowY: "auto" }}>
                   <div className="px-4 py-3 border-b flex items-center gap-2" style={{ borderColor: "var(--color-border)", position: "sticky", top: 0, backgroundColor: "var(--color-surface)", zIndex: 1 }}>
                     <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--color-text-muted)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" /></svg>
                     <span className="text-xs font-semibold uppercase tracking-wider" style={{ color: "var(--color-text-muted)", letterSpacing: "0.12em" }}>{t("session.transcriptTab", "Live transcript")}</span>
                   </div>
-                  {segments.length === 0 ? (
+                  {segments.length === 0 && !interimText ? (
                     <div className="p-8 text-center"><p className="text-sm m-0" style={{ color: "var(--color-text-muted)" }}>{t("session.listeningTranscript")}</p></div>
                   ) : (
                     <div className="divide-y" style={{ borderColor: "var(--color-border)" }}>{transcriptStream}</div>
                   )}
+                  {interimText && (
+                    <p className="px-4 pb-4 pt-2 m-0 text-sm italic" style={{ color: "var(--color-text-muted)" }}>{interimText}</p>
+                  )}
                 </div>
-              ) : (
-                <LiveTranslationStream segments={segments} isRecording={isRecording} />
+              {!isDemo && can("copilotOverlay") && (
+                <div className="mt-4">
+                  <LiveTranslationStream segments={segments} isRecording={isRecording} />
+                </div>
               )}
             </div>
             <div className="live-grid__aside">
@@ -2511,6 +2596,8 @@ export default function SessionPage() {
                 onAsk={handleAskCopilot}
                 asking={copilotAsking}
                 answer={copilotAnswer}
+                detectedQuestion={detectedQuestion}
+                proLocked={!can("coachingTips") && !isDemo}
                 labels={{
                   coaching: t("copilot.coaching"),
                   insight: t("copilot.insight"),
@@ -2534,7 +2621,7 @@ export default function SessionPage() {
         )}
 
         {/* Screen Analysis Card */}
-        {isRecording && screenEnabled && audioService.current?.hasVideo && (
+        {isRecording && screenEnabled && features.screenAnalysis && audioService.current?.hasVideo && (
           <div className="screen-analysis-card rounded-xl border p-5 mb-6" style={{ backgroundColor: "var(--color-surface)", borderColor: screenAnalysisCompleted ? "rgba(52, 211, 153, 0.3)" : analyzingScreen ? "rgba(200, 200, 216, 0.2)" : "var(--color-border)", transition: "border-color 0.3s ease" }}>
             <div className="flex items-center justify-between mb-3">
               <div className="flex items-center gap-2">
@@ -2861,6 +2948,8 @@ export default function SessionPage() {
             participantCountPlural: t("copilot.participantCount", { count: 2 }),
             paused: t("copilot.paused", "Paused"),
             askPlaceholder: t("copilot.askPlaceholder", "Ask the copilot..."),
+            them: t("copilot.them"),
+            you: t("copilot.you"),
           }}
         />
       )}

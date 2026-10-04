@@ -8,6 +8,8 @@ export type PlanId = "free" | "pro" | "team";
 export interface PlanFeatures {
   sessionsPerMonth: number; // -1 = unlimited
   maxSessionDurationSec: number; // -1 = unlimited
+  /** Live suggested replies + detected question (the core copilot). */
+  suggestedResponses: boolean;
   coachingTips: boolean;
   liveInsight: boolean;
   screenAnalysis: boolean;
@@ -28,6 +30,7 @@ export const PLAN_FEATURES: Record<PlanId, PlanFeatures> = {
   free: {
     sessionsPerMonth: 3,
     maxSessionDurationSec: 5 * 60, // 5 minutes
+    suggestedResponses: true,
     coachingTips: false,
     liveInsight: false,
     screenAnalysis: false,
@@ -46,6 +49,7 @@ export const PLAN_FEATURES: Record<PlanId, PlanFeatures> = {
   pro: {
     sessionsPerMonth: -1,
     maxSessionDurationSec: -1,
+    suggestedResponses: true,
     coachingTips: true,
     liveInsight: true,
     screenAnalysis: false,
@@ -64,6 +68,7 @@ export const PLAN_FEATURES: Record<PlanId, PlanFeatures> = {
   team: {
     sessionsPerMonth: -1,
     maxSessionDurationSec: -1,
+    suggestedResponses: true,
     coachingTips: true,
     liveInsight: true,
     screenAnalysis: true,

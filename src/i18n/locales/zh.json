@@ -271,7 +271,13 @@
     "copilotInvisible": "AI 副驾已运行 — 屏幕共享时对方完全看不见。",
     "copilotSeparateWindow": "副驾在独立窗口运行。建议：仅共享指定窗口，保持隐藏。",
     "copilotBlocked": "浏览器拦截了副驾窗口。请允许弹窗，或使用 Chrome 启用隐形画中画。",
-    "copilotInline": "副驾以内嵌方式显示在下方 — 向下滚动查看建议。"
+    "copilotInline": "副驾以内嵌方式显示在下方 — 向下滚动查看建议。",
+    "questionToAnswer": "待回答的问题",
+    "copyReply": "复制",
+    "copied": "已复制",
+    "proLockedTitle": "实时辅导",
+    "proLockedText": "通话过程中实时提供辅导建议、购买信号和发言时间平衡。",
+    "proLockedCta": "查看套餐"
   },
   "auth": {
     "welcomeBack": "欢迎回来",
@@ -427,7 +433,25 @@
     "modeNone": "至少开启屏幕或音频，才能开始会话。",
     "listeningInsights": "聆听中…洞察会随对话推进出现在这里。",
     "noAudioDetected": "未检测到音频。请检查音频源。",
-    "listeningTranscript": "聆听中…开口说话，转录会出现在这里。"
+    "listeningTranscript": "聆听中…开口说话，转录会出现在这里。",
+    "liveInProgress": "直播中",
+    "statusCopilotDown": "Copilot 暂不可用",
+    "statusLive": "实时转写",
+    "statusFallback": "备用模式",
+    "statusReconnecting": "正在重新连接...",
+    "statusConnecting": "正在连接...",
+    "retry": "重试",
+    "fallbackMode": "实时转写已中断。已切换到备用模式，会有轻微延迟。",
+    "screenShareEnded": "共享已停止：Tonvo 现在只能听到你的麦克风。",
+    "shareMeetingHint": "共享会议标签页并勾选“同时分享标签页音频”，Tonvo 才能听到对方的声音。",
+    "shareScreenToggle": "屏幕",
+    "shareMeetingToggle": "会议音频",
+    "meetingAudioTitle": "听到 Meet、Zoom 或 Teams 通话的双方声音",
+    "meetingAudioHint": "共享窗口打开后，选择会议标签页并勾选“同时分享标签页音频”（桌面应用请选择“分享系统音频”）。即使戴着耳机，Tonvo 也能听到对方的声音。",
+    "transcriptTab": "实时转写",
+    "starting": "正在启动...",
+    "recordingHint": "Tonvo 正在聆听。专注于对话，建议会实时出现。",
+    "idleHint": "设置采集后点击开始。"
   },
   "analyzePage": {
     "title": "复盘对话",
@@ -734,7 +758,7 @@
       "cta": "拿下我的第一单",
       "features": [
         "每月 3 场实时成单会话",
-        "购买信号识别",
+        "识别客户提问",
         "核心成单话术",
         "订单复盘（保留 7 天）"
       ]

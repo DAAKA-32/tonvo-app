@@ -271,7 +271,13 @@
     "copilotInvisible": "AI 코파일럿 작동 중 — 화면 공유에는 보이지 않습니다.",
     "copilotSeparateWindow": "코파일럿이 별도 창에서 실행 중입니다. 팁: 특정 창만 공유하면 코파일럿이 노출되지 않습니다.",
     "copilotBlocked": "브라우저가 코파일럿 창을 차단했습니다. 팝업을 허용하거나 Chrome에서 PiP 모드를 사용하세요.",
-    "copilotInline": "코파일럿이 아래 인라인으로 표시됩니다 — 스크롤해 추천을 확인하세요."
+    "copilotInline": "코파일럿이 아래 인라인으로 표시됩니다 — 스크롤해 추천을 확인하세요.",
+    "questionToAnswer": "답변할 질문",
+    "copyReply": "복사",
+    "copied": "복사됨",
+    "proLockedTitle": "실시간 코칭",
+    "proLockedText": "코칭 팁, 구매 시그널, 발화 비율을 통화 중 실시간으로 제공합니다.",
+    "proLockedCta": "요금제 보기"
   },
   "auth": {
     "welcomeBack": "다시 오신 것을 환영합니다",
@@ -427,7 +433,25 @@
     "modeNone": "세션을 시작하려면 화면 또는 오디오 중 하나 이상을 켜세요.",
     "listeningInsights": "듣는 중... 대화가 분석되면 인사이트가 표시됩니다.",
     "noAudioDetected": "오디오가 감지되지 않습니다. 오디오 소스를 확인하세요.",
-    "listeningTranscript": "듣는 중... 말을 시작하면 트랜스크립트가 표시됩니다."
+    "listeningTranscript": "듣는 중... 말을 시작하면 트랜스크립트가 표시됩니다.",
+    "liveInProgress": "라이브",
+    "statusCopilotDown": "Copilot 사용 불가",
+    "statusLive": "실시간 전사",
+    "statusFallback": "백업 모드",
+    "statusReconnecting": "다시 연결 중...",
+    "statusConnecting": "연결 중...",
+    "retry": "다시 시도",
+    "fallbackMode": "실시간 전사가 중단되었습니다. 약간의 지연이 있는 백업 모드로 전환했습니다.",
+    "screenShareEnded": "공유가 중지되었습니다. 이제 Tonvo는 마이크만 듣습니다.",
+    "shareMeetingHint": "회의 탭을 공유하고 \"탭 오디오도 공유\"를 선택하면 Tonvo가 상대방의 목소리를 듣습니다.",
+    "shareScreenToggle": "화면",
+    "shareMeetingToggle": "회의 오디오",
+    "meetingAudioTitle": "Meet, Zoom, Teams 통화의 양쪽 목소리를 듣기",
+    "meetingAudioHint": "공유 창이 열리면 회의 탭을 선택하고 \"탭 오디오도 공유\"를 선택하세요 (데스크톱 앱은 \"시스템 오디오 공유\"). 헤드셋을 사용해도 Tonvo가 상대방의 목소리를 듣습니다.",
+    "transcriptTab": "실시간 전사",
+    "starting": "시작 중...",
+    "recordingHint": "Tonvo가 듣고 있습니다. 대화에 집중하세요. 제안은 실시간으로 도착합니다.",
+    "idleHint": "캡처를 설정하고 눌러서 시작하세요."
   },
   "analyzePage": {
     "title": "대화 분석",
@@ -734,7 +758,7 @@
       "cta": "첫 딜 클로징하기",
       "features": [
         "월 3회 라이브 클로징 세션",
-        "구매 시그널 감지",
+        "고객 질문 감지",
         "코어 클로징 멘트",
         "딜 리뷰 (7일 히스토리)"
       ]

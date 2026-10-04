@@ -1,9 +1,10 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
+import { useEffect, useRef, useState, type FormEvent } from "react";
+import Link from "next/link";
 import { useTranslation } from "react-i18next";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
-import type { ConversationSignal } from "@/types/analysis";
+import type { ConversationSignal, DetectedQuestion } from "@/types/analysis";
 
 interface SignalEntry {
   signal: ConversationSignal;
@@ -31,6 +32,10 @@ interface LiveCopilotPanelProps {
   onAsk: (question: string) => void;
   asking: boolean;
   answer: string;
+  /** Question the other party asked that still needs an answer. */
+  detectedQuestion?: DetectedQuestion | null;
+  /** Free plan: coaching, insight, signals and balance are shown as a locked teaser. */
+  proLocked?: boolean;
   labels: {
     coaching: string;
     insight: string;
@@ -76,11 +81,29 @@ export default function LiveCopilotPanel({
   onAsk,
   asking,
   answer,
+  detectedQuestion,
+  proLocked = false,
   labels,
 }: LiveCopilotPanelProps) {
   const { t } = useTranslation();
   const reduce = useReducedMotion();
   const [question, setQuestion] = useState("");
+  const [copiedIndex, setCopiedIndex] = useState<number | null>(null);
+  const copiedTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  useEffect(() => () => { if (copiedTimer.current) clearTimeout(copiedTimer.current); }, []);
+
+  // A suggested reply is something to SAY: clicking copies it (e.g. to paste in the meeting chat).
+  const copyReply = async (text: string, index: number) => {
+    try {
+      await navigator.clipboard.writeText(text);
+    } catch {
+      return;
+    }
+    setCopiedIndex(index);
+    if (copiedTimer.current) clearTimeout(copiedTimer.current);
+    copiedTimer.current = setTimeout(() => setCopiedIndex(null), 1500);
+  };
+
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
@@ -134,6 +157,30 @@ export default function LiveCopilotPanel({
         </div>
       )}
 
+      {/* Question the other party is waiting on */}
+      <AnimatePresence mode="wait">
+        {detectedQuestion && detectedQuestion.text && (
+          <motion.section
+            key={detectedQuestion.text}
+            className={`lcp-block lcp-block--question ${detectedQuestion.urgency === "high" ? "is-urgent" : ""}`}
+            initial={reduce ? { opacity: 0 } : { opacity: 0, y: 8 }}
+            animate={reduce ? { opacity: 1 } : { opacity: 1, y: 0 }}
+            exit={reduce ? { opacity: 0 } : { opacity: 0, y: -4 }}
+            transition={{ duration: 0.3, ease: easeOut }}
+          >
+            <div className="lcp-block-head">
+              <span className="lcp-block-label lcp-question-label">
+                {t("copilot.questionToAnswer", "Question to answer")}
+              </span>
+              {detectedQuestion.urgency === "high" && (
+                <span className="lcp-urgent">{t("copilot.respondNow", "Respond now")}</span>
+              )}
+            </div>
+            <p className="lcp-text lcp-question-text">&ldquo;{detectedQuestion.text}&rdquo;</p>
+          </motion.section>
+        )}
+      </AnimatePresence>
+
       {/* Suggestion (primary call-to-say) */}
       <AnimatePresence mode="wait">
         {suggestion && (
@@ -168,11 +215,17 @@ export default function LiveCopilotPanel({
                 key={`${r.intent}-${i}`}
                 type="button"
                 className="lcp-quickreply"
-                onClick={() => onAsk(r.text)}
+                onClick={() => copyReply(r.text, i)}
+                title={t("copilot.copyReply", "Copy")}
                 whileHover={reduce ? undefined : { y: -2 }}
                 whileTap={reduce ? undefined : { scale: 0.98 }}
               >
-                <span className="lcp-quickreply-label">{r.label}</span>
+                <span className="lcp-quickreply-head">
+                  <span className="lcp-quickreply-label">{r.label}</span>
+                  <span className="lcp-quickreply-copy">
+                    {copiedIndex === i ? t("copilot.copied", "Copied") : t("copilot.copyReply", "Copy")}
+                  </span>
+                </span>
                 <span className="lcp-quickreply-text">{r.text}</span>
               </motion.button>
             ))}
@@ -279,8 +332,27 @@ export default function LiveCopilotPanel({
         </section>
       )}
 
+      {/* Free plan: what the paid copilot adds */}
+      {proLocked && (
+        <section className="lcp-block lcp-block--locked">
+          <div className="lcp-block-head">
+            <span className="lcp-block-icon" aria-hidden>
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" /><path d="M7 11V7a5 5 0 0 1 10 0v4" /></svg>
+            </span>
+            <span className="lcp-block-label">{t("copilot.proLockedTitle", "Live coaching")}</span>
+          </div>
+          <p className="lcp-text lcp-locked-text">
+            {t("copilot.proLockedText", "Coaching tips, buying signals and talk-time balance, live during the call.")}
+          </p>
+          <Link href="/pricing" className="lcp-locked-cta">
+            {t("copilot.proLockedCta", "See plans")}
+          </Link>
+        </section>
+      )}
+
       {/* Idle state */}
-      {!suggestion && !coachingTip && !liveInsight && signals.length === 0 && (
+      {!suggestion && !coachingTip && !liveInsight && signals.length === 0
+        && suggestedResponses.length === 0 && !(detectedQuestion && detectedQuestion.text) && (
         <div className="lcp-idle">
           <div className="lcp-idle-bars" aria-hidden>
             <span /><span /><span /><span />
@@ -322,7 +394,9 @@ export default function LiveCopilotPanel({
         )}
       </AnimatePresence>
 
-      <style jsx>{`
+      {/* Global (lcp- prefixed) rather than scoped: styled-jsx does not tag
+          framer-motion's motion.* elements, so scoped rules never matched them. */}
+      <style jsx global>{`
         .lcp-root {
           display: flex;
           flex-direction: column;
@@ -468,6 +542,55 @@ export default function LiveCopilotPanel({
           border-color: var(--color-accent);
           background: rgba(129, 140, 248, 0.06);
         }
+        .lcp-quickreply-head {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 8px;
+        }
+        .lcp-quickreply-copy {
+          font-size: 9.5px;
+          font-weight: 600;
+          color: var(--color-text-muted);
+          opacity: 0.7;
+        }
+        .lcp-quickreply:hover .lcp-quickreply-copy { opacity: 1; color: var(--color-text); }
+        .lcp-block--question {
+          padding: 12px 14px;
+          background: rgba(251, 191, 36, 0.07);
+          border: 1px solid rgba(251, 191, 36, 0.25);
+          border-radius: 12px;
+        }
+        .lcp-block--question.is-urgent {
+          background: rgba(248, 113, 113, 0.08);
+          border-color: rgba(248, 113, 113, 0.3);
+        }
+        .lcp-question-label { color: #d97706; }
+        .lcp-block--question.is-urgent .lcp-question-label { color: var(--color-negative); }
+        .lcp-urgent {
+          margin-left: auto;
+          font-size: 9.5px;
+          font-weight: 700;
+          letter-spacing: 0.08em;
+          text-transform: uppercase;
+          color: var(--color-negative);
+        }
+        .lcp-question-text { font-weight: 500; }
+        .lcp-block--locked {
+          padding: 12px 14px;
+          border: 1px dashed var(--color-border);
+          border-radius: 12px;
+          color: var(--color-text-muted);
+        }
+        .lcp-locked-text { color: var(--color-text-muted); font-size: 12.5px; }
+        .lcp-locked-cta {
+          align-self: flex-start;
+          font-size: 11.5px;
+          font-weight: 600;
+          color: var(--color-accent-light);
+          text-decoration: none;
+        }
+        .lcp-locked-cta:hover { text-decoration: underline; }
         .lcp-quickreply-label {
           font-size: 9.5px;
           font-weight: 700;
