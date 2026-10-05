@@ -749,6 +749,8 @@ export default function LandingHero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1], delay: 0.9 }}
           className="body-muted text-base md:text-lg mb-8 sm:mb-10 max-w-xl mx-auto"
+          // Silver, not muted grey: muted drops to ~3.3:1 on the coloured hero backdrop.
+          style={{ color: "var(--color-text-silver)" }}
         >
           {t("landing.hero.subtitle")}
         </motion.p>
