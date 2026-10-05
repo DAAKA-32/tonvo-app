@@ -10,6 +10,7 @@ import { useToast } from "@/components/Toast";
 import { useAuth } from "@/lib/auth-context";
 import { getAuthErrorKey } from "@/lib/auth-errors";
 import { authFetch } from "@/lib/api-client";
+import { recordConsent } from "@/lib/conversations-client";
 import { trackSignup } from "@/lib/meta-pixel";
 import {
   auth,
@@ -478,17 +479,7 @@ function LoginPageInner() {
       if (!auth) throw new Error("firebase-not-initialized");
       if (isRegister) {
         const cred = await createUserWithEmailAndPassword(auth, email, password);
-        try {
-          const { supabase } = await import("@/lib/supabase");
-          await supabase.from("user_consent").upsert({
-            user_id: cred.user.uid,
-            terms_accepted: true,
-            terms_accepted_at: new Date().toISOString(),
-            privacy_accepted: true,
-          });
-        } catch {
-          console.error("Failed to store consent");
-        }
+        await recordConsent();
         trackSignup({ email: cred.user.email ?? undefined, userId: cred.user.uid });
         redirectWithFeedback(t("auth.accountCreated"));
       } else {
@@ -531,17 +522,7 @@ function LoginPageInner() {
   async function handleConsentAccept() {
     setShowConsent(false);
     if (pendingGoogleUser) {
-      try {
-        const { supabase } = await import("@/lib/supabase");
-        await supabase.from("user_consent").upsert({
-          user_id: pendingGoogleUser.user.uid,
-          terms_accepted: true,
-          terms_accepted_at: new Date().toISOString(),
-          privacy_accepted: true,
-        });
-      } catch {
-        console.error("Failed to store consent");
-      }
+      await recordConsent();
       trackSignup({
         email: pendingGoogleUser.user.email ?? undefined,
         userId: pendingGoogleUser.user.uid,

@@ -17,7 +17,14 @@ import {
 } from "@/services/assemblyai-stream";
 import { CopilotAnalysisQueue, type AnalyzeOutcome, type CopilotTurn } from "@/lib/copilot-queue";
 import { EchoFilter } from "@/lib/echo-filter";
-import { supabase } from "@/lib/supabase";
+import {
+  createConversation,
+  saveSegments,
+  toDbTone,
+  toScore,
+  toStringList,
+  updateConversation,
+} from "@/lib/conversations-client";
 import AppShell from "@/components/AppShell";
 import { useToast } from "@/components/Toast";
 import ToneIndicator from "@/components/ToneIndicator";
@@ -1348,8 +1355,9 @@ export default function SessionPage() {
       else if (hasAudio) toast.show(t("session.audioStarted"), { type: "success", duration: 3000 });
       if (features.screenAnalysis && hasVideo) { screenAnalysisTimer.current = setTimeout(() => analyzeScreen(), 3000); }
       if (user) {
-        const { data } = await supabase.from("conversations").insert({ user_id: user.uid, title: `Session ${new Date().toLocaleString()}` }).select("id").single();
-        if (data) setConversationId(data.id);
+        // Server-side record (non-blocking): the session runs even if saving is down.
+        setConversationId(null);
+        void createConversation(`Session ${new Date().toLocaleString()}`).then((id) => { if (id) setConversationId(id); });
         // Increment session count for free plan users
         authFetch("/api/subscription", {
           method: "POST",
@@ -1445,18 +1453,17 @@ export default function SessionPage() {
       // Save core fields that definitely exist in the DB
       const coreUpdate: Record<string, unknown> = {
         ended_at: new Date().toISOString(),
-        overall_tone: dominantTone,
+        overall_tone: toDbTone(dominantTone),
       };
       // Include summary text in phase 1 if we already have it from screen analysis
       if (currentScreenSummary) {
         coreUpdate.summary = currentScreenSummary.recommendation;
-        coreUpdate.insights = currentScreenSummary.keyInsights;
+        coreUpdate.insights = toStringList(currentScreenSummary.keyInsights);
       }
-      await supabase.from("conversations").update(coreUpdate).eq("id", conversationId);
+      await updateConversation(conversationId, coreUpdate);
 
       if (hasAudioData) {
-        const rows = segments.map((s) => ({ conversation_id: conversationId, timestamp: s.timestamp, transcript: s.text, tone: s.tone.tone, confidence: s.tone.confidence, suggestion: s.tone.suggestion }));
-        await supabase.from("analysis_segments").insert(rows);
+        await saveSegments(conversationId, segments.map((s) => ({ timestamp: s.timestamp, transcript: s.text, tone: s.tone.tone, confidence: s.tone.confidence, suggestion: s.tone.suggestion })));
       }
 
       // Phase 2: Generate and save full summary (uses new columns that may need migration)
@@ -1476,29 +1483,29 @@ export default function SessionPage() {
           });
           const summary = await res.json();
           if (!summary.error) {
-            await supabase.from("conversations").update({
-              summary: summary.recommendation,
-              overall_tone: summary.overallTone || dominantTone,
-              insights: summary.insights,
-              classification: summary.classification,
-              score: summary.score,
-              diagnosis: summary.diagnosis,
-              follow_up_actions: summary.followUpActions,
-              strengths: summary.strengths,
-              improvements: summary.improvements,
-            }).eq("id", conversationId);
+            await updateConversation(conversationId, {
+              summary: typeof summary.recommendation === "string" ? summary.recommendation : undefined,
+              overall_tone: toDbTone(summary.overallTone || dominantTone),
+              insights: toStringList(summary.insights),
+              classification: typeof summary.classification === "string" ? summary.classification : undefined,
+              score: toScore(summary.score),
+              diagnosis: typeof summary.diagnosis === "string" ? summary.diagnosis : undefined,
+              follow_up_actions: toStringList(summary.followUpActions),
+              strengths: toStringList(summary.strengths),
+              improvements: toStringList(summary.improvements),
+            });
           }
         } else if (currentScreenSummary) {
           // Screen-only: save enriched data to new columns
-          await supabase.from("conversations").update({
+          await updateConversation(conversationId, {
             classification: currentScreenSummary.conversationTone,
-            score: { overall: currentScreenSummary.attractionScore, engagement: currentScreenSummary.attractionScore, tone: currentScreenSummary.attractionScore, fluidity: 0, interest: currentScreenSummary.attractionScore },
+            score: toScore({ overall: currentScreenSummary.attractionScore, engagement: currentScreenSummary.attractionScore, tone: currentScreenSummary.attractionScore, fluidity: 0, interest: currentScreenSummary.attractionScore }),
             diagnosis: currentScreenSummary.summary,
-            follow_up_actions: currentScreenSummary.improvements,
-            social_score: currentScreenSummary.attractionScore,
-            strengths: currentScreenSummary.strengths,
-            improvements: currentScreenSummary.improvements,
-          }).eq("id", conversationId);
+            follow_up_actions: toStringList(currentScreenSummary.improvements),
+            social_score: Math.max(0, Math.min(100, Math.round(Number(currentScreenSummary.attractionScore) || 0))),
+            strengths: toStringList(currentScreenSummary.strengths),
+            improvements: toStringList(currentScreenSummary.improvements),
+          });
         }
         toast.update(saveToastId, t("session.sessionSaved"), { type: "success", duration: 2000 });
       } catch (err) {
