@@ -5,7 +5,7 @@ import Link from "next/link";
 import { motion, useReducedMotion } from "framer-motion";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "@/lib/auth-context";
-import { supabase } from "@/lib/supabase";
+import { listConversations } from "@/lib/conversations-client";
 import AppShell from "@/components/AppShell";
 import PlanUpgradeModal from "@/components/PlanUpgradeModal";
 import CountUp from "@/components/motion/CountUp";
@@ -645,18 +645,9 @@ export default function DashboardPage() {
 
     async function fetchData() {
       try {
-        const [recentResult, countResult] = await Promise.all([
-          supabase.from("conversations").select("*").eq("user_id", user!.uid).order("created_at", { ascending: false }).limit(5),
-          supabase.from("conversations").select("*", { count: "exact", head: true }).eq("user_id", user!.uid),
-        ]);
-
-        const convos = recentResult.data;
-        if (convos) setConversations(convos);
-
-        const convoIds = (convos || []).map((c) => c.id);
-        const segments = convoIds.length > 0
-          ? (await supabase.from("analysis_segments").select("tone, confidence").in("conversation_id", convoIds)).data
-          : null;
+        const { conversations: convos, total, tones } = await listConversations<Conversation>({ limit: 5, stats: true });
+        setConversations(convos);
+        const segments = tones ?? null;
 
         const toneCounts = { positive: 0, neutral: 0, negative: 0, hesitant: 0 };
         let confidenceSum = 0;
@@ -668,7 +659,7 @@ export default function DashboardPage() {
         }
 
         setStats({
-          totalSessions: countResult.count || 0,
+          totalSessions: total || 0,
           totalSegments: segments?.length || 0,
           avgConfidence: segments && segments.length > 0
             ? Math.round((confidenceSum / segments.length) * 100)

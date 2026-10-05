@@ -5,7 +5,7 @@ import Link from "next/link";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "@/lib/auth-context";
-import { supabase } from "@/lib/supabase";
+import { listConversations } from "@/lib/conversations-client";
 import AppShell from "@/components/AppShell";
 import CountUp from "@/components/motion/CountUp";
 import { usePlan } from "@/hooks/usePlan";
@@ -316,21 +316,15 @@ export default function HistoryPage() {
     if (!user) return;
 
     async function fetchHistory() {
-      let query = supabase
-        .from("conversations")
-        .select("*")
-        .eq("user_id", user!.uid)
-        .order("created_at", { ascending: false });
-
-      if (features.historyRetentionDays > 0) {
-        const cutoff = new Date();
-        cutoff.setDate(cutoff.getDate() - features.historyRetentionDays);
-        query = query.gte("created_at", cutoff.toISOString());
+      // Plan retention is applied server-side.
+      try {
+        const { conversations: data } = await listConversations<Conversation>();
+        setConversations(data);
+      } catch (err) {
+        console.error("History fetch failed:", err);
+      } finally {
+        setLoadingData(false);
       }
-
-      const { data } = await query;
-      if (data) setConversations(data);
-      setLoadingData(false);
     }
 
     fetchHistory();

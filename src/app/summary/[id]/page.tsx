@@ -6,7 +6,7 @@ import Link from "next/link";
 import { motion, useReducedMotion } from "framer-motion";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "@/lib/auth-context";
-import { supabase } from "@/lib/supabase";
+import { getConversation } from "@/lib/conversations-client";
 import { useTranslateFields } from "@/hooks/useTranslateFields";
 import AppShell from "@/components/AppShell";
 import ToneIndicator from "@/components/ToneIndicator";
@@ -209,17 +209,17 @@ export default function SummaryPage() {
   useEffect(() => {
     if (!user || !id) return;
     async function fetchData() {
-      const [convRes, segRes] = await Promise.all([
-        supabase.from("conversations").select("*").eq("id", id).single(),
-        supabase
-          .from("analysis_segments")
-          .select("*")
-          .eq("conversation_id", id)
-          .order("timestamp", { ascending: true }),
-      ]);
-      if (convRes.data) setConversation(convRes.data);
-      if (segRes.data) setSegments(segRes.data);
-      setLoadingData(false);
+      try {
+        const res = await getConversation<Conversation, AnalysisSegment>(id);
+        if (res) {
+          setConversation(res.conversation);
+          setSegments(res.segments);
+        }
+      } catch (err) {
+        console.error("Summary fetch failed:", err);
+      } finally {
+        setLoadingData(false);
+      }
     }
     fetchData();
   }, [user, id]);
