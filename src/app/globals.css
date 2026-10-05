@@ -743,40 +743,84 @@ html[data-theme="light"] body {
       rgba(0, 0, 0, 0.24) 78%,
       rgba(0, 0, 0, 0.42) 100%
     ),
-    /* 2. Horizon core — the light source sitting behind the product */
+    /* 2. "Live" green — low-left, the colour of Start free and the LIVE chip */
     radial-gradient(
-      135% 62% at 50% 84%,
-      rgba(200, 200, 216, 0.2) 0%,
-      rgba(170, 170, 198, 0.115) 30%,
-      rgba(118, 118, 148, 0.05) 56%,
-      transparent 78%
-    ),
-    /* 3. Violet cast — echoes .hero-stage-blob--violet, keeps the pool from
-          going flat grey */
-    radial-gradient(
-      90% 45% at 50% 78%,
-      rgba(129, 140, 248, 0.06) 0%,
+      60% 50% at -2% 90%,
+      rgba(52, 211, 153, 0.17) 0%,
+      rgba(52, 211, 153, 0.05) 45%,
       transparent 70%
     ),
-    /* 4. Atmosphere — the vertical lift. Onset is early and the stops are
-          dense on purpose: starting later leaves the headline on dead black,
-          and a sparse ramp bands visibly on 8-bit panels. */
+    /* 3. Silver-lilac edge — right side, balances the green */
+    radial-gradient(
+      45% 55% at 102% 55%,
+      rgba(165, 170, 235, 0.13) 0%,
+      transparent 65%
+    ),
+    /* 4. Horizon core — the light behind the product, now copilot indigo
+          with a silver heart instead of flat grey */
+    radial-gradient(
+      135% 62% at 50% 84%,
+      rgba(200, 200, 230, 0.2) 0%,
+      rgba(129, 140, 248, 0.17) 26%,
+      rgba(105, 100, 190, 0.08) 52%,
+      transparent 78%
+    ),
+    /* 5. Crown — an indigo crest behind the headline, same language as the
+          login page */
+    radial-gradient(
+      80% 42% at 50% -8%,
+      rgba(129, 140, 248, 0.22) 0%,
+      rgba(92, 92, 110, 0.08) 50%,
+      transparent 75%
+    ),
+    /* 6. Atmosphere — the vertical lift, tinted slate-violet. Onset is early
+          and the stops are dense on purpose: starting later leaves the
+          headline on dead black, and a sparse ramp bands on 8-bit panels. */
     linear-gradient(
       180deg,
-      rgba(92, 92, 110, 0) 0%,
-      rgba(92, 92, 110, 0.03) 8%,
-      rgba(94, 94, 114, 0.07) 18%,
-      rgba(96, 96, 118, 0.115) 28%,
-      rgba(100, 100, 122, 0.165) 37%,
-      rgba(104, 104, 128, 0.22) 46%,
-      rgba(110, 110, 136, 0.275) 55%,
-      rgba(116, 116, 144, 0.325) 64%,
-      rgba(122, 122, 152, 0.365) 72%,
-      rgba(126, 126, 158, 0.385) 79%,
-      rgba(116, 116, 146, 0.3) 87%,
-      rgba(96, 96, 120, 0.145) 94%,
-      rgba(72, 72, 92, 0) 100%
+      rgba(92, 92, 120, 0) 0%,
+      rgba(92, 92, 122, 0.03) 8%,
+      rgba(94, 94, 128, 0.07) 18%,
+      rgba(96, 96, 134, 0.115) 28%,
+      rgba(100, 100, 140, 0.165) 37%,
+      rgba(104, 104, 148, 0.22) 46%,
+      rgba(110, 108, 158, 0.275) 55%,
+      rgba(116, 112, 168, 0.325) 64%,
+      rgba(122, 118, 176, 0.365) 72%,
+      rgba(126, 122, 182, 0.385) 79%,
+      rgba(116, 112, 168, 0.3) 87%,
+      rgba(96, 94, 140, 0.145) 94%,
+      rgba(72, 72, 100, 0) 100%
     );
+}
+
+/* Large screens: the copy is a centred column, so the sides and the crown
+   can carry much more colour (mirrors the login page). */
+@media (min-width: 1024px) {
+  .hero-bg {
+    background-image:
+      radial-gradient(120% 90% at 50% 62%, transparent 42%, rgba(0, 0, 0, 0.22) 78%, rgba(0, 0, 0, 0.38) 100%),
+      radial-gradient(55% 55% at -4% 88%, rgba(52, 211, 153, 0.3) 0%, rgba(52, 211, 153, 0.09) 42%, transparent 68%),
+      radial-gradient(42% 60% at 104% 52%, rgba(165, 170, 235, 0.22) 0%, rgba(200, 200, 216, 0.05) 45%, transparent 66%),
+      radial-gradient(135% 62% at 50% 84%, rgba(205, 205, 240, 0.24) 0%, rgba(129, 140, 248, 0.26) 26%, rgba(105, 100, 190, 0.12) 52%, transparent 78%),
+      radial-gradient(80% 45% at 50% -10%, rgba(129, 140, 248, 0.38) 0%, rgba(110, 112, 190, 0.14) 45%, transparent 72%),
+      linear-gradient(
+        180deg,
+        rgba(92, 92, 120, 0) 0%,
+        rgba(92, 92, 122, 0.03) 8%,
+        rgba(94, 94, 128, 0.07) 18%,
+        rgba(96, 96, 134, 0.115) 28%,
+        rgba(100, 100, 140, 0.165) 37%,
+        rgba(104, 104, 148, 0.22) 46%,
+        rgba(110, 108, 158, 0.275) 55%,
+        rgba(116, 112, 168, 0.325) 64%,
+        rgba(122, 118, 176, 0.365) 72%,
+        rgba(126, 122, 182, 0.385) 79%,
+        rgba(116, 112, 168, 0.3) 87%,
+        rgba(96, 94, 140, 0.145) 94%,
+        rgba(72, 72, 100, 0) 100%
+      );
+  }
 }
 
 /* Dither — kills residual banding across the wide vertical ramp. Static tile,
@@ -874,14 +918,18 @@ html[data-theme="light"] body {
   overflow: hidden;
 }
 
-/* Dark base with subtle warm-cool gradient */
+/* Colour gradient: a copilot-indigo dawn cresting at the top, a faint
+   "live" green horizon low-left, a silver-lilac edge on the right. Colour
+   stays at the periphery; the centre column (where the form sits on the
+   bare background) stays near-black so text contrast is unchanged. */
 .auth-bg-base {
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(ellipse 80% 60% at 50% -10%, rgba(120, 119, 140, 0.12) 0%, transparent 60%),
-    radial-gradient(ellipse 60% 50% at 80% 110%, rgba(100, 100, 130, 0.06) 0%, transparent 50%),
-    var(--color-bg);
+    radial-gradient(ellipse 110% 70% at 50% -18%, rgba(129, 140, 248, 0.34) 0%, rgba(92, 92, 110, 0.2) 40%, transparent 70%),
+    radial-gradient(ellipse 75% 60% at -5% 112%, rgba(52, 211, 153, 0.2) 0%, rgba(52, 211, 153, 0.06) 42%, transparent 66%),
+    radial-gradient(ellipse 55% 70% at 108% 55%, rgba(200, 200, 216, 0.08) 0%, transparent 60%),
+    linear-gradient(180deg, #0e0e18 0%, var(--color-bg) 45%, var(--color-bg) 75%, #080c0b 100%);
 }
 
 /* Soft light glows — mimics photographic light leaks */
@@ -890,29 +938,69 @@ html[data-theme="light"] body {
   border-radius: 50%;
 }
 .auth-bg-glow-1 {
-  width: 900px;
-  height: 600px;
-  top: -25%;
+  width: 960px;
+  height: 620px;
+  top: -30%;
   left: 50%;
   transform: translateX(-50%);
-  background: radial-gradient(ellipse, rgba(180, 175, 200, 0.1) 0%, rgba(140, 138, 165, 0.04) 40%, transparent 70%);
+  background: radial-gradient(ellipse, rgba(129, 140, 248, 0.26) 0%, rgba(160, 155, 200, 0.09) 42%, transparent 70%);
   filter: blur(80px);
 }
 .auth-bg-glow-2 {
-  width: 500px;
-  height: 500px;
-  bottom: -20%;
-  left: -10%;
-  background: radial-gradient(circle, rgba(140, 140, 170, 0.06) 0%, transparent 65%);
-  filter: blur(60px);
+  width: 560px;
+  height: 560px;
+  bottom: -26%;
+  left: -12%;
+  background: radial-gradient(circle, rgba(52, 211, 153, 0.16) 0%, transparent 65%);
+  filter: blur(70px);
 }
 .auth-bg-glow-3 {
-  width: 400px;
-  height: 400px;
-  top: 30%;
-  right: -8%;
-  background: radial-gradient(circle, rgba(160, 155, 180, 0.05) 0%, transparent 60%);
+  width: 440px;
+  height: 440px;
+  top: 28%;
+  right: -10%;
+  background: radial-gradient(circle, rgba(200, 200, 216, 0.1) 0%, transparent 60%);
   filter: blur(70px);
+}
+
+/* Large screens: the form is a narrow centre column, so the periphery can
+   carry much more colour without touching legibility. */
+@media (min-width: 1024px) {
+  .auth-bg-base {
+    background:
+      radial-gradient(ellipse 95% 65% at 50% -14%, rgba(129, 140, 248, 0.5) 0%, rgba(110, 112, 190, 0.26) 34%, transparent 66%),
+      radial-gradient(ellipse 60% 70% at -6% 108%, rgba(52, 211, 153, 0.34) 0%, rgba(52, 211, 153, 0.1) 40%, transparent 66%),
+      radial-gradient(ellipse 50% 75% at 106% 50%, rgba(165, 170, 235, 0.2) 0%, rgba(200, 200, 216, 0.06) 45%, transparent 66%),
+      linear-gradient(180deg, #121224 0%, var(--color-bg) 50%, var(--color-bg) 70%, #07100d 100%);
+  }
+  .auth-bg-glow-1 {
+    width: 1300px;
+    height: 760px;
+    top: -32%;
+    background: radial-gradient(ellipse, rgba(129, 140, 248, 0.38) 0%, rgba(150, 150, 215, 0.14) 42%, transparent 70%);
+    filter: blur(90px);
+  }
+  .auth-bg-glow-2 {
+    width: 860px;
+    height: 860px;
+    bottom: -30%;
+    left: -14%;
+    background: radial-gradient(circle, rgba(52, 211, 153, 0.26) 0%, rgba(52, 211, 153, 0.06) 45%, transparent 68%);
+    filter: blur(80px);
+  }
+  .auth-bg-glow-3 {
+    width: 680px;
+    height: 680px;
+    top: 22%;
+    right: -14%;
+    background: radial-gradient(circle, rgba(165, 170, 235, 0.18) 0%, transparent 62%);
+    filter: blur(80px);
+  }
+  /* Muted grey drops to ~3.2:1 on the indigo crest; silver keeps it at 6:1+. */
+  .auth-page .auth-subheading,
+  .auth-page .auth-nav-link {
+    color: var(--color-text-silver);
+  }
 }
 
 /* Fine dot grid — gives depth and structure */
@@ -941,7 +1029,7 @@ html[data-theme="light"] body {
 .auth-bg-vignette {
   position: absolute;
   inset: 0;
-  background: radial-gradient(ellipse 70% 65% at 50% 45%, transparent 40%, rgba(0, 0, 0, 0.4) 100%);
+  background: radial-gradient(ellipse 70% 65% at 50% 45%, transparent 40%, rgba(0, 0, 0, 0.3) 100%);
 }
 
 /* Navigation */
