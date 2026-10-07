@@ -573,7 +573,9 @@
       "ctaSecondary": "So funktioniert's",
       "vslLabel": "Tonvo in 30 Sekunden",
       "vslSound": "Mit Ton ansehen",
-      "vslMute": "Ton aus"
+      "vslMute": "Ton aus",
+      "vslFullscreen": "Vollbild",
+      "vslExitFullscreen": "Vollbild beenden"
     },
     "desktopDownload": {
       "badge": "Jetzt als Desktop-App",

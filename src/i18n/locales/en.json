@@ -573,7 +573,9 @@
       "ctaSecondary": "See how it works",
       "vslLabel": "Tonvo in 30 seconds",
       "vslSound": "Watch with sound",
-      "vslMute": "Mute"
+      "vslMute": "Mute",
+      "vslFullscreen": "Full screen",
+      "vslExitFullscreen": "Exit full screen"
     },
     "desktopDownload": {
       "badge": "Now in desktop",

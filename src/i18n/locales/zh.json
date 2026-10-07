@@ -573,7 +573,9 @@
       "ctaSecondary": "了解工作原理",
       "vslLabel": "30 秒了解 Tonvo",
       "vslSound": "开启声音观看",
-      "vslMute": "静音"
+      "vslMute": "静音",
+      "vslFullscreen": "全屏",
+      "vslExitFullscreen": "退出全屏"
     },
     "desktopDownload": {
       "badge": "桌面版上线",

@@ -573,7 +573,9 @@
       "ctaSecondary": "デモを見る",
       "vslLabel": "30秒でわかるTonvo",
       "vslSound": "音声付きで見る",
-      "vslMute": "ミュート"
+      "vslMute": "ミュート",
+      "vslFullscreen": "全画面表示",
+      "vslExitFullscreen": "全画面表示を終了"
     },
     "desktopDownload": {
       "badge": "デスクトップ版登場",

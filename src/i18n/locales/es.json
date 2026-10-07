@@ -573,7 +573,9 @@
       "ctaSecondary": "Ver cómo funciona",
       "vslLabel": "Tonvo en 30 segundos",
       "vslSound": "Ver con sonido",
-      "vslMute": "Silenciar"
+      "vslMute": "Silenciar",
+      "vslFullscreen": "Pantalla completa",
+      "vslExitFullscreen": "Salir de pantalla completa"
     },
     "desktopDownload": {
       "badge": "Ahora en desktop",
