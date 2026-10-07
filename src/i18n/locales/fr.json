@@ -573,7 +573,9 @@
       "ctaSecondary": "Voir comment ça marche",
       "vslLabel": "Tonvo en 30 secondes",
       "vslSound": "Regarder avec le son",
-      "vslMute": "Couper le son"
+      "vslMute": "Couper le son",
+      "vslFullscreen": "Plein écran",
+      "vslExitFullscreen": "Quitter le plein écran"
     },
     "desktopDownload": {
       "badge": "Maintenant en desktop",

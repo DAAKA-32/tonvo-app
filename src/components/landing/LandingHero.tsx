@@ -7,6 +7,7 @@ import {
   AnimatePresence,
   motion,
   useMotionValue,
+  useMotionValueEvent,
   useReducedMotion,
   useScroll,
   useSpring,
@@ -30,24 +31,47 @@ function IconArrowRight({ className }: { className?: string }) {
 /*  — partial-peek video stage with 3D cursor tilt,                */
 /*    light-scan beam, reflective floor, breathing halo.           */
 /* ============================================================== */
-// The hero VSL: 30 s, 16:9, Emma VO with on-screen words (reads muted). Source film: Tonvo-Ad/video/vsl5 "H1"
-// (fork of the Z1 VSL). While null, the rich app mockup renders without hitting the network.
+// The hero VSL: 30 s, 16:9, Emma VO with on-screen words (reads muted). Source film: Tonvo-Ad/video/vsl5 "H2"
+// (made for the home page). While null, the rich app mockup renders without hitting the network.
 const DEMO_VIDEO_SRC: string | null = "/vsl/tonvo-vsl.mp4";
 const DEMO_VIDEO_POSTER = "/vsl/tonvo-vsl-poster.jpg";
+// Scroll distance (px) over which the tilted frame straightens out.
+const FLAT_AT_SCROLL = 400;
 
 function HeroDemoStage() {
   const { t } = useTranslation();
   const reduce = useReducedMotion();
   const stageRef = useRef<HTMLDivElement>(null);
+  const screenRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const [videoFailed, setVideoFailed] = useState(false);
   const [videoReady, setVideoReady] = useState(false);
   const [soundOn, setSoundOn] = useState(false);
   const [playing, setPlaying] = useState(false);
+  const [isFullscreen, setIsFullscreen] = useState(false);
+  const heardFromStart = useRef(false);
 
-  // Scroll-driven yaw + roll: default tilt right, flips through 0 to opposite as page scrolls
+  // Scroll-driven yaw + roll: starts tilted right and straightens as the page scrolls. Once the frame is flat it
+  // stays flat for good (scrolling back up does not tilt it again), and so does turning the sound on.
   const { scrollY } = useScroll();
-  const flip = useTransform(scrollY, [0, 800], [1, -1], { clamp: true });
+  const flip = useMotionValue(1);
+  const flatForGood = useRef(false);
+  const settleFlat = () => {
+    flatForGood.current = true;
+    flip.set(0);
+  };
+  useMotionValueEvent(scrollY, "change", (y) => {
+    if (flatForGood.current) return;
+    const f = Math.max(0, 1 - y / FLAT_AT_SCROLL);
+    flip.set(f);
+    if (f === 0) flatForGood.current = true;
+  });
+  useEffect(() => {
+    if (scrollY.get() >= FLAT_AT_SCROLL) {
+      flatForGood.current = true;
+      flip.set(0);
+    }
+  }, [scrollY, flip]);
   const baseRotYRaw = useTransform(flip, (v) => v * 14);
   const baseRotZRaw = useTransform(flip, (v) => v * -3);
   const rotateY = useSpring(baseRotYRaw, { stiffness: 80, damping: 22, mass: 0.6 });
@@ -66,18 +90,49 @@ function HeroDemoStage() {
     return () => io.disconnect();
   }, [reduce, videoFailed]);
 
-  // Sound on = watch the VSL properly: restart from the hook, unmuted, frame squared to the viewer.
+  useEffect(() => {
+    const onChange = () => setIsFullscreen(!!screenRef.current && document.fullscreenElement === screenRef.current);
+    document.addEventListener("fullscreenchange", onChange);
+    return () => document.removeEventListener("fullscreenchange", onChange);
+  }, []);
+
+  // Sound on = watch the VSL properly: the first time it restarts from the hook, the frame squares to the viewer.
+  const enableSound = (v: HTMLVideoElement) => {
+    if (!heardFromStart.current) {
+      heardFromStart.current = true;
+      v.currentTime = 0;
+    }
+    v.muted = false;
+    setSoundOn(true);
+    settleFlat();
+    void v.play().catch(() => {});
+  };
   const toggleSound = () => {
     const v = videoRef.current;
     if (!v) return;
     if (!soundOn) {
-      v.currentTime = 0;
-      v.muted = false;
-      setSoundOn(true);
-      void v.play().catch(() => {});
+      enableSound(v);
     } else {
       v.muted = true;
       setSoundOn(false);
+    }
+  };
+
+  // Full screen keeps our own controls (the screen element goes full screen, not the bare video). iOS Safari only
+  // allows the native video player. Going full screen means watching, so the sound comes on.
+  const toggleFullscreen = () => {
+    const el = screenRef.current;
+    const v = videoRef.current;
+    if (!el || !v) return;
+    if (document.fullscreenElement) {
+      void document.exitFullscreen().catch(() => {});
+      return;
+    }
+    if (!soundOn) enableSound(v);
+    if (typeof el.requestFullscreen === "function") {
+      void el.requestFullscreen().catch(() => {});
+    } else {
+      (v as HTMLVideoElement & { webkitEnterFullscreen?: () => void }).webkitEnterFullscreen?.();
     }
   };
 
@@ -91,8 +146,8 @@ function HeroDemoStage() {
       <motion.div
         className="hero-stage-frame"
         style={{
-          rotateY: soundOn ? 0 : rotateY,
-          rotateZ: soundOn ? 0 : rotateZ,
+          rotateY,
+          rotateZ,
           transformStyle: "preserve-3d",
           transformPerspective: 1600,
         }}
@@ -109,7 +164,7 @@ function HeroDemoStage() {
         )}
 
         {/* The actual demo (video if available, otherwise rich app mockup) */}
-        <div className={`hero-stage-screen${DEMO_VIDEO_SRC && !videoFailed ? " hero-stage-screen--video" : ""}`}>
+        <div ref={screenRef} className={`hero-stage-screen${DEMO_VIDEO_SRC && !videoFailed ? " hero-stage-screen--video" : ""}`}>
           {DEMO_VIDEO_SRC && !videoFailed ? (
             <>
               <video
@@ -133,9 +188,11 @@ function HeroDemoStage() {
                   <HeroAppPreview />
                 </div>
               )}
+              {/* Controls show on hover (always on touch screens, and centred while the film is paused) */}
+              <div className={`hero-vsl-controls${!playing && !soundOn ? " is-idle" : ""}`}>
               <button
                 type="button"
-                className={`hero-vsl-sound${soundOn ? " is-on" : ""}${!playing && !soundOn ? " is-idle" : ""}`}
+                className={`hero-vsl-sound${soundOn ? " is-on" : ""}`}
                 onClick={toggleSound}
                 aria-pressed={soundOn}
               >
@@ -155,6 +212,22 @@ function HeroDemoStage() {
                 </svg>
                 <span>{soundOn ? t("landing.hero.vslMute", "Mute") : t("landing.hero.vslSound", "Watch with sound")}</span>
               </button>
+              <button
+                type="button"
+                className="hero-vsl-sound hero-vsl-full"
+                onClick={toggleFullscreen}
+                aria-label={isFullscreen ? t("landing.hero.vslExitFullscreen", "Exit full screen") : t("landing.hero.vslFullscreen", "Full screen")}
+                title={isFullscreen ? t("landing.hero.vslExitFullscreen", "Exit full screen") : t("landing.hero.vslFullscreen", "Full screen")}
+              >
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+                  {isFullscreen ? (
+                    <path d="M8 3v3a2 2 0 0 1-2 2H3m18 0h-3a2 2 0 0 1-2-2V3m0 18v-3a2 2 0 0 1 2-2h3M3 16h3a2 2 0 0 1 2 2v3" />
+                  ) : (
+                    <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3" />
+                  )}
+                </svg>
+              </button>
+              </div>
             </>
           ) : (
             <div className="hero-stage-fallback">
@@ -1169,11 +1242,52 @@ export default function LandingHero() {
           z-index: 2;
           overflow: hidden;
         }
-        :global(.hero-vsl-sound) {
+        /* Full screen: the screen element itself, film letterboxed on black */
+        :global(.hero-stage-screen--video:fullscreen) {
+          aspect-ratio: auto;
+          width: 100vw;
+          height: 100vh;
+          background: #000;
+        }
+        :global(.hero-stage-screen--video:fullscreen .hero-stage-video) {
+          object-fit: contain;
+        }
+        :global(.hero-vsl-controls) {
           position: absolute;
           left: 14px;
+          right: 14px;
           bottom: 14px;
           z-index: 4;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 10px;
+          pointer-events: none;
+          opacity: 0;
+          transform: translateY(6px);
+          transition: opacity 0.25s ease, transform 0.25s ease;
+        }
+        :global(.hero-vsl-controls > *) {
+          pointer-events: auto;
+        }
+        :global(.hero-stage-screen--video:hover .hero-vsl-controls),
+        :global(.hero-vsl-controls:focus-within),
+        :global(.hero-vsl-controls.is-idle) {
+          opacity: 1;
+          transform: none;
+        }
+        @media (hover: none) {
+          :global(.hero-vsl-controls) {
+            opacity: 1;
+            transform: none;
+          }
+        }
+        :global(.hero-vsl-controls.is-idle) {
+          /* poster only (reduced motion / paused): the controls become the obvious play control, centred */
+          inset: 0;
+          justify-content: center;
+        }
+        :global(.hero-vsl-sound) {
           display: inline-flex;
           align-items: center;
           gap: 8px;
@@ -1198,19 +1312,30 @@ export default function LandingHero() {
           outline: 2px solid #c8c8d8;
           outline-offset: 3px;
         }
-        :global(.hero-vsl-sound.is-idle) {
-          /* poster only (reduced motion / paused): make the button the obvious play control */
-          left: 50%;
-          bottom: 50%;
-          transform: translate(-50%, 50%);
+        :global(.hero-vsl-sound.hero-vsl-full) {
+          justify-content: center;
+          width: 40px;
+          padding: 0;
+        }
+        :global(.hero-vsl-controls.is-idle .hero-vsl-sound) {
           min-height: 48px;
           padding: 12px 20px 12px 16px;
           font-size: 15px;
         }
+        :global(.hero-vsl-controls.is-idle .hero-vsl-full) {
+          width: 48px;
+          padding: 0;
+        }
         @media (max-width: 640px) {
-          :global(.hero-vsl-sound) {
+          :global(.hero-vsl-controls) {
             left: 10px;
+            right: 10px;
             bottom: 10px;
+          }
+          :global(.hero-vsl-sound.hero-vsl-full) {
+            width: 36px;
+          }
+          :global(.hero-vsl-sound) {
             min-height: 36px;
             font-size: 12px;
             padding: 6px 12px 6px 10px;

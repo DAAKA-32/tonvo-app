@@ -573,7 +573,9 @@
       "ctaSecondary": "Vedi come funziona",
       "vslLabel": "Tonvo in 30 secondi",
       "vslSound": "Guarda con l'audio",
-      "vslMute": "Disattiva audio"
+      "vslMute": "Disattiva audio",
+      "vslFullscreen": "Schermo intero",
+      "vslExitFullscreen": "Esci da schermo intero"
     },
     "desktopDownload": {
       "badge": "Ora come app desktop",
