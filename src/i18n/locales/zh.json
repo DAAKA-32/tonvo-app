@@ -570,7 +570,10 @@
       ],
       "subtitle": "实时转录、即时洞察、成交建议 — 在你需要的那一刻。为成交者、咨询顾问、以及收入取决于下一通电话的所有人打造。",
       "cta": "免费开始",
-      "ctaSecondary": "了解工作原理"
+      "ctaSecondary": "了解工作原理",
+      "vslLabel": "30 秒了解 Tonvo",
+      "vslSound": "开启声音观看",
+      "vslMute": "静音"
     },
     "desktopDownload": {
       "badge": "桌面版上线",

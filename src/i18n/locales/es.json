@@ -570,7 +570,10 @@
       ],
       "subtitle": "Transcripción en vivo, insights instantáneos y sugerencias de cierre — en el momento exacto. Pensado para closers, consultores y todos los que viven de la próxima llamada.",
       "cta": "Empezar gratis",
-      "ctaSecondary": "Ver cómo funciona"
+      "ctaSecondary": "Ver cómo funciona",
+      "vslLabel": "Tonvo en 30 segundos",
+      "vslSound": "Ver con sonido",
+      "vslMute": "Silenciar"
     },
     "desktopDownload": {
       "badge": "Ahora en desktop",

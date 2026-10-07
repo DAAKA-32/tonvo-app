@@ -570,7 +570,10 @@
       ],
       "subtitle": "Trascrizione live, insights istantanei e suggerimenti di chiusura — nel momento giusto. Pensato per closer, consulenti e chiunque viva della prossima chiamata.",
       "cta": "Inizia gratis",
-      "ctaSecondary": "Vedi come funziona"
+      "ctaSecondary": "Vedi come funziona",
+      "vslLabel": "Tonvo in 30 secondi",
+      "vslSound": "Guarda con l'audio",
+      "vslMute": "Disattiva audio"
     },
     "desktopDownload": {
       "badge": "Ora come app desktop",

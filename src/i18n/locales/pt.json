@@ -570,7 +570,10 @@
       ],
       "subtitle": "Transcrição ao vivo, insights instantâneos e sugestões de fechamento — no momento certo. Feito para closers, consultores e todos que vivem da próxima ligação.",
       "cta": "Começar grátis",
-      "ctaSecondary": "Veja como funciona"
+      "ctaSecondary": "Veja como funciona",
+      "vslLabel": "Tonvo em 30 segundos",
+      "vslSound": "Ver com som",
+      "vslMute": "Silenciar"
     },
     "desktopDownload": {
       "badge": "Agora no desktop",

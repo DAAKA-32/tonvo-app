@@ -570,7 +570,10 @@
       ],
       "subtitle": "Live transcriptie, directe inzichten en closing-suggesties — precies wanneer het telt. Gebouwd voor closers, consultants en iedereen wiens inkomen afhangt van het volgende gesprek.",
       "cta": "Gratis beginnen",
-      "ctaSecondary": "Bekijk hoe het werkt"
+      "ctaSecondary": "Bekijk hoe het werkt",
+      "vslLabel": "Tonvo in 30 seconden",
+      "vslSound": "Bekijk met geluid",
+      "vslMute": "Geluid uit"
     },
     "desktopDownload": {
       "badge": "Nu als desktop-app",
