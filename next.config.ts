@@ -19,6 +19,16 @@ const nextConfig: NextConfig = {
       "react-i18next",
     ],
   },
+  // Serve Firebase Auth's handler from tonvo.co so Google's sign-in screen says
+  // "tonvo.co" instead of "cue-55815.firebaseapp.com" (Firebase "proxy auth
+  // requests" setup). Requires NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=tonvo.co and
+  // https://tonvo.co/__/auth/handler in the OAuth client's redirect URIs.
+  async rewrites() {
+    return [
+      { source: "/__/auth/:path*", destination: "https://cue-55815.firebaseapp.com/__/auth/:path*" },
+      { source: "/__/firebase/:path*", destination: "https://cue-55815.firebaseapp.com/__/firebase/:path*" },
+    ];
+  },
   async headers() {
     // Content-Security-Policy — restricts where scripts, styles, images, and
     // network calls can come from. Tuned for Firebase Auth, Supabase, Stripe,

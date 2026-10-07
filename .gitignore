@@ -17,3 +17,11 @@ desktop/node_modules/
 desktop/dist/
 desktop/src-tauri/target/
 desktop/src-tauri/gen/
+
+# Donnees prospects (PII) - ne jamais committer
+scripts/prospector/data/*.csv
+scripts/prospector/data/prospects.json
+
+
+# Firebase Admin service account (secret)
+firebase-admin.json
