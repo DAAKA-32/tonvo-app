@@ -570,7 +570,10 @@
       ],
       "subtitle": "실시간 전사, 즉시 인사이트, 클로징 제안 — 필요한 그 순간에. 클로저, 컨설턴트, 다음 통화로 수입이 결정되는 모든 사람을 위해.",
       "cta": "무료로 시작",
-      "ctaSecondary": "작동 방식 보기"
+      "ctaSecondary": "작동 방식 보기",
+      "vslLabel": "30초 만에 보는 Tonvo",
+      "vslSound": "소리와 함께 보기",
+      "vslMute": "음소거"
     },
     "desktopDownload": {
       "badge": "이제 데스크톱에서도",

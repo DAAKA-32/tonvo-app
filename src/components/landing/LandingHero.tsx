@@ -30,16 +30,20 @@ function IconArrowRight({ className }: { className?: string }) {
 /*  — partial-peek video stage with 3D cursor tilt,                */
 /*    light-scan beam, reflective floor, breathing halo.           */
 /* ============================================================== */
-// Set to "/demo.mp4" (or any URL) once you drop a real video into /public.
-// While null, we render the rich app mockup directly without hitting the network.
-// /demo.mp4 is the scripted live-call capture (see scripts/capture-demo-call.mjs).
-const DEMO_VIDEO_SRC: string | null = "/demo.mp4";
+// The hero VSL: 30 s, 16:9, Emma VO with on-screen words (reads muted). Source film: Tonvo-Ad/video/vsl5 "H1"
+// (fork of the Z1 VSL). While null, the rich app mockup renders without hitting the network.
+const DEMO_VIDEO_SRC: string | null = "/vsl/tonvo-vsl.mp4";
+const DEMO_VIDEO_POSTER = "/vsl/tonvo-vsl-poster.jpg";
 
 function HeroDemoStage() {
+  const { t } = useTranslation();
   const reduce = useReducedMotion();
   const stageRef = useRef<HTMLDivElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
   const [videoFailed, setVideoFailed] = useState(false);
   const [videoReady, setVideoReady] = useState(false);
+  const [soundOn, setSoundOn] = useState(false);
+  const [playing, setPlaying] = useState(false);
 
   // Scroll-driven yaw + roll: default tilt right, flips through 0 to opposite as page scrolls
   const { scrollY } = useScroll();
@@ -48,6 +52,34 @@ function HeroDemoStage() {
   const baseRotZRaw = useTransform(flip, (v) => v * -3);
   const rotateY = useSpring(baseRotYRaw, { stiffness: 80, damping: 22, mass: 0.6 });
   const rotateZ = useSpring(baseRotZRaw, { stiffness: 80, damping: 22, mass: 0.6 });
+
+  // Muted autoplay (the film's words double as subtitles); paused while off screen to save battery.
+  // Reduced motion: no autoplay, the poster + sound button start it on demand.
+  useEffect(() => {
+    const v = videoRef.current;
+    if (!v || reduce) return;
+    const io = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) void v.play().catch(() => {});
+      else v.pause();
+    }, { threshold: 0.25 });
+    io.observe(v);
+    return () => io.disconnect();
+  }, [reduce, videoFailed]);
+
+  // Sound on = watch the VSL properly: restart from the hook, unmuted, frame squared to the viewer.
+  const toggleSound = () => {
+    const v = videoRef.current;
+    if (!v) return;
+    if (!soundOn) {
+      v.currentTime = 0;
+      v.muted = false;
+      setSoundOn(true);
+      void v.play().catch(() => {});
+    } else {
+      v.muted = true;
+      setSoundOn(false);
+    }
+  };
 
   return (
     <div
@@ -59,8 +91,8 @@ function HeroDemoStage() {
       <motion.div
         className="hero-stage-frame"
         style={{
-          rotateY,
-          rotateZ,
+          rotateY: soundOn ? 0 : rotateY,
+          rotateZ: soundOn ? 0 : rotateZ,
           transformStyle: "preserve-3d",
           transformPerspective: 1600,
         }}
@@ -68,33 +100,61 @@ function HeroDemoStage() {
         animate={{ opacity: 1, y: 0, scale: 1 }}
         transition={{ duration: 1.05, ease: [0.22, 1, 0.36, 1], delay: 0.65 }}
       >
-        {/* LIVE chip — sits over the top edge */}
-        <div className="hero-stage-live">
-          <span className="hero-stage-live-dot" />
-          <span className="hero-stage-live-text">LIVE • REAL-TIME COPILOT</span>
-        </div>
+        {/* LIVE chip (mockup fallback only): over the VSL it would cover the film's hook */}
+        {!(DEMO_VIDEO_SRC && !videoFailed) && (
+          <div className="hero-stage-live">
+            <span className="hero-stage-live-dot" />
+            <span className="hero-stage-live-text">LIVE • REAL-TIME COPILOT</span>
+          </div>
+        )}
 
         {/* The actual demo (video if available, otherwise rich app mockup) */}
         <div className={`hero-stage-screen${DEMO_VIDEO_SRC && !videoFailed ? " hero-stage-screen--video" : ""}`}>
           {DEMO_VIDEO_SRC && !videoFailed ? (
             <>
               <video
+                ref={videoRef}
                 className="hero-stage-video"
                 src={DEMO_VIDEO_SRC}
-                poster="/demo-poster.jpg"
-                autoPlay
+                poster={DEMO_VIDEO_POSTER}
+                autoPlay={!reduce}
                 muted
                 loop
                 playsInline
-                preload="metadata"
+                preload={reduce ? "none" : "auto"}
+                aria-label={t("landing.hero.vslLabel", "Tonvo in 30 seconds")}
                 onCanPlay={() => setVideoReady(true)}
+                onPlay={() => setPlaying(true)}
+                onPause={() => setPlaying(false)}
                 onError={() => setVideoFailed(true)}
               />
-              {!videoReady && (
-                <div className="hero-stage-fallback">
+              {!videoReady && !reduce && (
+                <div className="hero-stage-fallback hero-stage-fallback--over">
                   <HeroAppPreview />
                 </div>
               )}
+              <button
+                type="button"
+                className={`hero-vsl-sound${soundOn ? " is-on" : ""}${!playing && !soundOn ? " is-idle" : ""}`}
+                onClick={toggleSound}
+                aria-pressed={soundOn}
+              >
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+                  <path d="M11 5 6 9H2v6h4l5 4V5z" />
+                  {soundOn ? (
+                    <>
+                      <path d="M15.54 8.46a5 5 0 0 1 0 7.07" />
+                      <path d="M19.07 4.93a10 10 0 0 1 0 14.14" />
+                    </>
+                  ) : (
+                    <>
+                      <line x1="22" y1="9" x2="16" y2="15" />
+                      <line x1="16" y1="9" x2="22" y2="15" />
+                    </>
+                  )}
+                </svg>
+                <span>{soundOn ? t("landing.hero.vslMute", "Mute") : t("landing.hero.vslSound", "Watch with sound")}</span>
+              </button>
             </>
           ) : (
             <div className="hero-stage-fallback">
@@ -102,9 +162,8 @@ function HeroDemoStage() {
             </div>
           )}
 
-          {/* Subtle vignette — kept for depth (no bottom fade: mockup is no
-              longer cropped, so there's nothing to mask). */}
-          <div aria-hidden className="hero-stage-vignette" />
+          {/* Subtle vignette for the mockup fallback only: the VSL carries its own grade. */}
+          {!(DEMO_VIDEO_SRC && !videoFailed) && <div aria-hidden className="hero-stage-vignette" />}
         </div>
 
       </motion.div>
@@ -1089,11 +1148,11 @@ export default function LandingHero() {
           position: relative;
           width: 100%;
         }
-        /* When the demo video is active it's absolutely positioned, so the
-           screen has no in-flow content to give it height — pin the laptop
-           aspect ratio (matches the 1280x800 capture). */
+        /* The VSL is absolutely positioned, so the screen has no in-flow
+           content to give it height: pin the film's 16:9 frame (no crop). */
         :global(.hero-stage-screen--video) {
-          aspect-ratio: 1280 / 800;
+          aspect-ratio: 16 / 9;
+          background: #09090b;
         }
         :global(.hero-stage-video) {
           position: absolute;
@@ -1101,8 +1160,61 @@ export default function LandingHero() {
           width: 100%;
           height: 100%;
           object-fit: cover;
-          object-position: top center;
+          object-position: center;
           z-index: 1;
+        }
+        :global(.hero-stage-fallback--over) {
+          position: absolute;
+          inset: 0;
+          z-index: 2;
+          overflow: hidden;
+        }
+        :global(.hero-vsl-sound) {
+          position: absolute;
+          left: 14px;
+          bottom: 14px;
+          z-index: 4;
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+          min-height: 40px;
+          padding: 8px 14px 8px 12px;
+          border-radius: 999px;
+          font-size: 13px;
+          font-weight: 600;
+          color: #fafafa;
+          background: rgba(9, 9, 11, 0.62);
+          border: 1px solid rgba(255, 255, 255, 0.16);
+          backdrop-filter: blur(10px);
+          -webkit-backdrop-filter: blur(10px);
+          cursor: pointer;
+          transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+        }
+        :global(.hero-vsl-sound:hover) {
+          background: rgba(9, 9, 11, 0.8);
+          border-color: rgba(255, 255, 255, 0.3);
+        }
+        :global(.hero-vsl-sound:focus-visible) {
+          outline: 2px solid #c8c8d8;
+          outline-offset: 3px;
+        }
+        :global(.hero-vsl-sound.is-idle) {
+          /* poster only (reduced motion / paused): make the button the obvious play control */
+          left: 50%;
+          bottom: 50%;
+          transform: translate(-50%, 50%);
+          min-height: 48px;
+          padding: 12px 20px 12px 16px;
+          font-size: 15px;
+        }
+        @media (max-width: 640px) {
+          :global(.hero-vsl-sound) {
+            left: 10px;
+            bottom: 10px;
+            min-height: 36px;
+            font-size: 12px;
+            padding: 6px 12px 6px 10px;
+          }
         }
         :global(.hero-stage-fallback) {
           /* Flows in normal layout so the frame sizes to the mockup's

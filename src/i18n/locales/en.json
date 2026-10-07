@@ -570,7 +570,10 @@
       ],
       "subtitle": "Live transcription, instant insights, and closing suggestions — the moment they matter. Built for closers, consultants, and anyone whose income depends on the next call.",
       "cta": "Start free",
-      "ctaSecondary": "See how it works"
+      "ctaSecondary": "See how it works",
+      "vslLabel": "Tonvo in 30 seconds",
+      "vslSound": "Watch with sound",
+      "vslMute": "Mute"
     },
     "desktopDownload": {
       "badge": "Now in desktop",

@@ -496,12 +496,12 @@ export default function SessionPage() {
     // "Speaker 1" → You (the rep), "Speaker 2" → Them (the prospect)
     at(1200, () => {
       seg("Speaker 2", "Honestly, we've already trialed a couple of tools like this.", "neutral", "neutral", "key_point", "context");
-      setLiveInsight("They've evaluated competitors — educated buyer, likely price-aware.");
+      setLiveInsight("They've evaluated competitors. Educated buyer, likely price-aware.");
       setSpeakerBalance(0.34); rampQ(71); rampE(67);
     });
     at(3600, () => {
       seg("Speaker 1", "Makes sense. What made those fall short for your team?", "neutral", "neutral", "none", "");
-      setCoachingTip("Strong discovery question — let them name the gap themselves.");
+      setCoachingTip("Strong discovery question. Let them name the gap themselves.");
       setSpeakerBalance(0.62);
     });
     at(6000, () => {
@@ -511,34 +511,34 @@ export default function SessionPage() {
       setSpeakerBalance(0.30); rampE(73);
     });
     at(8000, () => {
-      setCurrentSuggestion("So the win isn't more features — it's your team actually using it on every call?");
+      setCurrentSuggestion("So the win isn't more features. It's your team actually using it on every call?");
       rampQ(79);
     });
     at(10000, () => {
-      seg("Speaker 1", "So the real win is the team using it on every call — not more features?", "neutral", "neutral", "none", "");
-      setCoachingTip("Mirror and confirm — you're framing the problem in their own words.");
+      seg("Speaker 1", "So the real win is the team using it on every call, not more features?", "neutral", "neutral", "none", "");
+      setCoachingTip("Mirror and confirm. You're framing the problem in their own words.");
       setSpeakerBalance(0.60);
     });
     at(12200, () => {
-      seg("Speaker 2", "Exactly. Though I'll be honest — the price is higher than I budgeted.", "negative", "negative", "objection", "price");
+      seg("Speaker 2", "Exactly. Though I'll be honest, the price is higher than I budgeted.", "negative", "negative", "objection", "price");
       setCurrentTone("negative");
       setCurrentSuggestion("");
       setCoachingTip("Don't discount. Quantify the ROI before you talk numbers.");
       setSpeakerBalance(0.32);
     });
     at(14000, () => {
-      setCurrentSuggestion("Before price — how many deals slipped last quarter from a call going sideways?");
+      setCurrentSuggestion("Before price: how many deals slipped last quarter from a call going sideways?");
       setLiveInsight("Shift the frame from cost to cost-of-inaction.");
       rampQ(83);
     });
     at(15800, () => {
-      seg("Speaker 1", "Before we get to price — how many deals slipped last quarter from a call going sideways?", "neutral", "neutral", "none", "");
+      seg("Speaker 1", "Before we get to price, how many deals slipped last quarter from a call going sideways?", "neutral", "neutral", "none", "");
       setSpeakerBalance(0.57);
     });
     at(18000, () => {
       seg("Speaker 2", "Probably three or four we should have won.", "positive", "positive", "opportunity", "pain quantified");
       setCurrentTone("positive");
-      setLiveInsight("Prospect quantified the pain (3–4 lost deals). Anchor the ROI right here.");
+      setLiveInsight("Prospect quantified the pain (3 to 4 lost deals). Anchor the ROI right here.");
       setSpeakerBalance(0.34); rampE(85);
     });
     at(20000, () => {
@@ -550,26 +550,32 @@ export default function SessionPage() {
       seg("Speaker 2", "How flexible is the pricing if we commit annually?", "positive", "very_positive", "opportunity", "buying signal");
       setCurrentTone("positive");
       setLiveInsight("Pricing + annual commitment = buying signal. Move to the close.");
+      setDetectedQuestion({ text: "How flexible is the pricing if we commit annually?", speaker: "them", urgency: "high" });
       setSpeakerBalance(0.30); rampE(91);
     });
     at(24000, () => {
       setCurrentSuggestion("Buying signal. Offer annual = 2 months free, then ask for the verbal yes now.");
-      setSuggestedResponses([{ label: "Close", intent: "ask_for_commitment", text: "Annual gets you two months free — want me to send it over today?" }]);
+      setSuggestedResponses([
+        { label: "Close", intent: "close", text: "Annual gets you two months free. Want me to send it over today?" },
+        { label: "Probe", intent: "probe", text: "Happy to flex. Is annual the only thing between us and a yes?" },
+        { label: "Value", intent: "redirect", text: "One saved deal covers the year. Shall we lock annual in?" },
+      ]);
       rampQ(91);
     });
     at(26000, () => {
       seg("Speaker 1", "Annual gets you two months free. Want me to send it over today?", "positive", "positive", "none", "");
       setCoachingTip("Clean ask. Now stay silent and let them answer.");
       setSuggestedResponses([]);
+      setDetectedQuestion(null);
       setSpeakerBalance(0.60);
     });
     at(28300, () => {
-      seg("Speaker 2", "Yeah — send it through.", "positive", "very_positive", "agreement", "verbal yes");
+      seg("Speaker 2", "Yeah, send it through.", "positive", "very_positive", "agreement", "verbal yes");
       setCurrentTone("positive");
       setSpeakerBalance(0.44); rampQ(93); rampE(94);
     });
     at(29600, () => {
-      setCurrentSuggestion("Sending now — I'll add a 14-day onboarding so your reps adopt fast.");
+      setCurrentSuggestion("Sending now. I'll add a 14-day onboarding so your reps adopt fast.");
       setLiveInsight("Verbal yes secured. Send the agreement while momentum is high.");
       setCoachingTip("Lock the next step before you hang up.");
     });

@@ -570,7 +570,10 @@
       ],
       "subtitle": "Transcription en direct, insights instantanés, suggestions de closing — au moment exact où ça compte. Pensé pour les closers, consultants, et tous ceux dont le revenu dépend du prochain appel.",
       "cta": "Commencer gratuitement",
-      "ctaSecondary": "Voir comment ça marche"
+      "ctaSecondary": "Voir comment ça marche",
+      "vslLabel": "Tonvo en 30 secondes",
+      "vslSound": "Regarder avec le son",
+      "vslMute": "Couper le son"
     },
     "desktopDownload": {
       "badge": "Maintenant en desktop",

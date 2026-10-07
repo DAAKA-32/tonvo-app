@@ -570,7 +570,10 @@
       ],
       "subtitle": "Live-Transkription, sofortige Insights und Closing-Vorschläge — genau im richtigen Moment. Gebaut für Closer, Berater und alle, deren Einkommen vom nächsten Call abhängt.",
       "cta": "Kostenlos starten",
-      "ctaSecondary": "So funktioniert's"
+      "ctaSecondary": "So funktioniert's",
+      "vslLabel": "Tonvo in 30 Sekunden",
+      "vslSound": "Mit Ton ansehen",
+      "vslMute": "Ton aus"
     },
     "desktopDownload": {
       "badge": "Jetzt als Desktop-App",

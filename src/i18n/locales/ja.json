@@ -570,7 +570,10 @@
       ],
       "subtitle": "ライブ文字起こし、即時のインサイト、クロージング提案 — 必要な瞬間に。クローザー、コンサルタント、次の通話で収入が決まるすべての人のために。",
       "cta": "無料で始める",
-      "ctaSecondary": "デモを見る"
+      "ctaSecondary": "デモを見る",
+      "vslLabel": "30秒でわかるTonvo",
+      "vslSound": "音声付きで見る",
+      "vslMute": "ミュート"
     },
     "desktopDownload": {
       "badge": "デスクトップ版登場",
