@@ -57,8 +57,8 @@
     "greetingMorning": "Bonjour",
     "greetingAfternoon": "Bon après-midi",
     "greetingEvening": "Bonsoir",
-    "subtitle": "Vos performances de closing, en un coup d'œil.",
-    "startSession": "Lancer un live — c'est l'heure de closer",
+    "subtitle": "Tous vos appels, de vente et du quotidien, en un coup d'œil.",
+    "startSession": "Lancer un live : démarrer un appel",
     "startSessionDesc": "Votre avantage en temps réel pendant l'appel",
     "analyzeText": "Débriefer un échange",
     "analyzeTextDesc": "Collez un transcript — on vous donne le prochain coup",
@@ -231,7 +231,7 @@
     "screenOnlyWarning": "Audio désactivé : pas de transcript, pas d'analyse de conversation. Seul le contenu visuel sera analysé.",
     "fullAnalysisInfo": "Mode complet : capture d'écran + transcription audio + signaux de closing en live.",
     "screenOnlyInfo": "Écran seul : analyse visuelle active. Pas d'audio, pas de transcript.",
-    "audioOnlyInfo": "Audio seul : capture micro + transcription + signaux de closing en live.",
+    "audioOnlyInfo": "Audio seul : capture micro + transcription + signaux en live.",
     "enableAtLeast": "Activez au moins l'écran ou l'audio pour démarrer une session."
   },
   "copilot": {
@@ -282,8 +282,8 @@
   "auth": {
     "welcomeBack": "Content de vous revoir",
     "createAccount": "Créez votre compte",
-    "signInSubtitle": "Reprenez vos closings là où vous les avez laissés",
-    "signUpSubtitle": "Créez votre compte et faites monter votre close rate",
+    "signInSubtitle": "Connectez-vous et reprenez là où vous vous étiez arrêté",
+    "signUpSubtitle": "Créez votre compte : un copilote en direct pour vos appels de vente et du quotidien",
     "emailLabel": "Adresse e-mail",
     "emailPlaceholder": "vous@exemple.com",
     "passwordLabel": "Mot de passe",
@@ -391,7 +391,7 @@
     "delaySilence": "Silence",
     "startRecording": "Lancer l'enregistrement",
     "stopSession": "Arrêter la session",
-    "audioOnlyInfo": "Audio seul : capture micro + transcription + signaux de closing en live.",
+    "audioOnlyInfo": "Audio seul : capture micro + transcription + signaux en live.",
     "tone": "TON",
     "idle": "INACTIF",
     "quality": "QUALITÉ",
@@ -427,7 +427,7 @@
     "sessionLimitReached": "Vous avez consommé toutes vos sessions gratuites du mois. Passez Pro pour des sessions illimitées.",
     "modeFullCapture": "Capture complète : partage d'écran + micro. Tonvo analyse écran et audio en temps réel.",
     "modeMobileAudio": "Mode audio : capture micro + transcription en temps réel. Mettez l'appel sur haut-parleur pour de meilleurs résultats.",
-    "modeFullAnalysis": "Mode complet : capture d'écran + transcription audio + signaux de closing en live.",
+    "modeFullAnalysis": "Mode complet : capture d'écran + transcription audio + signaux en live.",
     "modeScreenOnly": "Écran seul : analyse visuelle active. Pas d'audio, pas de transcript.",
     "modeAudioOnly": "Audio seul : capture micro + transcription + intelligence conversationnelle.",
     "modeNone": "Activez au moins l'écran ou l'audio pour démarrer une session.",
@@ -556,7 +556,7 @@
       "dashboard": "Tableau de bord"
     },
     "hero": {
-      "badge": "L'IA en temps réel pour vos conversations commerciales",
+      "badge": "L'IA en temps réel pour vos appels de vente et du quotidien",
       "headline1": "Le copilote IA pour",
       "headline2": "les conversations à enjeu.",
       "headline2b": "les conversations qui comptent.",
@@ -564,11 +564,12 @@
       "headline2Phrases": [
         "Les conversations qui closent",
         "Les appels à enjeu",
+        "Les appels du quotidien",
         "La persuasion en temps réel",
         "Les conversations internationales",
         "La performance commerciale"
       ],
-      "subtitle": "Transcription en direct, insights instantanés, suggestions de closing — au moment exact où ça compte. Pensé pour les closers, consultants, et tous ceux dont le revenu dépend du prochain appel.",
+      "subtitle": "Transcription en direct, analyses instantanées et la bonne réponse, au moment où ça compte. Pensé pour les appels de vente, et tout aussi utile pour vos appels du quotidien : entretiens, support, networking.",
       "cta": "Commencer gratuitement",
       "ctaSecondary": "Voir comment ça marche",
       "vslLabel": "Tonvo en 30 secondes",

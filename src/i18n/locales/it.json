@@ -57,8 +57,8 @@
     "greetingMorning": "Buongiorno",
     "greetingAfternoon": "Buon pomeriggio",
     "greetingEvening": "Buonasera",
-    "subtitle": "Le sue performance di chiusura, in un colpo d'occhio.",
-    "startSession": "Vai live — chiudi adesso",
+    "subtitle": "Tutte le sue chiamate, di vendita e di tutti i giorni, in un colpo d'occhio.",
+    "startSession": "Vai live: avvia una chiamata",
     "startSessionDesc": "Vantaggio in tempo reale durante la call",
     "analyzeText": "Rivedi una conversazione",
     "analyzeTextDesc": "Incolli un transcript — riceva la prossima mossa",
@@ -231,7 +231,7 @@
     "screenOnlyWarning": "Audio disattivato: nessuna trascrizione, nessuna analisi della conversazione. Verrà analizzato solo il contenuto dello schermo.",
     "fullAnalysisInfo": "Modalità completa: cattura schermo + trascrizione audio + signal di chiusura live.",
     "screenOnlyInfo": "Solo schermo: analisi visiva attiva. Nessuna cattura audio, nessuna trascrizione.",
-    "audioOnlyInfo": "Solo audio: cattura microfono + trascrizione + signal di chiusura live.",
+    "audioOnlyInfo": "Solo audio: cattura microfono + trascrizione + segnali live.",
     "enableAtLeast": "Attivi almeno schermo o audio per avviare una sessione."
   },
   "copilot": {
@@ -282,8 +282,8 @@
   "auth": {
     "welcomeBack": "Bentornato",
     "createAccount": "Crei il suo account",
-    "signInSubtitle": "Acceda e riprenda da dove ha lasciato il deal",
-    "signUpSubtitle": "Crei il suo account e alzi il suo close rate",
+    "signInSubtitle": "Acceda e riprenda da dove aveva lasciato",
+    "signUpSubtitle": "Crei il suo account: un copilota live per le sue chiamate di vendita e di tutti i giorni",
     "emailLabel": "Indirizzo email",
     "emailPlaceholder": "lei@esempio.com",
     "passwordLabel": "Password",
@@ -391,7 +391,7 @@
     "delaySilence": "Silenzio",
     "startRecording": "Avvia registrazione",
     "stopSession": "Ferma sessione",
-    "audioOnlyInfo": "Solo audio: cattura microfono + trascrizione + signal di chiusura live.",
+    "audioOnlyInfo": "Solo audio: cattura microfono + trascrizione + segnali live.",
     "tone": "TONO",
     "idle": "INATTIVO",
     "quality": "QUALITÀ",
@@ -427,7 +427,7 @@
     "sessionLimitReached": "Ha esaurito le sessioni free di questo mese. Passi a Pro per sessioni illimitate.",
     "modeFullCapture": "Cattura completa: condivisione schermo + microfono. Tonvo analizza schermo e audio in tempo reale.",
     "modeMobileAudio": "Modalità audio: cattura microfono + trascrizione in tempo reale. Metta la call in vivavoce per il miglior risultato.",
-    "modeFullAnalysis": "Modalità completa: cattura schermo + trascrizione audio + signal di chiusura live.",
+    "modeFullAnalysis": "Modalità completa: cattura schermo + trascrizione audio + segnali live.",
     "modeScreenOnly": "Solo schermo: analisi visiva attiva. Nessuna cattura audio, nessuna trascrizione.",
     "modeAudioOnly": "Solo audio: cattura microfono + trascrizione + conversation intelligence.",
     "modeNone": "Attivi almeno schermo o audio per avviare una sessione.",
@@ -556,7 +556,7 @@
       "dashboard": "Dashboard"
     },
     "hero": {
-      "badge": "IA in tempo reale per le tue conversazioni di vendita",
+      "badge": "IA in tempo reale per chiamate di vendita e di tutti i giorni",
       "headline1": "Il copilota IA per",
       "headline2": "le conversazioni decisive.",
       "headline2b": "le conversazioni che chiudono deal.",
@@ -564,11 +564,12 @@
       "headline2Phrases": [
         "Conversazioni di chiusura",
         "Chiamate decisive",
+        "Chiamate di tutti i giorni",
         "Persuasione in tempo reale",
         "Conversazioni internazionali",
         "Performance di vendita"
       ],
-      "subtitle": "Trascrizione live, insights istantanei e suggerimenti di chiusura — nel momento giusto. Pensato per closer, consulenti e chiunque viva della prossima chiamata.",
+      "subtitle": "Trascrizione in diretta, analisi immediate e la risposta giusta, proprio quando conta. Pensato per le chiamate di vendita, e altrettanto utile in quelle di tutti i giorni: colloqui, assistenza, networking.",
       "cta": "Inizia gratis",
       "ctaSecondary": "Vedi come funziona",
       "vslLabel": "Tonvo in 30 secondi",

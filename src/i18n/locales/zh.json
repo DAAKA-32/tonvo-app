@@ -57,8 +57,8 @@
     "greetingMorning": "早上好",
     "greetingAfternoon": "下午好",
     "greetingEvening": "晚上好",
-    "subtitle": "你的成单表现，一眼掌握。",
-    "startSession": "上线 — 开始拿单",
+    "subtitle": "销售通话与日常通话，一眼掌握。",
+    "startSession": "上线：开始通话",
     "startSessionDesc": "通话中的实时优势",
     "analyzeText": "复盘一段对话",
     "analyzeTextDesc": "粘贴对话稿 — 给你下一步动作",
@@ -231,7 +231,7 @@
     "screenOnlyWarning": "音频已关闭：不进行转录与对话分析，仅对屏幕画面做视觉分析。",
     "fullAnalysisInfo": "完整模式：屏幕捕获 + 音频转录 + 实时成单信号。",
     "screenOnlyInfo": "仅屏幕：仅启用视觉分析，不录音、不转录。",
-    "audioOnlyInfo": "仅音频：麦克风采集 + 转录 + 实时成单信号。",
+    "audioOnlyInfo": "仅音频：麦克风采集 + 转录 + 实时信号。",
     "enableAtLeast": "至少开启屏幕或音频，才能开始会话。"
   },
   "copilot": {
@@ -282,8 +282,8 @@
   "auth": {
     "welcomeBack": "欢迎回来",
     "createAccount": "创建你的账户",
-    "signInSubtitle": "登录，从你上次断掉的那单接着拿下",
-    "signUpSubtitle": "创建账户，立刻拉高你的成单率",
+    "signInSubtitle": "登录，从上次停下的地方继续",
+    "signUpSubtitle": "创建账户：销售通话和日常通话的实时副驾驶",
     "emailLabel": "邮箱",
     "emailPlaceholder": "you@example.com",
     "passwordLabel": "密码",
@@ -391,7 +391,7 @@
     "delaySilence": "沉默",
     "startRecording": "开始录制",
     "stopSession": "结束会话",
-    "audioOnlyInfo": "仅音频：麦克风采集 + 转录 + 实时成单信号。",
+    "audioOnlyInfo": "仅音频：麦克风采集 + 转录 + 实时信号。",
     "tone": "语气",
     "idle": "待机",
     "quality": "质量",
@@ -427,7 +427,7 @@
     "sessionLimitReached": "你已用完本月免费场次。升级 Pro，畅享不限场次。",
     "modeFullCapture": "全量捕获：屏幕共享 + 麦克风。Tonvo 实时分析画面与声音。",
     "modeMobileAudio": "音频模式：麦克风采集 + 实时转录。开扬声器接听效果最佳。",
-    "modeFullAnalysis": "完整模式：屏幕捕获 + 音频转录 + 实时成单信号。",
+    "modeFullAnalysis": "完整模式：屏幕捕获 + 音频转录 + 实时信号。",
     "modeScreenOnly": "仅屏幕：启用视觉分析，不录音、不转录。",
     "modeAudioOnly": "仅音频：麦克风采集 + 转录 + 对话智能分析。",
     "modeNone": "至少开启屏幕或音频，才能开始会话。",
@@ -556,7 +556,7 @@
       "dashboard": "工作台"
     },
     "hero": {
-      "badge": "面向销售对话的实时 AI",
+      "badge": "适用于销售通话和日常通话的实时 AI",
       "headline1": "为高风险对话而生的",
       "headline2": "AI 副驾驶。",
       "headline2b": "决定成交的关键时刻。",
@@ -564,11 +564,12 @@
       "headline2Phrases": [
         "成交对话",
         "高风险销售电话",
+        "日常通话",
         "实时说服",
         "国际化对话",
         "销售业绩"
       ],
-      "subtitle": "实时转录、即时洞察、成交建议 — 在你需要的那一刻。为成交者、咨询顾问、以及收入取决于下一通电话的所有人打造。",
+      "subtitle": "实时转录、即时洞察，在关键时刻给出恰当的回答。专为销售通话打造，在面试、客服、社交等日常通话中同样好用。",
       "cta": "免费开始",
       "ctaSecondary": "了解工作原理",
       "vslLabel": "30 秒了解 Tonvo",

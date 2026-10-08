@@ -57,8 +57,8 @@
     "greetingMorning": "Bom dia",
     "greetingAfternoon": "Boa tarde",
     "greetingEvening": "Boa noite",
-    "subtitle": "A sua performance de fecho, num só olhar.",
-    "startSession": "Entrar em chamada — Fechar",
+    "subtitle": "Todas as suas chamadas, de vendas e do dia a dia, num só olhar.",
+    "startSession": "Entrar em direto: iniciar uma chamada",
     "startSessionDesc": "Vantagem em tempo real durante a call",
     "analyzeText": "Rever uma conversa",
     "analyzeTextDesc": "Cole a transcrição — receba a próxima jogada",
@@ -231,7 +231,7 @@
     "screenOnlyWarning": "Áudio desativado: sem transcrição e sem análise de conversa. Apenas o conteúdo do ecrã será analisado visualmente.",
     "fullAnalysisInfo": "Modo completo: captura de ecrã + transcrição de áudio + sinais de fecho ao vivo.",
     "screenOnlyInfo": "Apenas ecrã: análise visual ativa. Sem captura de áudio nem transcrição.",
-    "audioOnlyInfo": "Apenas áudio: captura por microfone + transcrição + sinais de fecho ao vivo.",
+    "audioOnlyInfo": "Apenas áudio: captura por microfone + transcrição + sinais ao vivo.",
     "enableAtLeast": "Ative pelo menos o ecrã ou o áudio para iniciar uma sessão."
   },
   "copilot": {
@@ -282,8 +282,8 @@
   "auth": {
     "welcomeBack": "Bem-vindo de volta",
     "createAccount": "Crie a sua conta",
-    "signInSubtitle": "Entre e retome o fecho onde o deixou",
-    "signUpSubtitle": "Crie a sua conta e suba a sua taxa de fecho",
+    "signInSubtitle": "Entre e continue onde ficou",
+    "signUpSubtitle": "Crie a sua conta: um copiloto ao vivo para as suas chamadas de vendas e do dia a dia",
     "emailLabel": "Endereço de email",
     "emailPlaceholder": "voce@exemplo.com",
     "passwordLabel": "Palavra-passe",
@@ -391,7 +391,7 @@
     "delaySilence": "Silêncio",
     "startRecording": "Começar a gravar",
     "stopSession": "Terminar sessão",
-    "audioOnlyInfo": "Apenas áudio: captura por microfone + transcrição + sinais de fecho ao vivo.",
+    "audioOnlyInfo": "Apenas áudio: captura por microfone + transcrição + sinais ao vivo.",
     "tone": "TOM",
     "idle": "INATIVO",
     "quality": "QUALIDADE",
@@ -427,7 +427,7 @@
     "sessionLimitReached": "Já usou todas as sessões gratuitas deste mês. Faça upgrade para Pro e tenha sessões ilimitadas.",
     "modeFullCapture": "Captura total: partilha de ecrã + microfone. O Tonvo analisa ecrã e áudio em tempo real.",
     "modeMobileAudio": "Modo áudio: captura por microfone + transcrição em tempo real. Ponha a chamada em alta-voz para melhores resultados.",
-    "modeFullAnalysis": "Modo completo: captura de ecrã + transcrição de áudio + sinais de fecho ao vivo.",
+    "modeFullAnalysis": "Modo completo: captura de ecrã + transcrição de áudio + sinais ao vivo.",
     "modeScreenOnly": "Apenas ecrã: análise visual ativa. Sem captura de áudio nem transcrição.",
     "modeAudioOnly": "Apenas áudio: captura por microfone + transcrição + inteligência conversacional.",
     "modeNone": "Ative pelo menos o ecrã ou o áudio para iniciar uma sessão.",
@@ -556,7 +556,7 @@
       "dashboard": "Dashboard"
     },
     "hero": {
-      "badge": "IA em tempo real para suas conversas de vendas",
+      "badge": "IA em tempo real para chamadas de vendas e do dia a dia",
       "headline1": "O copiloto de IA para",
       "headline2": "as conversas decisivas.",
       "headline2b": "as conversas que fecham deals.",
@@ -564,11 +564,12 @@
       "headline2Phrases": [
         "Conversas de fechamento",
         "Chamadas decisivas",
+        "Chamadas do dia a dia",
         "Persuasão em tempo real",
         "Conversas internacionais",
         "Performance de vendas"
       ],
-      "subtitle": "Transcrição ao vivo, insights instantâneos e sugestões de fechamento — no momento certo. Feito para closers, consultores e todos que vivem da próxima ligação.",
+      "subtitle": "Transcrição ao vivo, insights instantâneos e a resposta certa, no momento em que importa. Feito para chamadas de vendas e igualmente útil nas do dia a dia: entrevistas, apoio ao cliente, networking.",
       "cta": "Começar grátis",
       "ctaSecondary": "Veja como funciona",
       "vslLabel": "Tonvo em 30 segundos",
