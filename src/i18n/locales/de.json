@@ -57,8 +57,8 @@
     "greetingMorning": "Guten Morgen",
     "greetingAfternoon": "Guten Tag",
     "greetingEvening": "Guten Abend",
-    "subtitle": "Ihre Closing-Performance auf einen Blick.",
-    "startSession": "Live gehen — jetzt closen",
+    "subtitle": "Alle Ihre Anrufe, Vertrieb und Alltag, auf einen Blick.",
+    "startSession": "Live gehen: Anruf starten",
     "startSessionDesc": "Echtzeit-Vorsprung im Gespräch",
     "analyzeText": "Gespräch auswerten",
     "analyzeTextDesc": "Transkript einfügen — nächsten Move erhalten",
@@ -231,7 +231,7 @@
     "screenOnlyWarning": "Audio deaktiviert: keine Transkription, keine Gesprächsanalyse. Nur Bildschirminhalte werden visuell ausgewertet.",
     "fullAnalysisInfo": "Voller Modus: Bildschirm + Audio-Transkription + Live-Closing-Signale.",
     "screenOnlyInfo": "Nur Bildschirm: visuelle Analyse aktiv. Kein Audio, keine Transkription.",
-    "audioOnlyInfo": "Nur Audio: Mikrofonaufnahme + Transkription + Live-Closing-Signale.",
+    "audioOnlyInfo": "Nur Audio: Mikrofonaufnahme + Transkription + Live-Signale.",
     "enableAtLeast": "Aktivieren Sie mindestens Bildschirm oder Audio, um zu starten."
   },
   "copilot": {
@@ -282,8 +282,8 @@
   "auth": {
     "welcomeBack": "Willkommen zurück",
     "createAccount": "Konto erstellen",
-    "signInSubtitle": "Anmelden und weiter closen, wo Sie aufgehört haben",
-    "signUpSubtitle": "Konto erstellen und Ihre Close-Rate steigern",
+    "signInSubtitle": "Anmelden und dort weitermachen, wo Sie aufgehört haben",
+    "signUpSubtitle": "Konto erstellen: ein Live-Copilot für Ihre Verkaufsgespräche und Alltagsanrufe",
     "emailLabel": "E-Mail-Adresse",
     "emailPlaceholder": "sie@beispiel.de",
     "passwordLabel": "Passwort",
@@ -391,7 +391,7 @@
     "delaySilence": "Stille",
     "startRecording": "Aufnahme starten",
     "stopSession": "Session stoppen",
-    "audioOnlyInfo": "Nur Audio: Mikrofonaufnahme + Transkription + Live-Closing-Signale.",
+    "audioOnlyInfo": "Nur Audio: Mikrofonaufnahme + Transkription + Live-Signale.",
     "tone": "TON",
     "idle": "INAKTIV",
     "quality": "QUALITÄT",
@@ -427,7 +427,7 @@
     "sessionLimitReached": "Sie haben Ihre kostenlosen Sessions diesen Monat aufgebraucht. Upgraden Sie auf Pro für unbegrenzte Sessions.",
     "modeFullCapture": "Vollerfassung: Bildschirmfreigabe + Mikrofon. Tonvo analysiert Bildschirm und Audio in Echtzeit.",
     "modeMobileAudio": "Audio-Modus: Mikrofonaufnahme + Echtzeit-Transkription. Für beste Ergebnisse das Gespräch über Lautsprecher führen.",
-    "modeFullAnalysis": "Voller Modus: Bildschirm + Audio-Transkription + Live-Closing-Signale.",
+    "modeFullAnalysis": "Voller Modus: Bildschirm + Audio-Transkription + Live-Signale.",
     "modeScreenOnly": "Nur Bildschirm: visuelle Analyse aktiv. Kein Audio, keine Transkription.",
     "modeAudioOnly": "Nur Audio: Mikrofonaufnahme + Transkription + Conversation Intelligence.",
     "modeNone": "Aktivieren Sie mindestens Bildschirm oder Audio, um eine Session zu starten.",
@@ -556,7 +556,7 @@
       "dashboard": "Dashboard"
     },
     "hero": {
-      "badge": "Echtzeit-KI für deine Vertriebsgespräche",
+      "badge": "Echtzeit-KI für Verkaufsgespräche und alltägliche Anrufe",
       "headline1": "Der KI-Copilot für",
       "headline2": "Gespräche, die zählen.",
       "headline2b": "Gespräche, die Deals entscheiden.",
@@ -564,11 +564,12 @@
       "headline2Phrases": [
         "Closing-Gespräche",
         "Wichtige Vertriebsgespräche",
+        "Alltägliche Anrufe",
         "Echtzeit-Überzeugungskraft",
         "Internationale Gespräche",
         "Vertriebsperformance"
       ],
-      "subtitle": "Live-Transkription, sofortige Insights und Closing-Vorschläge — genau im richtigen Moment. Gebaut für Closer, Berater und alle, deren Einkommen vom nächsten Call abhängt.",
+      "subtitle": "Live-Transkription, sofortige Einblicke und die passende Antwort, genau im richtigen Moment. Gemacht für Verkaufsgespräche und genauso nützlich bei alltäglichen Anrufen: Vorstellungsgespräche, Support, Networking.",
       "cta": "Kostenlos starten",
       "ctaSecondary": "So funktioniert's",
       "vslLabel": "Tonvo in 30 Sekunden",

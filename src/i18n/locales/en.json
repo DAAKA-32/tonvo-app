@@ -57,8 +57,8 @@
     "greetingMorning": "Good morning",
     "greetingAfternoon": "Good afternoon",
     "greetingEvening": "Good evening",
-    "subtitle": "Your closing performance, at a glance.",
-    "startSession": "Go Live — Start Closing",
+    "subtitle": "All your calls, sales and everyday, at a glance.",
+    "startSession": "Go Live: Start a Call",
     "startSessionDesc": "Real-time edge during the call",
     "analyzeText": "Review a Conversation",
     "analyzeTextDesc": "Drop a transcript — get your next move",
@@ -231,7 +231,7 @@
     "screenOnlyWarning": "Audio disabled: no transcription, no conversation analysis. Only screen content will be analyzed visually.",
     "fullAnalysisInfo": "Full mode: screen capture + audio transcription + live closing signals.",
     "screenOnlyInfo": "Screen only: visual analysis active. No audio capture, no transcription.",
-    "audioOnlyInfo": "Audio only: microphone capture + transcription + live closing signals.",
+    "audioOnlyInfo": "Audio only: microphone capture + transcription + live signals.",
     "enableAtLeast": "Enable at least Screen or Audio to start a session."
   },
   "copilot": {
@@ -282,8 +282,8 @@
   "auth": {
     "welcomeBack": "Welcome back",
     "createAccount": "Create your account",
-    "signInSubtitle": "Sign in and pick up where you were closing",
-    "signUpSubtitle": "Create your account and raise your close rate",
+    "signInSubtitle": "Sign in and pick up where you left off",
+    "signUpSubtitle": "Create your account. A live copilot for your sales calls and everyday ones",
     "emailLabel": "Email address",
     "emailPlaceholder": "you@example.com",
     "passwordLabel": "Password",
@@ -391,7 +391,7 @@
     "delaySilence": "Silence",
     "startRecording": "Start Recording",
     "stopSession": "Stop Session",
-    "audioOnlyInfo": "Audio only: microphone capture + transcription + live closing signals.",
+    "audioOnlyInfo": "Audio only: microphone capture + transcription + live signals.",
     "tone": "TONE",
     "idle": "IDLE",
     "quality": "QUALITY",
@@ -427,7 +427,7 @@
     "sessionLimitReached": "You've used all your free sessions this month. Upgrade to Pro for unlimited sessions.",
     "modeFullCapture": "Full capture: screen sharing + microphone. Tonvo will analyze both the screen and audio in real time.",
     "modeMobileAudio": "Audio mode: microphone capture + real-time transcription. Put your call on speaker for best results.",
-    "modeFullAnalysis": "Full mode: screen capture + audio transcription + live closing signals.",
+    "modeFullAnalysis": "Full mode: screen capture + audio transcription + live signals.",
     "modeScreenOnly": "Screen only: visual analysis active. No audio capture, no transcription.",
     "modeAudioOnly": "Audio only: microphone capture + transcription + conversation intelligence.",
     "modeNone": "Enable at least Screen or Audio to start a session.",
@@ -556,7 +556,7 @@
       "dashboard": "Dashboard"
     },
     "hero": {
-      "badge": "Real-time AI for sales conversations",
+      "badge": "Real-time AI for sales and everyday calls",
       "headline1": "The AI copilot for",
       "headline2": "conversations that matter.",
       "headline2b": "conversations that close deals.",
@@ -564,11 +564,12 @@
       "headline2Phrases": [
         "Closing Conversations",
         "High-Stakes Sales Calls",
+        "Everyday Calls",
         "Real-Time Persuasion",
         "International Conversations",
         "Sales Performance"
       ],
-      "subtitle": "Live transcription, instant insights, and closing suggestions — the moment they matter. Built for closers, consultants, and anyone whose income depends on the next call.",
+      "subtitle": "Live transcription, instant insights and the right reply, the moment it matters. Built for sales calls, and just as useful on everyday ones: interviews, support, networking.",
       "cta": "Start free",
       "ctaSecondary": "See how it works",
       "vslLabel": "Tonvo in 30 seconds",

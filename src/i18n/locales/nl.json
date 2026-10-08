@@ -57,8 +57,8 @@
     "greetingMorning": "Goedemorgen",
     "greetingAfternoon": "Goedemiddag",
     "greetingEvening": "Goedenavond",
-    "subtitle": "Je closing-prestaties, in één oogopslag.",
-    "startSession": "Ga live — start met closen",
+    "subtitle": "Al je gesprekken, sales en alledaags, in één oogopslag.",
+    "startSession": "Ga live: start een gesprek",
     "startSessionDesc": "Realtime voorsprong tijdens je call",
     "analyzeText": "Bespreek een gesprek na",
     "analyzeTextDesc": "Plak je transcript — krijg je volgende zet",
@@ -231,7 +231,7 @@
     "screenOnlyWarning": "Audio uit: geen transcriptie, geen gespreksanalyse. Alleen de scherminhoud wordt visueel geanalyseerd.",
     "fullAnalysisInfo": "Full mode: schermopname + audiotranscriptie + live closing-signalen.",
     "screenOnlyInfo": "Alleen scherm: visuele analyse actief. Geen audio, geen transcriptie.",
-    "audioOnlyInfo": "Alleen audio: microfoon + transcriptie + live closing-signalen.",
+    "audioOnlyInfo": "Alleen audio: microfoon + transcriptie + live signalen.",
     "enableAtLeast": "Activeer minimaal Scherm of Audio om een sessie te starten."
   },
   "copilot": {
@@ -282,8 +282,8 @@
   "auth": {
     "welcomeBack": "Welkom terug",
     "createAccount": "Maak je account aan",
-    "signInSubtitle": "Log in en pak je deals weer op",
-    "signUpSubtitle": "Maak je account en til je close rate omhoog",
+    "signInSubtitle": "Log in en ga verder waar je gebleven was",
+    "signUpSubtitle": "Maak je account: een live copiloot voor je salesgesprekken en alledaagse gesprekken",
     "emailLabel": "E-mailadres",
     "emailPlaceholder": "jij@voorbeeld.nl",
     "passwordLabel": "Wachtwoord",
@@ -391,7 +391,7 @@
     "delaySilence": "Stilte",
     "startRecording": "Opname starten",
     "stopSession": "Sessie stoppen",
-    "audioOnlyInfo": "Alleen audio: microfoon + transcriptie + live closing-signalen.",
+    "audioOnlyInfo": "Alleen audio: microfoon + transcriptie + live signalen.",
     "tone": "TOON",
     "idle": "IDLE",
     "quality": "KWALITEIT",
@@ -427,7 +427,7 @@
     "sessionLimitReached": "Je hebt al je gratis sessies van deze maand gebruikt. Upgrade naar Pro voor onbeperkte sessies.",
     "modeFullCapture": "Full capture: scherm delen + microfoon. Tonvo analyseert scherm en audio realtime.",
     "modeMobileAudio": "Audiomodus: microfoon + realtime transcriptie. Zet je call op speaker voor het beste resultaat.",
-    "modeFullAnalysis": "Full mode: schermopname + audiotranscriptie + live closing-signalen.",
+    "modeFullAnalysis": "Full mode: schermopname + audiotranscriptie + live signalen.",
     "modeScreenOnly": "Alleen scherm: visuele analyse actief. Geen audio, geen transcriptie.",
     "modeAudioOnly": "Alleen audio: microfoon + transcriptie + gespreksintelligentie.",
     "modeNone": "Activeer minimaal Scherm of Audio om een sessie te starten.",
@@ -556,7 +556,7 @@
       "dashboard": "Dashboard"
     },
     "hero": {
-      "badge": "Realtime AI voor je salesgesprekken",
+      "badge": "Realtime AI voor salesgesprekken en alledaagse gesprekken",
       "headline1": "De AI-copilot voor",
       "headline2": "gesprekken die ertoe doen.",
       "headline2b": "gesprekken die deals beslissen.",
@@ -564,11 +564,12 @@
       "headline2Phrases": [
         "Closing-gesprekken",
         "Cruciale salesgesprekken",
+        "Alledaagse gesprekken",
         "Realtime overtuiging",
         "Internationale gesprekken",
         "Salesperformance"
       ],
-      "subtitle": "Live transcriptie, directe inzichten en closing-suggesties — precies wanneer het telt. Gebouwd voor closers, consultants en iedereen wiens inkomen afhangt van het volgende gesprek.",
+      "subtitle": "Live transcriptie, directe inzichten en het juiste antwoord, precies wanneer het telt. Gemaakt voor salesgesprekken en net zo handig bij alledaagse gesprekken: sollicitaties, support, netwerken.",
       "cta": "Gratis beginnen",
       "ctaSecondary": "Bekijk hoe het werkt",
       "vslLabel": "Tonvo in 30 seconden",
