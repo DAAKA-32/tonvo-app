@@ -576,7 +576,9 @@
       "vslSound": "音声付きで見る",
       "vslMute": "ミュート",
       "vslFullscreen": "全画面表示",
-      "vslExitFullscreen": "全画面表示を終了"
+      "vslExitFullscreen": "全画面表示を終了",
+      "vslPause": "一時停止",
+      "vslPlay": "再生"
     },
     "desktopDownload": {
       "badge": "デスクトップ版登場",

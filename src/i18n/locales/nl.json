@@ -576,7 +576,9 @@
       "vslSound": "Bekijk met geluid",
       "vslMute": "Geluid uit",
       "vslFullscreen": "Volledig scherm",
-      "vslExitFullscreen": "Volledig scherm sluiten"
+      "vslExitFullscreen": "Volledig scherm sluiten",
+      "vslPause": "Pauzeren",
+      "vslPlay": "Afspelen"
     },
     "desktopDownload": {
       "badge": "Nu als desktop-app",

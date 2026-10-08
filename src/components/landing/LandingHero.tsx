@@ -50,6 +50,8 @@ function HeroDemoStage() {
   const [playing, setPlaying] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const heardFromStart = useRef(false);
+  const userPausedRef = useRef(false);
+  const [userPaused, setUserPaused] = useState(false);
 
   // Scroll-driven yaw + roll: starts tilted right and straightens as the page scrolls. Once the frame is flat it
   // stays flat for good (scrolling back up does not tilt it again), and so does turning the sound on.
@@ -83,8 +85,10 @@ function HeroDemoStage() {
     const v = videoRef.current;
     if (!v || reduce) return;
     const io = new IntersectionObserver(([entry]) => {
-      if (entry.isIntersecting) void v.play().catch(() => {});
-      else v.pause();
+      // a pause the viewer chose sticks: scrolling back to the film does not restart it
+      if (entry.isIntersecting) {
+        if (!userPausedRef.current) void v.play().catch(() => {});
+      } else v.pause();
     }, { threshold: 0.25 });
     io.observe(v);
     return () => io.disconnect();
@@ -105,7 +109,22 @@ function HeroDemoStage() {
     v.muted = false;
     setSoundOn(true);
     settleFlat();
+    userPausedRef.current = false;
+    setUserPaused(false);
     void v.play().catch(() => {});
+  };
+  const togglePlay = () => {
+    const v = videoRef.current;
+    if (!v) return;
+    if (v.paused) {
+      userPausedRef.current = false;
+      setUserPaused(false);
+      void v.play().catch(() => {});
+    } else {
+      userPausedRef.current = true;
+      setUserPaused(true);
+      v.pause();
+    }
   };
   const toggleSound = () => {
     const v = videoRef.current;
@@ -182,14 +201,36 @@ function HeroDemoStage() {
                 onPlay={() => setPlaying(true)}
                 onPause={() => setPlaying(false)}
                 onError={() => setVideoFailed(true)}
+                onClick={togglePlay}
               />
               {!videoReady && !reduce && (
                 <div className="hero-stage-fallback hero-stage-fallback--over">
                   <HeroAppPreview />
                 </div>
               )}
-              {/* Controls show on hover (always on touch screens, and centred while the film is paused) */}
-              <div className={`hero-vsl-controls${!playing && !soundOn ? " is-idle" : ""}`}>
+              {/* Controls show on hover (always on touch screens and while paused by the viewer; centred on the
+                  poster before the film has started) */}
+              <div className={`hero-vsl-controls${!playing && !soundOn && !userPaused ? " is-idle" : ""}${userPaused ? " is-paused" : ""}`}>
+              {!(!playing && !soundOn && !userPaused) && (
+                <button
+                  type="button"
+                  className="hero-vsl-sound hero-vsl-icon"
+                  onClick={togglePlay}
+                  aria-label={playing ? t("landing.hero.vslPause", "Pause") : t("landing.hero.vslPlay", "Play")}
+                  title={playing ? t("landing.hero.vslPause", "Pause") : t("landing.hero.vslPlay", "Play")}
+                >
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+                    {playing ? (
+                      <>
+                        <rect x="6" y="5" width="4" height="14" rx="1" />
+                        <rect x="14" y="5" width="4" height="14" rx="1" />
+                      </>
+                    ) : (
+                      <path d="M8 5.14v13.72a1 1 0 0 0 1.52.85l10.6-6.86a1 1 0 0 0 0-1.7L9.52 4.29A1 1 0 0 0 8 5.14z" />
+                    )}
+                  </svg>
+                </button>
+              )}
               <button
                 type="button"
                 className={`hero-vsl-sound${soundOn ? " is-on" : ""}`}
@@ -214,7 +255,7 @@ function HeroDemoStage() {
               </button>
               <button
                 type="button"
-                className="hero-vsl-sound hero-vsl-full"
+                className="hero-vsl-sound hero-vsl-icon hero-vsl-full"
                 onClick={toggleFullscreen}
                 aria-label={isFullscreen ? t("landing.hero.vslExitFullscreen", "Exit full screen") : t("landing.hero.vslFullscreen", "Full screen")}
                 title={isFullscreen ? t("landing.hero.vslExitFullscreen", "Exit full screen") : t("landing.hero.vslFullscreen", "Full screen")}
@@ -1260,7 +1301,7 @@ export default function LandingHero() {
           z-index: 4;
           display: flex;
           align-items: center;
-          justify-content: space-between;
+          justify-content: flex-start;
           gap: 10px;
           pointer-events: none;
           opacity: 0;
@@ -1272,7 +1313,8 @@ export default function LandingHero() {
         }
         :global(.hero-stage-screen--video:hover .hero-vsl-controls),
         :global(.hero-vsl-controls:focus-within),
-        :global(.hero-vsl-controls.is-idle) {
+        :global(.hero-vsl-controls.is-idle),
+        :global(.hero-vsl-controls.is-paused) {
           opacity: 1;
           transform: none;
         }
@@ -1281,6 +1323,12 @@ export default function LandingHero() {
             opacity: 1;
             transform: none;
           }
+        }
+        :global(.hero-vsl-full) {
+          margin-left: auto;
+        }
+        :global(.hero-vsl-controls.is-idle .hero-vsl-full) {
+          margin-left: 0;
         }
         :global(.hero-vsl-controls.is-idle) {
           /* poster only (reduced motion / paused): the controls become the obvious play control, centred */
@@ -1312,7 +1360,7 @@ export default function LandingHero() {
           outline: 2px solid #c8c8d8;
           outline-offset: 3px;
         }
-        :global(.hero-vsl-sound.hero-vsl-full) {
+        :global(.hero-vsl-sound.hero-vsl-icon) {
           justify-content: center;
           width: 40px;
           padding: 0;
@@ -1322,7 +1370,7 @@ export default function LandingHero() {
           padding: 12px 20px 12px 16px;
           font-size: 15px;
         }
-        :global(.hero-vsl-controls.is-idle .hero-vsl-full) {
+        :global(.hero-vsl-controls.is-idle .hero-vsl-icon) {
           width: 48px;
           padding: 0;
         }
@@ -1332,7 +1380,7 @@ export default function LandingHero() {
             right: 10px;
             bottom: 10px;
           }
-          :global(.hero-vsl-sound.hero-vsl-full) {
+          :global(.hero-vsl-sound.hero-vsl-icon) {
             width: 36px;
           }
           :global(.hero-vsl-sound) {

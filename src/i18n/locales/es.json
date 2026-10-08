@@ -576,7 +576,9 @@
       "vslSound": "Ver con sonido",
       "vslMute": "Silenciar",
       "vslFullscreen": "Pantalla completa",
-      "vslExitFullscreen": "Salir de pantalla completa"
+      "vslExitFullscreen": "Salir de pantalla completa",
+      "vslPause": "Pausa",
+      "vslPlay": "Reproducir"
     },
     "desktopDownload": {
       "badge": "Ahora en desktop",
