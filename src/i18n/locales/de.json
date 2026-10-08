@@ -576,7 +576,9 @@
       "vslSound": "Mit Ton ansehen",
       "vslMute": "Ton aus",
       "vslFullscreen": "Vollbild",
-      "vslExitFullscreen": "Vollbild beenden"
+      "vslExitFullscreen": "Vollbild beenden",
+      "vslPause": "Pause",
+      "vslPlay": "Abspielen"
     },
     "desktopDownload": {
       "badge": "Jetzt als Desktop-App",

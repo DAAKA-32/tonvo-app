@@ -576,7 +576,9 @@
       "vslSound": "开启声音观看",
       "vslMute": "静音",
       "vslFullscreen": "全屏",
-      "vslExitFullscreen": "退出全屏"
+      "vslExitFullscreen": "退出全屏",
+      "vslPause": "暂停",
+      "vslPlay": "播放"
     },
     "desktopDownload": {
       "badge": "桌面版上线",

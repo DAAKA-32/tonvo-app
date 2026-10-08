@@ -576,7 +576,9 @@
       "vslSound": "Ver com som",
       "vslMute": "Silenciar",
       "vslFullscreen": "Tela cheia",
-      "vslExitFullscreen": "Sair da tela cheia"
+      "vslExitFullscreen": "Sair da tela cheia",
+      "vslPause": "Pausa",
+      "vslPlay": "Reproduzir"
     },
     "desktopDownload": {
       "badge": "Agora no desktop",

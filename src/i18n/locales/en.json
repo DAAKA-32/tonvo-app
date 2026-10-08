@@ -576,7 +576,9 @@
       "vslSound": "Watch with sound",
       "vslMute": "Mute",
       "vslFullscreen": "Full screen",
-      "vslExitFullscreen": "Exit full screen"
+      "vslExitFullscreen": "Exit full screen",
+      "vslPause": "Pause",
+      "vslPlay": "Play"
     },
     "desktopDownload": {
       "badge": "Now in desktop",

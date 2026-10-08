@@ -576,7 +576,9 @@
       "vslSound": "Regarder avec le son",
       "vslMute": "Couper le son",
       "vslFullscreen": "Plein écran",
-      "vslExitFullscreen": "Quitter le plein écran"
+      "vslExitFullscreen": "Quitter le plein écran",
+      "vslPause": "Pause",
+      "vslPlay": "Lecture"
     },
     "desktopDownload": {
       "badge": "Maintenant en desktop",

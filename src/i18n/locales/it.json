@@ -576,7 +576,9 @@
       "vslSound": "Guarda con l'audio",
       "vslMute": "Disattiva audio",
       "vslFullscreen": "Schermo intero",
-      "vslExitFullscreen": "Esci da schermo intero"
+      "vslExitFullscreen": "Esci da schermo intero",
+      "vslPause": "Pausa",
+      "vslPlay": "Riproduci"
     },
     "desktopDownload": {
       "badge": "Ora come app desktop",
