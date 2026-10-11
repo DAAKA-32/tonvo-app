@@ -16,6 +16,7 @@ import {
 import { useTranslation } from "react-i18next";
 import { useAuth } from "@/lib/auth-context";
 import TonvoLogo from "@/components/Logo";
+import { track } from "@/lib/analytics/client";
 
 function IconArrowRight({ className }: { className?: string }) {
   return (
@@ -105,6 +106,7 @@ function HeroDemoStage() {
     if (!heardFromStart.current) {
       heardFromStart.current = true;
       v.currentTime = 0;
+      track("vsl_sound");
     }
     v.muted = false;
     setSoundOn(true);
@@ -148,6 +150,7 @@ function HeroDemoStage() {
       return;
     }
     if (!soundOn) enableSound(v);
+    track("vsl_fullscreen");
     if (typeof el.requestFullscreen === "function") {
       void el.requestFullscreen().catch(() => {});
     } else {
@@ -872,7 +875,7 @@ export default function LandingHero() {
   const percentMatch = headline1.match(/^(.*?)(\d+%)(.*)$/);
 
   return (
-    <section className="hero-section relative z-10 px-4 sm:px-6 pt-32 sm:pt-36 pb-0">
+    <section className="hero-section relative z-10 px-4 sm:px-6 pt-32 sm:pt-36 pb-0" data-cta-section="hero">
       {/* ── HEADLINE BLOCK ── */}
       <div className="relative z-10 max-w-5xl mx-auto text-center">
         {/* Headline */}

@@ -881,6 +881,12 @@
     "s13Intro": "Voor vragen over deze Voorwaarden:"
   },
   "privacyPage": {
+    "analyticsTitle": "Bezoekersmeting",
+    "analyticsText": "We meten het gebruik van tonvo.co met een eigen tool, zonder derde partijen: paginaweergaven, klikken op aanmeldknoppen, aanmeldingen, eerste live sessie en betalingen. In je browser wordt maximaal 13 maanden een willekeurige bezoekers-ID bewaard, plus de pagina, hoe je bij ons kwam (bijvoorbeeld via een campagnelink), je land en je type apparaat. Geen IP-adres, geen e-mail, geen trackers van derden. De gegevens staan in onze eigen database (Supabase, zie sectie 6) en worden na 25 maanden verwijderd. We respecteren Global Privacy Control en Do Not Track, en je kunt de meting hier altijd uitzetten.",
+    "analyticsStatusOn": "Bezoekersmeting staat aan in deze browser.",
+    "analyticsStatusOff": "Bezoekersmeting staat uit in deze browser.",
+    "analyticsOptOut": "Meting uitzetten",
+    "analyticsOptIn": "Meting weer aanzetten",
     "breadcrumb": "Privacybeleid",
     "title": "Privacybeleid",
     "lastUpdated": "Laatst bijgewerkt: 17 maart 2026",
@@ -1065,5 +1071,29 @@
     "joinedAnonymous": "Iemand koos voor <plan>{{plan}}</plan>",
     "demo": "Demo",
     "dismiss": "Meldingen verbergen"
+  },
+  "adminAnalytics": {
+    "title": "Funnelanalyse",
+    "subtitle": "Eigen meting van de route van bezoek tot betaling. Elke browser telt als één bezoeker.",
+    "days": "{{n}} dagen",
+    "funnel": "Funnel",
+    "visitors": "Bezoekers",
+    "clicks": "Klikken op ‘Start free’",
+    "signups": "Aanmeldingen",
+    "activated": "Eerste live sessie",
+    "checkoutStarted": "Betaling geopend",
+    "paid": "Betaald",
+    "stepRate": "{{rate}} van de vorige stap",
+    "bySource": "Per bron",
+    "source": "Bron",
+    "topPages": "Meest bekeken pagina's",
+    "vsl": "Hero-video",
+    "vslSound": "Met geluid afgespeeld",
+    "vslFullscreen": "Op volledig scherm geopend",
+    "empty": "Nog geen gegevens voor deze periode. De cijfers verschijnen zodra mensen tonvo.co bezoeken.",
+    "forbidden": "Deze pagina is alleen voor het Tonvo-team.",
+    "error": "De cijfers konden niet worden geladen. Probeer het zo opnieuw.",
+    "loading": "Laden…",
+    "note": "Aanmeldingen, activaties en betalingen worden toegeschreven aan de bron van het bezoek dat tot de aanmelding leidde. Accounts van vóór de meting staan onder ‘before tracking’."
   }
 }

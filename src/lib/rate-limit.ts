@@ -219,6 +219,8 @@ export const RATE_LIMITS = {
   screenSummary: { maxRequests: 5, windowMs: 60_000 } as RateLimitConfig,
   /** Analytics: 10 per minute */
   analytics: { maxRequests: 10, windowMs: 60_000 } as RateLimitConfig,
+  /** First-party funnel events from the browser (/api/track): 60 per minute per IP */
+  track: { maxRequests: 60, windowMs: 60_000 } as RateLimitConfig,
   /** Session / history reads and writes (conversations, segments, consent): 60 per minute */
   data: { maxRequests: 60, windowMs: 60_000 } as RateLimitConfig,
 };

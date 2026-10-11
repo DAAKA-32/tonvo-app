@@ -25,3 +25,9 @@ scripts/prospector/data/prospects.json
 
 # Firebase Admin service account (secret)
 firebase-admin.json
+
+# Outreach data: OAuth tokens and prospects personal data, never commit
+scripts/cold-email/data/
+scripts/prospector/data/
+suppression.csv
+supabase/.temp/

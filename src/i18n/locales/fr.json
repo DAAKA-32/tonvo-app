@@ -881,6 +881,12 @@
     "s13Intro": "Pour toute question relative aux présentes Conditions :"
   },
   "privacyPage": {
+    "analyticsTitle": "Mesure d'audience",
+    "analyticsText": "Nous mesurons l'utilisation de tonvo.co avec notre propre outil, sans service tiers : pages vues, clics sur les boutons d'inscription, inscriptions, première session live et paiements. Il enregistre dans votre navigateur un identifiant aléatoire pendant 13 mois au maximum, ainsi que la page, la façon dont vous êtes arrivé (par exemple un lien de campagne), votre pays et votre type d'appareil. Aucune adresse IP, aucun email, aucun traceur tiers. Les données sont conservées dans notre propre base de données (Supabase, voir section 6) et supprimées après 25 mois. Nous respectons Global Privacy Control et Do Not Track, et vous pouvez désactiver cette mesure ci-dessous à tout moment.",
+    "analyticsStatusOn": "La mesure d'audience est active sur ce navigateur.",
+    "analyticsStatusOff": "La mesure d'audience est désactivée sur ce navigateur.",
+    "analyticsOptOut": "Désactiver la mesure",
+    "analyticsOptIn": "Réactiver la mesure",
     "breadcrumb": "Politique de confidentialité",
     "title": "Politique de Confidentialité",
     "lastUpdated": "Dernière mise à jour : 17 mars 2026",
@@ -1065,5 +1071,29 @@
     "joinedAnonymous": "Quelqu'un a rejoint <plan>{{plan}}</plan>",
     "demo": "Démo",
     "dismiss": "Masquer les notifications"
+  },
+  "adminAnalytics": {
+    "title": "Analyse du parcours",
+    "subtitle": "Mesure interne du parcours, de la visite au paiement. Chaque navigateur compte pour un visiteur.",
+    "days": "{{n}} jours",
+    "funnel": "Parcours",
+    "visitors": "Visiteurs",
+    "clicks": "Clics « Start free »",
+    "signups": "Inscriptions",
+    "activated": "Première session live",
+    "checkoutStarted": "Paiement ouvert",
+    "paid": "Payé",
+    "stepRate": "{{rate}} de l'étape précédente",
+    "bySource": "Par source",
+    "source": "Source",
+    "topPages": "Pages les plus vues",
+    "vsl": "Vidéo du hero",
+    "vslSound": "Lue avec le son",
+    "vslFullscreen": "Ouverte en plein écran",
+    "empty": "Pas encore de données sur cette période. Les chiffres apparaissent dès les premières visites sur tonvo.co.",
+    "forbidden": "Cette page est réservée à l'équipe Tonvo.",
+    "error": "Impossible de charger les chiffres. Réessayez dans un instant.",
+    "loading": "Chargement…",
+    "note": "Les inscriptions, activations et paiements sont attribués à la source de la visite qui a mené à l'inscription. Les comptes créés avant la mise en place apparaissent sous « before tracking »."
   }
 }

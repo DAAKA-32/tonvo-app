@@ -56,6 +56,7 @@ export default function PricingSection() {
 
   return (
     <section
+      data-cta-section="pricing"
       id="pricing"
       className="relative px-4 sm:px-6 py-16 sm:py-24 md:py-32 overflow-hidden"
       style={{ backgroundColor: "var(--color-surface)" }}

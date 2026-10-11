@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getStripe } from "@/lib/stripe";
 import { supabaseAdmin } from "@/lib/supabase-admin";
+import { recordServerEvent } from "@/lib/analytics/server";
 import type Stripe from "stripe";
 
 // Reject events whose Stripe timestamp is older than this. Stripe retries
@@ -86,6 +87,7 @@ export async function POST(req: NextRequest) {
               sessions_used: 0,
               sessions_reset: new Date().toISOString(),
             }, { onConflict: "user_id" });
+          await recordServerEvent("checkout_completed", userId, { plan: planId });
         }
         break;
       }

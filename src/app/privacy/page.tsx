@@ -1,8 +1,36 @@
 "use client";
 
 import Link from "next/link";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { isOptedOut, setOptOut } from "@/lib/analytics/client";
 import { TonvoLogoMark } from "@/components/Logo";
+
+/** Per-browser switch for the first-party audience measurement (lib/analytics/client). */
+function AnalyticsOptOut() {
+  const { t } = useTranslation();
+  const [off, setOff] = useState<boolean | null>(null);
+  useEffect(() => setOff(isOptedOut()), []);
+  if (off === null) return null;
+  return (
+    <div className="mt-4 flex flex-wrap items-center gap-3">
+      <span className="text-sm" role="status">
+        {off ? t("privacyPage.analyticsStatusOff") : t("privacyPage.analyticsStatusOn")}
+      </span>
+      <button
+        type="button"
+        onClick={() => {
+          setOptOut(!off);
+          setOff(!off);
+        }}
+        className="text-sm font-medium px-3 py-1.5 rounded-lg focus-visible:outline focus-visible:outline-2"
+        style={{ border: "1px solid var(--color-border)", color: "var(--color-text)" }}
+      >
+        {off ? t("privacyPage.analyticsOptIn") : t("privacyPage.analyticsOptOut")}
+      </button>
+    </div>
+  );
+}
 
 export default function PrivacyPage() {
   const { t } = useTranslation();
@@ -127,6 +155,13 @@ export default function PrivacyPage() {
                 </tbody>
               </table>
             </div>
+          </section>
+
+          {/* Audience measurement (first-party analytics) */}
+          <section id="analytics">
+            <h2 className="text-lg font-semibold mb-3" style={{ color: "var(--color-text)" }}>{t("privacyPage.analyticsTitle")}</h2>
+            <p className="text-sm leading-relaxed m-0">{t("privacyPage.analyticsText")}</p>
+            <AnalyticsOptOut />
           </section>
 
           {/* 6 */}

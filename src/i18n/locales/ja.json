@@ -881,6 +881,12 @@
     "s13Intro": "本規約に関するお問い合わせは、以下までご連絡ください："
   },
   "privacyPage": {
+    "analyticsTitle": "アクセス解析",
+    "analyticsText": "tonvo.co の利用状況を、外部サービスを使わない自社ツールで計測しています。対象はページの表示、登録ボタンのクリック、登録、初回ライブセッション、支払いです。ブラウザにはランダムな訪問者IDを最長13か月保存し、あわせてページ、流入経路（キャンペーンリンクなど）、国、端末の種類を記録します。IPアドレス、メールアドレス、第三者のトラッカーは使用しません。データは自社データベース（Supabase、第6項参照）に保存され、25か月後に削除されます。Global Privacy Control と Do Not Track を尊重しており、下のボタンからいつでも計測をオフにできます。",
+    "analyticsStatusOn": "このブラウザではアクセス解析が有効です。",
+    "analyticsStatusOff": "このブラウザではアクセス解析が無効です。",
+    "analyticsOptOut": "計測をオフにする",
+    "analyticsOptIn": "計測をオンに戻す",
     "breadcrumb": "プライバシーポリシー",
     "title": "プライバシーポリシー",
     "lastUpdated": "最終更新日：2026年3月17日",
@@ -1065,5 +1071,29 @@
     "joinedAnonymous": "どなたかが<plan>{{plan}}</plan>に登録しました",
     "demo": "デモ",
     "dismiss": "通知を非表示"
+  },
+  "adminAnalytics": {
+    "title": "ファネル分析",
+    "subtitle": "訪問から支払いまでの流れを自社で計測します。ブラウザごとに1人の訪問者として数えます。",
+    "days": "{{n}}日間",
+    "funnel": "ファネル",
+    "visitors": "訪問者",
+    "clicks": "「Start free」のクリック",
+    "signups": "登録",
+    "activated": "初回ライブセッション",
+    "checkoutStarted": "決済開始",
+    "paid": "支払い完了",
+    "stepRate": "前のステップの{{rate}}",
+    "bySource": "流入元別",
+    "source": "流入元",
+    "topPages": "よく見られたページ",
+    "vsl": "ヒーロー動画",
+    "vslSound": "音声付きで再生",
+    "vslFullscreen": "全画面で表示",
+    "empty": "この期間のデータはまだありません。tonvo.co への訪問があると数値が表示されます。",
+    "forbidden": "このページは Tonvo チーム専用です。",
+    "error": "数値を読み込めませんでした。しばらくしてから再度お試しください。",
+    "loading": "読み込み中…",
+    "note": "登録・初回セッション・支払いは、登録につながった訪問の流入元に紐づけています。計測開始前に作成されたアカウントは「before tracking」に表示されます。"
   }
 }

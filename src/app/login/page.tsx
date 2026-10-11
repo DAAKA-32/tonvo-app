@@ -12,6 +12,7 @@ import { getAuthErrorKey } from "@/lib/auth-errors";
 import { authFetch } from "@/lib/api-client";
 import { recordConsent } from "@/lib/conversations-client";
 import { trackSignup } from "@/lib/meta-pixel";
+import { track } from "@/lib/analytics/client";
 import {
   auth,
   googleProvider,
@@ -481,6 +482,7 @@ function LoginPageInner() {
         const cred = await createUserWithEmailAndPassword(auth, email, password);
         await recordConsent();
         trackSignup({ email: cred.user.email ?? undefined, userId: cred.user.uid });
+        track("signup", { method: "email" });
         redirectWithFeedback(t("auth.accountCreated"));
       } else {
         await signInWithEmailAndPassword(auth, email, password);
@@ -527,6 +529,7 @@ function LoginPageInner() {
         email: pendingGoogleUser.user.email ?? undefined,
         userId: pendingGoogleUser.user.uid,
       });
+      track("signup", { method: "google" });
     }
     setPendingGoogleUser(null);
     redirectWithFeedback(t("auth.accountCreated"));
