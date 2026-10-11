@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "About - Our Mission",
+  title: "About Tonvo | Why I built it",
   description:
-    "Tonvo is an AI conversation copilot built to help professionals communicate better during calls. Founded by Emilien Nepveu. Learn about our mission and values.",
+    "Emilien Nepveu, founder of Tonvo: why a live AI copilot for calls, and the promises behind it. No bot in your meetings, no fake numbers, free to start.",
   openGraph: {
-    title: "About Tonvo - AI Conversation Copilot",
-    description: "Learn about Tonvo's mission to improve conversations with real-time AI insights.",
+    title: "About Tonvo | Why I built it",
+    description: "The moment your mind goes blank on a call, and the live copilot built for it.",
     url: "https://tonvo.co/about",
   },
   alternates: { canonical: "https://tonvo.co/about" },
