@@ -14,7 +14,6 @@ import PricingSection from "@/components/landing/PricingSection";
 import UseCasesSection from "@/components/landing/UseCasesSection";
 import SolutionSection from "@/components/landing/SolutionSection";
 import ProblemSection from "@/components/landing/ProblemSection";
-import TestimonialsSection from "@/components/landing/TestimonialsSection";
 import SubscriptionNotifications from "@/components/social-proof/SubscriptionNotifications";
 import { FadeIn, Stagger, StaggerItem, MotionLink, RevealLine } from "@/components/motion";
 
@@ -458,9 +457,6 @@ export default function HomePage() {
 
         {/* ── Divider ── */}
         <RevealLine className="glow-line max-w-2xl mx-auto" />
-
-        {/* ── Testimonials / Results-driven proof (client component: KPI counters + spotlight) ── */}
-        <TestimonialsSection />
 
         {/* ── Pricing (client component: billing toggle + auth) ── */}
         <PricingSection />

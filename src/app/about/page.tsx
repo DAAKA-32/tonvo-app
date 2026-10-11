@@ -1,117 +1,184 @@
 "use client";
 
 import Link from "next/link";
+import { useTranslation } from "react-i18next";
 import { TonvoLogoMark } from "@/components/Logo";
 
-const TIMELINE = [
-  { date: "February 2026", title: "Company founded", desc: "Emilien Nepveu registers Tonvo as an individual entrepreneur in Chambles, France." },
-  { date: "February 2026", title: "First prototype", desc: "Real-time tone analysis and AI coaching built on Next.js, Claude AI, and Whisper." },
-  { date: "March 2026", title: "Public launch", desc: "Tonvo goes live with Free, Pro, and Team plans. Screen analysis and copilot overlay shipped." },
-];
+/**
+ * /about: the founder story. One narrative column (observation -> cost -> the opposite -> promises -> CTA),
+ * every claim verifiable: no invented numbers, no testimonials, the real product film as proof.
+ */
 
-const VALUES = [
-  { icon: "brain", title: "AI that helps, not replaces", desc: "Tonvo augments your natural communication skills with real-time intelligence. You stay in control." },
-  { icon: "shield", title: "Privacy first", desc: "Audio is transcribed in real-time and never stored. Screen frames are analyzed then discarded. Your data stays yours." },
-  { icon: "zap", title: "Instant feedback", desc: "Sub-second analysis. Coaching tips, tone detection, and signals appear as you speak, not after the call." },
-  { icon: "globe", title: "Built for everyone", desc: "10 languages supported. Works with Discord, Zoom, Meet, and any voice/video platform." },
-];
+const PROMISES = ["p1", "p2", "p3", "p4", "p5"] as const;
 
-function IconFor({ name }: { name: string }) {
-  const props = { width: 20, height: 20, viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: 1.8, strokeLinecap: "round" as const, strokeLinejoin: "round" as const };
-  if (name === "brain") return <svg {...props}><path d="M12 5a3 3 0 1 0-5.997.125 4 4 0 0 0-2.526 5.77 4 4 0 0 0 .556 6.588A4 4 0 1 0 12 18Z" /><path d="M12 5a3 3 0 1 1 5.997.125 4 4 0 0 1 2.526 5.77 4 4 0 0 1-.556 6.588A4 4 0 1 1 12 18Z" /></svg>;
-  if (name === "shield") return <svg {...props}><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z" /><path d="m9 12 2 2 4-4" /></svg>;
-  if (name === "zap") return <svg {...props}><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z" /></svg>;
-  return <svg {...props}><circle cx="12" cy="12" r="10" /><line x1="2" y1="12" x2="22" y2="12" /><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" /></svg>;
+function Check() {
+  return (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#34d399" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden className="shrink-0 mt-1">
+      <path d="M20 6 9 17l-5-5" />
+    </svg>
+  );
 }
 
 export default function AboutPage() {
+  const { t } = useTranslation();
+  const body = "text-[17px] leading-[1.75] mt-0 mb-5 last:mb-0";
+  const h2 = "text-xl sm:text-2xl font-semibold tracking-tight mb-4";
+
   return (
-    <div style={{ backgroundColor: "var(--color-bg)", minHeight: "100vh" }}>
+    <div style={{ backgroundColor: "var(--color-bg)", minHeight: "100vh", color: "var(--color-text-silver)" }} data-cta-section="about">
       <header className="border-b" style={{ borderColor: "var(--color-border)" }}>
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 h-16 flex items-center gap-3">
-          <Link href="/" className="flex items-center gap-2.5 no-underline">
-            <TonvoLogoMark size="sm" />
-            <span className="text-lg font-bold" style={{ color: "var(--color-text)" }}>Tonvo</span>
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-3">
+          <div className="flex items-center gap-3 min-w-0">
+            <Link href="/" className="flex items-center gap-2.5 no-underline">
+              <TonvoLogoMark size="sm" />
+              <span className="text-lg font-bold" style={{ color: "var(--color-text)" }}>Tonvo</span>
+            </Link>
+            <span className="text-sm hidden sm:inline" style={{ color: "var(--color-text-muted)" }}>/</span>
+            <span className="text-sm font-medium truncate hidden sm:inline" style={{ color: "var(--color-text-muted)" }}>{t("aboutPage.breadcrumb")}</span>
+          </div>
+          <Link
+            href="/login"
+            data-cta="about_header"
+            className="text-sm font-semibold no-underline px-4 py-2 rounded-full whitespace-nowrap focus-visible:outline focus-visible:outline-2"
+            style={{ color: "var(--color-text)", border: "1px solid rgba(52, 211, 153, 0.45)", background: "rgba(52, 211, 153, 0.12)" }}
+          >
+            {t("aboutPage.ctaButton")}
           </Link>
-          <span className="text-sm" style={{ color: "var(--color-text-muted)" }}>/</span>
-          <span className="text-sm font-medium" style={{ color: "var(--color-text-muted)" }}>About</span>
         </div>
       </header>
 
-      <main className="max-w-4xl mx-auto px-4 sm:px-6 py-12 sm:py-16">
-        {/* Hero */}
-        <div className="text-center mb-16">
-          <h1 className="text-3xl sm:text-4xl font-bold mb-4" style={{ color: "var(--color-text)" }}>
-            Better conversations, powered by AI
-          </h1>
-          <p className="text-base leading-relaxed max-w-2xl mx-auto" style={{ color: "var(--color-text-muted)" }}>
-            Tonvo is an AI conversation copilot that helps professionals communicate more effectively
-            during calls, meetings, and chats. Real-time insights, coaching tips, and tone detection
-            — all while you speak.
+      <main className="max-w-2xl mx-auto px-4 sm:px-6 pt-14 sm:pt-20 pb-20">
+        {/* Hook: name the moment */}
+        <h1
+          className="font-bold tracking-tight m-0"
+          style={{
+            fontSize: "clamp(2.1rem, 5.4vw, 3.4rem)",
+            lineHeight: 1.08,
+            backgroundImage: "linear-gradient(135deg, #ffffff 0%, #d4d4e0 45%, #b8b8cc 100%)",
+            WebkitBackgroundClip: "text",
+            backgroundClip: "text",
+            color: "transparent",
+          }}
+        >
+          {t("aboutPage.title")}
+        </h1>
+        <p className="mt-5 text-lg m-0" style={{ color: "var(--color-text-muted)" }}>{t("aboutPage.intro")}</p>
+
+        {/* 1. The observation */}
+        <section className="mt-14" aria-labelledby="about-s1">
+          <h2 id="about-s1" className={h2} style={{ color: "var(--color-text)" }}>{t("aboutPage.s1Title")}</h2>
+          <div>
+            <p className={body}>{t("aboutPage.s1p1")}</p>
+            <p className={body}>{t("aboutPage.s1p2")}</p>
+          </div>
+          <blockquote
+            className="mt-8 mb-0 mx-0 pl-5 sm:pl-6 py-1 text-xl sm:text-2xl leading-snug italic"
+            style={{ borderLeft: "3px solid rgba(248, 113, 113, 0.75)", color: "var(--color-text)" }}
+          >
+            {t("aboutPage.quote")}
+          </blockquote>
+        </section>
+
+        {/* 2. What it costs */}
+        <section className="mt-14" aria-labelledby="about-s2">
+          <h2 id="about-s2" className={h2} style={{ color: "var(--color-text)" }}>{t("aboutPage.s2Title")}</h2>
+          <div>
+            <p className={body}>{t("aboutPage.s2p1")}</p>
+            <p className={body}>{t("aboutPage.s2p2")}</p>
+          </div>
+        </section>
+
+        {/* 3. The opposite, with the real product as proof */}
+        <section className="mt-14" aria-labelledby="about-s3">
+          <h2 id="about-s3" className={h2} style={{ color: "var(--color-text)" }}>{t("aboutPage.s3Title")}</h2>
+          <div>
+            <p className={body}>{t("aboutPage.s3p1")}</p>
+            <p className={body}>{t("aboutPage.s3p2")}</p>
+          </div>
+          <figure className="mt-8 mb-0 mx-0">
+            <video
+              className="w-full rounded-2xl block"
+              style={{ aspectRatio: "16 / 9", background: "#09090b", border: "1px solid var(--color-border)" }}
+              src="/vsl/tonvo-vsl.mp4"
+              poster="/vsl/tonvo-vsl-poster.jpg"
+              controls
+              playsInline
+              preload="none"
+              aria-label={t("aboutPage.videoLabel")}
+            />
+          </figure>
+        </section>
+
+        {/* 4. Promises (risk reversal, trust) */}
+        <section className="mt-14" aria-labelledby="about-s4">
+          <h2 id="about-s4" className={h2} style={{ color: "var(--color-text)" }}>{t("aboutPage.s4Title")}</h2>
+          <ul className="list-none p-0 m-0 space-y-5">
+            {PROMISES.map((p) => (
+              <li key={p} className="flex gap-3">
+                <Check />
+                <p className={body}>
+                  <strong style={{ color: "var(--color-text)" }}>{t(`aboutPage.${p}Title`)}</strong>{" "}
+                  {t(`aboutPage.${p}Text`)}
+                  {p === "p2" && (
+                    <>
+                      {" "}
+                      <Link href="/privacy" className="underline" style={{ color: "var(--color-text-silver)" }}>
+                        {t("aboutPage.p2Link")}
+                      </Link>
+                    </>
+                  )}
+                  {p === "p5" && (
+                    <>
+                      {" "}
+                      <a href="mailto:tonvo.sales@gmail.com" className="underline" style={{ color: "var(--color-text)" }}>
+                        tonvo.sales@gmail.com
+                      </a>
+                    </>
+                  )}
+                </p>
+              </li>
+            ))}
+          </ul>
+          <p className="mt-10 mb-0 text-[17px]" style={{ color: "var(--color-text)" }}>
+            <span className="font-semibold">Emilien Nepveu</span>
+            <span style={{ color: "var(--color-text-muted)" }}>, {t("aboutPage.signRole")}</span>
           </p>
-        </div>
-
-        {/* Founder */}
-        <section className="mb-16">
-          <div className="rounded-2xl border p-8 flex flex-col sm:flex-row items-center gap-8" style={{ backgroundColor: "var(--color-surface)", borderColor: "var(--color-border)" }}>
-            <div className="w-24 h-24 rounded-full flex items-center justify-center shrink-0" style={{ background: "linear-gradient(135deg, #5c5c6e 0%, #6e6e82 100%)" }}>
-              <span className="text-3xl font-bold text-white">EN</span>
-            </div>
-            <div>
-              <h2 className="text-lg font-bold mb-1" style={{ color: "var(--color-text)" }}>Emilien Nepveu</h2>
-              <p className="text-sm font-medium mb-3" style={{ color: "var(--color-accent-light)" }}>Founder & Developer</p>
-              <p className="text-sm leading-relaxed m-0" style={{ color: "var(--color-text-muted)" }}>
-                Software engineer based in France, passionate about AI and human communication.
-                Built Tonvo to solve a problem he experienced firsthand: understanding conversation dynamics
-                in real time, whether in sales calls, job interviews, or everyday conversations.
-              </p>
-            </div>
-          </div>
         </section>
 
-        {/* Values */}
-        <section className="mb-16">
-          <h2 className="text-xl font-bold text-center mb-8" style={{ color: "var(--color-text)" }}>Our values</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {VALUES.map((v) => (
-              <div key={v.title} className="rounded-xl border p-6" style={{ backgroundColor: "var(--color-surface)", borderColor: "var(--color-border)" }}>
-                <div className="mb-3" style={{ color: "var(--color-accent-light)" }}>
-                  <IconFor name={v.icon} />
-                </div>
-                <h3 className="text-sm font-bold mb-2" style={{ color: "var(--color-text)" }}>{v.title}</h3>
-                <p className="text-xs leading-relaxed m-0" style={{ color: "var(--color-text-muted)" }}>{v.desc}</p>
-              </div>
-            ))}
+        {/* 5. Future pacing + one action */}
+        <section
+          className="mt-16 rounded-3xl px-6 sm:px-10 py-10 sm:py-12"
+          style={{ border: "1px solid var(--color-border)", background: "radial-gradient(ellipse 80% 90% at 50% 0%, rgba(52,211,153,0.08), rgba(9,9,11,0) 70%)" }}
+          aria-labelledby="about-cta"
+        >
+          <h2 id="about-cta" className="text-2xl sm:text-3xl font-semibold tracking-tight leading-tight m-0" style={{ color: "var(--color-text)" }}>
+            {t("aboutPage.ctaTitle")}
+          </h2>
+          <div className="mt-8 flex flex-wrap items-center gap-3">
+            <Link
+              href="/login"
+              data-cta="about_bottom"
+              className="inline-flex items-center gap-2 text-base font-semibold no-underline px-6 py-3 rounded-full focus-visible:outline focus-visible:outline-2"
+              style={{
+                color: "var(--color-text)",
+                background: "linear-gradient(135deg, rgba(52, 211, 153, 0.25) 0%, rgba(52, 211, 153, 0.08) 100%)",
+                border: "1px solid rgba(52, 211, 153, 0.45)",
+              }}
+            >
+              {t("aboutPage.ctaButton")}
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+                <path d="M5 12h14" />
+                <path d="m12 5 7 7-7 7" />
+              </svg>
+            </Link>
+            <Link href="/#demo" className="text-base font-medium no-underline px-4 py-3" style={{ color: "var(--color-text-silver)" }}>
+              {t("aboutPage.ctaSecondary")}
+            </Link>
           </div>
+          <p className="mt-4 mb-0 text-sm" style={{ color: "var(--color-text-muted)" }}>{t("aboutPage.ctaNote")}</p>
         </section>
 
-        {/* Timeline */}
-        <section className="mb-16">
-          <h2 className="text-xl font-bold text-center mb-8" style={{ color: "var(--color-text)" }}>Our journey</h2>
-          <div className="space-y-0 relative pl-6" style={{ borderLeft: "2px solid var(--color-border)" }}>
-            {TIMELINE.map((e, i) => (
-              <div key={i} className="pb-8 relative">
-                <div className="absolute -left-[29px] w-3 h-3 rounded-full" style={{ backgroundColor: "var(--color-accent-light)", border: "2px solid var(--color-bg)" }} />
-                <p className="text-xs font-semibold mb-1" style={{ color: "var(--color-accent-light)" }}>{e.date}</p>
-                <p className="text-sm font-bold m-0 mb-1" style={{ color: "var(--color-text)" }}>{e.title}</p>
-                <p className="text-xs leading-relaxed m-0" style={{ color: "var(--color-text-muted)" }}>{e.desc}</p>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* CTA */}
-        <div className="text-center rounded-2xl border p-10" style={{ backgroundColor: "rgba(200, 200, 216, 0.04)", borderColor: "var(--color-border)" }}>
-          <h2 className="text-xl font-bold mb-3" style={{ color: "var(--color-text)" }}>Ready to communicate better?</h2>
-          <p className="text-sm mb-6" style={{ color: "var(--color-text-muted)" }}>Join thousands of professionals using Tonvo to improve their conversations.</p>
-          <Link href="/login" className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-semibold no-underline transition-all hover:opacity-90" style={{ background: "linear-gradient(135deg, #5c5c6e, #6e6e82)", color: "white", boxShadow: "0 4px 14px rgba(92,92,110,0.35)" }}>
-            Get started for free
-          </Link>
-        </div>
-
-        <div className="mt-12 pt-8 border-t" style={{ borderColor: "var(--color-border)" }}>
-          <Link href="/" className="text-sm no-underline font-medium" style={{ color: "var(--color-accent-light)" }}>&larr; Back to home</Link>
-        </div>
+        <p className="mt-12 mb-0 text-sm" style={{ color: "var(--color-text-muted)" }}>{t("aboutPage.company")}</p>
       </main>
     </div>
   );
