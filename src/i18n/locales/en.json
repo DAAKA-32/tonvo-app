@@ -897,6 +897,12 @@
     "s13Intro": "For questions about these Terms:"
   },
   "privacyPage": {
+    "analyticsTitle": "Audience measurement",
+    "analyticsText": "We measure how visitors use tonvo.co with our own first-party tool, without any third-party service: page views, clicks on sign-up buttons, sign-ups, first live session and payments. It stores a random visitor ID in your browser for up to 13 months, plus the page, how you arrived (for example a campaign link), your country and your device type. No IP address, no email, no third-party tracker. The data is kept in our own database (Supabase, see section 6) and deleted after 25 months. We honour Global Privacy Control and Do Not Track, and you can turn measurement off below at any time.",
+    "analyticsStatusOn": "Audience measurement is on for this browser.",
+    "analyticsStatusOff": "Audience measurement is off for this browser.",
+    "analyticsOptOut": "Turn off measurement",
+    "analyticsOptIn": "Turn measurement back on",
     "breadcrumb": "Privacy Policy",
     "title": "Privacy Policy",
     "lastUpdated": "Last updated: March 17, 2026",
@@ -1081,5 +1087,29 @@
     "joinedAnonymous": "Someone joined <plan>{{plan}}</plan>",
     "demo": "Demo",
     "dismiss": "Hide notifications"
+  },
+  "adminAnalytics": {
+    "title": "Funnel analytics",
+    "subtitle": "First-party measurement of the path from visit to payment. Each browser counts as one visitor.",
+    "days": "{{n}} days",
+    "funnel": "Funnel",
+    "visitors": "Visitors",
+    "clicks": "Start free clicks",
+    "signups": "Sign-ups",
+    "activated": "First live session",
+    "checkoutStarted": "Checkout opened",
+    "paid": "Paid",
+    "stepRate": "{{rate}} of previous step",
+    "bySource": "By source",
+    "source": "Source",
+    "topPages": "Top pages",
+    "vsl": "Hero video",
+    "vslSound": "Played with sound",
+    "vslFullscreen": "Opened full screen",
+    "empty": "No data for this period yet. Numbers appear as soon as people visit tonvo.co.",
+    "forbidden": "This page is reserved for the Tonvo team.",
+    "error": "The numbers could not be loaded. Try again in a moment.",
+    "loading": "Loading…",
+    "note": "Sign-ups, activation and payments are attributed to the source of the visit that led to the sign-up. Accounts created before tracking started appear under \"before tracking\"."
   }
 }

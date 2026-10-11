@@ -4,6 +4,7 @@ import { supabaseAdmin } from "@/lib/supabase-admin";
 import { getUserSubscription } from "@/lib/subscription";
 import { getPlanFeatures } from "@/lib/plan-features";
 import { badRequest, dbError, guard, readJson } from "@/lib/conversations-server";
+import { afterResponse, recordServerEvent } from "@/lib/analytics/server";
 
 /**
  * GET  /api/conversations             → the user's sessions (history), plan retention applied
@@ -68,5 +69,16 @@ export async function POST(req: NextRequest) {
     .select("id")
     .single();
   if (error || !data) return dbError("create", error);
+
+  // Funnel analytics, after the response: every LIVE session, and the account's first one (activation).
+  const uid = auth.uid;
+  afterResponse(async () => {
+    await recordServerEvent("session_started", uid);
+    const { count } = await supabaseAdmin
+      .from("conversations")
+      .select("id", { count: "exact", head: true })
+      .eq("user_id", uid);
+    if (count === 1) await recordServerEvent("first_session", uid);
+  });
   return NextResponse.json({ id: data.id }, { status: 201 });
 }

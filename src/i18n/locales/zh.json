@@ -881,6 +881,12 @@
     "s13Intro": "如对本条款有任何疑问，请联系："
   },
   "privacyPage": {
+    "analyticsTitle": "访问统计",
+    "analyticsText": "我们使用自有工具统计 tonvo.co 的使用情况，不依赖任何第三方服务：页面浏览、注册按钮点击、注册、首次实时会话和付款。工具会在您的浏览器中保存一个随机访客 ID，最长 13 个月，同时记录页面、您的来源（例如活动链接）、国家和设备类型。不收集 IP 地址和邮箱，也不使用第三方追踪器。数据保存在我们自己的数据库中（Supabase，见第 6 节），25 个月后删除。我们遵守 Global Privacy Control 和 Do Not Track 设置，您也可以随时在下方关闭统计。",
+    "analyticsStatusOn": "此浏览器已开启访问统计。",
+    "analyticsStatusOff": "此浏览器已关闭访问统计。",
+    "analyticsOptOut": "关闭统计",
+    "analyticsOptIn": "重新开启统计",
     "breadcrumb": "隐私政策",
     "title": "隐私政策",
     "lastUpdated": "最后更新：2026 年 3 月 17 日",
@@ -1065,5 +1071,29 @@
     "joinedAnonymous": "有人加入了 <plan>{{plan}}</plan>",
     "demo": "演示",
     "dismiss": "隐藏通知"
+  },
+  "adminAnalytics": {
+    "title": "转化漏斗分析",
+    "subtitle": "自有统计：从访问到付款的完整路径。每个浏览器计为一位访客。",
+    "days": "{{n}} 天",
+    "funnel": "漏斗",
+    "visitors": "访客",
+    "clicks": "点击“Start free”",
+    "signups": "注册",
+    "activated": "首次实时会话",
+    "checkoutStarted": "发起付款",
+    "paid": "已付款",
+    "stepRate": "上一步的 {{rate}}",
+    "bySource": "按来源",
+    "source": "来源",
+    "topPages": "热门页面",
+    "vsl": "首屏视频",
+    "vslSound": "开启声音播放",
+    "vslFullscreen": "全屏打开",
+    "empty": "该时段暂无数据。tonvo.co 有访问后即会显示数据。",
+    "forbidden": "此页面仅限 Tonvo 团队访问。",
+    "error": "无法加载数据，请稍后重试。",
+    "loading": "加载中…",
+    "note": "注册、首次会话和付款归属于带来注册的那次访问的来源。统计开始前创建的账户显示在“before tracking”下。"
   }
 }

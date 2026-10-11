@@ -881,6 +881,12 @@
     "s13Intro": "Para cualquier consulta sobre estos Términos:"
   },
   "privacyPage": {
+    "analyticsTitle": "Medición de audiencia",
+    "analyticsText": "Medimos el uso de tonvo.co con nuestra propia herramienta, sin servicios de terceros: páginas vistas, clics en los botones de registro, registros, primera sesión en vivo y pagos. Guarda en su navegador un identificador aleatorio durante 13 meses como máximo, además de la página, cómo llegó (por ejemplo, un enlace de campaña), su país y su tipo de dispositivo. Sin dirección IP, sin correo electrónico y sin rastreadores de terceros. Los datos se conservan en nuestra propia base de datos (Supabase, ver sección 6) y se eliminan a los 25 meses. Respetamos Global Privacy Control y Do Not Track, y puede desactivar esta medición aquí en cualquier momento.",
+    "analyticsStatusOn": "La medición de audiencia está activa en este navegador.",
+    "analyticsStatusOff": "La medición de audiencia está desactivada en este navegador.",
+    "analyticsOptOut": "Desactivar la medición",
+    "analyticsOptIn": "Reactivar la medición",
     "breadcrumb": "Política de privacidad",
     "title": "Política de privacidad",
     "lastUpdated": "Última actualización: 17 de marzo de 2026",
@@ -1065,5 +1071,29 @@
     "joinedAnonymous": "Alguien se unió a <plan>{{plan}}</plan>",
     "demo": "Demo",
     "dismiss": "Ocultar notificaciones"
+  },
+  "adminAnalytics": {
+    "title": "Análisis del embudo",
+    "subtitle": "Medición propia del recorrido, de la visita al pago. Cada navegador cuenta como un visitante.",
+    "days": "{{n}} días",
+    "funnel": "Embudo",
+    "visitors": "Visitantes",
+    "clicks": "Clics en «Start free»",
+    "signups": "Registros",
+    "activated": "Primera sesión en vivo",
+    "checkoutStarted": "Pago iniciado",
+    "paid": "Pagado",
+    "stepRate": "{{rate}} del paso anterior",
+    "bySource": "Por fuente",
+    "source": "Fuente",
+    "topPages": "Páginas más vistas",
+    "vsl": "Vídeo principal",
+    "vslSound": "Reproducido con sonido",
+    "vslFullscreen": "Abierto en pantalla completa",
+    "empty": "Aún no hay datos en este periodo. Las cifras aparecerán con las primeras visitas a tonvo.co.",
+    "forbidden": "Esta página está reservada al equipo de Tonvo.",
+    "error": "No se pudieron cargar las cifras. Inténtelo de nuevo en un momento.",
+    "loading": "Cargando…",
+    "note": "Los registros, activaciones y pagos se atribuyen a la fuente de la visita que llevó al registro. Las cuentas creadas antes de la medición aparecen como «before tracking»."
   }
 }

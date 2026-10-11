@@ -881,6 +881,12 @@
     "s13Intro": "본 약관에 관한 문의 사항:"
   },
   "privacyPage": {
+    "analyticsTitle": "방문자 분석",
+    "analyticsText": "tonvo.co 이용 현황을 외부 서비스 없이 자체 도구로 측정합니다. 페이지 조회, 가입 버튼 클릭, 가입, 첫 라이브 세션, 결제를 측정합니다. 브라우저에 무작위 방문자 ID를 최대 13개월 동안 저장하며, 페이지, 유입 경로(예: 캠페인 링크), 국가, 기기 유형을 함께 기록합니다. IP 주소, 이메일, 제3자 추적기는 사용하지 않습니다. 데이터는 자체 데이터베이스(Supabase, 6항 참고)에 보관되며 25개월 후 삭제됩니다. Global Privacy Control과 Do Not Track을 존중하며, 아래에서 언제든지 측정을 끌 수 있습니다.",
+    "analyticsStatusOn": "이 브라우저에서 방문자 분석이 켜져 있습니다.",
+    "analyticsStatusOff": "이 브라우저에서 방문자 분석이 꺼져 있습니다.",
+    "analyticsOptOut": "측정 끄기",
+    "analyticsOptIn": "측정 다시 켜기",
     "breadcrumb": "개인정보 처리방침",
     "title": "개인정보 처리방침",
     "lastUpdated": "최종 업데이트: 2026년 3월 17일",
@@ -1065,5 +1071,29 @@
     "joinedAnonymous": "누군가 <plan>{{plan}}</plan>에 가입했습니다",
     "demo": "데모",
     "dismiss": "알림 숨기기"
+  },
+  "adminAnalytics": {
+    "title": "퍼널 분석",
+    "subtitle": "방문부터 결제까지의 흐름을 자체적으로 측정합니다. 브라우저 하나를 방문자 한 명으로 셉니다.",
+    "days": "{{n}}일",
+    "funnel": "퍼널",
+    "visitors": "방문자",
+    "clicks": "'Start free' 클릭",
+    "signups": "가입",
+    "activated": "첫 라이브 세션",
+    "checkoutStarted": "결제 시작",
+    "paid": "결제 완료",
+    "stepRate": "이전 단계의 {{rate}}",
+    "bySource": "유입 경로별",
+    "source": "유입 경로",
+    "topPages": "많이 본 페이지",
+    "vsl": "히어로 영상",
+    "vslSound": "소리와 함께 재생",
+    "vslFullscreen": "전체 화면으로 열기",
+    "empty": "이 기간에는 아직 데이터가 없습니다. tonvo.co 방문이 생기면 수치가 표시됩니다.",
+    "forbidden": "이 페이지는 Tonvo 팀 전용입니다.",
+    "error": "수치를 불러오지 못했습니다. 잠시 후 다시 시도해 주세요.",
+    "loading": "불러오는 중…",
+    "note": "가입, 첫 세션, 결제는 가입으로 이어진 방문의 유입 경로로 집계됩니다. 측정 시작 전에 만든 계정은 'before tracking'에 표시됩니다."
   }
 }

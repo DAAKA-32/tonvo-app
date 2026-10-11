@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import Providers from "@/components/Providers";
 import MetaPixel from "@/components/MetaPixel";
+import AnalyticsTracker from "@/components/AnalyticsTracker";
 import { inlineDetectScript } from "@/lib/performance/detect";
 import "./globals.css";
 
@@ -368,6 +369,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body className="antialiased notranslate" translate="no">
         <MetaPixel />
+        <AnalyticsTracker />
         <Providers>
           {children}
         </Providers>

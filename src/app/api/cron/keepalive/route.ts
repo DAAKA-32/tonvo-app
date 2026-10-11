@@ -8,6 +8,7 @@ import { supabaseAdmin } from "@/lib/supabase-admin";
  * week ("a few user requests to the database each day" is typically enough).
  * Each run makes two real, read-only queries. Nothing is returned but booleans.
  * Vercel sends `Authorization: Bearer $CRON_SECRET` on every cron invocation.
+ * It also enforces the analytics retention promised on the privacy page: events older than 25 months are deleted.
  */
 export async function GET(req: NextRequest) {
   const secret = process.env.CRON_SECRET;
@@ -19,6 +20,10 @@ export async function GET(req: NextRequest) {
     supabaseAdmin.from("conversations").select("id", { count: "exact", head: true }),
     supabaseAdmin.from("subscriptions").select("id", { count: "exact", head: true }),
   ]);
+  const cutoff = new Date(Date.now() - 25 * 30.44 * 864e5).toISOString();
+  const purge = await supabaseAdmin.from("analytics_events").delete().lt("created_at", cutoff);
+  if (purge.error) console.error("[keepalive] analytics retention purge failed:", purge.error.message);
+
   const ok = !conversations.error && !subscriptions.error;
   if (!ok) {
     console.error("[keepalive] database query failed:", conversations.error?.message ?? subscriptions.error?.message);

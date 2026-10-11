@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getStripe, PLANS, type PlanId } from "@/lib/stripe";
 import { supabaseAdmin } from "@/lib/supabase-admin";
 import { verifyAuth } from "@/lib/auth-server";
+import { afterResponse, recordServerEvent } from "@/lib/analytics/server";
 import { getAppUrl } from "@/lib/url";
 import { assertJsonSize, JSON_BODY_LIMIT } from "@/lib/security";
 import Stripe from "stripe";
@@ -135,6 +136,7 @@ export async function POST(req: NextRequest) {
       },
     });
 
+    afterResponse(() => recordServerEvent("checkout_started", userId, { plan: planId, billing: String(billing) }));
     return NextResponse.json({ url: session.url });
   } catch (error: unknown) {
     if (error instanceof Stripe.errors.StripeConnectionError) {

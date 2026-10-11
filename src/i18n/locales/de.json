@@ -881,6 +881,12 @@
     "s13Intro": "Bei Fragen zu diesen AGB:"
   },
   "privacyPage": {
+    "analyticsTitle": "Reichweitenmessung",
+    "analyticsText": "Wir messen die Nutzung von tonvo.co mit einem eigenen Werkzeug ohne Drittanbieter: Seitenaufrufe, Klicks auf Registrierungs-Buttons, Registrierungen, erste Live-Session und Zahlungen. Dabei wird in Ihrem Browser für höchstens 13 Monate eine zufällige Besucher-ID gespeichert, dazu die Seite, wie Sie zu uns gekommen sind (zum Beispiel über einen Kampagnenlink), Ihr Land und Ihr Gerätetyp. Keine IP-Adresse, keine E-Mail, kein Tracker von Dritten. Die Daten liegen in unserer eigenen Datenbank (Supabase, siehe Abschnitt 6) und werden nach 25 Monaten gelöscht. Wir respektieren Global Privacy Control und Do Not Track, und Sie können die Messung hier jederzeit deaktivieren.",
+    "analyticsStatusOn": "Die Reichweitenmessung ist in diesem Browser aktiv.",
+    "analyticsStatusOff": "Die Reichweitenmessung ist in diesem Browser deaktiviert.",
+    "analyticsOptOut": "Messung deaktivieren",
+    "analyticsOptIn": "Messung wieder aktivieren",
     "breadcrumb": "Datenschutz",
     "title": "Datenschutzerklärung",
     "lastUpdated": "Zuletzt aktualisiert: 17. März 2026",
@@ -1065,5 +1071,29 @@
     "joinedAnonymous": "Jemand hat <plan>{{plan}}</plan> gewählt",
     "demo": "Demo",
     "dismiss": "Benachrichtigungen ausblenden"
+  },
+  "adminAnalytics": {
+    "title": "Funnel-Analyse",
+    "subtitle": "Eigene Messung des Wegs vom Besuch bis zur Zahlung. Jeder Browser zählt als ein Besucher.",
+    "days": "{{n}} Tage",
+    "funnel": "Funnel",
+    "visitors": "Besucher",
+    "clicks": "Klicks auf „Start free“",
+    "signups": "Registrierungen",
+    "activated": "Erste Live-Session",
+    "checkoutStarted": "Checkout geöffnet",
+    "paid": "Bezahlt",
+    "stepRate": "{{rate}} des vorherigen Schritts",
+    "bySource": "Nach Quelle",
+    "source": "Quelle",
+    "topPages": "Meistbesuchte Seiten",
+    "vsl": "Hero-Video",
+    "vslSound": "Mit Ton abgespielt",
+    "vslFullscreen": "Im Vollbild geöffnet",
+    "empty": "Für diesen Zeitraum liegen noch keine Daten vor. Die Zahlen erscheinen mit den ersten Besuchen auf tonvo.co.",
+    "forbidden": "Diese Seite ist dem Tonvo-Team vorbehalten.",
+    "error": "Die Zahlen konnten nicht geladen werden. Bitte gleich erneut versuchen.",
+    "loading": "Wird geladen…",
+    "note": "Registrierungen, Aktivierungen und Zahlungen werden der Quelle des Besuchs zugeordnet, der zur Registrierung geführt hat. Konten von vor dem Tracking erscheinen unter „before tracking“."
   }
 }
