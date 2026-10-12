@@ -157,7 +157,7 @@ interface EnterprisePanelProps {
 function EnterprisePanel({ t, reduce }: EnterprisePanelProps) {
   const features = t("pricing.planEnterprise.features", { returnObjects: true }) as string[];
   const subject = encodeURIComponent("Tonvo Enterprise — sales inquiry");
-  const mailto = `mailto:tonvo.sales@gmail.com?subject=${subject}`;
+  const mailto = `mailto:outreach@tonvo.co?subject=${subject}`;
 
   return (
     <motion.div

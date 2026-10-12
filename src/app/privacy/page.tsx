@@ -93,7 +93,7 @@ export default function PrivacyPage() {
               <strong>Tonvo</strong><br />
               42170 Chambles, France<br />
               SIREN 101 134 633<br />
-              {t("privacyPage.s1Contact")} <strong>tonvo.sales@gmail.com</strong>
+              {t("privacyPage.s1Contact")} <strong>outreach@tonvo.co</strong>
             </p>
           </section>
 
@@ -196,7 +196,7 @@ export default function PrivacyPage() {
               ))}
             </div>
             <p className="text-sm leading-relaxed mt-4 m-0">
-              {t("privacyPage.s8Contact")} <strong>tonvo.sales@gmail.com</strong>
+              {t("privacyPage.s8Contact")} <strong>outreach@tonvo.co</strong>
             </p>
           </section>
 
@@ -225,7 +225,7 @@ export default function PrivacyPage() {
               {t("privacyPage.s12Intro")}<br /><br />
               <strong>Tonvo</strong><br />
               42170 Chambles, France<br />
-              Email: <strong>tonvo.sales@gmail.com</strong><br /><br />
+              Email: <strong>outreach@tonvo.co</strong><br /><br />
               {t("privacyPage.s12Cnil")}
             </p>
           </section>

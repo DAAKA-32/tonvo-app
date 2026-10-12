@@ -130,8 +130,8 @@ export default function AboutPage() {
                   {p === "p5" && (
                     <>
                       {" "}
-                      <a href="mailto:tonvo.sales@gmail.com" className="underline" style={{ color: "var(--color-text)" }}>
-                        tonvo.sales@gmail.com
+                      <a href="mailto:outreach@tonvo.co" className="underline" style={{ color: "var(--color-text)" }}>
+                        outreach@tonvo.co
                       </a>
                     </>
                   )}
