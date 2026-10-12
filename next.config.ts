@@ -83,6 +83,14 @@ const nextConfig: NextConfig = {
   },
   async redirects() {
     return [
+      // One canonical host. Firebase's auth domain is tonvo.co: on www.tonvo.co its auth iframe would be
+      // cross-origin (blocked by frame-src 'self') and Google sign-in would fail.
+      {
+        source: "/:path*",
+        has: [{ type: "host", value: "www.tonvo.co" }],
+        destination: "https://tonvo.co/:path*",
+        permanent: true,
+      },
       {
         source: "/home",
         destination: "/",
