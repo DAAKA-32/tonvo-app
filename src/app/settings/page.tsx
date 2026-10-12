@@ -570,7 +570,7 @@ export default function SettingsPage() {
             label="Request data export"
             description="Download a copy of all your personal data in a machine-readable format.">
             <a
-              href={`mailto:tonvo.sales@gmail.com?subject=Data%20Export%20Request&body=User%20ID:%20${user?.uid}`}
+              href={`mailto:outreach@tonvo.co?subject=Data%20Export%20Request&body=User%20ID:%20${user?.uid}`}
               className="btn-secondary text-xs no-underline"
               style={{ padding: "6px 16px", fontSize: 12 }}>
               Request Export
@@ -580,7 +580,7 @@ export default function SettingsPage() {
             label="Request data deletion"
             description="Request permanent deletion of all your personal data and session history.">
             <a
-              href={`mailto:tonvo.sales@gmail.com?subject=Data%20Deletion%20Request&body=User%20ID:%20${user?.uid}`}
+              href={`mailto:outreach@tonvo.co?subject=Data%20Deletion%20Request&body=User%20ID:%20${user?.uid}`}
               className="btn-secondary text-xs no-underline"
               style={{ padding: "6px 16px", fontSize: 12 }}>
               Request Deletion

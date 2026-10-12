@@ -591,7 +591,7 @@ export default function HomePage() {
                 <ul className="list-none p-0 m-0 space-y-2.5">
                   <li><Link href="/about" className="footer-link">{t("footer.about")}</Link></li>
                   <li><Link href="/blog" className="footer-link">{t("footer.blog")}</Link></li>
-                  <li><a href="mailto:tonvo.sales@gmail.com" className="footer-link">{t("footer.contact")}</a></li>
+                  <li><a href="mailto:outreach@tonvo.co" className="footer-link">{t("footer.contact")}</a></li>
                 </ul>
               </div>
 
