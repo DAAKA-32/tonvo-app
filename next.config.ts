@@ -63,7 +63,11 @@ const nextConfig: NextConfig = {
         ],
       },
       {
-        source: "/(.*)",
+        // Everything except Firebase Auth's proxied pages (/__/auth/*, /__/firebase/*, see rewrites above).
+        // Firebase loads tonvo.co/__/auth/iframe INSIDE our pages to receive the Google popup result:
+        // X-Frame-Options DENY / frame-ancestors 'none' blocked it, so every Google sign-in ended in
+        // auth/popup-closed-by-user ("Sign-in cancelled"). Those pages keep Firebase's own headers.
+        source: "/((?!__/).*)",
         headers: [
           { key: "X-Content-Type-Options", value: "nosniff" },
           { key: "X-Frame-Options", value: "DENY" },
