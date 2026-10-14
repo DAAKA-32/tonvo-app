@@ -179,7 +179,7 @@ export const guides: GuideEntry[] = [
     slug: "ai-conversation-intelligence-guide",
     title: "AI Conversation Intelligence: The Complete Guide | Tonvo",
     metaDescription:
-      "Everything you need to know about AI conversation intelligence — how it works, key features, use cases, and how to choose the right platform for your team.",
+      "Everything you need to know about AI conversation intelligence: how it works, key features, use cases, and how to choose the right platform for your team.",
     h1: "AI Conversation Intelligence: The Complete Guide",
     subtitle:
       "Understand what conversation intelligence is, how AI transforms voice interactions into actionable insights, and what to look for in a modern CI platform.",

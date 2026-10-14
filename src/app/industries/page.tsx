@@ -1,13 +1,15 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import Link from "next/link";
 import SEOPageShell from "@/components/seo/SEOPageShell";
 import { industries } from "@/data/seo/industries";
 
-export const metadata: Metadata = {
-  title: "Industries — AI Conversation Intelligence by Sector",
-  description: "See how Tonvo helps teams across SaaS, recruiting, consulting, healthcare, financial services, and more communicate better.",
-  alternates: { canonical: "https://tonvo.co/industries" },
-};
+export const metadata: Metadata = pageMetadata({
+  title: "Tonvo by industry",
+  description:
+    "See how Tonvo helps teams across SaaS, recruiting, consulting, healthcare, financial services, and more communicate better.",
+  path: "/industries",
+});
 
 export default function IndustriesIndex() {
   return (

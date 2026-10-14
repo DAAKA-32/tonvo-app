@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import SEOPageShell from "@/components/seo/SEOPageShell";
@@ -23,23 +24,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const entry = industries.find((ind) => ind.slug === slug);
   if (!entry) return {};
 
-  return {
+  return pageMetadata({
     title: entry.title,
     description: entry.metaDescription,
+    path: `/industries/${entry.slug}`,
     keywords: entry.targetKeywords,
-    openGraph: {
-      title: entry.title,
-      description: entry.metaDescription,
-      url: `${SITE_URL}/industries/${entry.slug}`,
-      type: "website",
-    },
-    twitter: {
-      card: "summary_large_image",
-      title: entry.title,
-      description: entry.metaDescription,
-    },
-    alternates: { canonical: `${SITE_URL}/industries/${entry.slug}` },
-  };
+  });
 }
 
 export default async function IndustryPage({ params }: Props) {

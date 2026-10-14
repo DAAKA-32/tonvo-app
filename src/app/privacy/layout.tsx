@@ -1,19 +1,12 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Privacy Policy",
   description:
-    "Tonvo Privacy Policy. Learn how we collect, use, and protect your conversation data. Your privacy and data security are our top priority.",
-  openGraph: {
-    title: "Privacy Policy - Tonvo",
-    description:
-      "How Tonvo handles your data. Encryption, data retention, and your privacy rights.",
-    url: "https://tonvo.co/privacy",
-  },
-  alternates: {
-    canonical: "https://tonvo.co/privacy",
-  },
-};
+    "How Tonvo collects, uses and protects your data, what we keep and for how long, and how to exercise your privacy rights.",
+  path: "/privacy",
+});
 
 export default function PrivacyLayout({ children }: { children: React.ReactNode }) {
   return children;

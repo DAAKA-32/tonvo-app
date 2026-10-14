@@ -1,18 +1,12 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Legal Notice",
   description:
-    "Tonvo Legal Notice. Company information, legal mentions, and regulatory disclosures for the Tonvo conversation intelligence platform.",
-  openGraph: {
-    title: "Legal Notice - Tonvo",
-    description: "Legal mentions and company information for Tonvo.",
-    url: "https://tonvo.co/legal",
-  },
-  alternates: {
-    canonical: "https://tonvo.co/legal",
-  },
-};
+    "Company information and legal notices for Tonvo, the AI copilot for live calls.",
+  path: "/legal",
+});
 
 export default function LegalLayout({ children }: { children: React.ReactNode }) {
   return children;

@@ -1,0 +1,96 @@
+<!doctype html>
+<!--
+  Tonvo social preview card (Open Graph / X), 1200 x 630.
+  Rendered to PNG by scripts/og/render-og.mjs. Brand: graphite #09090b, 64 px grid, silver light leak,
+  silver wordmark gradient, the official voice-bars logo, coral for the problem ("freeze").
+  Keep everything important inside the centre 1000 x 520 area (platform crops, small thumbnails).
+-->
+<html>
+<head>
+<meta charset="utf-8" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;700;800&display=block" rel="stylesheet" />
+<style>
+  html, body { margin: 0; background: #09090b; }
+  .card {
+    position: relative; width: 1200px; height: 630px; overflow: hidden;
+    background: #09090b; color: #fafafa; font-family: "Inter", sans-serif;
+  }
+  .grid {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(255, 255, 255, 0.045) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.045) 1px, transparent 1px);
+    background-size: 64px 64px; background-position: -8px -17px;
+    -webkit-mask-image: radial-gradient(ellipse 72% 78% at 50% 46%, #000 0%, rgba(0, 0, 0, 0.45) 52%, transparent 86%);
+            mask-image: radial-gradient(ellipse 72% 78% at 50% 46%, #000 0%, rgba(0, 0, 0, 0.45) 52%, transparent 86%);
+  }
+  .leak {
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse 52% 44% at 50% -10%, rgba(200, 200, 216, 0.22), rgba(200, 200, 216, 0.05) 48%, rgba(200, 200, 216, 0) 76%);
+  }
+  .vignette {
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse 88% 88% at 50% 50%, rgba(0, 0, 0, 0) 58%, rgba(0, 0, 0, 0.5) 100%);
+  }
+  .content {
+    position: absolute; inset: 0; padding-bottom: 54px;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+  }
+  .lockup { display: flex; align-items: center; gap: 18px; margin-bottom: 44px; }
+  .lockup img { width: 78px; height: 78px; display: block; }
+  .wordmark {
+    font-weight: 700; font-size: 60px; letter-spacing: -0.035em; line-height: 1;
+    background: linear-gradient(135deg, #ffffff 0%, #d4d4e0 40%, #b8b8cc 100%);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+    padding: 4px 2px 6px 0;
+  }
+  h1 {
+    margin: 0; text-align: center; font-weight: 800; font-size: 88px; line-height: 1.04; letter-spacing: -0.045em;
+  }
+  .silver {
+    background: linear-gradient(160deg, #ffffff 0%, #ececf2 45%, #bdbdcf 100%);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .coral { color: #f87171; }
+  .sub { margin: 30px 0 0; font-size: 31px; font-weight: 500; color: #a1a1aa; letter-spacing: -0.01em; }
+  .bars {
+    position: absolute; left: 0; right: 0; bottom: 46px; height: 56px;
+    display: flex; justify-content: center; align-items: center; gap: 11px;
+  }
+  .bars span { width: 6px; border-radius: 6px; background: linear-gradient(180deg, #ffffff, #c8c8d8); }
+</style>
+</head>
+<body>
+  <div class="card" id="card">
+    <div class="grid"></div>
+    <div class="leak"></div>
+    <div class="vignette"></div>
+    <div class="content">
+      <div class="lockup">
+        <img src="../../public/logo-tonvo-remove.png" alt="" />
+        <span class="wordmark">Tonvo</span>
+      </div>
+      <h1><span class="silver">Never </span><span class="coral">freeze</span><br /><span class="silver">on a call again.</span></h1>
+      <p class="sub">The AI copilot for your live calls</p>
+    </div>
+    <div class="bars" id="bars"></div>
+  </div>
+  <script>
+    // The logo's voice bars, extended into a quiet horizon: heights follow a bell so the row reads as one voice.
+    const bars = document.getElementById("bars");
+    const n = 29;
+    for (let i = 0; i < n; i++) {
+      const x = (i - (n - 1) / 2) / ((n - 1) / 2);
+      const bell = Math.exp(-3.2 * x * x);
+      const wobble = 0.55 + 0.45 * Math.abs(Math.sin(i * 1.93 + 0.7));
+      const h = Math.round(6 + 46 * bell * wobble);
+      const s = document.createElement("span");
+      s.style.height = h + "px";
+      s.style.opacity = (0.12 + 0.3 * bell).toFixed(3);
+      bars.appendChild(s);
+    }
+  </script>
+</body>
+</html>

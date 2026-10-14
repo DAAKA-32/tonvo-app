@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import { notFound } from "next/navigation";
 import SEOPageShell from "@/components/seo/SEOPageShell";
 import SEOHeroSection from "@/components/seo/SEOHeroSection";
@@ -22,23 +23,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const entry = features.find((f) => f.slug === slug);
   if (!entry) return {};
 
-  return {
+  return pageMetadata({
     title: entry.title,
     description: entry.metaDescription,
+    path: `/features/${entry.slug}`,
     keywords: entry.targetKeywords,
-    openGraph: {
-      title: entry.title,
-      description: entry.metaDescription,
-      url: `${SITE_URL}/features/${entry.slug}`,
-      type: "website",
-    },
-    twitter: {
-      card: "summary_large_image",
-      title: entry.title,
-      description: entry.metaDescription,
-    },
-    alternates: { canonical: `${SITE_URL}/features/${entry.slug}` },
-  };
+  });
 }
 
 export default async function FeaturePage({ params }: Props) {

@@ -1,13 +1,15 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import Link from "next/link";
 import SEOPageShell from "@/components/seo/SEOPageShell";
 import { comparisons } from "@/data/seo/comparisons";
 
-export const metadata: Metadata = {
-  title: "Compare Tonvo — AI Conversation Copilot Alternatives",
-  description: "See how Tonvo compares to Gong, Fireflies, Otter.ai, Chorus, and other conversation intelligence tools. Feature-by-feature comparison.",
-  alternates: { canonical: "https://tonvo.co/compare" },
-};
+export const metadata: Metadata = pageMetadata({
+  title: "Compare Tonvo with other AI call tools",
+  description:
+    "See how Tonvo compares to Gong, Fireflies, Otter.ai, Chorus, and other conversation intelligence tools. Feature-by-feature comparison.",
+  path: "/compare",
+});
 
 export default function CompareIndex() {
   return (
