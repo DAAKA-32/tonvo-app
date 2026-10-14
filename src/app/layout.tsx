@@ -4,6 +4,7 @@ import Providers from "@/components/Providers";
 import MetaPixel from "@/components/MetaPixel";
 import AnalyticsTracker from "@/components/AnalyticsTracker";
 import { inlineDetectScript } from "@/lib/performance/detect";
+import { HOME_DESCRIPTION, HOME_TITLE, OG_IMAGE, SITE_NAME, SITE_URL } from "@/lib/seo";
 import "./globals.css";
 
 const inter = Inter({
@@ -12,8 +13,6 @@ const inter = Inter({
   variable: "--font-inter",
 });
 
-const SITE_URL = "https://tonvo.co";
-const SITE_NAME = "Tonvo";
 
 export const viewport: Viewport = {
   width: "device-width",
@@ -27,12 +26,13 @@ export const viewport: Viewport = {
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
+  // Public pages build their own metadata with pageMetadata() (lib/seo.ts); these are the home page values and
+  // the defaults for app routes. "./" resolves to each route's own path, so nothing inherits the home URL.
   title: {
-    default: "Tonvo — AI Copilot for High-Stakes Conversations",
+    default: HOME_TITLE,
     template: "%s | Tonvo",
   },
-  description:
-    "Tonvo is the real-time AI copilot for sales conversations. Live transcription, instant insights, and closing suggestions — the moment they matter. Built for closers, consultants, and anyone whose income depends on the next call.",
+  description: HOME_DESCRIPTION,
   keywords: [
     "AI sales copilot",
     "real-time AI",
@@ -89,44 +89,20 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: SITE_URL,
+    url: "./",
     siteName: SITE_NAME,
-    title: "Tonvo — AI Copilot for High-Stakes Conversations",
-    description:
-      "The real-time AI copilot for sales conversations. Live transcription, instant insights, and closing suggestions — the moment they matter.",
-    images: [
-      {
-        url: "/og-image.png",
-        width: 1200,
-        height: 630,
-        alt: "Tonvo — AI Copilot for High-Stakes Conversations",
-        type: "image/png",
-      },
-    ],
+    title: HOME_TITLE,
+    description: HOME_DESCRIPTION,
+    images: [{ ...OG_IMAGE }],
   },
   twitter: {
     card: "summary_large_image",
-    site: "@tonvo",
-    creator: "@tonvo",
-    title: "Tonvo — Real-Time AI Sales Copilot",
-    description:
-      "Live transcription, instant insights, and closing suggestions during every call that matters. The AI copilot for sales conversations.",
-    images: [{ url: "/og-image.png", alt: "Tonvo — Real-Time AI Sales Copilot" }],
+    title: HOME_TITLE,
+    description: HOME_DESCRIPTION,
+    images: [{ url: OG_IMAGE.url, alt: OG_IMAGE.alt }],
   },
   alternates: {
-    canonical: SITE_URL,
-    languages: {
-      "en": SITE_URL,
-      "fr": `${SITE_URL}?lang=fr`,
-      "es": `${SITE_URL}?lang=es`,
-      "de": `${SITE_URL}?lang=de`,
-      "pt": `${SITE_URL}?lang=pt`,
-      "it": `${SITE_URL}?lang=it`,
-      "nl": `${SITE_URL}?lang=nl`,
-      "zh": `${SITE_URL}?lang=zh`,
-      "ja": `${SITE_URL}?lang=ja`,
-      "ko": `${SITE_URL}?lang=ko`,
-    },
+    canonical: "./",
   },
   category: "technology",
   verification: {
@@ -173,7 +149,7 @@ const softwareJsonLd = {
     "Invisible during screen share",
     "Native desktop apps (Windows, macOS, Linux)",
   ],
-  screenshot: `${SITE_URL}/og-image.png`,
+  screenshot: `${SITE_URL}${OG_IMAGE.url}`,
   offers: [
     {
       "@type": "Offer",

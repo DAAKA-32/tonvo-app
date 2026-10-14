@@ -1,13 +1,15 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import Link from "next/link";
 import SEOPageShell from "@/components/seo/SEOPageShell";
 import { guides } from "@/data/seo/guides";
 
-export const metadata: Metadata = {
-  title: "Guides — Conversation Intelligence Resources",
-  description: "Learn about conversation intelligence, tone detection, and communication best practices with Tonvo's expert guides and resources.",
-  alternates: { canonical: "https://tonvo.co/guides" },
-};
+export const metadata: Metadata = pageMetadata({
+  title: "Conversation intelligence guides",
+  description:
+    "Learn about conversation intelligence, tone detection, and communication best practices with Tonvo's expert guides and resources.",
+  path: "/guides",
+});
 
 export default function GuidesIndex() {
   return (

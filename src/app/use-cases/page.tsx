@@ -1,13 +1,15 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import Link from "next/link";
 import SEOPageShell from "@/components/seo/SEOPageShell";
 import { useCases } from "@/data/seo/use-cases";
 
-export const metadata: Metadata = {
-  title: "Use Cases — AI Conversation Copilot",
-  description: "Discover how professionals use Tonvo's AI conversation copilot for sales calls, customer support, interviews, meetings, and more.",
-  alternates: { canonical: "https://tonvo.co/use-cases" },
-};
+export const metadata: Metadata = pageMetadata({
+  title: "Tonvo use cases",
+  description:
+    "Discover how professionals use Tonvo's AI conversation copilot for sales calls, customer support, interviews, meetings, and more.",
+  path: "/use-cases",
+});
 
 export default function UseCasesIndex() {
   return (

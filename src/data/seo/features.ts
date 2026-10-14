@@ -588,7 +588,7 @@ export const features: FeatureEntry[] = [
     slug: "invisible-copilot-mode",
     title: "Invisible Copilot Mode | Tonvo Stealth AI",
     metaDescription:
-      "Hide Tonvo from screen share during calls. Invisible Copilot Mode keeps AI coaching and insights visible only to you — completely hidden from participants.",
+      "Hide Tonvo from screen share during calls. Invisible Copilot Mode keeps AI coaching and insights visible only to you and hidden from other participants.",
     h1: "Get AI Coaching Without Anyone Knowing — Invisible Copilot Mode",
     subtitle:
       "Tonvo's Invisible Copilot Mode hides every coaching panel, signal badge, and sentiment indicator from screen share — so you get full AI support while participants see nothing.",

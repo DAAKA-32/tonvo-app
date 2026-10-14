@@ -1,13 +1,15 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import Link from "next/link";
 import SEOPageShell from "@/components/seo/SEOPageShell";
 import { features } from "@/data/seo/features";
 
-export const metadata: Metadata = {
-  title: "Features — AI Conversation Intelligence",
-  description: "Explore Tonvo's features: real-time tone detection, AI coaching suggestions, conversation signals, post-session analysis, and more.",
-  alternates: { canonical: "https://tonvo.co/features" },
-};
+export const metadata: Metadata = pageMetadata({
+  title: "Tonvo features",
+  description:
+    "Explore Tonvo's features: real-time tone detection, AI coaching suggestions, conversation signals, post-session analysis, and more.",
+  path: "/features",
+});
 
 export default function FeaturesIndex() {
   return (

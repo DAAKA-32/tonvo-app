@@ -1,19 +1,12 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Pricing — Priced on the Outcome",
+export const metadata: Metadata = pageMetadata({
+  title: "Pricing",
   description:
-    "Priced on your close rate, not per-seat software. Starter free with 3 closing sessions/month, Closer at $19/month unlocks unlimited closing, full objection library, and deal tracking. One extra deal pays the year. 7-day money-back guarantee.",
-  openGraph: {
-    title: "Tonvo Pricing — Priced on the Outcome, Not the Software",
-    description:
-      "Starter, Closer, and Sales Team plans. Unlock unlimited closing sessions, live closing lines, and close-rate tracking — starting at $19/month. One additional closed deal pays the whole year.",
-    url: "https://tonvo.co/pricing",
-  },
-  alternates: {
-    canonical: "https://tonvo.co/pricing",
-  },
-};
+    "Start free with 3 live sessions a month. Closer is $19 a month for unlimited sessions and the full objection library, and Sales Team covers your whole team.",
+  path: "/pricing",
+});
 
 export default function PricingLayout({ children }: { children: React.ReactNode }) {
   return children;

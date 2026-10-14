@@ -1,18 +1,12 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Cookie Policy",
   description:
-    "Tonvo Cookie Policy. Learn how we use cookies and similar technologies to improve your experience on our platform.",
-  openGraph: {
-    title: "Cookie Policy - Tonvo",
-    description: "How Tonvo uses cookies and tracking technologies.",
-    url: "https://tonvo.co/cookies",
-  },
-  alternates: {
-    canonical: "https://tonvo.co/cookies",
-  },
-};
+    "How Tonvo uses cookies and similar technologies, and how you can control them.",
+  path: "/cookies",
+});
 
 export default function CookiesLayout({ children }: { children: React.ReactNode }) {
   return children;
