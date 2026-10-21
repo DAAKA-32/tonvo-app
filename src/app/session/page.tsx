@@ -30,7 +30,6 @@ import { useToast } from "@/components/Toast";
 import ToneIndicator from "@/components/ToneIndicator";
 import AudioWave from "@/components/AudioWave";
 import SuggestionCard from "@/components/SuggestionCard";
-import SmartCopilotOverlay, { type PrepData } from "@/components/SmartCopilotOverlay";
 import CopilotPiP, { type CopilotPiPHandle, type CopilotPiPLabels } from "@/components/CopilotPiP";
 import CopilotInline from "@/components/CopilotInline";
 import LiveTranslationStream from "@/components/LiveTranslationStream";
@@ -341,11 +340,6 @@ export default function SessionPage() {
   const [conversationMode, setConversationMode] = useState<ConversationMode>("general");
   const [detectedLanguage, setDetectedLanguage] = useState<string | null>(null);
 
-  // Proactive copilot prep mode
-  const [prepData, setPrepData] = useState<PrepData | null>(null);
-  const [prepLoading, setPrepLoading] = useState(false);
-  const prevModeRef = useRef<string>("");
-
   // Detected question from other speaker
   const [detectedQuestion, setDetectedQuestion] = useState<DetectedQuestion | null>(null);
 
@@ -395,27 +389,6 @@ export default function SessionPage() {
   const conversationSummary = useRef<string>("");
   const unsummarizedSegments = useRef<Array<{ text: string; tone: string; speaker?: string; signal?: string; signalLabel?: string }>>([]);
   const summaryUpdatePending = useRef(false);
-
-  // Fetch proactive prep when mode changes and not recording
-  useEffect(() => {
-    if (isRecording || !user || !can("copilotOverlay")) return;
-    if (conversationMode === prevModeRef.current) return;
-    prevModeRef.current = conversationMode;
-
-    setPrepLoading(true);
-    setPrepData(null);
-    authFetch("/api/copilot-prep", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ mode: conversationMode, language: i18n.language }),
-    })
-      .then((r) => r.json())
-      .then((data) => {
-        if (data.greeting) setPrepData(data);
-      })
-      .catch(() => {})
-      .finally(() => setPrepLoading(false));
-  }, [conversationMode, isRecording, user, can, i18n.language]);
 
   // Analysis lifecycle
   const [analysisStatus, setAnalysisStatus] = useState<"idle" | "running" | "completed">("idle");
@@ -1843,7 +1816,7 @@ export default function SessionPage() {
                   className="text-[10px] uppercase tracking-[0.22em]"
                   style={{ color: isRecording ? "var(--color-negative)" : "rgba(110, 231, 183, 0.85)" }}
                 >
-                  {isRecording ? "Recording" : "Ready"}
+                  {isRecording ? t("session.statusRecording") : t("session.statusReady")}
                 </span>
                 <span className="text-base sm:text-lg font-medium leading-tight">
                   {sessionStarting
@@ -2156,14 +2129,14 @@ export default function SessionPage() {
               </svg>
               <span>
                 <span className="text-[10px] uppercase tracking-[0.18em] font-semibold mr-2" style={{ color: timeRemaining <= 60 ? "var(--color-negative)" : "#fb923c" }}>
-                  Free plan
+                  {t("session.freePlanBanner")}
                 </span>
                 <strong className="tabular-nums" style={{ color: timeRemaining <= 60 ? "var(--color-negative)" : "#fb923c" }}>
                   {Math.floor(timeRemaining / 60)}:{(timeRemaining % 60).toString().padStart(2, "0")}
                 </strong>
                 <span style={{ color: "var(--color-text-muted)" }}>
-                  {" "}restantes
-                  {timeRemaining <= 60 ? " — fin imminente" : ` / ${Math.floor(features.maxSessionDurationSec / 60)} min`}
+                  {" "}{t("session.timeLeft")}
+                  {timeRemaining <= 60 ? `, ${t("session.endingSoon")}` : ` / ${Math.floor(features.maxSessionDurationSec / 60)} min`}
                 </span>
               </span>
             </div>
@@ -2177,7 +2150,7 @@ export default function SessionPage() {
                 transition: "all 0.2s ease",
               }}
             >
-              Upgrade
+              {t("session.upgradeShort")}
             </a>
           </div>
         )}
@@ -2259,7 +2232,7 @@ export default function SessionPage() {
               <rect x="3" y="3" width="18" height="18" rx="2" ry="2" /><circle cx="8.5" cy="8.5" r="1.5" /><polyline points="21 15 16 10 5 21" />
             </svg>
             <span style={{ lineHeight: 1.6 }}>
-              Pour analyser une conversation texte (Instagram, Snap, WhatsApp), utilise <a href="/analyze-text" style={{ color: "var(--shimmer-accent-1)", textDecoration: "underline", textUnderlineOffset: 2 }}>Analyze Conversation</a>.
+              {t("session.analyzeTextTip")} <a href="/analyze-text" style={{ color: "var(--shimmer-accent-1)", textDecoration: "underline", textUnderlineOffset: 2 }}>{t("session.analyzeTextLink")}</a>.
             </span>
           </div>
         )}
@@ -2296,7 +2269,7 @@ export default function SessionPage() {
           >
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0, opacity: 0.7 }}><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z" /></svg>
             <span style={{ lineHeight: 1.6 }}>
-              Assure-toi d&apos;avoir le droit d&apos;analyser le contenu visible. En lançant la session, tu acceptes nos <a href="/terms" target="_blank" style={{ color: "var(--color-text-silver)", textDecoration: "underline", textUnderlineOffset: 2 }}>Terms of Service</a>.
+              {t("session.screenConsent")} <a href="/terms" target="_blank" style={{ color: "var(--color-text-silver)", textDecoration: "underline", textUnderlineOffset: 2 }}>{t("session.termsLink")}</a>.
             </span>
           </div>
         )}
@@ -2318,7 +2291,7 @@ export default function SessionPage() {
               <line x1="12" y1="17" x2="12.01" y2="17" />
             </svg>
             <span className="relative" style={{ color: "var(--color-text-silver)" }}>
-              <span style={{ color: "#fb923c", fontWeight: 600 }}>Audio désactivé</span> — pas de transcription ni d&apos;analyse conversationnelle. Seul le contenu écran sera analysé.
+              <span style={{ color: "#fb923c", fontWeight: 600 }}>{t("session.audioDisabledLabel")}</span>. {t("session.audioDisabledDesc")}
             </span>
           </div>
         )}
@@ -2531,9 +2504,9 @@ export default function SessionPage() {
                   </svg>
                 </span>
                 <div>
-                  <p className="text-sm font-semibold m-0" style={{ color: "var(--color-positive)" }}>Analyse prête</p>
+                  <p className="text-sm font-semibold m-0" style={{ color: "var(--color-positive)" }}>{t("session.analysisReady")}</p>
                   <p className="text-xs m-0 mt-1" style={{ color: "var(--color-text-muted)" }}>
-                    {segments.length > 0 ? `${segments.length} segments analysés.` : "Écran analysé."} Session toujours active — stoppe quand tu es prêt.
+                    {segments.length > 0 ? t("session.segmentsAnalyzed", { count: segments.length }) : t("session.screenAnalyzed")} {t("session.stillActive")}
                   </p>
                 </div>
               </div>

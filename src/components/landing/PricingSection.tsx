@@ -20,6 +20,13 @@ const SPRING_HOVER = { type: "spring" as const, stiffness: 320, damping: 28 };
 
 const MotionLink = motion.create(Link);
 
+// Same i18n namespaces as /pricing, so both pages always say the same thing.
+const PLAN_I18N_KEY = {
+  free: "pricing.planFree",
+  pro: "pricing.planPro",
+  team: "pricing.planTeam",
+} as const;
+
 export default function PricingSection() {
   const { user } = useAuth();
   const { t, i18n } = useTranslation();
@@ -100,12 +107,23 @@ export default function PricingSection() {
                 ? formatPrice(plan.monthlyEquivalent, lang)
                 : formatPrice(plan.monthlyPrice, lang);
             const oldPrice = formatPrice(plan.monthlyPrice, lang);
+            const copyKey = PLAN_I18N_KEY[plan.id];
+            const translatedFeatures = t(`${copyKey}.features`, { returnObjects: true });
+            const localizedPlan = {
+              ...plan,
+              name: t(`${copyKey}.name`),
+              description: t(`${copyKey}.description`),
+              cta: t(`${copyKey}.cta`),
+              features: Array.isArray(translatedFeatures)
+                ? (translatedFeatures as string[])
+                : plan.features,
+            };
 
             return (
               <PricingCard
                 key={plan.id}
                 index={i}
-                plan={plan}
+                plan={localizedPlan}
                 annual={annual}
                 isFree={isFree}
                 displayPrice={displayPrice}
@@ -156,7 +174,7 @@ interface EnterprisePanelProps {
 
 function EnterprisePanel({ t, reduce }: EnterprisePanelProps) {
   const features = t("pricing.planEnterprise.features", { returnObjects: true }) as string[];
-  const subject = encodeURIComponent("Tonvo Enterprise — sales inquiry");
+  const subject = encodeURIComponent("Tonvo Enterprise inquiry");
   const mailto = `mailto:outreach@tonvo.co?subject=${subject}`;
 
   return (
@@ -677,7 +695,7 @@ function CTASlot({
       whileTap={tap}
       transition={SPRING_TAP}
     >
-      {t("landing.hero.cta")}
+      {plan.cta}
     </MotionLink>
   );
 }

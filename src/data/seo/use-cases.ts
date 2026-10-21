@@ -13,8 +13,6 @@ export const useCases: UseCaseEntry[] = [
       "Tonvo listens to your sales calls in real time, detects buyer objections and sentiment shifts, and delivers coaching prompts so you never miss a closing opportunity. Works on Zoom, Meet, and Discord.",
     lastModified: "2026-04-09",
     relatedSlugs: [
-      { type: "features", slug: "live-tone-analysis", label: "Live Tone Analysis" },
-      { type: "features", slug: "objection-detection", label: "Objection Detection" },
       { type: "use-cases", slug: "sdr-onboarding-with-call-review", label: "SDR Onboarding with Call Review" },
       { type: "industries", slug: "saas-sales-teams", label: "SaaS Sales Teams" },
     ],
@@ -84,18 +82,7 @@ export const useCases: UseCaseEntry[] = [
           "A session summary with talk-time ratio, key moments, and next-step recommendations to strengthen your follow-up.",
       },
     ],
-    stats: [
-      { value: "34%", label: "average increase in close rate reported by beta users" },
-      { value: "< 200ms", label: "latency from signal detection to coaching prompt" },
-      { value: "12 min", label: "average time saved on post-call notes per session" },
-    ],
-    testimonial: {
-      quote:
-        "Tonvo is like having my best sales manager whispering in my ear during every call. I caught two objections I would have missed last quarter.",
-      name: "Marcus T.",
-      role: "Senior Account Executive",
-      company: "CloudReach",
-    },
+    stats: [],
   },
 
   // ─── 2. Customer Support Tone Detection ───
@@ -110,9 +97,6 @@ export const useCases: UseCaseEntry[] = [
       "Tonvo uses real-time tone and sentiment analysis to flag frustrated or confused customers the moment their mood shifts. Support agents get live de-escalation suggestions to resolve issues faster and protect your CSAT score.",
     lastModified: "2026-04-09",
     relatedSlugs: [
-      { type: "features", slug: "sentiment-analysis", label: "Sentiment Analysis" },
-      { type: "industries", slug: "customer-support-centers", label: "Customer Support Centers" },
-      { type: "guides", slug: "de-escalation-techniques", label: "De-Escalation Techniques Guide" },
       { type: "use-cases", slug: "remote-meeting-communication", label: "Remote Meeting Communication" },
     ],
     targetKeywords: [
@@ -127,12 +111,12 @@ export const useCases: UseCaseEntry[] = [
       {
         question: "How does Tonvo detect customer frustration?",
         answer:
-          "Tonvo analyzes vocal patterns—pitch, pace, volume changes, and specific language cues—in real time. When these indicators cross a frustration threshold, it alerts the agent with a contextual de-escalation suggestion within milliseconds.",
+          "When these indicators cross a frustration threshold, it alerts the agent with a contextual de-escalation suggestion within milliseconds.",
       },
       {
         question: "Can managers see frustration trends across the team?",
         answer:
-          "Yes. On the Team plan, managers get access to aggregate sentiment dashboards that show frustration frequency, average resolution time after alerts, and per-agent de-escalation performance.",
+          "Yes.",
       },
       {
         question: "Does Tonvo work with existing support platforms?",
@@ -142,7 +126,7 @@ export const useCases: UseCaseEntry[] = [
       {
         question: "Will Tonvo slow down my support workflow?",
         answer:
-          "No. Tonvo runs as a lightweight overlay and processes audio locally with sub-200ms latency. Agents see coaching prompts in a sidebar without leaving their current workflow or switching applications.",
+          "No. Agents see coaching prompts in a sidebar without leaving their current workflow or switching applications.",
       },
     ],
     problem: {
@@ -170,9 +154,9 @@ export const useCases: UseCaseEntry[] = [
       },
       {
         icon: "bar-chart",
-        title: "Team Sentiment Dashboard",
+        title: "Conversation Summaries",
         description:
-          "Aggregate view of frustration trends, resolution times, and agent performance to help managers coach effectively.",
+          "After each session, a summary with the tone of the conversation, what went well and suggested follow-up actions.",
       },
       {
         icon: "clock",
@@ -181,18 +165,7 @@ export const useCases: UseCaseEntry[] = [
           "Early intervention reduces average handle time by addressing root concerns before the customer disengages.",
       },
     ],
-    stats: [
-      { value: "41%", label: "reduction in escalated calls during pilot programs" },
-      { value: "28%", label: "improvement in CSAT scores with real-time tone alerts" },
-      { value: "< 1s", label: "average time from frustration detection to agent prompt" },
-    ],
-    testimonial: {
-      quote:
-        "Our escalation rate dropped dramatically in the first month. Agents feel more confident because they see the warning signs before the customer even raises their voice.",
-      name: "Priya S.",
-      role: "Support Operations Manager",
-      company: "HelpStack",
-    },
+    stats: [],
   },
 
   // ─── 3. AI Coaching for Job Interviews ───
@@ -207,8 +180,6 @@ export const useCases: UseCaseEntry[] = [
       "Tonvo provides live feedback on your tone, confidence, and pacing during mock and real interviews. Review your performance with a detailed post-session analysis and walk into every interview fully prepared.",
     lastModified: "2026-04-09",
     relatedSlugs: [
-      { type: "features", slug: "live-coaching-suggestions", label: "Live Coaching Suggestions" },
-      { type: "guides", slug: "interview-preparation-guide", label: "Interview Preparation Guide" },
       { type: "use-cases", slug: "freelancer-client-call-assistant", label: "Freelancer Client Call Assistant" },
       { type: "features", slug: "post-session-analysis", label: "Post-Session Analysis" },
     ],
@@ -229,41 +200,41 @@ export const useCases: UseCaseEntry[] = [
       {
         question: "What feedback does Tonvo give during an interview?",
         answer:
-          "Tonvo monitors your vocal confidence, speaking pace, filler word frequency, and tone clarity. It provides real-time nudges—like slowing down when you rush or projecting more confidence when your tone drops—and a full analysis after the session.",
+          "It provides real-time nudges—like slowing down when you rush or projecting more confidence when your tone drops—and a full analysis after the session.",
       },
       {
         question: "Is there a free tier I can use for interview prep?",
         answer:
-          "Absolutely. Tonvo's Free plan includes 3 sessions per month at no cost, which is ideal for practicing before key interviews. Upgrade to Pro at $19/month for unlimited sessions and deeper analytics.",
+          "Absolutely. Tonvo's Free plan includes 3 sessions per month at no cost, which is ideal for practicing before key interviews. Upgrade to Plus at $19/month for unlimited sessions and deeper analytics.",
       },
       {
         question: "How does the post-interview analysis work?",
         answer:
-          "After your session, Tonvo generates a report covering confidence trajectory, filler word count, pace variations, and key moments where your tone shifted. You can review specific timestamps and track improvement across sessions.",
+          "You can review specific timestamps and track improvement across sessions.",
       },
     ],
     problem: {
       label: "The Problem",
       heading: "Interview nerves undermine qualified candidates",
-      body: "You know the material, but anxiety causes filler words, rushed answers, and a flat tone that fails to convey confidence. Traditional mock interviews lack the real-time, objective feedback needed to build lasting habits before the high-stakes call.",
+      body: "Traditional mock interviews lack the real-time, objective feedback needed to build lasting habits before the high-stakes call.",
     },
     solution: {
       label: "The Solution",
       heading: "A personal interview coach that listens in real time",
-      body: "Tonvo analyzes your voice throughout the interview—flagging when you speed up, lose vocal energy, or rely on filler words—and delivers gentle prompts to course-correct in the moment. After the call, a detailed performance breakdown helps you improve systematically.",
+      body: "After the call, a detailed performance breakdown helps you improve systematically.",
     },
     features: [
       {
         icon: "mic",
         title: "Confidence & Tone Tracking",
         description:
-          "Continuous analysis of vocal energy, pitch stability, and assertiveness so you project confidence throughout the conversation.",
+          "A short read on the moment as the conversation unfolds, so you can stay calm and answer with confidence.",
       },
       {
         icon: "clock",
-        title: "Pace & Filler Word Alerts",
+        title: "Live Reply Suggestions",
         description:
-          "Real-time nudges when you speak too fast, pause too long, or use filler words like 'um' and 'like' excessively.",
+          "Ready-to-say replies written for what was just said, so you are never stuck for an answer.",
       },
       {
         icon: "bar-chart",
@@ -272,16 +243,7 @@ export const useCases: UseCaseEntry[] = [
           "Track improvements in confidence, clarity, and pacing across multiple practice sessions with trend visualizations.",
       },
     ],
-    stats: [
-      { value: "3x", label: "more callback rate for users who practiced 3+ sessions" },
-      { value: "52%", label: "reduction in filler words after two weeks of use" },
-    ],
-    testimonial: {
-      quote:
-        "I used Tonvo for three mock sessions before my final-round interview at a FAANG company. Being aware of my pacing and tone in real time completely changed how I presented myself.",
-      name: "Jordan K.",
-      role: "Software Engineer",
-    },
+    stats: [],
   },
 
   // ─── 4. Team Meeting Engagement Tracking ───
@@ -297,9 +259,6 @@ export const useCases: UseCaseEntry[] = [
     lastModified: "2026-04-09",
     relatedSlugs: [
       { type: "use-cases", slug: "remote-meeting-communication", label: "Remote Meeting Communication" },
-      { type: "features", slug: "conversation-signals", label: "Conversation Signal Detection" },
-      { type: "industries", slug: "enterprise-teams", label: "Enterprise Teams" },
-      { type: "guides", slug: "effective-meeting-guide", label: "Running Effective Meetings" },
     ],
     targetKeywords: [
       "meeting engagement tracking",
@@ -367,18 +326,7 @@ export const useCases: UseCaseEntry[] = [
           "Aggregate analytics across meetings to identify which formats, times, and durations yield the highest engagement.",
       },
     ],
-    stats: [
-      { value: "23%", label: "increase in meeting participation after implementing engagement tracking" },
-      { value: "18 min", label: "average meeting time reduced through better format decisions" },
-      { value: "4.2x", label: "more balanced talk-time distribution on tracked teams" },
-    ],
-    testimonial: {
-      quote:
-        "We discovered that our standup format was causing half the team to zone out. After switching to a round-robin style based on Tonvo's data, participation doubled.",
-      name: "Lena R.",
-      role: "Engineering Manager",
-      company: "Vertix",
-    },
+    stats: [],
   },
 
   // ─── 5. Freelancer Client Call Assistant ───
@@ -394,9 +342,6 @@ export const useCases: UseCaseEntry[] = [
     lastModified: "2026-04-09",
     relatedSlugs: [
       { type: "use-cases", slug: "ai-copilot-for-sales-calls", label: "AI Copilot for Sales Calls" },
-      { type: "features", slug: "live-coaching-suggestions", label: "Live Coaching Suggestions" },
-      { type: "guides", slug: "freelance-client-communication", label: "Freelance Client Communication" },
-      { type: "industries", slug: "freelancers-consultants", label: "Freelancers & Consultants" },
     ],
     targetKeywords: [
       "freelancer call assistant",
@@ -420,7 +365,7 @@ export const useCases: UseCaseEntry[] = [
       {
         question: "Is the Free plan enough for a freelancer?",
         answer:
-          "The Free plan gives you 3 sessions per month, which works well for occasional client calls. Most active freelancers find the Pro plan at $19/month worthwhile for unlimited sessions and deeper post-call analytics.",
+          "The Free plan gives you 3 sessions per month, which works well for occasional client calls. Most active freelancers find the Plus plan at $19/month worthwhile for unlimited sessions and deeper post-call analytics.",
       },
       {
         question: "Does Tonvo store my client conversations?",
@@ -458,16 +403,7 @@ export const useCases: UseCaseEntry[] = [
           "Continuous sentiment tracking that shows when a client is enthusiastic, uncertain, or disengaged so you can adapt instantly.",
       },
     ],
-    stats: [
-      { value: "27%", label: "higher average project value reported by freelancer users" },
-      { value: "3 free", label: "sessions per month on the Free plan to get started" },
-    ],
-    testimonial: {
-      quote:
-        "I used to cave on pricing the moment a client paused. Tonvo taught me that a pause doesn't mean rejection—it means they're thinking. My average project rate is up 30% in three months.",
-      name: "Alex M.",
-      role: "Independent UX Consultant",
-    },
+    stats: [],
   },
 
   // ─── 6. SDR Onboarding with Call Review ───
@@ -485,7 +421,6 @@ export const useCases: UseCaseEntry[] = [
       { type: "use-cases", slug: "ai-copilot-for-sales-calls", label: "AI Copilot for Sales Calls" },
       { type: "features", slug: "post-session-analysis", label: "Post-Session Analysis" },
       { type: "industries", slug: "saas-sales-teams", label: "SaaS Sales Teams" },
-      { type: "guides", slug: "sdr-coaching-playbook", label: "SDR Coaching Playbook" },
     ],
     targetKeywords: [
       "sdr onboarding tool",
@@ -514,7 +449,7 @@ export const useCases: UseCaseEntry[] = [
       {
         question: "What pricing works for an SDR team?",
         answer:
-          "The Team plan at $49/user/month includes manager dashboards, aggregate team analytics, and unlimited sessions for each rep. It is designed specifically for teams that need coaching at scale.",
+          "It is designed specifically for teams that need coaching at scale.",
       },
     ],
     problem: {
@@ -553,18 +488,7 @@ export const useCases: UseCaseEntry[] = [
           "A prioritized queue of sessions that need attention, sorted by coaching opportunity density so managers focus on high-impact reviews.",
       },
     ],
-    stats: [
-      { value: "2x", label: "faster ramp time compared to traditional call shadowing" },
-      { value: "67%", label: "reduction in manager review time per rep per week" },
-      { value: "89%", label: "of SDRs reported higher confidence after 30 days of use" },
-    ],
-    testimonial: {
-      quote:
-        "We onboarded five new SDRs last quarter with Tonvo. They hit quota 6 weeks earlier than our previous cohort, and my coaching time per rep dropped by half.",
-      name: "David L.",
-      role: "VP of Sales Development",
-      company: "PipelineIQ",
-    },
+    stats: [],
   },
 
   // ─── 7. User Research Interview Insights ───
@@ -579,10 +503,7 @@ export const useCases: UseCaseEntry[] = [
       "Tonvo helps product managers and UX researchers detect real user sentiment during research interviews. Catch hesitation, enthusiasm, and confusion in real time so you build products based on what users actually feel, not just what they say.",
     lastModified: "2026-04-09",
     relatedSlugs: [
-      { type: "features", slug: "sentiment-analysis", label: "Sentiment Analysis" },
       { type: "use-cases", slug: "team-meeting-engagement-tracking", label: "Meeting Engagement Tracking" },
-      { type: "industries", slug: "product-teams", label: "Product Teams" },
-      { type: "guides", slug: "user-research-best-practices", label: "User Research Best Practices" },
     ],
     targetKeywords: [
       "user research sentiment analysis",
@@ -650,17 +571,7 @@ export const useCases: UseCaseEntry[] = [
           "Aggregate analysis across multiple interviews to surface recurring sentiment patterns and validate or challenge hypotheses.",
       },
     ],
-    stats: [
-      { value: "38%", label: "more actionable insights captured per interview session" },
-      { value: "3x", label: "faster time from research to synthesized findings" },
-    ],
-    testimonial: {
-      quote:
-        "We found that users said they loved our checkout flow, but Tonvo's sentiment data showed clear frustration at the payment step. That one insight saved us from shipping a broken experience.",
-      name: "Sana P.",
-      role: "Senior Product Manager",
-      company: "FormKit",
-    },
+    stats: [],
   },
 
   // ─── 8. Remote Meeting Communication ───
@@ -676,9 +587,6 @@ export const useCases: UseCaseEntry[] = [
     lastModified: "2026-04-09",
     relatedSlugs: [
       { type: "use-cases", slug: "team-meeting-engagement-tracking", label: "Meeting Engagement Tracking" },
-      { type: "features", slug: "live-tone-analysis", label: "Live Tone Analysis" },
-      { type: "industries", slug: "remote-distributed-teams", label: "Remote & Distributed Teams" },
-      { type: "compare", slug: "tonvo-vs-otter-ai", label: "Tonvo vs Otter.ai" },
     ],
     targetKeywords: [
       "remote meeting communication",
@@ -746,17 +654,6 @@ export const useCases: UseCaseEntry[] = [
           "An individual score based on clarity, energy, and engagement that helps team members track and improve their remote communication skills.",
       },
     ],
-    stats: [
-      { value: "31%", label: "improvement in reported meeting effectiveness for remote teams" },
-      { value: "2.5x", label: "more balanced participation across distributed team members" },
-      { value: "15 min", label: "average meeting time saved through improved communication clarity" },
-    ],
-    testimonial: {
-      quote:
-        "We're a 40-person team across four time zones. Tonvo helped us realize that our all-hands were dominated by three people. Now every meeting has a participation score, and the culture has completely shifted.",
-      name: "Omar B.",
-      role: "Head of Remote Operations",
-      company: "NomadOps",
-    },
+    stats: [],
   },
 ];

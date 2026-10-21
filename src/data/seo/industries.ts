@@ -14,9 +14,7 @@ export const industries: IndustryEntry[] = [
     lastModified: "2026-04-09",
     relatedSlugs: [
       { type: "use-cases", slug: "ai-copilot-for-sales-calls", label: "AI Copilot for Sales Calls" },
-      { type: "features", slug: "live-coaching-suggestions", label: "Live Coaching Suggestions" },
       { type: "use-cases", slug: "sdr-onboarding-with-call-review", label: "SDR Onboarding with Call Review" },
-      { type: "guides", slug: "improve-sales-call-conversion", label: "Improve Sales Call Conversion" },
     ],
     targetKeywords: [
       "saas sales call coaching",
@@ -39,12 +37,12 @@ export const industries: IndustryEntry[] = [
       {
         question: "Does Tonvo integrate with my existing sales stack?",
         answer:
-          "Tonvo works directly inside Zoom, Google Meet, and Discord. It requires no CRM plugin to start delivering value, though you can export session summaries to feed into your CRM workflow.",
+          "It requires no CRM plugin to start delivering value, though you can export session summaries to feed into your CRM workflow.",
       },
       {
         question: "Is there a free trial for sales teams?",
         answer:
-          "Tonvo's Free plan includes 3 sessions per month so you can evaluate real-time coaching and sentiment detection before upgrading to Pro ($19/mo) or Team ($49/user/mo).",
+          "Tonvo's Free plan includes 3 sessions per month so you can evaluate real-time coaching and sentiment detection before upgrading to Plus ($19/mo) or Team ($49/user/mo).",
       },
     ],
     industryName: "SaaS Sales",
@@ -57,7 +55,7 @@ export const industries: IndustryEntry[] = [
     howTonvoHelps: {
       label: "How It Works",
       heading: "Real-Time Coaching That Moves the Revenue Needle",
-      body: "Tonvo joins your Zoom, Meet, or Discord call and analyzes speaker tone, pace, and sentiment in real time. When a prospect shows hesitation, Tonvo nudges your rep with a contextual coaching prompt. After the session, a full analytics report highlights what went well and where to improve, turning every call into a learning opportunity.",
+      body: "When a prospect shows hesitation, Tonvo nudges your rep with a contextual coaching prompt. After the session, a full analytics report highlights what went well and where to improve, turning every call into a learning opportunity.",
     },
     features: [
       {
@@ -85,11 +83,7 @@ export const industries: IndustryEntry[] = [
           "Track call quality metrics over time and correlate coaching improvements with win-rate changes.",
       },
     ],
-    stats: [
-      { value: "32%", label: "Average increase in demo-to-close rate reported by early adopters" },
-      { value: "2.4x", label: "Faster SDR ramp time with real-time coaching enabled" },
-      { value: "18 min", label: "Average time saved per call on post-call note-taking" },
-    ],
+    stats: [],
     useCaseLinks: [
       "ai-copilot-for-sales-calls",
       "sdr-onboarding-with-call-review",
@@ -110,9 +104,7 @@ export const industries: IndustryEntry[] = [
     lastModified: "2026-04-09",
     relatedSlugs: [
       { type: "use-cases", slug: "customer-support-tone-detection", label: "Customer Support Tone Detection" },
-      { type: "features", slug: "sentiment-analysis", label: "Sentiment Analysis" },
       { type: "industries", slug: "saas-sales-teams", label: "SaaS Sales Teams" },
-      { type: "guides", slug: "reduce-churn-with-conversation-intelligence", label: "Reduce Churn Guide" },
     ],
     targetKeywords: [
       "customer success tone detection",
@@ -140,7 +132,7 @@ export const industries: IndustryEntry[] = [
       {
         question: "What pricing plan do CS teams typically choose?",
         answer:
-          "Most CS teams start with the Team plan at $49/user/mo for shared analytics and account-level sentiment tracking. Individual CSMs can trial the Free plan (3 sessions/mo) first.",
+          "Individual CSMs can trial the Free plan (3 sessions/mo) first.",
       },
     ],
     industryName: "Customer Success",
@@ -153,7 +145,7 @@ export const industries: IndustryEntry[] = [
     howTonvoHelps: {
       label: "How It Works",
       heading: "Turn Every Customer Call into a Retention Signal",
-      body: "Tonvo joins your Zoom, Meet, or Discord calls and continuously scores each participant's tone and engagement. When sentiment dips below a configurable threshold, your CS rep receives a discreet coaching nudge with de-escalation strategies. After the session, the sentiment timeline feeds into account health dashboards so leadership can prioritize at-risk accounts with confidence.",
+      body: "When sentiment dips below a configurable threshold, your CS rep receives a discreet coaching nudge with de-escalation strategies. After the session, the sentiment timeline feeds into account health dashboards so leadership can prioritize at-risk accounts with confidence.",
     },
     features: [
       {
@@ -181,11 +173,7 @@ export const industries: IndustryEntry[] = [
           "Aggregate sentiment data across calls to flag accounts approaching renewal with declining satisfaction.",
       },
     ],
-    stats: [
-      { value: "27%", label: "Reduction in voluntary churn reported by beta CS teams" },
-      { value: "4.1x", label: "More at-risk accounts identified before renewal deadline" },
-      { value: "89%", label: "CS reps say Tonvo prompts improved difficult conversations" },
-    ],
+    stats: [],
     useCaseLinks: [
       "customer-support-tone-detection",
       "team-meeting-engagement-tracking",
@@ -206,7 +194,6 @@ export const industries: IndustryEntry[] = [
     lastModified: "2026-04-09",
     relatedSlugs: [
       { type: "use-cases", slug: "ai-coaching-for-job-interviews", label: "AI Coaching for Job Interviews" },
-      { type: "features", slug: "tone-sentiment-detection", label: "Tone & Sentiment Detection" },
       { type: "use-cases", slug: "user-research-interview-insights", label: "Interview Insights" },
       { type: "industries", slug: "consulting-firms", label: "Consulting Firms" },
     ],
@@ -236,7 +223,7 @@ export const industries: IndustryEntry[] = [
       {
         question: "What plan works best for recruitment agencies?",
         answer:
-          "Agencies with multiple recruiters benefit most from the Team plan ($49/user/mo), which enables shared candidate analytics. Solo recruiters can start with Pro ($19/mo) for unlimited sessions.",
+          "Solo recruiters can start with Plus ($19/mo) for unlimited sessions.",
       },
     ],
     industryName: "Recruitment & Staffing",
@@ -249,7 +236,7 @@ export const industries: IndustryEntry[] = [
     howTonvoHelps: {
       label: "How It Works",
       heading: "Objective Interview Data in Real Time",
-      body: "Tonvo joins your Zoom, Meet, or Discord interview and tracks vocal confidence, pacing, and sentiment for both interviewer and candidate. Discreet prompts help interviewers probe deeper when hesitation is detected. Post-session, a structured scorecard with engagement metrics lets your hiring panel align quickly on candidate fit.",
+      body: "Discreet prompts help interviewers probe deeper when hesitation is detected. Post-session, a structured scorecard with engagement metrics lets your hiring panel align quickly on candidate fit.",
     },
     features: [
       {
@@ -277,11 +264,7 @@ export const industries: IndustryEntry[] = [
           "Structured post-interview reports eliminate hours of manual debrief, accelerating your hiring pipeline.",
       },
     ],
-    stats: [
-      { value: "41%", label: "Faster candidate screening cycle for agencies using Tonvo" },
-      { value: "3.2x", label: "More data points per interview compared to manual note-taking" },
-      { value: "15 min", label: "Average debrief time saved per panel interview" },
-    ],
+    stats: [],
     useCaseLinks: [
       "ai-coaching-for-job-interviews",
       "user-research-interview-insights",
@@ -327,7 +310,7 @@ export const industries: IndustryEntry[] = [
       {
         question: "Is Tonvo suitable for both solo consultants and large firms?",
         answer:
-          "Solo practitioners can use the Pro plan ($19/mo) for unlimited sessions. Larger firms benefit from the Team plan ($49/user/mo) which adds cross-consultant analytics and shared client dashboards.",
+          "Solo practitioners can use the Plus plan ($19/mo) for unlimited sessions.",
       },
       {
         question: "Does Tonvo store or share client conversation content?",
@@ -373,11 +356,7 @@ export const industries: IndustryEntry[] = [
           "Detects client confusion signals and prompts the consultant to rephrase or provide additional context.",
       },
     ],
-    stats: [
-      { value: "23%", label: "Improvement in client satisfaction scores during pilot engagements" },
-      { value: "12 hrs", label: "Documentation time saved per consultant per month" },
-      { value: "94%", label: "Consultants rated real-time prompts as helpful or very helpful" },
-    ],
+    stats: [],
     useCaseLinks: [
       "freelancer-client-call-assistant",
       "remote-meeting-communication",
@@ -400,7 +379,6 @@ export const industries: IndustryEntry[] = [
       { type: "use-cases", slug: "ai-copilot-for-sales-calls", label: "AI Copilot for Sales Calls" },
       { type: "use-cases", slug: "user-research-interview-insights", label: "User Research Insights" },
       { type: "industries", slug: "saas-sales-teams", label: "SaaS Sales Teams" },
-      { type: "features", slug: "real-time-conversation-signals", label: "Conversation Signals" },
     ],
     targetKeywords: [
       "startup meeting copilot",
@@ -423,7 +401,7 @@ export const industries: IndustryEntry[] = [
       {
         question: "What does Tonvo cost for a small startup?",
         answer:
-          "The Free plan (3 sessions/mo) lets you test on your most important calls. Pro ($19/mo) unlocks unlimited sessions for a single user, ideal for solo founders. The Team plan ($49/user/mo) scales as you hire.",
+          "The Free plan (3 sessions/mo) lets you test on your most important calls. Plus ($19/mo) unlocks unlimited sessions for a single user, ideal for solo founders. The Team plan ($49/user/mo) scales as you hire.",
       },
       {
         question: "Does Tonvo work for async or recorded calls?",
@@ -470,11 +448,7 @@ export const industries: IndustryEntry[] = [
           "Three free sessions per month let budget-conscious startups experience real-time coaching risk-free.",
       },
     ],
-    stats: [
-      { value: "$0", label: "Cost to get started with 3 sessions per month on the Free plan" },
-      { value: "28%", label: "Improvement in customer call engagement for early-stage teams" },
-      { value: "5 min", label: "Average setup time from sign-up to first live-coached session" },
-    ],
+    stats: [],
     useCaseLinks: [
       "ai-copilot-for-sales-calls",
       "user-research-interview-insights",
@@ -486,31 +460,29 @@ export const industries: IndustryEntry[] = [
   {
     type: "industries",
     slug: "financial-services",
-    title: "Tonvo for Financial Services | Compliance-Aware Conversation AI",
+    title: "Tonvo for Financial Services | Client Conversation Copilot",
     metaDescription:
-      "Tonvo provides real-time tone monitoring and post-call analytics for financial advisors, ensuring compliant, client-centric conversations every time.",
-    h1: "Compliant, Client-Centric Conversations Powered by AI",
+      "Tonvo helps financial advisors follow client conversations, catch questions and signs of confusion, and review each session afterwards.",
+    h1: "Clearer Client Conversations, Live",
     subtitle:
-      "Tonvo monitors advisor-client call dynamics in real time, providing coaching cues that improve outcomes while maintaining the professionalism financial services demands.",
+      "Tonvo follows advisor-client calls as they happen, with ready replies and a short read on the moment, so advisors can explain complex topics clearly.",
     lastModified: "2026-04-09",
     relatedSlugs: [
       { type: "use-cases", slug: "customer-support-tone-detection", label: "Tone Detection" },
-      { type: "features", slug: "sentiment-analysis", label: "Sentiment Analysis" },
       { type: "industries", slug: "healthcare-communication", label: "Healthcare Communication" },
-      { type: "guides", slug: "conversation-compliance-best-practices", label: "Compliance Best Practices" },
     ],
     targetKeywords: [
       "financial advisor call analytics",
-      "compliance conversation monitoring",
+      "financial advisor conversation assistant",
       "ai tone detection financial services",
       "advisor client communication tool",
       "wealth management call coaching",
     ],
     faq: [
       {
-        question: "How does Tonvo handle compliance-sensitive conversations?",
+        question: "Does Tonvo replace our compliance recording and review?",
         answer:
-          "Tonvo analyzes vocal tone and sentiment patterns, not the content of what is said. This makes it a communication quality tool rather than a surveillance tool, complementing your existing compliance recording infrastructure.",
+          "No. Tonvo is a conversation assistant for the advisor. It does not replace any recording, supervision or review that your regulator requires.",
       },
       {
         question: "Can Tonvo detect when a client is confused or hesitant about a recommendation?",
@@ -520,32 +492,32 @@ export const industries: IndustryEntry[] = [
       {
         question: "Is Tonvo suitable for regulated financial environments?",
         answer:
-          "Tonvo focuses on tone and engagement analytics rather than content transcription. Financial firms should evaluate it alongside their specific regulatory requirements. We recommend reviewing our security documentation with your compliance team.",
+          "Tonvo transcribes the conversation to suggest replies, and sends that text to AI service providers to process it (see our Privacy Policy). Financial firms should evaluate it against their own regulatory, confidentiality and data-processing requirements before use.",
       },
       {
         question: "What does the post-session report include for financial advisors?",
         answer:
-          "Reports include client sentiment timeline, engagement score, advisor pacing metrics, and flagged moments where client confusion or concern was detected, providing an objective quality layer for supervisory review.",
+          "After a session, the report includes a summary, tone and engagement scores, what went well, and suggested follow-up actions.",
       },
     ],
     industryName: "Financial Services",
     painPoints: [
       "Advisors cannot objectively assess client understanding during complex product discussions",
-      "Compliance teams lack scalable tools to evaluate communication quality across the firm",
+      "Advisors have little time to prepare an answer when a client asks an unexpected question",
       "Client dissatisfaction surfaces only after formal complaints rather than during the conversation",
       "Junior advisors need coaching but supervisors cannot attend every client call",
     ],
     howTonvoHelps: {
       label: "How It Works",
-      heading: "Communication Quality That Meets Financial Services Standards",
-      body: "Tonvo integrates with Zoom, Meet, and Discord to provide advisors with real-time tone and engagement analytics during client calls. When a client's vocal signals suggest confusion or concern, the advisor receives a discreet prompt to pause and clarify. Post-session analytics give compliance and supervisory teams an objective communication quality layer without reviewing full call recordings.",
+      heading: "Support for the Advisor in the Moment",
+      body: "Tonvo follows advisor-client calls on Zoom, Meet or any call whose audio you can share, and puts ready replies and a short read on the moment next to the call. When the client seems unsure, the advisor gets a prompt to pause and clarify. After the session, the advisor gets a summary and suggested follow-up actions.",
     },
     features: [
       {
         icon: "shield",
-        title: "Compliance-Friendly Design",
+        title: "Built to Assist, Not to Replace Review",
         description:
-          "Analyzes tone and sentiment patterns rather than transcribing content, fitting alongside existing regulatory recording infrastructure.",
+          "Tonvo helps the advisor in the moment. It is not a recording or supervision system.",
       },
       {
         icon: "eye",
@@ -555,9 +527,9 @@ export const industries: IndustryEntry[] = [
       },
       {
         icon: "bar-chart",
-        title: "Supervisory Quality Reports",
+        title: "Session Summaries",
         description:
-          "Post-session analytics provide compliance teams with objective communication quality data at scale.",
+          "After each session, a summary with scores and suggested follow-ups.",
       },
       {
         icon: "brain",
@@ -566,11 +538,7 @@ export const industries: IndustryEntry[] = [
           "Real-time prompts help junior advisors adopt the communication patterns of top performers.",
       },
     ],
-    stats: [
-      { value: "96%", label: "Client comprehension confidence after sessions with Tonvo-coached advisors" },
-      { value: "35%", label: "Fewer post-call client clarification requests" },
-      { value: "3.8x", label: "More communication quality data points vs manual supervisory review" },
-    ],
+    stats: [],
     useCaseLinks: [
       "customer-support-tone-detection",
       "remote-meeting-communication",
@@ -590,10 +558,8 @@ export const industries: IndustryEntry[] = [
       "Tonvo analyzes tone and engagement during telehealth sessions, coaching providers to communicate with the empathy and clarity patients deserve.",
     lastModified: "2026-04-09",
     relatedSlugs: [
-      { type: "features", slug: "tone-sentiment-detection", label: "Tone & Sentiment Detection" },
       { type: "use-cases", slug: "remote-meeting-communication", label: "Remote Meeting Communication" },
       { type: "industries", slug: "financial-services", label: "Financial Services" },
-      { type: "guides", slug: "empathetic-communication-telehealth", label: "Empathetic Telehealth Guide" },
     ],
     targetKeywords: [
       "telehealth communication tool",
@@ -611,7 +577,7 @@ export const industries: IndustryEntry[] = [
       {
         question: "Does Tonvo comply with healthcare privacy regulations?",
         answer:
-          "Tonvo analyzes vocal tone and engagement patterns, not clinical content. Healthcare organizations should evaluate Tonvo alongside their specific privacy and compliance requirements. We recommend consulting your compliance officer before deployment.",
+          "Tonvo has not been assessed against healthcare privacy regulations such as HIPAA, and it is not designed for clinical use. It transcribes the conversation and sends the text to AI service providers. Do not use it for conversations that contain protected health information unless your organization has reviewed and approved it.",
       },
       {
         question: "Can Tonvo help train new healthcare communicators?",
@@ -634,7 +600,7 @@ export const industries: IndustryEntry[] = [
     howTonvoHelps: {
       label: "How It Works",
       heading: "Empathetic Communication, Coached in Real Time",
-      body: "Tonvo joins your Zoom or Meet telehealth session and tracks patient vocal signals for anxiety, confusion, and engagement. When it detects a communication gap, the provider receives a gentle nudge to slow down, express empathy, or check understanding. Post-session analytics help training programs benchmark and improve communication quality across the care team.",
+      body: "When it detects a communication gap, the provider receives a gentle nudge to slow down, express empathy, or check understanding. Post-session analytics help training programs benchmark and improve communication quality across the care team.",
     },
     features: [
       {
@@ -662,11 +628,7 @@ export const industries: IndustryEntry[] = [
           "Provides communication quality metrics that training programs use to track provider improvement over time.",
       },
     ],
-    stats: [
-      { value: "31%", label: "Improvement in patient-reported communication satisfaction" },
-      { value: "2.7x", label: "More empathy-driven interactions per session with coaching enabled" },
-      { value: "22%", label: "Increase in patient comprehension of care instructions" },
-    ],
+    stats: [],
     useCaseLinks: [
       "customer-support-tone-detection",
       "remote-meeting-communication",
@@ -687,7 +649,6 @@ export const industries: IndustryEntry[] = [
     lastModified: "2026-04-09",
     relatedSlugs: [
       { type: "use-cases", slug: "team-meeting-engagement-tracking", label: "Meeting Engagement Tracking" },
-      { type: "features", slug: "live-coaching-suggestions", label: "Live Coaching Suggestions" },
       { type: "use-cases", slug: "remote-meeting-communication", label: "Remote Communication" },
       { type: "industries", slug: "consulting-firms", label: "Consulting Firms" },
     ],
@@ -717,7 +678,7 @@ export const industries: IndustryEntry[] = [
       {
         question: "What plan is best for a training department?",
         answer:
-          "The Team plan ($49/user/mo) is ideal for training departments, offering shared analytics across facilitators. Individual trainers can start with Pro ($19/mo) for unlimited personal sessions.",
+          "Individual trainers can start with Plus ($19/mo) for unlimited personal sessions.",
       },
     ],
     industryName: "Education & Corporate Training",
@@ -759,11 +720,7 @@ export const industries: IndustryEntry[] = [
           "Compares engagement metrics across sessions so trainers can measure the impact of delivery improvements.",
       },
     ],
-    stats: [
-      { value: "38%", label: "Increase in active learner participation during coached sessions" },
-      { value: "4.5/5", label: "Average learner satisfaction rating for Tonvo-enhanced training" },
-      { value: "45%", label: "Reduction in silent non-participation during virtual training" },
-    ],
+    stats: [],
     useCaseLinks: [
       "team-meeting-engagement-tracking",
       "remote-meeting-communication",

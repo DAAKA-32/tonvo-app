@@ -9,7 +9,7 @@ interface CTABannerProps {
 
 export default function CTABanner({
   heading = "Ready to communicate better?",
-  description = "Join thousands of professionals using Tonvo to improve their conversations.",
+  description = "Try Tonvo free. Three live sessions a month, no credit card.",
   buttonText = "Get started for free",
   buttonHref = "/login",
 }: CTABannerProps) {

@@ -528,6 +528,7 @@ export default function HomePage() {
                 { q: t("landing.faq.q4"), a: t("landing.faq.a4") },
                 { q: t("landing.faq.q5"), a: t("landing.faq.a5") },
                 { q: t("landing.faq.q6"), a: t("landing.faq.a6") },
+                { q: t("landing.faq.q7"), a: t("landing.faq.a7") },
               ].map((item, i) => (
                 <StaggerItem key={i}>
                   <details

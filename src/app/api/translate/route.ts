@@ -66,7 +66,7 @@ Rules:
       const cleaned = content.text.replace(/```json\s*/g, "").replace(/```\s*/g, "").trim();
       translated = JSON.parse(cleaned);
     } catch {
-      console.error("Failed to parse translation:", content.text);
+      console.error("Failed to parse translation");
       return NextResponse.json({ translated: fields });
     }
 

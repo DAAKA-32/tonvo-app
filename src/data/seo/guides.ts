@@ -13,8 +13,6 @@ export const guides: GuideEntry[] = [
       "Master the art of detecting emotional shifts, unspoken objections, and buying signals so you can adapt your approach in real time and close more deals.",
     lastModified: "2026-04-09",
     relatedSlugs: [
-      { type: "features", slug: "real-time-sentiment-analysis", label: "Real-Time Sentiment Analysis" },
-      { type: "use-cases", slug: "sales-call-optimization", label: "Sales Call Optimization" },
       { type: "industries", slug: "saas-sales-teams", label: "SaaS Sales Teams" },
       { type: "guides", slug: "tone-of-voice-impact-on-sales", label: "Tone of Voice Impact on Sales" },
     ],
@@ -49,7 +47,7 @@ export const guides: GuideEntry[] = [
       {
         id: "why-reading-the-room-matters",
         heading: "Why Reading the Room Matters More Than Your Script",
-        body: "Most sales methodologies emphasize what to say, but research consistently shows that how a conversation feels matters more than the words exchanged. A Salesforce study found that 84% of business buyers say being treated like a person — not a number — is critical to winning their business. Reading the room is the skill that bridges that gap.\n\nWhen you can sense a prospect's emotional state, you make better micro-decisions throughout the call. You know when to push forward with a demo and when to pause and address an unspoken concern. You recognize genuine excitement versus polite tolerance. These real-time reads determine whether a call ends with a next step or a dead lead.\n\nThe challenge is that voice-only and video calls strip away many of the cues we rely on in person. Without a full view of body language, sales reps must become students of vocal dynamics — tone shifts, pacing changes, and the subtle verbal markers that reveal what a prospect is actually thinking.",
+        body: "Reading the room matters as much as the words you prepared.\n\nWhen you can sense a prospect's emotional state, you make better micro-decisions throughout the call. You know when to push forward with a demo and when to pause and address an unspoken concern. You recognize genuine excitement versus polite tolerance. These real-time reads determine whether a call ends with a next step or a dead lead.\n\nThe challenge is that voice-only and video calls strip away many of the cues we rely on in person. Without a full view of body language, sales reps must become students of vocal dynamics — tone shifts, pacing changes, and the subtle verbal markers that reveal what a prospect is actually thinking.",
       },
       {
         id: "vocal-cues-to-listen-for",
@@ -97,8 +95,6 @@ export const guides: GuideEntry[] = [
       "Actionable techniques for support and success teams to elevate every customer interaction with real-time awareness, empathy, and adaptive communication.",
     lastModified: "2026-04-09",
     relatedSlugs: [
-      { type: "features", slug: "live-coaching-suggestions", label: "Live Coaching Suggestions" },
-      { type: "use-cases", slug: "customer-support-calls", label: "Customer Support Calls" },
       { type: "industries", slug: "customer-success-teams", label: "Customer Success Teams" },
     ],
     targetKeywords: [
@@ -157,7 +153,7 @@ export const guides: GuideEntry[] = [
       {
         id: "measuring-real-time-improvement",
         heading: "Measuring the Impact of Real-Time Conversation Skills",
-        body: "Measuring improvement requires tracking both outcome metrics and process metrics. Outcome metrics include customer satisfaction scores (CSAT), Net Promoter Score (NPS), first-contact resolution rate, and average handle time. Process metrics include sentiment trajectory during calls, coaching nudge adoption rates, and the frequency of successful de-escalation.\n\nThe most revealing metric is sentiment trajectory — how customer sentiment changes from the beginning to the end of a call. Teams that practice real-time improvement show a consistent pattern of neutral-to-positive sentiment arcs, even for calls that begin with a complaint. This pattern is a more reliable predictor of customer retention than any single satisfaction score.\n\nTrack improvement over time by comparing agent performance across cohorts. New agents who receive real-time coaching typically reach experienced-agent performance levels 40% faster than those trained with traditional methods alone. This compression of the learning curve has a direct impact on both team capacity and customer experience quality.\n\nFinally, correlate conversation quality metrics with business outcomes. When you can demonstrate that a specific improvement in real-time communication skills led to measurable gains in retention, expansion revenue, or referral rates, you build the business case for continued investment in coaching technology and training.",
+        body: "Measuring improvement requires tracking both outcome metrics and process metrics. Outcome metrics include customer satisfaction scores (CSAT), Net Promoter Score (NPS), first-contact resolution rate, and average handle time. Process metrics include sentiment trajectory during calls, coaching nudge adoption rates, and the frequency of successful de-escalation.\n\nThe most revealing metric is sentiment trajectory — how customer sentiment changes from the beginning to the end of a call. Teams that practice real-time improvement show a consistent pattern of neutral-to-positive sentiment arcs, even for calls that begin with a complaint. This pattern is a more reliable predictor of customer retention than any single satisfaction score.\n\nTrack improvement over time by comparing agent performance across cohorts. This compression of the learning curve has a direct impact on both team capacity and customer experience quality.\n\nFinally, correlate conversation quality metrics with business outcomes. When you can demonstrate that a specific improvement in real-time communication skills led to measurable gains in retention, expansion revenue, or referral rates, you build the business case for continued investment in coaching technology and training.",
       },
     ],
     keyTakeaways: [
@@ -184,12 +180,7 @@ export const guides: GuideEntry[] = [
     subtitle:
       "Understand what conversation intelligence is, how AI transforms voice interactions into actionable insights, and what to look for in a modern CI platform.",
     lastModified: "2026-04-09",
-    relatedSlugs: [
-      { type: "features", slug: "real-time-sentiment-analysis", label: "Real-Time Sentiment Analysis" },
-      { type: "features", slug: "post-session-analytics", label: "Post-Session Analytics" },
-      { type: "use-cases", slug: "sales-call-optimization", label: "Sales Call Optimization" },
-      { type: "industries", slug: "call-centers", label: "Call Centers" },
-    ],
+    relatedSlugs: [],
     targetKeywords: [
       "conversation intelligence",
       "AI conversation analysis",
@@ -226,12 +217,12 @@ export const guides: GuideEntry[] = [
       {
         id: "what-is-conversation-intelligence",
         heading: "What Is Conversation Intelligence?",
-        body: "Conversation intelligence (CI) is a technology category that applies artificial intelligence to analyze human conversations — typically voice calls and virtual meetings — and extract structured, actionable insights. At its core, CI transforms the unstructured data locked inside every conversation into something teams can search, measure, learn from, and act on.\n\nThe technology emerged from the convergence of several AI disciplines. Natural language processing (NLP) handles what was said — transcription, topic detection, and semantic analysis. Acoustic analysis handles how it was said — tone, pitch, pace, volume, and emotional markers. Machine learning ties these layers together, identifying patterns across thousands of conversations to surface insights that would be impossible to detect manually.\n\nThe evolution of CI has been dramatic. Early tools were essentially glorified transcription services — useful for record-keeping but limited in analytical power. The current generation operates in real time, analyzing conversations as they happen and delivering insights to participants during the call itself. This shift from retrospective analysis to live intelligence represents a fundamental change in how teams can use conversation data.",
+        body: "Conversation intelligence (CI) is a technology category that applies artificial intelligence to analyze human conversations — typically voice calls and virtual meetings — and extract structured, actionable insights. At its core, CI transforms the unstructured data locked inside every conversation into something teams can search, measure, learn from, and act on.\n\nThe technology emerged from the convergence of several AI disciplines. Natural language processing (NLP) handles what was said — transcription, topic detection, and semantic analysis. Acoustic analysis handles how it was said — tone, pitch, pace, volume, and emotional markers. The evolution of CI has been dramatic. Early tools were essentially glorified transcription services — useful for record-keeping but limited in analytical power. The current generation operates in real time, analyzing conversations as they happen and delivering insights to participants during the call itself. This shift from retrospective analysis to live intelligence represents a fundamental change in how teams can use conversation data.",
       },
       {
         id: "how-ai-conversation-analysis-works",
         heading: "How AI Conversation Analysis Works Under the Hood",
-        body: "Modern conversation intelligence platforms process audio through multiple analysis pipelines simultaneously. The first pipeline handles speech-to-text conversion using automatic speech recognition (ASR) models trained on millions of hours of conversational audio. These models have reached near-human accuracy for clear audio and continue to improve for challenging conditions like accented speech, overlapping speakers, and background noise.\n\nThe second pipeline performs acoustic analysis independent of word content. It extracts features like fundamental frequency (pitch), speaking rate, volume dynamics, and voice quality characteristics. These acoustic features carry emotional information that words alone do not capture — a person can say \"I am fine\" in ways that communicate anything from genuine contentment to barely contained frustration.\n\nThe third pipeline applies natural language understanding (NLU) to the transcribed text. This includes sentiment classification, topic segmentation, intent detection, and entity extraction. Advanced models can identify conversation acts like objections, commitments, questions, and agreements, creating a structured map of the conversation's flow.\n\nThese pipelines feed into a synthesis layer that combines acoustic and linguistic signals to produce holistic insights. For example, a statement classified as positive by the text model but delivered in a flat, low-energy tone would be flagged as potentially incongruent — a signal that warrants attention. This multi-modal analysis is what separates true conversation intelligence from simple transcription.",
+        body: "Modern conversation intelligence platforms process audio through multiple analysis pipelines simultaneously. These models have reached near-human accuracy for clear audio and continue to improve for challenging conditions like accented speech, overlapping speakers, and background noise.\n\nThe second pipeline performs acoustic analysis independent of word content. It extracts features like fundamental frequency (pitch), speaking rate, volume dynamics, and voice quality characteristics. These acoustic features carry emotional information that words alone do not capture — a person can say \"I am fine\" in ways that communicate anything from genuine contentment to barely contained frustration.\n\nThe third pipeline applies natural language understanding (NLU) to the transcribed text. This includes sentiment classification, topic segmentation, intent detection, and entity extraction. Advanced models can identify conversation acts like objections, commitments, questions, and agreements, creating a structured map of the conversation's flow.\n\nThese pipelines feed into a synthesis layer that combines acoustic and linguistic signals to produce holistic insights. For example, a statement classified as positive by the text model but delivered in a flat, low-energy tone would be flagged as potentially incongruent — a signal that warrants attention. This multi-modal analysis is what separates true conversation intelligence from simple transcription.",
       },
       {
         id: "key-features-to-look-for",
@@ -241,7 +232,7 @@ export const guides: GuideEntry[] = [
       {
         id: "use-cases-across-teams",
         heading: "How Different Teams Use Conversation Intelligence",
-        body: "Sales teams were the earliest adopters of conversation intelligence, and the use case remains compelling. CI helps sales organizations understand why deals close or stall by analyzing the conversational dynamics — not just the CRM data — behind every opportunity. Managers can coach reps on specific conversation moments rather than general behaviors, and reps get real-time guidance during high-stakes calls.\n\nCustomer support and success teams use CI to improve resolution quality and reduce escalation rates. Real-time sentiment tracking alerts agents when a customer's emotional state is deteriorating, enabling proactive de-escalation. Post-call analysis identifies systemic issues — if the same confusion point appears across hundreds of conversations, it signals a product or documentation problem rather than an agent training gap.\n\nRecruiting teams apply CI to interview analysis, ensuring consistent evaluation criteria and reducing unconscious bias. By analyzing what interviewers actually asked (versus what was planned) and how candidates responded, teams can calibrate hiring processes based on data rather than gut feel.\n\nProduct teams mine conversation data for customer insight. Every support call, sales demo, and customer meeting contains feedback about what users love, what frustrates them, and what they wish existed. CI platforms make this insight accessible at scale, transforming thousands of hours of conversations into searchable, analyzable product intelligence.",
+        body: "Sales teams were the earliest adopters of conversation intelligence, and the use case remains compelling. CI helps sales organizations understand why deals close or stall by analyzing the conversational dynamics — not just the CRM data — behind every opportunity. Managers can coach reps on specific conversation moments rather than general behaviors, and reps get real-time guidance during high-stakes calls.\n\nCustomer support and success teams use CI to improve resolution quality and reduce escalation rates. Real-time sentiment tracking alerts agents when a customer's emotional state is deteriorating, enabling proactive de-escalation. Post-call analysis identifies systemic issues — if the same confusion point appears across hundreds of conversations, it signals a product or documentation problem rather than an agent training gap.\n\nRecruiting teams apply CI to interview analysis, ensuring consistent evaluation criteria and reducing unconscious bias. By analyzing what interviewers actually asked (versus what was planned) and how candidates responded, teams can calibrate hiring processes based on data rather than gut feel.\n\nProduct teams mine conversation data for customer insight. Every support call, sales demo, and customer meeting contains feedback about what users love, what frustrates them, and what they wish existed.",
       },
       {
         id: "choosing-the-right-platform",
@@ -274,15 +265,13 @@ export const guides: GuideEntry[] = [
     slug: "tone-of-voice-impact-on-sales",
     title: "Why Tone of Voice Matters More Than Words in Sales | Tonvo",
     metaDescription:
-      "Research shows tone of voice drives up to 38% of communication impact. Learn how vocal delivery shapes sales outcomes and how to master it on every call.",
+      "Learn how vocal delivery shapes sales outcomes and how to master it on every call.",
     h1: "Why Tone of Voice Matters More Than Words in Sales",
     subtitle:
       "The research behind vocal delivery's outsized impact on persuasion, trust, and sales outcomes — and how top-performing reps use tone as a competitive advantage.",
     lastModified: "2026-04-09",
     relatedSlugs: [
-      { type: "features", slug: "tone-analysis", label: "Tone Analysis" },
       { type: "guides", slug: "how-to-read-room-in-sales-calls", label: "How to Read the Room in Sales Calls" },
-      { type: "use-cases", slug: "sales-call-optimization", label: "Sales Call Optimization" },
     ],
     targetKeywords: [
       "tone of voice in sales",
@@ -295,7 +284,7 @@ export const guides: GuideEntry[] = [
       {
         question: "How much does tone of voice actually impact sales outcomes?",
         answer:
-          "Research consistently shows that vocal delivery — including tone, pitch, pace, and emphasis — accounts for roughly 38% of communication impact in spoken interactions (based on Mehrabian's communication research and subsequent validation studies). In phone and virtual sales where visual cues are limited, this percentage may be even higher. Teams that train on vocal delivery alongside messaging typically see 15-25% improvements in close rates.",
+          "Tone shapes how your words are received. In phone and virtual conversations, where visual cues are limited, it carries a larger share of the message. The exact effect varies with the situation and the people involved.",
       },
       {
         question: "Can you train yourself to have a better sales tone?",
@@ -315,7 +304,7 @@ export const guides: GuideEntry[] = [
       {
         id: "the-research-behind-tone",
         heading: "What Research Tells Us About Vocal Impact",
-        body: "The foundational research on vocal communication dates to Albert Mehrabian's work in the 1960s, which found that when verbal and nonverbal signals are incongruent, listeners rely on vocal tone (38%) and facial expressions (55%) far more than words alone (7%). While this specific ratio is often misapplied to all communication, the core insight holds: how you say something profoundly shapes how it is received.\n\nMore recent research strengthens this finding in business contexts. A study published in the Journal of Voice found that speakers rated as having \"authoritative\" vocal qualities were 20% more persuasive than those with identical scripts but less confident delivery. Another study in the Harvard Business Review identified vocal warmth and competence as the two dimensions listeners use to evaluate speakers within the first few seconds of hearing them.\n\nIn sales specifically, analysis of over 500,000 sales calls by various conversation intelligence platforms has revealed consistent patterns. Calls where the rep demonstrated vocal variety — deliberate changes in pace, pitch, and emphasis — resulted in significantly higher engagement and conversion rates than monotone deliveries. The data is clear: tone is not a soft skill. It is a measurable driver of revenue.",
+        body: "How you say something shapes how it is received. Vocal variety, such as deliberate changes in pace and emphasis, keeps a listener engaged more than a monotone delivery does. Tone is not a soft skill: it changes how your message lands.",
       },
       {
         id: "how-tone-shapes-trust",
@@ -325,7 +314,7 @@ export const guides: GuideEntry[] = [
       {
         id: "five-tonal-patterns-top-performers",
         heading: "Five Tonal Patterns of Top-Performing Sales Reps",
-        body: "The first pattern is strategic pacing. Top performers do not speak at one speed. They slow down for key value propositions and speed up slightly during transitional moments. This variation signals importance — it tells the prospect's brain to pay extra attention when the pace drops. Analysis of high-performing reps shows they use an average of three distinct pace levels within a single call.\n\nThe second pattern is the power of the pause. Elite reps are comfortable with silence in ways that average reps are not. After making a key point, they pause for one to two seconds rather than rushing to fill the space. After asking a question, they wait fully for the answer without jumping in. These pauses communicate confidence and give prospects the cognitive space to process and respond thoughtfully.\n\nThird is pitch range utilization. Top performers use a wider pitch range than their peers. They do not speak in monotone, nor do they use exaggerated inflection. Instead, they employ natural variation that keeps the listener engaged and emphasizes key points. Studies show that listeners rate speakers with moderate pitch variation as 23% more engaging than those with flat delivery.\n\nThe fourth pattern is volume dynamics. Effective reps modulate volume strategically — slightly softer when sharing something confidential or important, slightly louder when expressing enthusiasm about a solution. This creates a sense of intimacy and partnership rather than a one-directional pitch.\n\nFifth is emotional mirroring followed by leading. When a prospect expresses frustration, top reps briefly match that energy — their tone acknowledges the difficulty — before gradually shifting to a more optimistic and solution-oriented delivery. This mirror-then-lead approach validates the prospect's experience while steering the conversation forward.",
+        body: "The first pattern is strategic pacing. Top performers do not speak at one speed. They slow down for key value propositions and speed up slightly during transitional moments. This variation signals importance — it tells the prospect's brain to pay extra attention when the pace drops. Analysis of high-performing reps shows they use an average of three distinct pace levels within a single call.\n\nThe second pattern is the power of the pause. Elite reps are comfortable with silence in ways that average reps are not. After making a key point, they pause for one to two seconds rather than rushing to fill the space. After asking a question, they wait fully for the answer without jumping in. These pauses communicate confidence and give prospects the cognitive space to process and respond thoughtfully.\n\nThird is pitch range utilization. Top performers use a wider pitch range than their peers. They do not speak in monotone, nor do they use exaggerated inflection. Instead, they employ natural variation that keeps the listener engaged and emphasizes key points. The fourth pattern is volume dynamics. Effective reps modulate volume strategically — slightly softer when sharing something confidential or important, slightly louder when expressing enthusiasm about a solution. This creates a sense of intimacy and partnership rather than a one-directional pitch.\n\nFifth is emotional mirroring followed by leading. When a prospect expresses frustration, top reps briefly match that energy — their tone acknowledges the difficulty — before gradually shifting to a more optimistic and solution-oriented delivery. This mirror-then-lead approach validates the prospect's experience while steering the conversation forward.",
       },
       {
         id: "common-tonal-mistakes",
@@ -344,8 +333,8 @@ export const guides: GuideEntry[] = [
       },
     ],
     keyTakeaways: [
-      "Tone of voice accounts for roughly 38% of spoken communication impact; in phone and virtual sales it may be even higher.",
-      "Trust is formed within the first ten seconds based on vocal signals of competence and warmth — before your pitch even begins.",
+      "Your tone shapes how your words land, especially on a phone or video call where visual cues are limited.",
+      "The first moments of a call set the tone, so open with warmth and clarity before you get to the pitch.",
       "Top performers use five key tonal patterns: strategic pacing, deliberate pauses, pitch range variation, volume dynamics, and emotional mirror-then-lead.",
       "Systematic improvement requires recording review, targeted vocal exercises, real-time feedback, and objective metric tracking over time.",
     ],
@@ -367,11 +356,7 @@ export const guides: GuideEntry[] = [
     subtitle:
       "Evidence-based strategies for communicating clearly, building rapport, and driving productive outcomes in virtual meetings across Zoom, Google Meet, and Teams.",
     lastModified: "2026-04-09",
-    relatedSlugs: [
-      { type: "features", slug: "meeting-analytics", label: "Meeting Analytics" },
-      { type: "use-cases", slug: "remote-team-communication", label: "Remote Team Communication" },
-      { type: "industries", slug: "distributed-teams", label: "Distributed Teams" },
-    ],
+    relatedSlugs: [],
     targetKeywords: [
       "remote meeting communication tips",
       "virtual meeting best practices",
