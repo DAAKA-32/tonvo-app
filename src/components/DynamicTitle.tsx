@@ -12,15 +12,9 @@ const ROUTE_TITLE_MAP: Record<string, string> = {
   "/history": "pageTitle.history",
   "/analyze-text": "pageTitle.analyzeText",
   "/analytics": "pageTitle.analytics",
-  "/pricing": "pageTitle.pricing",
+  "/plans": "pageTitle.pricing",
   "/settings": "pageTitle.settings",
   "/profile": "pageTitle.profile",
-  "/about": "pageTitle.about",
-  "/privacy": "pageTitle.privacy",
-  "/terms": "pageTitle.terms",
-  "/cookies": "pageTitle.cookies",
-  "/legal": "pageTitle.legal",
-  "/blog": "pageTitle.blog",
 };
 
 /**

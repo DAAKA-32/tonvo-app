@@ -16,7 +16,7 @@ export default function UpgradePrompt({ feature, plan = "Plus", inline = false }
   if (inline) {
     return (
       <Link
-        href="/pricing"
+        href="/plans"
         className="inline-flex items-center gap-1.5 text-xs font-medium no-underline px-2.5 py-1 rounded-lg transition-all hover:opacity-80"
         style={{
           backgroundColor: "var(--color-surface-2)",
@@ -59,7 +59,7 @@ export default function UpgradePrompt({ feature, plan = "Plus", inline = false }
         This feature is available on the {plan} plan.
       </p>
       <Link
-        href="/pricing"
+        href="/plans"
         className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-semibold no-underline transition-all hover:opacity-90"
         style={{
           background: "var(--color-text)",

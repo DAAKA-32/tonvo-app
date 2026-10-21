@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
+import { useTranslation } from "react-i18next";
 import { motion, AnimatePresence } from "framer-motion";
 import { TonvoLogoMark } from "@/components/Logo";
 
@@ -14,6 +15,7 @@ import { TonvoLogoMark } from "@/components/Logo";
  *  - Exit after reaching 100% with a short dwell + fade-out
  */
 export default function CurtainIntro() {
+  const { t } = useTranslation();
   const [show, setShow] = useState(true);
   const [progress, setProgress] = useState(0);
   const [phase, setPhase] = useState<"loading" | "finishing" | "done">("loading");
@@ -132,7 +134,7 @@ export default function CurtainIntro() {
 
             {/* Label */}
             <span className="curtain-label">
-              Preparing your workspace
+              {t("ui.preparingWorkspace")}
             </span>
           </motion.div>
         </motion.div>

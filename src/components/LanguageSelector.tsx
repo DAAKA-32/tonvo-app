@@ -1,8 +1,11 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
+import { usePathname, useRouter } from "next/navigation";
 import { useTranslation } from "react-i18next";
 import { SUPPORTED_LANGUAGES, loadLanguage } from "@/i18n/config";
+import { useOptionalLocale } from "@/components/PublicProviders";
+import { isLocale, isPathAvailable, localePath, splitLocale } from "@/i18n/locales-config";
 
 const FLAG_EMOJI: Record<string, string> = {
   GB: "🇬🇧", ES: "🇪🇸", FR: "🇫🇷", DE: "🇩🇪", PT: "🇵🇹",
@@ -10,11 +13,16 @@ const FLAG_EMOJI: Record<string, string> = {
 };
 
 export default function LanguageSelector() {
-  const { i18n } = useTranslation();
+  const { i18n, t } = useTranslation();
+  // On the public pages the language is part of the URL: choosing one navigates. In the signed-in app it
+  // switches in place.
+  const pageLocale = useOptionalLocale();
+  const pathname = usePathname();
+  const router = useRouter();
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
-  const current = SUPPORTED_LANGUAGES.find((l) => l.code === i18n.language) || SUPPORTED_LANGUAGES[0];
+  const current = SUPPORTED_LANGUAGES.find((l) => l.code === (pageLocale ?? i18n.language)) || SUPPORTED_LANGUAGES[0];
 
   useEffect(() => {
     function close(e: MouseEvent) {
@@ -25,6 +33,18 @@ export default function LanguageSelector() {
   }, []);
 
   async function select(code: string) {
+    if (pageLocale && isLocale(code)) {
+      try {
+        localStorage.setItem("tonvo-language", code);
+      } catch {
+        /* storage blocked: the choice still applies to this page */
+      }
+      // Same page in the chosen language when it exists there, that language's home page otherwise.
+      const { path } = splitLocale(pathname);
+      router.push(localePath(isPathAvailable(path, code) ? path : "/", code));
+      setOpen(false);
+      return;
+    }
     await loadLanguage(code);
     i18n.changeLanguage(code);
     localStorage.setItem("tonvo-language", code);
@@ -33,7 +53,17 @@ export default function LanguageSelector() {
   }
 
   return (
-    <div ref={ref} className="relative">
+    <div
+      ref={ref}
+      className="relative"
+      onKeyDown={(e) => {
+        if (e.key === "Escape") setOpen(false);
+      }}
+      onBlur={(e) => {
+        // Tabbing out of the menu closes it.
+        if (!e.currentTarget.contains(e.relatedTarget as Node | null)) setOpen(false);
+      }}
+    >
       <button
         onClick={() => setOpen(!open)}
         className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs border-none cursor-pointer"
@@ -55,9 +85,11 @@ export default function LanguageSelector() {
           e.currentTarget.style.borderColor = "color-mix(in srgb, var(--color-text) 8%, transparent)";
           e.currentTarget.style.color = "var(--color-text-silver)";
         }}
-        aria-label="Change language"
+        aria-label={t("nav.changeLanguage")}
+        aria-expanded={open}
+        aria-haspopup="true"
       >
-        <span>{FLAG_EMOJI[current.flag] || "🌐"}</span>
+        <span aria-hidden="true">{FLAG_EMOJI[current.flag] || "🌐"}</span>
         <span className="hidden sm:inline font-medium tracking-[0.06em]">
           {current.code.toUpperCase()}
         </span>
@@ -99,6 +131,7 @@ export default function LanguageSelector() {
               <button
                 key={lang.code}
                 onClick={() => select(lang.code)}
+                aria-current={active ? "true" : undefined}
                 className="flex items-center gap-2.5 w-full px-3.5 py-2 text-left text-sm border-none cursor-pointer"
                 style={{
                   background: active ? "color-mix(in srgb, var(--color-text) 6%, transparent)" : "transparent",
@@ -117,7 +150,7 @@ export default function LanguageSelector() {
                   e.currentTarget.style.color = "var(--color-text-silver)";
                 }}
               >
-                <span>{FLAG_EMOJI[lang.flag] || "🌐"}</span>
+                <span aria-hidden="true">{FLAG_EMOJI[lang.flag] || "🌐"}</span>
                 <span>{lang.label}</span>
                 {active && (
                   <svg

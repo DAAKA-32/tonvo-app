@@ -868,7 +868,7 @@ export default function LandingHero() {
     }
   }, [user, loading, router]);
 
-  if (loading || user) return null;
+  // Always render: the hero must be in the server HTML. A signed-in visitor is redirected by the effect above.
 
   const ctaHref = "/login";
   const headline1 = t("landing.hero.headline1");

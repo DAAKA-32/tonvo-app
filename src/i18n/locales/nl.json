@@ -14,7 +14,8 @@
     "terms": "Algemene voorwaarden",
     "cookies": "Cookiebeleid",
     "legal": "Juridische kennisgeving",
-    "blog": "Blog"
+    "blog": "Blog",
+    "default": "Tonvo: je copilot voor elk gesprek"
   },
   "nav": {
     "menu": "Menu",
@@ -25,7 +26,8 @@
     "analytics": "Analytics",
     "pricing": "Prijzen",
     "settings": "Instellingen",
-    "signOut": "Uitloggen"
+    "signOut": "Uitloggen",
+    "changeLanguage": "Taal wijzigen"
   },
   "common": {
     "loading": "Laden...",
@@ -48,7 +50,9 @@
     "negative": "Negatief",
     "all": "Alles",
     "google": "Google",
-    "emailPassword": "E-mail / wachtwoord"
+    "emailPassword": "E-mail / wachtwoord",
+    "upgrade": "Upgraden",
+    "pro": "Plus"
   },
   "dashboard": {
     "greetingMorning": "Goedemorgen",
@@ -64,7 +68,12 @@
     "noSessions": "Nog geen sessies",
     "noSessionsDesc": "Start je eerste live analyse om hier resultaten te zien.",
     "startSessionBtn": "Sessie starten",
-    "latestInsights": "Laatste insights"
+    "latestInsights": "Laatste insights",
+    "subtitle": "Al je gesprekken in één overzicht.",
+    "startSession": "Start een live sessie",
+    "startSessionDesc": "Krijg de juiste woorden terwijl het gesprek bezig is",
+    "analyzeText": "Hulp bij een bericht",
+    "analyzeTextDesc": "Plak een bericht of upload screenshots en krijg hulp bij je antwoord"
   },
   "history": {
     "title": "Sessiegeschiedenis",
@@ -150,7 +159,8 @@
     "theme": "Thema",
     "themeDesc": "Kies je voorkeursthema voor het dashboard",
     "dark": "Donker",
-    "light": "Licht"
+    "light": "Licht",
+    "dataRetentionFree": "In je geschiedenis zie je met het Free-plan de laatste 7 dagen"
   },
   "profile": {
     "title": "Profiel",
@@ -265,7 +275,10 @@
     "copied": "Gekopieerd",
     "proLockedTitle": "Live coaching",
     "proLockedText": "Coachingtips, koopsignalen en spreektijdverhouding, live tijdens het gesprek.",
-    "proLockedCta": "Bekijk abonnementen"
+    "proLockedCta": "Bekijk abonnementen",
+    "invisibleInScreenShare": "Verborgen als je een tabblad of venster deelt",
+    "copilotInvisible": "AI-copilot actief. Verborgen als je een tabblad of venster deelt.",
+    "copilotBlocked": "Copilot-venster geblokkeerd door de browser. Sta pop-ups toe of gebruik Chrome voor het Picture-in-Picture-venster."
   },
   "auth": {
     "welcomeBack": "Welkom terug",
@@ -321,7 +334,8 @@
     "userDisabled": "Dit account is gedeactiveerd. Neem contact op met support.",
     "genericError": "Er ging iets mis. Probeer het opnieuw.",
     "passwordValidationError": "Wachtwoord moet minimaal 8 tekens hebben, met minimaal 1 letter en 1 cijfer.",
-    "firebaseNotInitialized": "Service tijdelijk niet beschikbaar. Probeer het later opnieuw."
+    "firebaseNotInitialized": "Service tijdelijk niet beschikbaar. Probeer het later opnieuw.",
+    "signUpSubtitle": "Maak je account aan. Een live copilot voor je gesprekken en voor alledaagse gesprekken"
   },
   "session": {
     "title": "Live sessie",
@@ -433,7 +447,29 @@
     "transcriptTab": "Live transcript",
     "starting": "Starten...",
     "recordingHint": "Tonvo luistert. Blijf bij het gesprek, de suggesties komen in realtime.",
-    "idleHint": "Stel de opname in en druk om live te gaan."
+    "idleHint": "Stel de opname in en druk om live te gaan.",
+    "timeLimitReached": "Tijdslimiet van de sessie bereikt. Upgrade naar Plus voor onbeperkte sessies.",
+    "copilotInvisible": "Verborgen als je een tabblad of venster deelt",
+    "copilotRunning": "AI-copilot actief. Verborgen als je een tabblad of venster deelt.",
+    "copilotBlocked": "Copilot-venster geblokkeerd door de browser. Sta pop-ups toe voor deze site of gebruik Chrome voor het Picture-in-Picture-venster.",
+    "sessionLimitReached": "Je hebt al je gratis sessies van deze maand gebruikt. Upgrade naar Plus voor onbeperkte sessies.",
+    "statusRecording": "Opname",
+    "statusReady": "Klaar",
+    "freePlanBanner": "Free-plan",
+    "timeLeft": "over",
+    "endingSoon": "bijna afgelopen",
+    "analyzeTextTip": "Wil je een tekstgesprek analyseren (Instagram, Snap, WhatsApp)? Gebruik dan",
+    "analyzeTextLink": "Hulp bij een bericht",
+    "screenConsent": "Zorg dat je het recht hebt om te analyseren wat er op je scherm te zien is. Door de sessie te starten ga je akkoord met onze",
+    "termsLink": "Algemene voorwaarden",
+    "audioDisabledLabel": "Audio uit",
+    "audioDisabledDesc": "Geen transcriptie of gespreksanalyse. Alleen de inhoud van het scherm wordt geanalyseerd.",
+    "analysisReady": "Analyse klaar",
+    "segmentsAnalyzed": "{{count}} segmenten geanalyseerd.",
+    "screenAnalyzed": "Scherm geanalyseerd.",
+    "stillActive": "Sessie nog actief. Stop wanneer je klaar bent.",
+    "upgradeShort": "Upgraden",
+    "fullAnalysisInfo": "Volledige modus: schermopname + audiotranscriptie + live signalen."
   },
   "analyzePage": {
     "title": "Gesprek analyseren",
@@ -546,26 +582,103 @@
       "vslFullscreen": "Volledig scherm",
       "vslExitFullscreen": "Volledig scherm sluiten",
       "vslPause": "Pauzeren",
-      "vslPlay": "Afspelen"
+      "vslPlay": "Afspelen",
+      "headline1": "Jouw copilot voor",
+      "headline2": "elk gesprek.",
+      "headline2Phrases": [
+        "Elk gesprek",
+        "Lastige gesprekken",
+        "Sollicitatiegesprekken",
+        "Gesprekken in een andere taal",
+        "Verkoopgesprekken",
+        "Het dagelijks leven"
+      ],
+      "subtitle": "Tonvo volgt een live gesprek en zet drie kant-en-klare antwoorden op je scherm, zodat je altijd weet wat je daarna kunt zeggen. Belgesprekken, sollicitaties, vergaderingen en de gesprekken die niemand kan voorbereiden."
     },
     "desktopDownload": {
       "badge": "Nu als desktop-app",
       "title": "Tonvo op je desktop",
-      "subtitle": "Native app voor {{os}} — installeer één keer, start vanaf je dock.",
-      "subtitleNoOS": "Native app — installeer één keer, start vanaf je dock.",
+      "subtitle": "Native app voor {{os}}, installeer één keer, start vanaf je dock.",
+      "subtitleNoOS": "Native app, installeer één keer, start vanaf je dock.",
       "cta": "Download voor {{os}}",
       "ctaFallback": "Download Tonvo",
       "alsoOn": "Ook op",
-      "safetyNote": "App is veilig — Microsoft-verificatie loopt.",
-      "safetyTooltip": "Tonvo is nog niet gesigneerd tijdens de Phase 1-bèta. Microsoft keurt elke release goed. Als SmartScreen waarschuwt, klik op 'Meer informatie' en dan 'Toch uitvoeren' — de binary is gebouwd vanaf een open CI op GitHub Actions."
+      "safetyNote": "App is veilig, Microsoft-verificatie loopt.",
+      "safetyTooltip": "Tonvo is nog niet gesigneerd tijdens de Phase 1-bèta. Microsoft keurt elke release goed. Als SmartScreen waarschuwt, klik op 'Meer informatie' en dan 'Toch uitvoeren', de binary is gebouwd vanaf een open CI op GitHub Actions."
     },
-    "problem": {},
-    "solution": {},
-    "features": {},
-    "demo": {},
-    "useCases": {},
-    "cta": {},
-    "faq": {}
+    "problem": {
+      "label": "Het leven komt niet met een script",
+      "heading1": "Je kent dat moment.",
+      "heading2": "Je hoofd is ineens leeg.",
+      "p1": "De ander stelt precies de vraag waar het om draait. Of iemand praat snel, in een tweede taal, en je raakt de draad kwijt. Een paar seconden lang sta je stil. Voor die seconden is Tonvo er."
+    },
+    "solution": {
+      "label": "Zo helpt Tonvo",
+      "heading1": "Een rustige stem aan jouw kant.",
+      "heading2": "In elk gesprek.",
+      "desc": "Tonvo volgt het gesprek terwijl het gebeurt. Je ziet wat de ander net vroeg, een korte inschatting van het moment en drie antwoorden die je kunt gebruiken. Jij beslist wat je zegt. Tonvo zorgt dat je nooit zonder woorden zit.",
+      "step1Title": "Start een sessie",
+      "step1Desc": "Met één klik. Kies je microfoon en deel de audio van je gesprek als je wilt dat Tonvo beide kanten hoort.",
+      "step2Title": "Krijg de juiste woorden",
+      "step2Desc": "Drie antwoorden en een snelle inschatting van het moment, terwijl het gesprek loopt. Live vertaling met betaalde plannen.",
+      "step3Title": "Kijk terug en leer",
+      "step3Desc": "Na het gesprek krijg je een samenvatting, wat goed ging en de vervolgstappen om op te volgen."
+    },
+    "features": {
+      "label": "Wat Tonvo doet",
+      "heading1": "Alles wat je nodig hebt",
+      "heading2": "op het juiste moment.",
+      "liveTone": "Begrijpt het moment",
+      "liveToneDesc": "Pikt de vraag op die je net kreeg, plus de toon en de signalen erachter.",
+      "smartSuggestions": "Antwoorden om direct te gebruiken",
+      "smartSuggestionsDesc": "Drie opties, geschreven voor wat er net gezegd is, in de taal van het gesprek.",
+      "conversationInsights": "Een beeld van hoe het gaat",
+      "conversationInsightsDesc": "Toon, betrokkenheid en wie het meeste aan het woord is. Coachingtips en scores met betaalde plannen.",
+      "textAnalysis": "Kijk het achteraf terug",
+      "textAnalysisDesc": "Krijg na een sessie een samenvatting en vervolgstappen, of plak een bericht of upload screenshots voor hulp bij je antwoord."
+    },
+    "demo": {
+      "label": "Zie het live",
+      "heading": "De woorden, precies wanneer je ze nodig hebt",
+      "desc": "Een echte sessie: links wat er gezegd werd, rechts drie antwoorden."
+    },
+    "useCases": {
+      "label": "Waar Tonvo helpt",
+      "heading": "Voor de gesprekken die voor jou tellen.",
+      "salesTitle": "Gesprekken en vergaderingen",
+      "salesDesc": "Volg een werkgesprek, beantwoord de lastige vraag en ga weg met duidelijke vervolgstappen.",
+      "supportTitle": "Sollicitaties en onderhandelingen",
+      "supportDesc": "Krijg een rustige inschatting van het moment en antwoorden die je kunt aanpassen, als er veel op het spel staat.",
+      "interviewsTitle": "Een andere taal",
+      "interviewsDesc": "Volg en reageer in 10 talen. Live vertaling is beschikbaar met betaalde plannen.",
+      "meetingsTitle": "Berichten en alledaagse gesprekken",
+      "meetingsDesc": "Plak een gesprek of upload screenshots en krijg hulp bij hoe je reageert."
+    },
+    "cta": {
+      "heading1": "De volgende keer dat je blokkeert,",
+      "heading2": "gebeurt dat niet.",
+      "desc": "Start een sessie en heb de juiste woorden voor je neus wanneer het gesprek erom vraagt.",
+      "button": "Probeer Tonvo gratis",
+      "note": "3 gratis sessies per maand. Geen creditcard nodig. 7 dagen geld-terug-garantie op betaalde plannen."
+    },
+    "faq": {
+      "title": "Vragen die mensen stellen.",
+      "subtitle": "Alles wat je wilt weten voor je eerste sessie met Tonvo.",
+      "q1": "Wat is Tonvo precies?",
+      "a1": "Tonvo is een copilot voor live gesprekken. Het luistert mee, transcribeert en zet drie kant-en-klare antwoorden en een korte inschatting van het moment op je scherm. Jij bepaalt wat je zegt.",
+      "q2": "Waarvoor kan ik het gebruiken?",
+      "a2": "Voor gesprekken en vergaderingen, sollicitaties, onderhandelingen en gesprekken in een andere taal. Je kunt ook een bericht plakken of screenshots uploaden voor hulp bij hoe je antwoordt.",
+      "q3": "Werkt het op mijn telefoon?",
+      "a3": "Tonvo draait in de browser op computers, telefoons en tablets. Op een telefoon luistert het via de microfoon, dus zet je gesprek op de luidspreker. Het kan de andere kant van een telefoongesprek niet zelf opvangen en luistert niet op de achtergrond mee.",
+      "q4": "Welke talen worden ondersteund?",
+      "a4": "De app en de antwoorden werken in 10 talen en Tonvo kan de taal van het gesprek herkennen. Live vertaling is beschikbaar met de betaalde plannen.",
+      "q5": "Kan de ander Tonvo zien?",
+      "a5": "Met Plus en Team opent Tonvo in een eigen venster, dat niet bij een gedeeld tabblad of venster hoort. Met het Free-plan verschijnen de antwoorden op de pagina zelf, dus houd die pagina buiten wat je deelt. Als je je hele scherm deelt, kunnen anderen Tonvo zien. Vertel de mensen met wie je praat altijd dat je zo'n tool gebruikt, en houd je aan de regels die voor jou gelden.",
+      "q6": "Wat gebeurt er met mijn gesprekken?",
+      "a6": "Audio wordt niet door Tonvo opgeslagen en schermopnames worden niet bewaard. We bewaren de tekst van je sessies en je rapporten, zodat je ze kunt teruglezen. Lees ons Privacybeleid voor de details en de betrokken diensten.",
+      "q7": "Is er een garantie?",
+      "a7": "Begin gratis, zonder creditcard. Betaalde plannen hebben een 7 dagen geld-terug-garantie."
+    }
   },
   "mockup": {
     "menu": "Menu",
@@ -580,7 +693,7 @@
     "live": "Live",
     "positive": "Positief",
     "you": "Jij",
-    "transcript1": "Ik denk dat de kwartaalcijfers er veelbelovend uitzien — laten we de vervolgstappen bespreken.",
+    "transcript1": "Ik denk dat de kwartaalcijfers er veelbelovend uitzien, laten we de vervolgstappen bespreken.",
     "transcript2": "Over de planning twijfel ik wel, het voelt nogal ambitieus.",
     "transcript3": "Terecht punt. Laat me de roadmap aanpassen en vrijdag een update sturen.",
     "transcript4": "Prima. Kunnen we ook de budgetverdeling nog eens doorlopen?",
@@ -603,7 +716,10 @@
     "opportunity": "Kans",
     "speaking": "Aan het woord",
     "listening": "Luistert",
-    "muted": "Gedempt"
+    "muted": "Gedempt",
+    "closeDeal": "Een stap verder",
+    "closeDealText": "\"Laten we de budgetbespreking vastzetten voor maandag, dan neem ik bijgewerkte cijfers mee.\"",
+    "showEmpathyText": "\"Ik begrijp je zorg helemaal. Laten we een tempo vinden dat voor iedereen werkt.\""
   },
   "pricing": {
     "monthly": "Maandelijks",
@@ -623,20 +739,76 @@
       "STRIPE_INIT": "Ons betaalsysteem is in onderhoud. Probeer het over een paar minuten opnieuw.",
       "CUSTOMER_CREATE": "We konden je betaalprofiel niet aanmaken. Probeer het opnieuw.",
       "STRIPE_CONNECTION": "Ons betaalsysteem is even onbereikbaar. Probeer het zo opnieuw.",
-      "STRIPE_AUTH": "Ons betaalsysteem is in onderhoud. We zijn ermee bezig — probeer het zo opnieuw.",
+      "STRIPE_AUTH": "Ons betaalsysteem is in onderhoud. We zijn ermee bezig, probeer het zo opnieuw.",
       "STRIPE_INVALID": "Er gebeurde iets onverwachts. Probeer het opnieuw of neem contact op met support.",
       "STRIPE_RATE_LIMIT": "Te veel verzoeken. Wacht even en probeer het opnieuw.",
       "UNKNOWN": "Tijdelijk probleem. Probeer het zo opnieuw."
     },
     "cancelError": "Kan je abonnement nu niet bijwerken. Probeer het opnieuw.",
     "portalError": "Kan het facturatieportaal nu niet openen. Probeer het opnieuw.",
-    "planFree": {},
-    "planPro": {},
-    "planTeam": {}
+    "planFree": {
+      "name": "Free",
+      "description": "Probeer Tonvo met 3 live sessies per maand",
+      "cta": "Gratis beginnen",
+      "features": [
+        "3 live sessies per maand, elk maximaal 5 minuten",
+        "Herkent de vraag die je kreeg",
+        "Antwoorden om direct te gebruiken",
+        "Sessiegeschiedenis (laatste 7 dagen)"
+      ]
+    },
+    "planPro": {
+      "name": "Plus",
+      "description": "Voor mensen die Tonvo elke week gebruiken",
+      "cta": "Kies Plus",
+      "features": [
+        "Onbeperkte live sessies",
+        "Live vertaling",
+        "Coachingtips en live inzichten",
+        "Spreekverdeling en gespreksscores",
+        "Volledige sessiegeschiedenis en rapporten",
+        "Voortgangsanalyse",
+        "Prioriteitssupport"
+      ]
+    },
+    "planTeam": {
+      "name": "Team",
+      "description": "Alles uit Plus, plus schermanalyse",
+      "cta": "Kies Team",
+      "features": [
+        "Alles uit Plus",
+        "Schermanalyse voor chats, DM's en e-mails",
+        "Prioriteitssupport"
+      ]
+    },
+    "title": "Begin gratis. Upgrade als je meer wilt.",
+    "subtitle": "Probeer Tonvo met drie live sessies per maand. Ga verder zodra het bij je gesprekken hoort.",
+    "guarantee": "Betaalde plannen hebben een 7 dagen geld-terug-garantie. Op elk moment opzegbaar.",
+    "planEnterprise": {
+      "label": "Enterprise",
+      "name": "Voor organisaties met specifieke wensen",
+      "description": "Vertel ons wat je nodig hebt, dan laten we weten wat mogelijk is, inclusief vragen over beveiliging en aangepaste voorwaarden.",
+      "priceLabel": "Op maat",
+      "priceSubLabel": "Praat met ons team",
+      "cta": "Neem contact op",
+      "features": [
+        "Een gesprek over jouw toepassing",
+        "Beoordeling van beveiliging en gegevensverwerking",
+        "Commerciële voorwaarden op maat"
+      ]
+    },
+    "periodMonth": "/maand",
+    "periodUserMonth": "/gebruiker/maand"
   },
   "upgrade": {
     "cancelTitle": "Nog niet zeker?",
-    "goToDashboard": "Naar het dashboard"
+    "goToDashboard": "Naar het dashboard",
+    "successTitle": "Je bent erbij.",
+    "successSubtitle": "Je {{plan}}-plan is actief. Elk gesprek vanaf nu wordt makkelijker.",
+    "cancelSubtitle": "Geen druk. Blijf het Free-plan gebruiken en upgrade wanneer je onbeperkte sessies wilt.",
+    "nudgeTitle": "Je gratis sessies zijn beperkt",
+    "nudgeSubtitle": "Je zit op Free: 3 sessies per maand. Ontgrendel onbeperkte sessies, live vertaling en coachingtips.",
+    "stayFree": "Op Free blijven"
   },
   "footer": {
     "product": "Product",
@@ -657,7 +829,9 @@
     "termsOfService": "Algemene voorwaarden",
     "cookiePolicy": "Cookiebeleid",
     "legalNotice": "Juridische kennisgeving",
-    "copyright": "2026 Tonvo. Alle rechten voorbehouden."
+    "copyright": "2026 Tonvo. Alle rechten voorbehouden.",
+    "tagline1": "Jouw copilot voor elk gesprek.",
+    "tagline2": "Vind de juiste woorden, wanneer je ze nodig hebt."
   },
   "termsPage": {
     "breadcrumb": "Algemene voorwaarden",
@@ -701,7 +875,10 @@
     "s12Title": "12. Toepasselijk recht",
     "s12Text": "Deze Voorwaarden worden beheerst door het recht van Frankrijk. Geschillen worden voorgelegd aan de bevoegde rechtbanken van Saint-Etienne, Frankrijk.",
     "s13Title": "13. Contact",
-    "s13Intro": "Voor vragen over deze Voorwaarden:"
+    "s13Intro": "Voor vragen over deze Voorwaarden:",
+    "s2Text": "Tonvo is een copilot voor live gesprekken die gesprekstranscriptie, voorgestelde antwoorden, live inzichten, vertaling, analyse van scherminhoud en samenvattingen na het gesprek biedt. De Dienst wordt geleverd \"zoals deze is\" en kan op elk moment worden bijgewerkt of gewijzigd.",
+    "s6Item1Desc": "Beperkt tot 3 sessies per maand. De geschiedenis toont de laatste 7 dagen.",
+    "s6Item2Label": "Plus-plan:"
   },
   "privacyPage": {
     "analyticsTitle": "Bezoekersmeting",
@@ -793,7 +970,14 @@
     "s11Text": "Wij kunnen dit Privacybeleid van tijd tot tijd bijwerken. Wij stellen u op de hoogte van materiële wijzigingen door het bijgewerkte beleid op deze pagina te plaatsen en de datum \"Laatst bijgewerkt\" aan te passen. Voortgezet gebruik van de dienst na wijzigingen geldt als aanvaarding van het bijgewerkte beleid.",
     "s12Title": "12. Contact",
     "s12Intro": "Voor vragen over dit Privacybeleid of uw persoonsgegevens:",
-    "s12Cnil": "U heeft ook het recht om een klacht in te dienen bij uw lokale gegevensbeschermingsautoriteit (in Nederland: de Autoriteit Persoonsgegevens; in Frankrijk: CNIL)."
+    "s12Cnil": "U heeft ook het recht om een klacht in te dienen bij uw lokale gegevensbeschermingsautoriteit (in Nederland: de Autoriteit Persoonsgegevens; in Frankrijk: CNIL).",
+    "s5Row2Retention": "Na 7 dagen verborgen in je geschiedenis",
+    "s5Row3Type": "Sessiegegevens (Plus/Team)",
+    "s5Row5Retention": "Niet opgeslagen door Tonvo. Tijdens de sessie gestreamd naar onze transcriptieprovider",
+    "s6Anthropic": "Anthropic. AI-gestuurde gespreksanalyse. Getranscribeerde tekst en eventuele screenshots die je zelf kiest om te analyseren, worden voor verwerking verstuurd.",
+    "s6AssemblyAI": "AssemblyAI. Spraak-naar-tekst. Sessie-audio wordt live verstuurd voor transcriptie.",
+    "s6Upstash": "Upstash. Beperking van het aantal verzoeken (rate limiting).",
+    "s6Meta": "Meta (Pixel en Conversions API). Advertentiemeting, alleen als u dit accepteert in de cookiebanner."
   },
   "cookiesPage": {
     "breadcrumb": "Cookiebeleid",
@@ -810,11 +994,11 @@
     "cookie2Desc": "Slaan uw voorkeuren op, zoals taalkeuze en UI-instellingen.",
     "cookie2Examples": "tonvo-language (localStorage).",
     "cookie3Type": "Analytische cookies",
-    "cookie3Desc": "Helpen ons te begrijpen hoe u de applicatie gebruikt om de dienst te verbeteren. Alle analytics-gegevens zijn geanonimiseerd.",
-    "cookie3Examples": "Momenteel geen. Wij gebruiken geen analytics-diensten van derden.",
+    "cookie3Desc": "Helpen ons te begrijpen hoe de site wordt gebruikt. Onze eigen bezoekersmeting is anoniem: een willekeurige bezoekers-ID die in de localStorage van uw browser wordt opgeslagen, en u kunt zich afmelden op de Privacypagina. Advertentiemeting met de Meta Pixel is optioneel.",
+    "cookie3Examples": "Onze eigen meting: tonvo_aid (localStorage). Meta Pixel (cookies zoals _fbp), alleen nadat u deze accepteert in de cookiebanner.",
     "cookie4Type": "Cookies van derden",
     "cookie4Desc": "Geplaatst door externe diensten die in onze applicatie zijn geïntegreerd.",
-    "cookie4Examples": "Stripe (betalingsverwerking), Firebase (authenticatie).",
+    "cookie4Examples": "Stripe (betalingsverwerking), Firebase (authenticatie). Meta (advertentiemeting), alleen met uw toestemming.",
     "required": "Vereist",
     "optional": "Optioneel",
     "examples": "Voorbeelden:",
@@ -823,7 +1007,8 @@
     "s4Title": "4. Cookies beheren",
     "s4Text": "U kunt cookies beheren via uw browserinstellingen. Houd er rekening mee dat het uitschakelen van essentiële cookies kan voorkomen dat u bepaalde functies van de applicatie kunt gebruiken, waaronder authenticatie. U kunt localStorage-gegevens wissen via de developer tools van uw browser.",
     "s5Title": "5. Contact",
-    "s5Text": "Voor vragen over ons gebruik van cookies:"
+    "s5Text": "Voor vragen over ons gebruik van cookies:",
+    "managePrefs": "Mijn cookiekeuze wijzigen"
   },
   "legalPage": {
     "breadcrumb": "Juridische kennisgeving",
@@ -920,7 +1105,8 @@
     "forbidden": "Deze pagina is alleen voor het Tonvo-team.",
     "error": "De cijfers konden niet worden geladen. Probeer het zo opnieuw.",
     "loading": "Laden…",
-    "note": "Aanmeldingen, activaties en betalingen worden toegeschreven aan de bron van het bezoek dat tot de aanmelding leidde. Accounts van vóór de meting staan onder ‘before tracking’."
+    "note": "Aanmeldingen, activaties en betalingen worden toegeschreven aan de bron van het bezoek dat tot de aanmelding leidde. Accounts van vóór de meting staan onder ‘before tracking’.",
+    "byLanguage": "Per taal"
   },
   "aboutPage": {
     "breadcrumb": "Over ons",
@@ -955,5 +1141,117 @@
     "ctaSecondary": "Bekijk hoe het werkt",
     "ctaNote": "3 live sessies per maand. Geen creditcard.",
     "company": "Tonvo is een onafhankelijk bedrijf, opgericht in 2026 in Frankrijk."
+  },
+  "onboarding": {
+    "title": "Waarmee wil je hulp?",
+    "subtitle": "Kies een startpunt. Al het andere kun je later ook doen.",
+    "words": {
+      "title": "Vind de juiste woorden",
+      "desc": "Start een live sessie en krijg drie antwoorden die je kunt gebruiken."
+    },
+    "message": {
+      "title": "Begrijp een bericht",
+      "desc": "Plak een gesprek of upload screenshots en krijg hulp bij je antwoord."
+    },
+    "language": {
+      "title": "Praat in een andere taal",
+      "desc": "Kies de taal van het gesprek en volg het live. Live vertaling zit in de betaalde plannen."
+    },
+    "demo": {
+      "title": "Bekijk het eerst in actie",
+      "desc": "Bekijk een korte demo met script. Geen microfoon nodig."
+    },
+    "skip": "Nu niet"
+  },
+  "seo": {
+    "organization": "Tonvo is een copilot voor live gesprekken: live transcriptie, kant-en-klare antwoorden en een korte inschatting van het moment, voor belgesprekken, sollicitaties en alledaagse gesprekken.",
+    "home": {
+      "title": "Tonvo: je copilot voor elk gesprek",
+      "description": "Tonvo volgt een live gesprek en zet drie kant-en-klare antwoorden op je scherm. Voor gesprekken, sollicitaties en alledaagse situaties. Begin gratis."
+    },
+    "pricing": {
+      "title": "Tonvo prijzen: begin gratis, upgrade als je meer wilt",
+      "description": "Begin gratis met 3 live sessies per maand. Plus kost $19 per maand voor onbeperkte sessies, live vertaling en coachingtips. Team voegt schermanalyse toe."
+    },
+    "about": {
+      "title": "Waarom ik Tonvo heb gebouwd",
+      "description": "De oprichter van Tonvo over het moment dat je hoofd leeg is in een gesprek, en de live AI-copilot daarvoor. Geen bot in je vergaderingen, gratis starten."
+    },
+    "privacy": {
+      "title": "Privacybeleid",
+      "description": "Hoe Tonvo je gegevens verzamelt, gebruikt en beschermt, wat we bewaren en hoe lang, en hoe je je privacyrechten uitoefent."
+    },
+    "terms": {
+      "title": "Algemene voorwaarden",
+      "description": "De voorwaarden voor het gebruik van Tonvo, de AI-copilot voor je gesprekken."
+    },
+    "cookies": {
+      "title": "Cookiebeleid",
+      "description": "Hoe Tonvo cookies en vergelijkbare technologieën gebruikt, en hoe je ze kunt beheren."
+    },
+    "legal": {
+      "title": "Juridische kennisgeving",
+      "description": "Bedrijfsgegevens en juridische kennisgevingen van Tonvo, de AI-copilot voor je gesprekken."
+    },
+    "blog": {
+      "title": "De Tonvo-blog",
+      "description": "Tips, gidsen en inzichten over betere gesprekken, sollicitaties, telefoongesprekken en communicatie, van het Tonvo-team."
+    }
+  },
+  "pricingPage": {
+    "faqTitle": "Vragen over prijzen",
+    "backHome": "Terug naar home",
+    "faq": {
+      "q1": "Wat krijg ik gratis?",
+      "a1": "Drie live sessies per maand, elk maximaal 5 minuten, met kant-en-klare antwoorden en de laatste 7 dagen sessiegeschiedenis. Geen creditcard nodig.",
+      "q2": "Kan ik op elk moment opzeggen?",
+      "a2": "Ja. Je kunt opzeggen via je accountinstellingen en betaalde plannen hebben een 7 dagen geld-terug-garantie.",
+      "q3": "In welke valuta wordt er gefactureerd?",
+      "a3": "Er wordt gefactureerd in Amerikaanse dollars. Prijzen in een andere valuta zijn ter indicatie."
+    }
+  },
+  "ui": {
+    "systemAudio": "Systeemaudio",
+    "speakerModeRecommended": "Speakermodus aanbevolen",
+    "screenAnalysis": "Schermanalyse",
+    "analyzedMonitoring": "Geanalyseerd, op wijzigingen controleren",
+    "analysisSummary": "Analysesamenvatting",
+    "attractionScore": "Aantrekkingsscore",
+    "conversationTone": "Gesprekstoon",
+    "keyInsights": "Belangrijkste inzichten",
+    "toImprove": "Te verbeteren",
+    "generatingSummary": "Analysesamenvatting genereren...",
+    "conversationOverview": "Gespreksoverzicht",
+    "qualityScore": "Kwaliteitsscore",
+    "responseSpeed": "Reactiesnelheid",
+    "audioLanguageLabel": "Taal voor audiotranscriptie",
+    "dataRights": "Gegevensrechten",
+    "requestExport": "Export aanvragen",
+    "requestExportLabel": "Gegevensexport aanvragen",
+    "requestDeletion": "Verwijdering aanvragen",
+    "requestDeletionLabel": "Gegevensverwijdering aanvragen",
+    "noSummary": "Nog geen samenvatting.",
+    "openFullSession": "Volledige sessie openen",
+    "searchHistory": "Geschiedenis doorzoeken",
+    "clearSearch": "Zoekopdracht wissen",
+    "openMenu": "Menu openen",
+    "toggleMenu": "Menu in- of uitklappen",
+    "dismiss": "Sluiten",
+    "notifications": "Notificaties",
+    "preparingWorkspace": "Je werkruimte wordt voorbereid",
+    "toneDistribution": "Toonverdeling",
+    "conversationAnalysis": "Gespreksanalyse"
+  },
+  "notFound": {
+    "title": "Pagina niet gevonden",
+    "body": "Deze pagina bestaat niet of is verplaatst.",
+    "home": "Terug naar home"
+  },
+  "consent": {
+    "title": "Cookies en advertentiemeting",
+    "body": "Wij gebruiken de Meta Pixel om onze advertenties te meten. Deze plaatst cookies en stuurt gegevens naar Meta, en start alleen als u accepteert. Weigeren verandert niets aan de werking van Tonvo.",
+    "accept": "Accepteren",
+    "decline": "Weigeren",
+    "policy": "Cookiebeleid"
   }
 }

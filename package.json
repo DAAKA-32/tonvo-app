@@ -15,7 +15,8 @@
     "scripts:render-all": "tsx agents/scripts/render-all.ts",
     "hook:log": "tsx agents/scripts/hook-log.ts",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "i18n:review": "node scripts/i18n/export-review.mjs"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.78.0",

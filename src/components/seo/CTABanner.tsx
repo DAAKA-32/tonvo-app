@@ -1,37 +1,33 @@
 import Link from "next/link";
+import { getServerT } from "@/i18n/messages";
+import type { Locale } from "@/i18n/locales-config";
 
 interface CTABannerProps {
+  locale: Locale;
   heading?: string;
   description?: string;
   buttonText?: string;
   buttonHref?: string;
 }
 
-export default function CTABanner({
-  heading = "Ready to communicate better?",
-  description = "Try Tonvo free. Three live sessions a month, no credit card.",
-  buttonText = "Get started for free",
+export default async function CTABanner({
+  locale,
+  heading,
+  description,
+  buttonText,
   buttonHref = "/login",
 }: CTABannerProps) {
+  const t = await getServerT(locale);
   return (
     <div
       className="text-center rounded-2xl border p-10"
-      style={{
-        backgroundColor: "rgba(200, 200, 216, 0.04)",
-        borderColor: "var(--color-border)",
-      }}
+      style={{ backgroundColor: "rgba(200, 200, 216, 0.04)", borderColor: "var(--color-border)" }}
     >
-      <h2
-        className="text-xl font-bold mb-3"
-        style={{ color: "var(--color-text)" }}
-      >
-        {heading}
+      <h2 className="text-xl font-bold mb-3" style={{ color: "var(--color-text)" }}>
+        {heading ?? t("seoUi.ctaHeading")}
       </h2>
-      <p
-        className="text-sm mb-6"
-        style={{ color: "var(--color-text-muted)" }}
-      >
-        {description}
+      <p className="text-sm mb-6" style={{ color: "var(--color-text-muted)" }}>
+        {description ?? t("seoUi.ctaDescription")}
       </p>
       <Link
         href={buttonHref}
@@ -42,7 +38,7 @@ export default function CTABanner({
           boxShadow: "0 4px 14px rgba(92,92,110,0.35)",
         }}
       >
-        {buttonText}
+        {buttonText ?? t("seoUi.ctaButton")}
       </Link>
     </div>
   );

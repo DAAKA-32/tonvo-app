@@ -1,4 +1,11 @@
 import type { Metadata } from "next";
+import {
+  DEFAULT_LOCALE,
+  LOCALE_INFO,
+  absoluteUrl,
+  localesForPath,
+  type Locale,
+} from "@/i18n/locales-config";
 
 /**
  * Shared metadata for search results and link previews (Open Graph, X, iMessage, WhatsApp, Slack, Discord...).
@@ -86,6 +93,67 @@ export function pageMetadata(page: PageSeo): Metadata {
       card: "summary_large_image",
       title: socialTitle,
       description: socialDescription,
+      images: [{ url: OG_IMAGE.url, alt: OG_IMAGE.alt }],
+    },
+    ...(page.noIndex ? { robots: { index: false, follow: true } } : {}),
+  };
+}
+
+/* ───────────────────────── Localized (public) pages ───────────────────────── */
+
+export interface LocalizedSeo {
+  locale: Locale;
+  /** English path of the page, starting with "/" ("/about", "/use-cases/some-slug"). */
+  path: string;
+  title: string;
+  description: string;
+  type?: "website" | "article";
+  keywords?: string[];
+  noIndex?: boolean;
+  /** Languages this exact page exists in. Defaults to the table in locales-config. */
+  locales?: readonly Locale[];
+}
+
+/**
+ * Metadata for a public page in a given language: its own canonical, reciprocal hreflang for every
+ * language the page really exists in (plus x-default = English), and Open Graph in the page language.
+ * A page that exists in one language only gets no hreflang block.
+ */
+export function localizedMetadata(page: LocalizedSeo): Metadata {
+  const title = fullTitle(page.title);
+  const description = cleanDescription(page.description);
+  const available = page.locales ?? localesForPath(page.path);
+  const info = LOCALE_INFO[page.locale];
+
+  const languages: Record<string, string> = {};
+  if (!page.noIndex && available.length > 1) {
+    for (const l of available) languages[LOCALE_INFO[l].hreflang] = absoluteUrl(page.path, l);
+    if (available.includes(DEFAULT_LOCALE)) languages["x-default"] = absoluteUrl(page.path, DEFAULT_LOCALE);
+  }
+
+  const url = absoluteUrl(page.path, page.locale);
+  return {
+    title: { absolute: title },
+    description,
+    ...(page.keywords ? { keywords: page.keywords } : {}),
+    alternates: {
+      canonical: url,
+      ...(Object.keys(languages).length ? { languages } : {}),
+    },
+    openGraph: {
+      type: page.type ?? "website",
+      url,
+      siteName: SITE_NAME,
+      locale: info.ogLocale,
+      alternateLocale: available.filter((l) => l !== page.locale).map((l) => LOCALE_INFO[l].ogLocale),
+      title,
+      description,
+      images: [{ ...OG_IMAGE }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
       images: [{ url: OG_IMAGE.url, alt: OG_IMAGE.alt }],
     },
     ...(page.noIndex ? { robots: { index: false, follow: true } } : {}),

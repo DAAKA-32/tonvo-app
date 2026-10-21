@@ -289,7 +289,7 @@ export default function PlanUpgradeModal() {
                     <span className="upgrade-plan-price-old">{oldPrice}</span>
                   )}
                   <span className="upgrade-plan-price-current">{price}</span>
-                  <span className="upgrade-plan-price-period">{plan.period}</span>
+                  <span className="upgrade-plan-price-period">{t(plan.period === "/user/month" ? "pricing.periodUserMonth" : "pricing.periodMonth")}</span>
                 </div>
 
                 <ul className="upgrade-plan-features">

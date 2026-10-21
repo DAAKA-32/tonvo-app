@@ -11,6 +11,8 @@ import { useTranslation } from "react-i18next";
 import { useAuth } from "@/lib/auth-context";
 import TonvoLogo from "@/components/Logo";
 import LanguageSelector from "@/components/LanguageSelector";
+import { useLocale } from "@/components/PublicProviders";
+import { localePath } from "@/i18n/locales-config";
 
 const SPRING_HOVER = { type: "spring" as const, stiffness: 380, damping: 30, mass: 0.7 };
 const SPRING_LAYOUT = { type: "spring" as const, stiffness: 320, damping: 32, mass: 0.8 };
@@ -19,6 +21,7 @@ const SPRING_TAP = { type: "spring" as const, stiffness: 500, damping: 28 };
 export default function LandingNavbar() {
   const { user } = useAuth();
   const { t } = useTranslation();
+  const locale = useLocale();
   const reduce = useReducedMotion();
 
   const [navVisible, setNavVisible] = useState(true);
@@ -130,7 +133,7 @@ export default function LandingNavbar() {
             whileTap={reduce ? undefined : { scale: 0.97 }}
             transition={SPRING_HOVER}
           >
-            <Link href="/" className="flex items-center no-underline">
+            <Link href={localePath("/", locale)} className="flex items-center no-underline">
               <TonvoLogo size="md" />
             </Link>
           </motion.div>
@@ -261,7 +264,7 @@ export default function LandingNavbar() {
               whileTap={reduce ? undefined : { scale: 0.92 }}
               transition={SPRING_TAP}
               onClick={() => setMobileOpen((v) => !v)}
-              aria-label="Toggle menu"
+              aria-label={t("ui.toggleMenu")}
               aria-expanded={mobileOpen}
             >
               <motion.span

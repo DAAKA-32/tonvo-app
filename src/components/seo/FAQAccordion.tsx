@@ -1,22 +1,20 @@
 import type { FAQItem } from "@/data/seo/types";
-import { buildFAQJsonLd } from "@/data/seo/json-ld";
+import { getServerT } from "@/i18n/messages";
+import type { Locale } from "@/i18n/locales-config";
 
-export default function FAQAccordion({ items }: { items: FAQItem[] }) {
+// No FAQPage structured data on purpose: Google only shows FAQ rich results for a small set of
+// authoritative sites, so for this site the markup would be noise. The visible questions stay.
+export default async function FAQAccordion({ items, locale }: { items: FAQItem[]; locale: Locale }) {
   if (items.length === 0) return null;
-
-  const jsonLd = buildFAQJsonLd(items);
+  const t = await getServerT(locale);
 
   return (
     <section className="mb-16">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
       <h2
         className="text-xl font-bold text-center mb-8"
         style={{ color: "var(--color-text)" }}
       >
-        Frequently Asked Questions
+        {t("seoUi.faqTitle")}
       </h2>
       <div className="max-w-2xl mx-auto space-y-3">
         {items.map((item, i) => (

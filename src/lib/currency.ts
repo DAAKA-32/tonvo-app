@@ -6,32 +6,25 @@
  * formats amounts via Intl.NumberFormat with locale-aware
  * grouping/decimals (e.g. "19,00 €" vs "$19").
  *
- * IMPORTANT: This is display-only. Stripe checkout still
- * charges in USD. A disclaimer is shown next to non-USD
- * prices via the `pricing.billedInUsd` translation key.
+ * IMPORTANT: Stripe checkout charges in USD only, so every price is
+ * DISPLAYED in USD too (formatted for the reader's language: "$19",
+ * "19 $US"). Showing "19 €" for a 19 USD charge was misleading, so the
+ * euro display was switched off on 2026-10-22.
  *
- * 1:1 parity is intentional (Pro 19 EUR == 19 USD) so users
- * never feel arbitrage and the marketing message stays simple.
- * To switch to true multi-currency Stripe later: add EUR
- * Price IDs to env vars and route checkout through them based
- * on `getCurrencyForLanguage()` — no UI changes needed.
+ * To offer real euro pricing later: add EUR Price IDs to env vars, route
+ * checkout through them based on `getCurrencyForLanguage()`, and put the
+ * languages back into EUR_LANGUAGES below. No UI change is needed, and the
+ * `pricing.billedInUsd` note then appears next to non-USD prices again.
  * ========================================================
  */
 
 export type SupportedCurrency = "USD" | "EUR";
 
 /**
- * Languages that should display prices in EUR. Everything else
- * (en, ja, ko, zh, plus any future locales) falls back to USD.
+ * Languages that display prices in EUR. Empty on purpose until EUR Price IDs
+ * exist in Stripe (see above): every language shows USD.
  */
-const EUR_LANGUAGES: ReadonlySet<string> = new Set([
-  "fr",
-  "de",
-  "es",
-  "it",
-  "nl",
-  "pt",
-]);
+const EUR_LANGUAGES: ReadonlySet<string> = new Set<string>([]);
 
 export function getCurrencyForLanguage(lang: string | undefined): SupportedCurrency {
   if (!lang) return "USD";

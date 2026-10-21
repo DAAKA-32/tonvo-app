@@ -5,82 +5,82 @@ export const comparisons: ComparisonEntry[] = [
   {
     type: "compare",
     slug: "tonvo-vs-gong",
-    title: "Tonvo vs Gong: Real-Time AI Copilot vs Post-Call Analytics",
+    title: "Tonvo vs Gong: live help or sales call analytics",
     metaDescription:
-      "Compare Tonvo and Gong side by side. See how real-time conversation coaching and live tone analysis differs from post-call revenue intelligence.",
+      "Tonvo helps you during a conversation. Gong analyzes sales calls for revenue teams. See how the two differ and which one fits what you need.",
     h1: "Tonvo vs Gong",
     subtitle:
-      "Gong is the industry standard for post-call revenue intelligence. Tonvo takes a different approach: real-time coaching and tone analysis while the conversation is still happening.",
-    lastModified: "2026-04-09",
+      "Gong is a conversation analytics platform built for sales organizations. Tonvo is a copilot for the conversation you are in right now: it follows along and suggests what to say while you talk.",
+    lastModified: "2026-10-21",
     relatedSlugs: [],
     targetKeywords: [
       "tonvo vs gong",
       "gong alternative",
-      "real-time conversation coaching",
-      "gong competitor for individuals",
-      "ai call coaching vs post-call analytics",
+      "gong alternative for individuals",
+      "live conversation copilot",
+      "real-time call assistant vs call analytics",
     ],
     faq: [
       {
         question: "How is Tonvo different from Gong?",
         answer:
-          "Gong records calls and provides analytics after the conversation ends. Tonvo works in real time during the call, giving you live coaching suggestions, tone detection, and conversation signals as the discussion unfolds.",
+          "Gong is a conversation analytics platform for sales organizations, built around recorded calls and what a revenue team learns from them. Tonvo is a copilot for the conversation itself. It follows along live, shows the question the other person just asked, and suggests three replies you can use. You decide what to say.",
       },
       {
-        question: "Can I use Tonvo if I'm an individual, not a sales team?",
+        question: "Can I use Tonvo if I am not part of a sales team?",
         answer:
-          "Yes. Unlike Gong, which is designed for enterprise sales teams with multi-seat contracts, Tonvo offers a free tier and a $19/mo Plus plan that works great for freelancers, founders, and individual professionals.",
+          "Yes. Tonvo is for anyone who wants help during a conversation: work calls and meetings, interviews, negotiations, talks in another language, and sales calls too. You can start on the Free plan with 3 live sessions a month, and Plus is $19 a month.",
       },
       {
-        question: "Does Gong offer real-time coaching like Tonvo?",
+        question: "Does Tonvo replace Gong for a sales team?",
         answer:
-          "Gong focuses on post-call analysis, deal intelligence, and pipeline forecasting. It does not provide live in-call coaching or real-time tone analysis the way Tonvo does.",
+          "No. Tonvo has no CRM integration, no manager or team dashboards, no call recordings and no forecasting. If your organization needs deal and pipeline analytics, that is what a platform like Gong is for. Tonvo is for the person on the call who wants help in the moment.",
       },
       {
-        question: "Is my audio data stored with Tonvo?",
+        question: "Does Tonvo store my audio?",
         answer:
-          "No. Tonvo is privacy-first and never stores your audio. The analysis happens in real time and audio is discarded immediately. Gong, by contrast, records and stores full call recordings for later review.",
+          "No. Tonvo does not record or store audio. It transcribes the conversation live, and the text of your sessions is kept so you can read it again. You are responsible for telling the people you talk to and for following the rules that apply to you.",
       },
     ],
     competitorName: "Gong",
     competitorDescription:
-      "Gong is a revenue intelligence platform that records, transcribes, and analyzes sales calls to surface deal insights and coaching opportunities after the conversation ends.",
+      "Gong is a conversation analytics and revenue intelligence platform for sales organizations. It works from recorded calls and meetings to help teams review conversations, track deals and coach reps.",
     comparisonRows: [
-      { feature: "Analysis timing", tonvo: "Real-time during calls", competitor: "Post-call only" },
-      { feature: "Live coaching suggestions", tonvo: true, competitor: false },
-      { feature: "Tone & sentiment detection", tonvo: "Real-time", competitor: "Post-call transcript analysis" },
-      { feature: "Audio storage", tonvo: "Never stored", competitor: "Full recordings stored" },
-      { feature: "Free tier available", tonvo: true, competitor: false },
-      { feature: "Individual plan", tonvo: "$19/mo Plus", competitor: "Enterprise pricing only" },
-      { feature: "Multi-platform support", tonvo: "Discord, Zoom, Meet, Teams", competitor: "Zoom, Meet, Teams" },
-      { feature: "Deal & pipeline analytics", tonvo: false, competitor: true },
-      { feature: "Language support", tonvo: "10 languages", competitor: "70+ languages" },
-      { feature: "Separate-window copilot", tonvo: true, competitor: false },
-      { feature: "Setup time", tonvo: "Open in the browser, no install", competitor: "Requires CRM integration" },
+      { feature: "Built for", tonvo: "The person in the conversation", competitor: "Sales organizations and revenue teams" },
+      { feature: "Main moment of use", tonvo: "During the conversation", competitor: "Review of recorded calls" },
+      { feature: "Replies suggested live", tonvo: "Three ready-to-say replies", competitor: "Not its focus" },
+      { feature: "Calls and recordings", tonvo: "No audio recorded or stored", competitor: "Recordings and transcripts" },
+      { feature: "Deal and pipeline analytics", tonvo: false, competitor: true },
+      { feature: "Manager and team dashboards", tonvo: false, competitor: true },
+      { feature: "CRM integration", tonvo: false, competitor: true },
+      { feature: "How it hears the call", tonvo: "Microphone or a shared browser tab", competitor: "Connects to calls and meetings" },
+      { feature: "Languages for live transcription", tonvo: "10", competitor: "Check the vendor" },
+      { feature: "Pricing", tonvo: "Free plan, Plus $19/mo, Team $49/user/mo", competitor: "Quote-based, sold to organizations" },
+      { feature: "Setup", tonvo: "Open in the browser, no install", competitor: "Set up by an organization" },
     ],
     tonvoAdvantages: [
       {
         icon: "zap",
-        title: "Coaching While It Matters",
+        title: "Help While You Are Talking",
         description:
-          "Tonvo delivers suggestions in real time so you can adjust your approach mid-conversation, not after the deal is already won or lost.",
+          "Tonvo shows the question that was just asked and three replies you can say, so the help arrives in the moment the conversation needs it.",
       },
       {
         icon: "shield",
-        title: "Privacy-First Architecture",
+        title: "No Audio Recorded or Stored",
         description:
-          "Tonvo does not store audio. Analysis happens live, and the text of your sessions is kept so you can review it.",
+          "Tonvo does not record or store audio. The text of your sessions is kept so you can read it again, and you choose what to say.",
       },
       {
         icon: "users",
-        title: "Built for Everyone, Not Just Enterprise",
+        title: "Made for One Person to Start",
         description:
-          "Start for free with 3 sessions per month, or upgrade to Plus for $19/mo. No enterprise sales cycle, no multi-seat minimums.",
+          "Start free with 3 live sessions a month, or move to Plus at $19 a month. No sales process and no team setup to begin.",
       },
     ],
     summary: {
-      heading: "Different Tools for Different Needs",
-      body: "Gong excels at post-call revenue intelligence and pipeline analytics for large sales organizations. Tonvo is purpose-built for real-time coaching and tone awareness during live conversations, with pricing and simplicity that work for individuals and small teams alike. If you need in-the-moment guidance rather than after-the-fact analysis, Tonvo is the better fit.",
+      heading: "Different Tools for Different Jobs",
+      body: "Gong is built for sales organizations that want to analyze their conversations across a team and track deals. Tonvo does none of that: no CRM integration, no dashboards, no recordings, no forecasting. It does one thing, which is to help you during a conversation by following it live and suggesting what to say. If you want analytics for a revenue team, look at Gong. If you want help in the conversation you are having, try Tonvo.",
     },
   },
 
@@ -88,89 +88,90 @@ export const comparisons: ComparisonEntry[] = [
   {
     type: "compare",
     slug: "tonvo-vs-fireflies",
-    title: "Tonvo vs Fireflies: AI Coaching Copilot vs Meeting Transcription",
+    title: "Tonvo vs Fireflies: live help or meeting notes",
     metaDescription:
-      "Tonvo vs Fireflies.ai compared. See how real-time conversation coaching and live sentiment analysis stacks up against automated meeting transcription.",
+      "Tonvo helps during a conversation. Fireflies.ai records and summarizes meetings afterwards. See the difference and decide which one you need.",
     h1: "Tonvo vs Fireflies.ai",
     subtitle:
-      "Fireflies is a popular meeting transcription tool. Tonvo goes beyond transcription to deliver live coaching, tone detection, and conversation signals during your calls.",
-    lastModified: "2026-04-09",
+      "Fireflies.ai is a meeting assistant that transcribes and summarizes meetings. Tonvo is a copilot that helps while the conversation is happening, with the question just asked and three replies you can use.",
+    lastModified: "2026-10-21",
     relatedSlugs: [
       { type: "compare", slug: "tonvo-vs-otter", label: "Tonvo vs Otter.ai" },
     ],
     targetKeywords: [
       "tonvo vs fireflies",
       "fireflies alternative",
+      "fireflies.ai alternative for live conversations",
       "ai meeting copilot vs transcription",
-      "real-time call coaching",
-      "fireflies ai competitor",
+      "live conversation assistant",
     ],
     faq: [
       {
-        question: "Does Tonvo also transcribe meetings like Fireflies?",
+        question: "Does Tonvo take meeting notes like Fireflies?",
         answer:
-          "Tonvo focuses on real-time coaching, tone analysis, and conversation signals rather than full transcription. It provides post-session analysis summaries, but its primary value is in-the-moment guidance, not verbatim transcripts.",
+          "Not in the same way. Fireflies is built to transcribe meetings and produce notes and summaries. Tonvo transcribes live so it can help you in the moment, and after a session it gives you a summary with tone, what went well, what to improve and follow-up actions. It does not record audio.",
       },
       {
-        question: "Can Fireflies provide live coaching during a call?",
+        question: "What does Tonvo do during a conversation?",
         answer:
-          "No. Fireflies is designed for automated note-taking and transcription. It generates summaries and action items after the meeting, but does not offer real-time coaching or live sentiment analysis.",
+          "It follows the conversation as it happens and shows the question the other person just asked, three ready-to-say replies and a short read on the moment. On Plus and Team you also get live signals such as objections, hesitation or agreement. You decide what to say, and Tonvo can be wrong.",
       },
       {
-        question: "Which tool is better for improving my communication skills?",
+        question: "Which one should I pick?",
         answer:
-          "Tonvo is built specifically for this. Its real-time tone detection and coaching suggestions help you adjust how you communicate as the conversation happens, which is more actionable than reviewing a transcript afterward.",
+          "If you need a record of meetings, searchable notes and shared summaries, a meeting assistant like Fireflies is built for that. If you want help while you are talking, Tonvo is built for that. They solve different problems, so some people use both.",
       },
       {
-        question: "Does Fireflies store my call recordings?",
+        question: "Does Tonvo join my call as a bot?",
         answer:
-          "Yes, Fireflies records and stores audio for transcription. Tonvo takes a privacy-first approach and never stores audio data. If data privacy is a priority, this is an important distinction.",
+          "No. Tonvo does not join calls and does not integrate with Zoom, Meet, Teams or Discord. It hears your microphone, and on a computer it can also hear the audio of a browser tab you share, so it can follow both sides of an online call. It does not record or store audio.",
       },
     ],
     competitorName: "Fireflies.ai",
     competitorDescription:
-      "Fireflies.ai is an AI meeting assistant that automatically records, transcribes, and summarizes meetings across video conferencing platforms.",
+      "Fireflies.ai is an AI meeting assistant that records and transcribes meetings and turns them into searchable notes and summaries.",
     comparisonRows: [
-      { feature: "Primary function", tonvo: "Real-time coaching & analysis", competitor: "Transcription & summaries" },
-      { feature: "Live coaching suggestions", tonvo: true, competitor: false },
-      { feature: "Tone & sentiment detection", tonvo: "Real-time", competitor: false },
-      { feature: "Meeting transcription", tonvo: "Post-session summary", competitor: "Full verbatim transcript" },
-      { feature: "Audio storage", tonvo: "Never stored", competitor: "Stored for playback" },
-      { feature: "Conversation signal detection", tonvo: true, competitor: false },
-      { feature: "CRM integrations", tonvo: false, competitor: true },
-      { feature: "Free tier", tonvo: "3 sessions/month", competitor: "Limited minutes" },
-      { feature: "Platform support", tonvo: "Discord, Zoom, Meet, Teams", competitor: "Zoom, Meet, Teams, Webex" },
-      { feature: "Separate-window copilot", tonvo: true, competitor: false },
+      { feature: "Main job", tonvo: "Help during the conversation", competitor: "Meeting transcripts and summaries" },
+      { feature: "Main moment of use", tonvo: "While you talk", competitor: "Notes and review afterwards" },
+      { feature: "Replies suggested live", tonvo: "Three ready-to-say replies", competitor: "Not its focus" },
+      { feature: "Transcription", tonvo: "Live, text of sessions kept", competitor: "Full meeting transcripts" },
+      { feature: "Audio", tonvo: "Not recorded or stored", competitor: "Recordings and transcripts" },
+      { feature: "Summary after the session", tonvo: true, competitor: true },
+      { feature: "How it hears the call", tonvo: "Microphone or a shared browser tab", competitor: "Connects to meetings" },
+      { feature: "Joins your call as a bot", tonvo: false, competitor: "Check the vendor" },
+      { feature: "Integrations with other tools", tonvo: false, competitor: true },
+      { feature: "Free plan", tonvo: "3 sessions a month, 5 min each", competitor: true },
+      { feature: "Languages for live transcription", tonvo: "10", competitor: "Check the vendor" },
     ],
     tonvoAdvantages: [
       {
         icon: "brain",
-        title: "Coaching, Not Just Recording",
+        title: "Help, Not Just a Record",
         description:
-          "While Fireflies captures what was said, Tonvo helps you communicate better in the moment with actionable real-time suggestions.",
+          "A meeting assistant captures what was said. Tonvo helps with what to say next, with three replies you can use while the other person is still waiting.",
       },
       {
         icon: "eye",
-        title: "Live Conversation Signals",
+        title: "Signals on Plus and Team",
         description:
-          "Detect engagement drops, confusion, hesitation, and other conversation signals as they happen so you can respond immediately.",
+          "Paid plans add live signals such as question, objection, opportunity, hesitation and agreement, plus a view of who is speaking.",
       },
       {
         icon: "shield",
         title: "No Audio Stored",
         description:
-          "Tonvo does not store your audio. Analysis happens live, and the text of your sessions is kept so you can review it.",
+          "Tonvo does not record or store audio. The text of your sessions is kept so you can read it again.",
       },
       {
         icon: "headphones",
-        title: "Separate-Window Copilot",
+        title: "Separate Copilot Window on Plus and Team",
         description:
-          "On Plus and Team, Tonvo runs in its own window, so a shared tab or window shows only your call.",
+          "On Plus and Team, the copilot can run in its own window. It is not part of a tab or window you share, but if you share your entire screen, others can see it.",
       },
     ],
     summary: {
-      heading: "Transcription vs Real-Time Intelligence",
-      body: "Fireflies is an excellent choice if your primary need is meeting transcription, searchable notes, and post-meeting summaries. Tonvo is the better fit if you want real-time coaching, live tone awareness, and conversation signal detection that helps you perform better during the call itself. Many users find the two tools complementary rather than mutually exclusive.",
+      heading: "Notes Afterwards or Help Right Now",
+      body: "Fireflies is a good fit if you want transcripts, searchable notes and summaries of your meetings. Tonvo does not replace that: it has no integrations with other tools and does not record audio. It is for the moment you are in the conversation and want to find the right words. Some people use both, one for the record and one for help in the moment.",
     },
   },
 
@@ -178,84 +179,83 @@ export const comparisons: ComparisonEntry[] = [
   {
     type: "compare",
     slug: "tonvo-vs-otter",
-    title: "Tonvo vs Otter.ai: Live Coaching vs AI Meeting Notes",
+    title: "Tonvo vs Otter.ai: live replies or AI meeting notes",
     metaDescription:
-      "Compare Tonvo with Otter.ai. See how real-time conversation coaching and live tone analysis differs from automated meeting notes and transcription tools.",
+      "Tonvo suggests replies while you talk. Otter.ai turns meetings into transcripts and notes. See how the two differ and which one fits your need.",
     h1: "Tonvo vs Otter.ai",
     subtitle:
-      "Otter.ai excels at turning spoken words into searchable notes. Tonvo focuses on making you a better communicator in real time with live coaching and sentiment analysis.",
-    lastModified: "2026-04-09",
+      "Otter.ai turns spoken meetings into searchable transcripts and notes. Tonvo is a copilot that helps while a conversation is happening, with the question just asked and three replies you can use.",
+    lastModified: "2026-10-21",
     relatedSlugs: [
       { type: "compare", slug: "tonvo-vs-fireflies", label: "Tonvo vs Fireflies" },
     ],
     targetKeywords: [
       "tonvo vs otter",
       "otter ai alternative",
-      "ai coaching vs meeting notes",
-      "real-time call assistant",
-      "otter ai competitor",
+      "otter.ai alternative for live conversations",
+      "meeting notes vs live copilot",
+      "real-time conversation assistant",
     ],
     faq: [
       {
-        question: "What does Tonvo do that Otter.ai doesn't?",
+        question: "What does Tonvo do that a notes tool does not?",
         answer:
-          "Tonvo provides real-time coaching suggestions, live tone and sentiment detection, and conversation signal analysis during your calls. Otter focuses on automated transcription, meeting notes, and post-meeting summaries.",
+          "Tonvo is built for help during the conversation. It follows along live, shows the question the other person just asked and suggests three replies you can say. A notes tool like Otter.ai is built to turn the meeting into a transcript and notes.",
       },
       {
         question: "Is Otter.ai better for taking meeting notes?",
         answer:
-          "Yes, Otter.ai is specifically optimized for generating detailed, searchable meeting notes and transcripts. If verbatim notes are your main need, Otter is a strong choice. Tonvo provides post-session summaries but focuses more on real-time performance improvement.",
+          "If notes and searchable transcripts are your main need, a tool built for that is the better choice. Tonvo does give you a summary after each session, with tone, what went well, what to improve and follow-up actions, but it is not a note-taking or archive tool.",
       },
       {
-        question: "Can I use both Tonvo and Otter.ai together?",
+        question: "Can I use both Tonvo and Otter.ai?",
         answer:
-          "Absolutely. Many users run Otter for transcription and notes while using Tonvo for real-time coaching. On Plus and Team, Tonvo runs in its own window, so it does not interfere with other tools running on the same call.",
+          "Yes, they do different jobs. You can keep a notes tool for the record and use Tonvo for help while you talk. Tonvo hears your microphone or a shared browser tab, so check that both tools can work on your setup before an important call.",
       },
       {
-        question: "Which tool is more affordable?",
+        question: "Which tool costs less?",
         answer:
-          "Both offer free tiers. Tonvo's free plan includes 3 sessions per month, while Otter's free plan offers limited transcription minutes. Tonvo Plus is $19/mo and Otter Pro is $16.99/mo, making them comparably priced.",
+          "Tonvo has a Free plan with 3 live sessions a month, up to 5 minutes each. Plus is $19 a month with unlimited sessions, and Team is $49 per user a month. Check the vendor's site for current Otter.ai pricing, since plans change.",
       },
     ],
     competitorName: "Otter.ai",
     competitorDescription:
-      "Otter.ai is an AI-powered meeting assistant that provides real-time transcription, automated meeting notes, and searchable conversation records.",
+      "Otter.ai is an AI meeting assistant that transcribes conversations and produces searchable transcripts, notes and summaries.",
     comparisonRows: [
-      { feature: "Core purpose", tonvo: "Real-time coaching & tone analysis", competitor: "Transcription & meeting notes" },
-      { feature: "Live coaching suggestions", tonvo: true, competitor: false },
-      { feature: "Real-time transcription", tonvo: false, competitor: true },
-      { feature: "Tone & sentiment analysis", tonvo: "Real-time", competitor: false },
-      { feature: "Searchable meeting archive", tonvo: false, competitor: true },
-      { feature: "Audio storage", tonvo: "Never stored", competitor: "Stored with transcript" },
-      { feature: "Post-session analysis", tonvo: true, competitor: true },
-      { feature: "Language support", tonvo: "10 languages", competitor: "English-focused" },
-      { feature: "Separate-window copilot", tonvo: true, competitor: false },
-      { feature: "Free tier", tonvo: "3 sessions/month", competitor: "300 min/month" },
-      { feature: "Platform support", tonvo: "Discord, Zoom, Meet, Teams", competitor: "Zoom, Meet, Teams" },
+      { feature: "Main job", tonvo: "Help during the conversation", competitor: "Transcripts and meeting notes" },
+      { feature: "Replies suggested live", tonvo: "Three ready-to-say replies", competitor: "Not its focus" },
+      { feature: "Live transcription", tonvo: true, competitor: true },
+      { feature: "Session history", tonvo: "7 days on Free, full on paid plans", competitor: "Searchable transcripts" },
+      { feature: "Audio", tonvo: "Not recorded or stored", competitor: "Transcripts and recordings" },
+      { feature: "Summary after the session", tonvo: true, competitor: true },
+      { feature: "How it hears the call", tonvo: "Microphone or a shared browser tab", competitor: "Connects to meetings" },
+      { feature: "Languages for live transcription", tonvo: "10", competitor: "Check the vendor" },
+      { feature: "Free plan", tonvo: "3 sessions a month, 5 min each", competitor: true },
+      { feature: "Paid plans", tonvo: "Plus $19/mo, Team $49/user/mo", competitor: "See the vendor" },
     ],
     tonvoAdvantages: [
       {
         icon: "zap",
-        title: "Act in the Moment",
+        title: "Help in the Moment",
         description:
-          "Tonvo helps you adjust your communication approach while the conversation is happening, turning every call into a growth opportunity.",
+          "Tonvo shows the question that was just asked and three replies you can say, while the conversation is still going.",
       },
       {
-        icon: "heart",
-        title: "Emotional Intelligence Layer",
+        icon: "message",
+        title: "Works for Written Talks Too",
         description:
-          "Real-time tone and sentiment detection gives you awareness of how the conversation feels, not just what words are being said.",
+          "Paste a conversation or upload screenshots and get help writing your reply. This is available on every plan.",
       },
       {
         icon: "globe",
-        title: "Multilingual Real-Time Analysis",
+        title: "10 Languages for Live Transcription",
         description:
-          "Tonvo supports 10 languages for live coaching and tone detection, making it effective for international and cross-cultural conversations.",
+          "Tonvo transcribes live in English, French, Spanish, German, Italian, Portuguese, Dutch, Chinese, Japanese and Korean, and can detect the language. Plus and Team add live translation.",
       },
     ],
     summary: {
-      heading: "Notes vs Performance",
-      body: "Otter.ai is the go-to tool if you need comprehensive meeting transcription and searchable notes. Tonvo serves a different purpose: helping you communicate more effectively during the call with real-time coaching, tone detection, and conversation signals. Choose Otter for documentation, Tonvo for performance, or use both for the complete picture.",
+      heading: "Notes or Help in the Moment",
+      body: "Otter.ai is a good choice if you want meetings turned into transcripts and notes you can search later. Tonvo is built for something else: help while you are talking, with the question just asked and three replies to choose from. It does not record audio and it is not an archive. Choose a notes tool for documentation, Tonvo for the live conversation, or use both.",
     },
   },
 
@@ -263,13 +263,13 @@ export const comparisons: ComparisonEntry[] = [
   {
     type: "compare",
     slug: "tonvo-vs-chorus",
-    title: "Tonvo vs Chorus: Accessible AI Copilot vs Enterprise Conversation Intelligence",
+    title: "Tonvo vs Chorus: live copilot or call analytics",
     metaDescription:
-      "Compare Tonvo and Chorus by ZoomInfo. See how an accessible real-time AI coaching copilot compares to enterprise-grade conversation intelligence tools.",
+      "Tonvo helps during a conversation. Chorus by ZoomInfo analyzes sales calls for organizations. See how they differ and which one fits you.",
     h1: "Tonvo vs Chorus by ZoomInfo",
     subtitle:
-      "Chorus is an enterprise conversation intelligence platform owned by ZoomInfo. Tonvo offers real-time coaching that's accessible to individuals and teams of any size.",
-    lastModified: "2026-04-09",
+      "Chorus by ZoomInfo is a conversation analytics platform for sales organizations. Tonvo is a copilot for one person in a live conversation, suggesting what to say while you talk.",
+    lastModified: "2026-10-21",
     relatedSlugs: [
       { type: "features", slug: "post-session-analysis", label: "Post-Session Analysis" },
       { type: "compare", slug: "tonvo-vs-gong", label: "Tonvo vs Gong" },
@@ -277,78 +277,76 @@ export const comparisons: ComparisonEntry[] = [
     targetKeywords: [
       "tonvo vs chorus",
       "chorus alternative",
-      "chorus zoominfo competitor",
-      "affordable conversation intelligence",
-      "enterprise vs individual call coaching",
+      "chorus zoominfo alternative",
+      "chorus conversation intelligence alternative",
+      "live conversation copilot",
     ],
     faq: [
       {
         question: "How does Chorus differ from Tonvo?",
         answer:
-          "Chorus is an enterprise conversation intelligence platform focused on post-call analytics, deal intelligence, and sales team management. Tonvo provides real-time coaching and tone analysis during calls, with plans starting at $0 for individuals.",
+          "Chorus by ZoomInfo is a conversation analytics platform for sales organizations, built around reviewing recorded calls. Tonvo helps during the conversation itself: it follows along live, shows the question just asked and suggests three replies. It is made for the person on the call, not for a sales organization.",
       },
       {
-        question: "Do I need a ZoomInfo subscription to use Chorus?",
+        question: "Does Tonvo do what Chorus does for a sales team?",
         answer:
-          "Chorus is part of the ZoomInfo platform and is typically sold as part of an enterprise bundle. Tonvo is a standalone product that requires no other subscriptions and can be set up in under two minutes.",
+          "No. Tonvo has no CRM integration, no manager or team dashboards, no call recordings and no forecasting. If your organization needs those, a platform like Chorus is built for them. Tonvo is for the moment of the conversation.",
       },
       {
-        question: "Can a small team use Chorus?",
+        question: "Can a small team or an individual use Tonvo?",
         answer:
-          "Chorus is designed for mid-market and enterprise sales organizations and its pricing reflects that. Tonvo's Team plan at $49/user/month is built for teams of any size, with a free tier and $19/mo Plus plan for individuals.",
+          "Yes. Anyone can start on the Free plan with 3 live sessions a month, up to 5 minutes each. Plus is $19 a month for unlimited sessions, and Team is $49 per user a month. There is a 7-day money-back guarantee on paid plans.",
       },
       {
-        question: "Which tool provides better real-time assistance?",
+        question: "Is Tonvo only for sales calls?",
         answer:
-          "Tonvo is built entirely around real-time assistance with live coaching, tone detection, and conversation signals during calls. Chorus focuses on post-call analytics and does not provide in-call coaching.",
+          "No. Sales is one mode among several. Tonvo also has modes for general conversations, recruitment, support and networking, and it can help with interviews, meetings, negotiations and talks in another language.",
       },
     ],
     competitorName: "Chorus",
     competitorDescription:
-      "Chorus by ZoomInfo is an enterprise conversation intelligence platform that captures and analyzes sales calls to provide deal insights, competitive intelligence, and team coaching recommendations.",
+      "Chorus by ZoomInfo is a conversation analytics platform for sales organizations. It works from recorded calls and meetings to help teams review conversations and coach reps.",
     comparisonRows: [
-      { feature: "Analysis timing", tonvo: "Real-time during calls", competitor: "Post-call only" },
-      { feature: "Live coaching suggestions", tonvo: true, competitor: false },
-      { feature: "Tone & sentiment detection", tonvo: "Real-time", competitor: "Post-call analysis" },
-      { feature: "Target audience", tonvo: "Individuals & teams", competitor: "Enterprise sales teams" },
-      { feature: "Pricing transparency", tonvo: "Public pricing from $0/mo", competitor: "Custom enterprise quotes" },
-      { feature: "Audio storage", tonvo: "Never stored", competitor: "Full recordings stored" },
-      { feature: "Setup complexity", tonvo: "No install, no integrations required", competitor: "CRM & tech stack integration needed" },
-      { feature: "Deal intelligence & forecasting", tonvo: false, competitor: true },
-      { feature: "Multi-platform support", tonvo: "Discord, Zoom, Meet, Teams", competitor: "Zoom, Meet, Teams" },
-      { feature: "Separate-window copilot", tonvo: true, competitor: false },
-      { feature: "Free tier available", tonvo: true, competitor: false },
-      { feature: "Language support", tonvo: "10 languages", competitor: "Multiple languages" },
+      { feature: "Built for", tonvo: "The person in the conversation", competitor: "Sales organizations" },
+      { feature: "Main moment of use", tonvo: "During the conversation", competitor: "Review of recorded calls" },
+      { feature: "Replies suggested live", tonvo: "Three ready-to-say replies", competitor: "Not its focus" },
+      { feature: "Calls and recordings", tonvo: "No audio recorded or stored", competitor: "Recordings and transcripts" },
+      { feature: "Deal intelligence and forecasting", tonvo: false, competitor: true },
+      { feature: "Manager and team dashboards", tonvo: false, competitor: true },
+      { feature: "CRM integration", tonvo: false, competitor: true },
+      { feature: "How it hears the call", tonvo: "Microphone or a shared browser tab", competitor: "Connects to calls and meetings" },
+      { feature: "Pricing", tonvo: "Public: Free, Plus $19/mo, Team $49/user/mo", competitor: "Sold to organizations" },
+      { feature: "Setup", tonvo: "Open in the browser, no install", competitor: "Set up by an organization" },
     ],
     tonvoAdvantages: [
       {
         icon: "target",
-        title: "Accessible to Everyone",
+        title: "Made for the Person on the Call",
         description:
-          "No enterprise contract or CRM integration required. Sign up and start using Tonvo in minutes with a free plan or affordable Plus subscription.",
+          "No organization-wide rollout and no integrations. Open Tonvo in the browser, pick a mode and start a session.",
       },
       {
         icon: "clock",
-        title: "Real-Time, Not Retrospective",
+        title: "Help While It Is Happening",
         description:
-          "Tonvo gives you coaching and tone awareness while the conversation is still happening, when you can still change the outcome.",
+          "Tonvo gives you the question just asked and three replies to choose from while the conversation is still going.",
       },
       {
         icon: "shield",
-        title: "Privacy by Design",
+        title: "No Audio Stored",
         description:
-          "Tonvo never records or stores audio. Your conversations stay private with zero data retention, a strong contrast to platforms that store full recordings.",
+          "Tonvo does not record or store audio. The text of your sessions is kept so you can read it again.",
       },
       {
         icon: "layers",
-        title: "Works Beyond Sales",
+        title: "Beyond Sales",
         description:
-          "While Chorus is sales-focused, Tonvo is effective for any conversation type: interviews, client calls, team meetings, negotiations, and more.",
+          "Modes for general talks, sales, recruitment, support and networking cover interviews, client calls, meetings and negotiations.",
       },
     ],
     summary: {
-      heading: "Enterprise Intelligence vs Accessible Real-Time Coaching",
-      body: "Chorus is a powerful tool for enterprise sales organizations that need deal intelligence, competitive analysis, and team-wide coaching insights. Tonvo fills a different gap: real-time, in-call coaching and tone awareness that's accessible to anyone regardless of team size or budget. If you need live guidance rather than post-call dashboards, and you value transparent pricing and privacy, Tonvo is the right choice.",
+      heading: "Analytics for Organizations or a Copilot for You",
+      body: "Chorus is built for sales organizations that want to analyze conversations across a team. Tonvo does not offer that: no CRM integration, no dashboards, no recordings, no forecasting. It is a copilot for one person in a live conversation, with public pricing and nothing to install. Pick the one that matches the job you need done.",
     },
   },
 
@@ -356,87 +354,87 @@ export const comparisons: ComparisonEntry[] = [
   {
     type: "compare",
     slug: "tonvo-vs-manual-notes",
-    title: "Tonvo vs Manual Note-Taking: AI Copilot vs Pen and Paper",
+    title: "Tonvo vs Manual Notes: stay present in a talk",
     metaDescription:
-      "Compare using Tonvo's AI conversation copilot against manual note-taking during calls. Discover what you gain with real-time coaching and analysis.",
+      "Taking notes while you talk splits your attention. Compare it with Tonvo, a live copilot that suggests replies and summarizes the session afterwards.",
     h1: "Tonvo vs Manual Note-Taking",
     subtitle:
-      "Taking notes during calls splits your attention and misses emotional context. Tonvo runs invisibly in the background, coaching you in real time while you stay fully present.",
-    lastModified: "2026-04-09",
+      "Writing notes during a conversation splits your attention. Tonvo follows the conversation for you, shows the question just asked and suggests three replies, then summarizes the session afterwards.",
+    lastModified: "2026-10-21",
     relatedSlugs: [],
     targetKeywords: [
-      "ai note taking during calls",
-      "alternative to manual notes meetings",
+      "alternative to taking notes during calls",
+      "ai help during conversations",
       "conversation copilot vs notes",
       "stay present during calls",
-      "ai meeting assistant for focus",
+      "live conversation assistant",
     ],
     faq: [
       {
-        question: "Can Tonvo fully replace note-taking during calls?",
+        question: "Can Tonvo replace taking notes during a conversation?",
         answer:
-          "Tonvo provides post-session analysis summaries that capture key moments, tone shifts, and conversation signals. For many users, this replaces the need for manual notes. However, if you need verbatim transcripts, pairing Tonvo with a dedicated transcription tool may be ideal.",
+          "For many conversations, partly. After each session Tonvo gives you a summary with tone, what went well, what to improve and follow-up actions, and the text of the session is kept so you can read it again. It does not record audio and it has no notes feature, so write things down yourself if you need your own notes.",
       },
       {
-        question: "How does manual note-taking affect call quality?",
+        question: "Does taking notes really change a conversation?",
         answer:
-          "You miss social cues, respond more slowly, and participants may feel you're distracted. Tonvo lets you stay fully present.",
+          "It can. Writing while listening means your attention is split, and some people find they lose the thread or look distracted. Others think better with a pen in hand, and that is a good reason to keep taking notes.",
       },
       {
         question: "Can the other person see Tonvo?",
         answer:
-          "On Plus and Team, not when you share a tab or a window, because Tonvo runs in its own window. On the Free plan the replies appear in the page itself, so keep that page out of what you share. If you share your entire screen, they can see it. You should tell the people you talk to when you use a tool like this.",
+          "On Plus and Team, the copilot can run in its own window, which is not part of a tab or window you share. On the Free plan the replies appear in the page itself, so keep that page out of what you share. If you share your entire screen, others can see it. Tell the people you talk to when you use a tool like this, and follow the rules that apply to you.",
       },
       {
-        question: "What if I prefer taking my own notes?",
+        question: "Can I use Tonvo and still take my own notes?",
         answer:
-          "You can use Tonvo alongside your own note-taking. The real-time coaching and tone detection work independently. Many users find that the AI coaching is most valuable and gradually rely less on manual notes as they trust the post-session summaries.",
+          "Yes. Tonvo works on its own while you write notes the way you like. Many people keep a short list of their own and let the session summary cover the rest.",
       },
     ],
     competitorName: "Manual Note-Taking",
     competitorDescription:
-      "Manual note-taking during calls involves writing or typing key points while simultaneously listening and participating in the conversation.",
+      "Manual note-taking means writing or typing key points while you listen and take part in the conversation.",
     comparisonRows: [
-      { feature: "Attention required", tonvo: "Runs in background, no attention needed", competitor: "Splits focus between notes and conversation" },
-      { feature: "Real-time coaching", tonvo: true, competitor: false },
-      { feature: "Tone & sentiment detection", tonvo: true, competitor: false },
-      { feature: "Conversation signal detection", tonvo: true, competitor: false },
-      { feature: "Post-session summary", tonvo: "Automatic with key moments", competitor: "Only what you wrote down" },
-      { feature: "Active listening", tonvo: "Fully present", competitor: "Compromised" },
-      { feature: "Cost", tonvo: "Free tier available, Plus at $19/mo", competitor: "Free" },
-      { feature: "Setup required", tonvo: "2-minute setup", competitor: "None" },
-      { feature: "Works across languages", tonvo: "10 languages", competitor: "Limited to your own fluency" },
-      { feature: "Captures emotional context", tonvo: true, competitor: false },
+      { feature: "Attention", tonvo: "Follows the conversation for you", competitor: "Shared between notes and listening" },
+      { feature: "Help with what to say", tonvo: "Three ready-to-say replies", competitor: false },
+      { feature: "Question just asked", tonvo: "Shown live", competitor: "Only if you wrote it down" },
+      { feature: "Live signals", tonvo: "On Plus and Team", competitor: false },
+      { feature: "After the session", tonvo: "Summary with tone, what went well, what to improve, follow-ups", competitor: "Only what you wrote down" },
+      { feature: "Languages", tonvo: "Live transcription in 10", competitor: "Limited to your own fluency" },
+      { feature: "Audio", tonvo: "Not recorded or stored", competitor: "Not applicable" },
+      { feature: "Your own notes and memory", tonvo: "No notes feature", competitor: true },
+      { feature: "Cost", tonvo: "Free plan, Plus $19/mo", competitor: "Free" },
+      { feature: "Setup", tonvo: "Open in the browser, no install", competitor: "None" },
     ],
     tonvoAdvantages: [
       {
         icon: "eye",
-        title: "Stay Fully Present",
+        title: "Look Up from the Page",
         description:
-          "Stop splitting your attention. Tonvo handles coaching and analysis in the background so you can focus entirely on the person you're talking to.",
+          "Tonvo follows the conversation and shows the question just asked, so you can spend less attention writing and more on the person you are talking to.",
       },
       {
-        icon: "brain",
-        title: "Insights You Can't Write Down",
+        icon: "message",
+        title: "Words When You Need Them",
         description:
-          "Tone shifts, sentiment changes, and conversation signals are nearly impossible to capture manually. Tonvo detects them automatically and in real time.",
+          "Three ready-to-say replies appear as the conversation moves. You decide what to say, and Tonvo can be wrong.",
       },
       {
         icon: "bar-chart",
-        title: "Consistent Post-Session Analysis",
+        title: "A Summary Afterwards",
         description:
-          "Manual notes vary in quality based on your focus and energy. Tonvo delivers consistent, structured analysis after every session regardless of how busy the call was.",
+          "Every session ends with a summary of tone, what went well, what to improve and follow-up actions, on every plan.",
       },
       {
-        icon: "trending-up",
-        title: "Improvement Over Time",
+        icon: "globe",
+        title: "Help in Other Languages",
         description:
-          "Tonvo's coaching helps you build better communication habits session after session, something no notebook can do.",
+          "Live transcription covers 10 languages, and Plus and Team add live translation, which a notebook cannot give you.",
       },
     ],
     summary: {
-      heading: "From Distracted Scribbling to Intelligent Awareness",
-      body: "Manual note-taking is familiar and free, but it comes with real costs: split attention, missed emotional cues, and inconsistent records. Tonvo eliminates these trade-offs by running invisibly during your calls, providing real-time coaching, and delivering automatic post-session analysis. The free tier makes it easy to try, and most users find the improvement in call quality and presence well worth the switch.",
+      heading: "Your Notes or a Copilot",
+      body: "Manual notes are free, familiar and entirely yours, and for some people writing is how they think. Tonvo offers something different: it follows the conversation live, suggests what to say and summarizes the session afterwards. It has no notes feature and does not record audio. The Free plan includes 3 live sessions a month, so you can try it next to your own notes.",
     },
   },
 ];

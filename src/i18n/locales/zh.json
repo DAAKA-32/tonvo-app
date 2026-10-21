@@ -14,7 +14,8 @@
     "terms": "服务条款",
     "cookies": "Cookie 政策",
     "legal": "法律声明",
-    "blog": "博客"
+    "blog": "博客",
+    "default": "Tonvo：每一场对话的 AI 副驾"
   },
   "nav": {
     "menu": "菜单",
@@ -25,7 +26,8 @@
     "analytics": "数据看板",
     "pricing": "价格",
     "settings": "设置",
-    "signOut": "退出"
+    "signOut": "退出",
+    "changeLanguage": "切换语言"
   },
   "common": {
     "loading": "加载中…",
@@ -48,7 +50,9 @@
     "negative": "消极",
     "all": "全部",
     "google": "Google",
-    "emailPassword": "邮箱 / 密码"
+    "emailPassword": "邮箱 / 密码",
+    "upgrade": "升级",
+    "pro": "Plus"
   },
   "dashboard": {
     "greetingMorning": "早上好",
@@ -64,7 +68,12 @@
     "noSessions": "还没有会话",
     "noSessionsDesc": "开始第一场实时分析，在这里看到结果。",
     "startSessionBtn": "开启会话",
-    "latestInsights": "最新洞察"
+    "latestInsights": "最新洞察",
+    "subtitle": "你的所有对话，一目了然。",
+    "startSession": "开始实时会话",
+    "startSessionDesc": "对话进行时，随时得到合适的话",
+    "analyzeText": "帮我处理一条消息",
+    "analyzeTextDesc": "粘贴消息或上传截图，获得回复建议"
   },
   "history": {
     "title": "会话记录",
@@ -150,7 +159,8 @@
     "theme": "主题",
     "themeDesc": "为工作台选择配色方案",
     "dark": "深色",
-    "light": "浅色"
+    "light": "浅色",
+    "dataRetentionFree": "Free 方案的历史记录只显示最近 7 天"
   },
   "profile": {
     "title": "个人资料",
@@ -265,7 +275,10 @@
     "copied": "已复制",
     "proLockedTitle": "实时辅导",
     "proLockedText": "通话过程中实时提供辅导建议、购买信号和发言时间平衡。",
-    "proLockedCta": "查看套餐"
+    "proLockedCta": "查看套餐",
+    "invisibleInScreenShare": "共享标签页或窗口时不会显示",
+    "copilotInvisible": "AI 副驾运行中。共享标签页或窗口时不会显示。",
+    "copilotBlocked": "副驾窗口被浏览器拦截。请允许弹窗，或使用 Chrome 的画中画窗口。"
   },
   "auth": {
     "welcomeBack": "欢迎回来",
@@ -321,7 +334,8 @@
     "userDisabled": "该账户已停用，请联系客服。",
     "genericError": "出了点问题，请重试。",
     "passwordValidationError": "密码至少 8 位，并需至少 1 个字母与 1 个数字。",
-    "firebaseNotInitialized": "服务暂不可用，请稍后再试。"
+    "firebaseNotInitialized": "服务暂不可用，请稍后再试。",
+    "signUpSubtitle": "创建你的账户。为你的通话和日常对话配一位实时副驾"
   },
   "session": {
     "title": "实时会话",
@@ -433,7 +447,29 @@
     "transcriptTab": "实时转写",
     "starting": "正在启动...",
     "recordingHint": "Tonvo 正在聆听。专注于对话，建议会实时出现。",
-    "idleHint": "设置采集后点击开始。"
+    "idleHint": "设置采集后点击开始。",
+    "timeLimitReached": "已达到会话时长上限。升级到 Plus 即可不限次数使用会话。",
+    "copilotInvisible": "共享标签页或窗口时不会显示",
+    "copilotRunning": "AI 副驾运行中。共享标签页或窗口时不会显示。",
+    "copilotBlocked": "副驾窗口被浏览器拦截。请允许本站弹窗，或使用 Chrome 的画中画窗口。",
+    "sessionLimitReached": "你本月的免费会话已用完。升级到 Plus 即可不限次数使用会话。",
+    "statusRecording": "录制中",
+    "statusReady": "就绪",
+    "freePlanBanner": "Free 方案",
+    "timeLeft": "剩余",
+    "endingSoon": "即将结束",
+    "analyzeTextTip": "想分析文字聊天（Instagram、Snap、WhatsApp），请使用",
+    "analyzeTextLink": "帮我处理一条消息",
+    "screenConsent": "请确认你有权分析屏幕上显示的内容。开始会话即表示你接受我们的",
+    "termsLink": "服务条款",
+    "audioDisabledLabel": "音频已关闭",
+    "audioDisabledDesc": "不会进行转录和对话分析，只分析屏幕内容。",
+    "analysisReady": "分析完成",
+    "segmentsAnalyzed": "已分析 {{count}} 个片段。",
+    "screenAnalyzed": "屏幕已分析。",
+    "stillActive": "会话仍在进行。准备好后再停止。",
+    "upgradeShort": "升级",
+    "fullAnalysisInfo": "完整模式：屏幕捕获 + 音频转录 + 实时信号。"
   },
   "analyzePage": {
     "title": "复盘对话",
@@ -546,26 +582,103 @@
       "vslFullscreen": "全屏",
       "vslExitFullscreen": "退出全屏",
       "vslPause": "暂停",
-      "vslPlay": "播放"
+      "vslPlay": "播放",
+      "headline1": "每一场对话，",
+      "headline2": "都有 AI 副驾。",
+      "headline2Phrases": [
+        "每一场对话",
+        "艰难的对话",
+        "求职面试",
+        "外语通话",
+        "销售电话",
+        "日常交流"
+      ],
+      "subtitle": "Tonvo 实时跟进对话，在屏幕上给出三条现成的回复，让你随时知道下一句该说什么。通话、面试、会议，还有那些没法提前写稿的对话。"
     },
     "desktopDownload": {
       "badge": "桌面版上线",
       "title": "桌面端的 Tonvo",
-      "subtitle": "{{os}} 原生应用 — 一次安装，从 Dock 启动。",
-      "subtitleNoOS": "原生应用 — 一次安装，从 Dock 启动。",
+      "subtitle": "{{os}} 原生应用，一次安装，从 Dock 启动。",
+      "subtitleNoOS": "原生应用，一次安装，从 Dock 启动。",
       "cta": "下载 {{os}} 版",
       "ctaFallback": "下载 Tonvo",
       "alsoOn": "也可在",
-      "safetyNote": "应用安全 — Microsoft 验证中。",
-      "safetyTooltip": "Tonvo 在 Phase 1 测试期间尚未签名。Microsoft 正在审批每个版本。如果 SmartScreen 警告，点击「详细信息」→「仍要运行」— 二进制文件由 GitHub Actions 的公开 CI 构建。"
+      "safetyNote": "应用安全，Microsoft 验证中。",
+      "safetyTooltip": "Tonvo 在 Phase 1 测试期间尚未签名。Microsoft 正在审批每个版本。如果 SmartScreen 警告，点击「详细信息」→「仍要运行」，二进制文件由 GitHub Actions 的公开 CI 构建。"
     },
-    "problem": {},
-    "solution": {},
-    "features": {},
-    "demo": {},
-    "useCases": {},
-    "cta": {},
-    "faq": {}
+    "problem": {
+      "label": "生活没有剧本",
+      "heading1": "这种时刻你一定遇到过。",
+      "heading2": "脑子一下子空白。",
+      "p1": "对方抛出最关键的那个问题。或者对方语速很快，说的还是外语，你跟丢了思路。接下来几秒钟，你僵住了。Tonvo 就在这几秒钟里陪着你。"
+    },
+    "solution": {
+      "label": "Tonvo 如何帮你",
+      "heading1": "站在你这边的冷静声音。",
+      "heading2": "每一场对话都在。",
+      "desc": "Tonvo 跟着对话实时进行。它会显示对方刚问了什么、对当下局面的简短判断，以及三条可以直接用的回复。说什么由你决定。Tonvo 保证你不会无话可说。",
+      "step1Title": "开始会话",
+      "step1Desc": "一键开始。选好麦克风，如果想让 Tonvo 听到通话双方，再共享通话音频。",
+      "step2Title": "得到合适的话",
+      "step2Desc": "对话进行中，实时给出三条回复和对当下局面的快速判断。付费方案支持实时翻译。",
+      "step3Title": "回顾与成长",
+      "step3Desc": "对话结束后，获得摘要、做得好的地方，以及需要跟进的下一步。"
+    },
+    "features": {
+      "label": "Tonvo 能做什么",
+      "heading1": "关键时刻，",
+      "heading2": "你需要的都在这里。",
+      "liveTone": "读懂当下的局面",
+      "liveToneDesc": "捕捉你刚被问到的问题，以及背后的语气和信号。",
+      "smartSuggestions": "现成的回复，拿来就说",
+      "smartSuggestionsDesc": "针对对方刚说的话写出三个选项，使用对话所用的语言。",
+      "conversationInsights": "了解对话进展",
+      "conversationInsightsDesc": "语气、投入度，以及谁说得更多。付费方案提供教练提示和评分。",
+      "textAnalysis": "事后复盘",
+      "textAnalysisDesc": "会话结束后获得摘要和跟进事项，也可以粘贴消息或上传截图，获得回复建议。"
+    },
+    "demo": {
+      "label": "实时演示",
+      "heading": "需要的时候，话就在眼前",
+      "desc": "一场真实的会话：左边是对方说的话，右边是三条回复。"
+    },
+    "useCases": {
+      "label": "Tonvo 的用武之地",
+      "heading": "为对你重要的每一场对话。",
+      "salesTitle": "通话与会议",
+      "salesDesc": "跟上工作通话的节奏，从容回答难题，带着明确的下一步离开。",
+      "supportTitle": "面试与谈判",
+      "supportDesc": "在压力大的场合，获得对局面的冷静判断，以及可以灵活调整的回复。",
+      "interviewsTitle": "另一种语言",
+      "interviewsDesc": "用 10 种语言跟进并回复。付费方案支持实时翻译。",
+      "meetingsTitle": "消息与日常交谈",
+      "meetingsDesc": "粘贴一段对话或上传截图，获得怎么回的建议。"
+    },
+    "cta": {
+      "heading1": "下次再卡壳，",
+      "heading2": "就不会了。",
+      "desc": "开始一场会话，对话需要的时候，合适的话就在你面前。",
+      "button": "免费试用 Tonvo",
+      "note": "每月 3 次免费会话。无需信用卡。付费方案支持 7 天退款。"
+    },
+    "faq": {
+      "title": "大家常问的问题。",
+      "subtitle": "第一次使用 Tonvo 之前，你需要知道的都在这里。",
+      "q1": "Tonvo 到底是什么？",
+      "a1": "Tonvo 是实时对话的副驾。它会聆听、转录，并在屏幕上给出三条现成的回复和对当下局面的简短判断。说什么，始终由你决定。",
+      "q2": "可以用在哪些场合？",
+      "a2": "通话与会议、面试、谈判，以及外语对话。你也可以粘贴消息或上传截图，获得怎么回的建议。",
+      "q3": "手机上能用吗？",
+      "a3": "Tonvo 在电脑、手机和平板的浏览器中运行。在手机上，它通过麦克风收听，所以请把通话开成免提。它无法单独捕获电话另一端的声音，也不会在后台收听。",
+      "q4": "支持哪些语言？",
+      "a4": "应用和回复支持 10 种语言，Tonvo 还能识别对话所用的语言。付费方案支持实时翻译。",
+      "q5": "对方能看到 Tonvo 吗？",
+      "a5": "在 Plus 和 Team 方案中，Tonvo 在独立窗口打开，共享标签页或窗口时不包含它。在 Free 方案中，回复显示在页面本身，所以请不要共享该页面。如果你共享整个屏幕，别人就能看到 Tonvo。使用这类工具时，你应当始终告知对话的另一方，并遵守适用于你的规定。",
+      "q6": "我的对话会怎么处理？",
+      "a6": "Tonvo 不存储音频，也不保留屏幕截图。我们会保存你的会话文本和报告，方便你随时回看。详情和涉及的服务请见我们的隐私政策。",
+      "q7": "有退款保障吗？",
+      "a7": "免费开始，无需信用卡。付费方案支持 7 天退款保障。"
+    }
   },
   "mockup": {
     "menu": "菜单",
@@ -603,7 +716,10 @@
     "opportunity": "机会",
     "speaking": "发言中",
     "listening": "聆听中",
-    "muted": "已静音"
+    "muted": "已静音",
+    "closeDeal": "推进下一步",
+    "closeDealText": "「我们把预算评审定在周一吧，我会带上更新后的数据。」",
+    "showEmpathyText": "「我完全理解你的顾虑。我们一起找一个大家都合适的节奏。」"
   },
   "pricing": {
     "monthly": "月付",
@@ -623,20 +739,76 @@
       "STRIPE_INIT": "支付系统正在维护，请几分钟后重试。",
       "CUSTOMER_CREATE": "未能为你创建支付账户，请重试。",
       "STRIPE_CONNECTION": "支付系统暂时无法连接，请稍后重试。",
-      "STRIPE_AUTH": "支付系统正在维护，我们已在处理 — 请稍后重试。",
+      "STRIPE_AUTH": "支付系统正在维护，我们已在处理，请稍后重试。",
       "STRIPE_INVALID": "出现了意料之外的问题，请重试或联系客服。",
       "STRIPE_RATE_LIMIT": "请求过于频繁，请稍候再试。",
       "UNKNOWN": "出现临时问题，请稍后重试。"
     },
     "cancelError": "暂时无法更新订阅，请重试。",
     "portalError": "暂时无法打开账单中心，请重试。",
-    "planFree": {},
-    "planPro": {},
-    "planTeam": {}
+    "planFree": {
+      "name": "Free",
+      "description": "每月 3 次实时会话，试用 Tonvo",
+      "cta": "免费开始",
+      "features": [
+        "每月 3 次实时会话，每次最长 5 分钟",
+        "识别你被问到的问题",
+        "现成的回复，拿来就说",
+        "会话历史（最近 7 天）"
+      ]
+    },
+    "planPro": {
+      "name": "Plus",
+      "description": "适合每周都用 Tonvo 的人",
+      "cta": "选择 Plus",
+      "features": [
+        "不限次数的实时会话",
+        "实时翻译",
+        "教练提示和实时洞察",
+        "发言占比和对话评分",
+        "完整的会话历史和报告",
+        "进步分析",
+        "优先支持"
+      ]
+    },
+    "planTeam": {
+      "name": "Team",
+      "description": "包含 Plus 的全部功能，另加屏幕分析",
+      "cta": "选择 Team",
+      "features": [
+        "包含 Plus 的全部功能",
+        "聊天、私信和邮件的屏幕分析",
+        "优先支持"
+      ]
+    },
+    "title": "免费开始，需要更多时再升级。",
+    "subtitle": "每月用三次实时会话试试 Tonvo。当它成为你日常对话的一部分，再走得更远。",
+    "guarantee": "付费方案支持 7 天退款保障。可随时取消。",
+    "planEnterprise": {
+      "label": "企业版",
+      "name": "适合有特定需求的组织",
+      "description": "告诉我们你的需求，我们会告诉你能做到什么，包括安全方面的问题和定制条款。",
+      "priceLabel": "定制",
+      "priceSubLabel": "联系我们的团队",
+      "cta": "联系我们",
+      "features": [
+        "围绕你的使用场景展开沟通",
+        "安全与数据处理评估",
+        "定制商务条款"
+      ]
+    },
+    "periodMonth": "/月",
+    "periodUserMonth": "/用户/月"
   },
   "upgrade": {
     "cancelTitle": "还在犹豫？",
-    "goToDashboard": "进入工作台"
+    "goToDashboard": "进入工作台",
+    "successTitle": "已开通。",
+    "successSubtitle": "你的 {{plan}} 方案已生效。从现在起，每一场对话都会更轻松。",
+    "cancelSubtitle": "不着急。你可以继续使用 Free 方案，想要不限次数的会话时随时升级。",
+    "nudgeTitle": "你的免费会话次数已达上限",
+    "nudgeSubtitle": "你目前使用 Free 方案：每月 3 次会话。解锁不限次数的会话、实时翻译和教练提示。",
+    "stayFree": "继续使用 Free"
   },
   "footer": {
     "product": "产品",
@@ -657,7 +829,9 @@
     "termsOfService": "服务条款",
     "cookiePolicy": "Cookie 政策",
     "legalNotice": "法律声明",
-    "copyright": "2026 Tonvo. 保留所有权利。"
+    "copyright": "2026 Tonvo. 保留所有权利。",
+    "tagline1": "每一场对话的 AI 副驾。",
+    "tagline2": "需要的时候，找到合适的话。"
   },
   "termsPage": {
     "breadcrumb": "服务条款",
@@ -701,7 +875,10 @@
     "s12Title": "12. 适用法律",
     "s12Text": "本条款适用法国法律。任何争议将提交至法国 Saint-Etienne 的有管辖权法院处理。",
     "s13Title": "13. 联系方式",
-    "s13Intro": "如对本条款有任何疑问，请联系："
+    "s13Intro": "如对本条款有任何疑问，请联系：",
+    "s2Text": "Tonvo 是一款实时对话副驾，提供对话转录、推荐回复、实时洞察、翻译、屏幕内容分析以及对话后摘要。本服务按「现状」提供，并可能随时更新或修改。",
+    "s6Item1Desc": "每月限 3 次会话。历史记录显示最近 7 天。",
+    "s6Item2Label": "Plus 方案："
   },
   "privacyPage": {
     "analyticsTitle": "访问统计",
@@ -793,7 +970,14 @@
     "s11Text": "我们可能不定期更新本隐私政策。如有重大变更，会在本页面更新政策与「最后更新」日期。变更后继续使用本服务，即视为您接受更新后的政策。",
     "s12Title": "12. 联系方式",
     "s12Intro": "如对本隐私政策或您的个人数据有任何疑问，请联系：",
-    "s12Cnil": "您也可向当地数据保护机构（如法国 CNIL）投诉。"
+    "s12Cnil": "您也可向当地数据保护机构（如法国 CNIL）投诉。",
+    "s5Row2Retention": "7 天后从您的历史记录中隐藏",
+    "s5Row3Type": "会话数据（Plus/Team）",
+    "s5Row5Retention": "Tonvo 不存储。会话期间实时传输给我们的转录服务商",
+    "s6Anthropic": "Anthropic。AI 对话分析。转录文本，以及您选择分析的任何截图，会被发送处理。",
+    "s6AssemblyAI": "AssemblyAI。语音转文字。会话音频会被实时发送进行转录。",
+    "s6Upstash": "Upstash。限流。",
+    "s6Meta": "Meta（Pixel 与 Conversions API）。广告效果统计，仅在您于 Cookie 横幅中接受后使用。"
   },
   "cookiesPage": {
     "breadcrumb": "Cookie 政策",
@@ -810,11 +994,11 @@
     "cookie2Desc": "保存您的偏好设置，如语言与界面选项。",
     "cookie2Examples": "tonvo-language（localStorage）。",
     "cookie3Type": "统计 Cookie",
-    "cookie3Desc": "帮助我们了解你如何使用产品，从而持续优化。所有数据均匿名化处理。",
-    "cookie3Examples": "暂无。我们目前不使用任何第三方统计服务。",
+    "cookie3Desc": "帮助我们了解网站的使用情况。我们自己的访问统计是匿名的：一个随机的访客标识符，存储在您浏览器的 localStorage 中，您可以在隐私政策页面选择退出。使用 Meta Pixel 的广告效果统计是可选的。",
+    "cookie3Examples": "我们自己的统计：tonvo_aid（localStorage）。Meta Pixel（Cookie，例如 _fbp），仅在您于 Cookie 横幅中接受后使用。",
     "cookie4Type": "第三方 Cookie",
     "cookie4Desc": "由集成在我们应用中的第三方服务设置。",
-    "cookie4Examples": "Stripe（支付）、Firebase（身份认证）。",
+    "cookie4Examples": "Stripe（支付处理）、Firebase（身份认证）。Meta（广告效果统计），仅在获得您同意后使用。",
     "required": "必要",
     "optional": "可选",
     "examples": "示例：",
@@ -823,7 +1007,8 @@
     "s4Title": "4. 管理 Cookie",
     "s4Text": "您可在浏览器设置中管理 Cookie。请注意，禁用必要 Cookie 可能会导致部分功能（包括登录）无法使用。您可通过浏览器开发者工具清除 localStorage 中的数据。",
     "s5Title": "5. 联系方式",
-    "s5Text": "如对我们的 Cookie 使用有任何疑问，请联系："
+    "s5Text": "如对我们的 Cookie 使用有任何疑问，请联系：",
+    "managePrefs": "更改我的 Cookie 选择"
   },
   "legalPage": {
     "breadcrumb": "法律声明",
@@ -920,7 +1105,8 @@
     "forbidden": "此页面仅限 Tonvo 团队访问。",
     "error": "无法加载数据，请稍后重试。",
     "loading": "加载中…",
-    "note": "注册、首次会话和付款归属于带来注册的那次访问的来源。统计开始前创建的账户显示在“before tracking”下。"
+    "note": "注册、首次会话和付款归属于带来注册的那次访问的来源。统计开始前创建的账户显示在“before tracking”下。",
+    "byLanguage": "按语言"
   },
   "aboutPage": {
     "breadcrumb": "关于我们",
@@ -955,5 +1141,117 @@
     "ctaSecondary": "了解工作原理",
     "ctaNote": "每月 3 次实时会话免费，无需信用卡。",
     "company": "Tonvo 是一家 2026 年在法国成立的独立公司。"
+  },
+  "onboarding": {
+    "title": "你想在哪方面得到帮助？",
+    "subtitle": "选一个起点。以后这些你都可以试。",
+    "words": {
+      "title": "找到合适的话",
+      "desc": "开始一场实时会话，获得三条可以直接用的回复。"
+    },
+    "message": {
+      "title": "看懂一条消息",
+      "desc": "粘贴一段对话或上传截图，获得回复建议。"
+    },
+    "language": {
+      "title": "用另一种语言交流",
+      "desc": "选择对话所用的语言，并实时跟进。实时翻译为付费方案功能。"
+    },
+    "demo": {
+      "title": "先看看效果",
+      "desc": "观看一段简短的脚本演示。无需麦克风。"
+    },
+    "skip": "暂时不用"
+  },
+  "seo": {
+    "organization": "Tonvo 是实时对话的 AI 副驾：实时转录、现成的回复和对当下局面的简短判断，适用于通话、面试和日常交谈。",
+    "home": {
+      "title": "Tonvo：每一场对话的 AI 副驾",
+      "description": "Tonvo 实时跟进对话，在屏幕上给出三条现成的回复。适用于通话、面试和日常交谈。免费开始。"
+    },
+    "pricing": {
+      "title": "Tonvo 价格：免费开始，按需升级",
+      "description": "每月 3 次免费实时会话。Plus 每月 $19，不限会话次数，含实时翻译和教练提示。Team 增加屏幕分析。"
+    },
+    "about": {
+      "title": "我为什么做 Tonvo",
+      "description": "Tonvo 创始人谈对话中脑子一片空白的时刻，以及为此打造的实时 AI 副驾。会议里没有机器人，免费开始。"
+    },
+    "privacy": {
+      "title": "隐私政策",
+      "description": "Tonvo 如何收集、使用和保护您的数据，我们保留什么、保留多久，以及如何行使您的隐私权利。"
+    },
+    "terms": {
+      "title": "服务条款",
+      "description": "使用 Tonvo 这款对话 AI 副驾的条款与条件。"
+    },
+    "cookies": {
+      "title": "Cookie 政策",
+      "description": "Tonvo 如何使用 Cookie 和类似技术，以及您如何控制它们。"
+    },
+    "legal": {
+      "title": "法律声明",
+      "description": "Tonvo（对话 AI 副驾）的公司信息与法律声明。"
+    },
+    "blog": {
+      "title": "Tonvo 博客",
+      "description": "Tonvo 团队分享的技巧、指南和见解，帮你把对话、面试、通话和沟通做得更好。"
+    }
+  },
+  "pricingPage": {
+    "faqTitle": "价格常见问题",
+    "backHome": "返回首页",
+    "faq": {
+      "q1": "免费版包含什么？",
+      "a1": "每月三次实时会话，每次最长 5 分钟，含现成的回复和最近 7 天的会话历史。无需信用卡。",
+      "q2": "可以随时取消吗？",
+      "a2": "可以。你可以在账户设置中取消，付费方案支持 7 天退款保障。",
+      "q3": "用哪种货币计费？",
+      "a3": "以美元计费。以其他货币显示的价格仅供参考。"
+    }
+  },
+  "ui": {
+    "systemAudio": "系统音频",
+    "speakerModeRecommended": "建议使用扬声器模式",
+    "screenAnalysis": "屏幕分析",
+    "analyzedMonitoring": "已分析，持续监测变化",
+    "analysisSummary": "分析摘要",
+    "attractionScore": "吸引力评分",
+    "conversationTone": "对话语气",
+    "keyInsights": "关键洞察",
+    "toImprove": "待改进",
+    "generatingSummary": "正在生成分析摘要...",
+    "conversationOverview": "对话概览",
+    "qualityScore": "质量评分",
+    "responseSpeed": "回应速度",
+    "audioLanguageLabel": "音频转录语言",
+    "dataRights": "数据权利",
+    "requestExport": "申请导出",
+    "requestExportLabel": "申请导出数据",
+    "requestDeletion": "申请删除",
+    "requestDeletionLabel": "申请删除数据",
+    "noSummary": "暂无摘要。",
+    "openFullSession": "打开完整会话",
+    "searchHistory": "搜索历史记录",
+    "clearSearch": "清除搜索",
+    "openMenu": "打开菜单",
+    "toggleMenu": "切换菜单",
+    "dismiss": "关闭",
+    "notifications": "通知",
+    "preparingWorkspace": "正在准备你的工作台",
+    "toneDistribution": "语气分布",
+    "conversationAnalysis": "对话分析"
+  },
+  "notFound": {
+    "title": "找不到页面",
+    "body": "此页面不存在，或已被移动。",
+    "home": "返回首页"
+  },
+  "consent": {
+    "title": "Cookie 与广告效果统计",
+    "body": "我们使用 Meta Pixel 来统计广告效果。它会设置 Cookie 并向 Meta 发送数据，且仅在您接受后才会启动。拒绝不会影响 Tonvo 的任何功能。",
+    "accept": "接受",
+    "decline": "拒绝",
+    "policy": "Cookie 政策"
   }
 }
