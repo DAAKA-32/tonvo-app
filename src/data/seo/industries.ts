@@ -5,82 +5,82 @@ export const industries: IndustryEntry[] = [
   {
     type: "industries",
     slug: "saas-sales-teams",
-    title: "Tonvo for SaaS Sales Teams | AI Conversation Copilot",
+    title: "Tonvo for SaaS Sales Teams | Copilot for Every Call",
     metaDescription:
-      "Tonvo helps SaaS sales teams close more deals with real-time tone detection, live coaching prompts, and post-call analytics on every discovery and demo call.",
-    h1: "Close More SaaS Deals with Real-Time Conversation Intelligence",
+      "Tonvo follows your discovery calls and demos live, shows the buyer's question and suggests three replies you can use. Works from your mic or a shared tab.",
+    h1: "Find the Right Words on Every Discovery Call and Demo",
     subtitle:
-      "Tonvo analyzes every sales call in real time, coaching your reps on tone, objection handling, and engagement so pipeline velocity increases from day one.",
-    lastModified: "2026-04-09",
+      "Tonvo follows your sales conversations as they happen, shows the question the buyer just asked and offers three replies. You decide what to say.",
+    lastModified: "2026-10-21",
     relatedSlugs: [
       { type: "use-cases", slug: "ai-copilot-for-sales-calls", label: "AI Copilot for Sales Calls" },
       { type: "use-cases", slug: "sdr-onboarding-with-call-review", label: "SDR Onboarding with Call Review" },
     ],
     targetKeywords: [
-      "saas sales call coaching",
-      "ai copilot for sales teams",
-      "real-time sales conversation intelligence",
-      "tone detection sales calls",
-      "sales call analytics software",
+      "ai copilot for sales calls",
+      "what to say on a sales call",
+      "live sales call assistant",
+      "handle objections on a call",
+      "saas demo call assistant",
     ],
     faq: [
       {
-        question: "How does Tonvo help SaaS sales reps close more deals?",
+        question: "How does Tonvo help during a sales call?",
         answer:
-          "Tonvo listens to your calls on Zoom, Meet, or Discord and surfaces real-time coaching cues such as objection-handling prompts, pacing reminders, and sentiment shifts so reps can adjust mid-call instead of reviewing mistakes after the fact.",
+          "Tonvo follows the conversation live and shows the question the other person just asked, three replies you can use and a short read on the moment. It suggests and you decide. It can be wrong, so treat it as a second opinion rather than a script.",
       },
       {
-        question: "Can managers review call performance across the team?",
+        question: "Does Tonvo join my Zoom or Meet calls?",
         answer:
-          "Yes. On the Team plan ($49/user/mo) managers get aggregated post-session analytics, including talk-time ratios, sentiment trends, and engagement scores for every rep.",
+          "No. Tonvo does not join calls as a bot and does not integrate with Zoom, Meet, Teams, Discord or any CRM. It listens through your microphone, or through the audio of a browser tab you share so it can hear both sides of an online call. You are responsible for informing the people you talk to and following the rules that apply.",
       },
       {
-        question: "Does Tonvo integrate with my existing sales stack?",
+        question: "Does Tonvo offer dashboards for sales managers?",
         answer:
-          "It requires no CRM plugin to start delivering value, though you can export session summaries to feed into your CRM workflow.",
+          "No. Tonvo is a copilot for the person on the call, so there are no manager dashboards or shared analytics. The Team plan ($49 per user a month) adds screen analysis of what you share on screen, such as chats and emails.",
       },
       {
-        question: "Is there a free trial for sales teams?",
+        question: "Is there a free plan for sales reps?",
         answer:
-          "Tonvo's Free plan includes 3 sessions per month so you can evaluate real-time coaching and sentiment detection before upgrading to Plus ($19/mo) or Team ($49/user/mo).",
+          "Yes. The Free plan includes 3 live sessions a month, up to 5 minutes each, with detected questions, three replies and a session summary. Plus is $19 a month for unlimited sessions, and paid plans have a 7-day money-back guarantee.",
       },
     ],
     industryName: "SaaS Sales",
     painPoints: [
-      "Reps miss buying signals and objection cues during fast-paced discovery calls",
-      "Managers lack visibility into individual call quality without listening to every recording",
-      "New SDRs take months to ramp because feedback only comes after the call ends",
-      "Inconsistent talk-to-listen ratios lead to poor prospect engagement",
+      "A buyer asks a pricing or security question you did not prepare for, and the pause shows",
+      "Objections arrive mid-sentence and are easy to miss while you take notes",
+      "Running a demo, a chat window and a conversation at once leaves little attention for what the buyer actually said",
+      "Details and next steps blur together once the call is over",
     ],
     howTonvoHelps: {
       label: "How It Works",
-      heading: "Real-Time Coaching That Moves the Revenue Needle",
-      body: "When a prospect shows hesitation, Tonvo nudges your rep with a contextual coaching prompt. After the session, a full analytics report highlights what went well and where to improve, turning every call into a learning opportunity.",
+      heading: "A Second Pair of Ears During the Call",
+      body: "Open Tonvo in your browser and let it listen through your microphone, or share the tab your call runs in so it can hear both sides. It shows the question just asked, three ready-to-say replies and a short read on the moment. Pick sales mode, and after the session read a summary with what went well, what to improve and follow-up actions.",
     },
     features: [
       {
-        icon: "zap",
-        title: "Live Objection Alerts",
+        icon: "message",
+        title: "The Question, Spotted",
         description:
-          "Detects negative sentiment shifts and prompts reps with objection-handling cues before the moment passes.",
+          "Shows the question the prospect just asked, so you answer what was said and not what you assumed.",
+      },
+      {
+        icon: "zap",
+        title: "Three Ready-to-Say Replies",
+        description:
+          "Each moment comes with three replies you can say as they are or adapt. You stay in charge of the conversation.",
+      },
+      {
+        icon: "eye",
+        title: "Signals on Plus and Team",
+        description:
+          "Paid plans flag questions, objections, opportunities, hesitation and agreement as the call unfolds.",
       },
       {
         icon: "bar-chart",
-        title: "Post-Call Analytics",
+        title: "Session Summary",
         description:
-          "Breaks down talk-time ratio, sentiment arc, and engagement score so managers can coach with data, not guesswork.",
-      },
-      {
-        icon: "brain",
-        title: "Adaptive Coaching Prompts",
-        description:
-          "Context-aware suggestions adjust to the conversation stage, from discovery openers to closing techniques.",
-      },
-      {
-        icon: "trending-up",
-        title: "Pipeline Trend Dashboard",
-        description:
-          "Track call quality metrics over time and correlate coaching improvements with win-rate changes.",
+          "After the session, read the tone, what went well, what to improve and the suggested follow-up actions.",
       },
     ],
     stats: [],
@@ -95,82 +95,82 @@ export const industries: IndustryEntry[] = [
   {
     type: "industries",
     slug: "customer-success-teams",
-    title: "Tonvo for Customer Success Teams | Reduce Churn with AI",
+    title: "Tonvo for Customer Success | Copilot for Client Calls",
     metaDescription:
-      "Tonvo detects at-risk sentiment in real time during customer calls, giving CS teams the signals they need to reduce churn and boost net retention.",
-    h1: "Detect At-Risk Accounts Before They Churn",
+      "Tonvo follows onboarding, check-in and renewal calls live, shows the customer's question and suggests replies for tense moments. Mic or shared tab.",
+    h1: "Stay Present on Every Customer Call",
     subtitle:
-      "Tonvo monitors tone and sentiment on every customer call, alerting your CS team to frustration signals so they can course-correct in real time.",
-    lastModified: "2026-04-09",
+      "From onboarding to renewals and escalations, Tonvo follows what the customer says and offers replies for the tricky moments, so you can focus on the person.",
+    lastModified: "2026-10-21",
     relatedSlugs: [
       { type: "use-cases", slug: "customer-support-tone-detection", label: "Customer Support Tone Detection" },
       { type: "industries", slug: "saas-sales-teams", label: "SaaS Sales Teams" },
     ],
     targetKeywords: [
-      "customer success tone detection",
-      "reduce churn ai",
-      "real-time sentiment customer calls",
-      "cs team conversation analytics",
-      "ai copilot customer success",
+      "customer success call assistant",
+      "what to say to an upset customer",
+      "ai copilot for customer success",
+      "renewal call preparation help",
+      "handle escalation calls",
     ],
     faq: [
       {
-        question: "How does Tonvo help CS teams reduce churn?",
+        question: "How does Tonvo help during a customer call?",
         answer:
-          "Tonvo analyzes tone and sentiment during live customer calls. When frustration or disengagement is detected, your CS manager receives a real-time alert with suggested de-escalation language, allowing them to save the relationship before it deteriorates.",
+          "Tonvo follows the conversation live and shows the question the customer just asked, three replies you can use and a short read on the moment. When a call gets tense, the replies give you words to acknowledge the issue and move forward. You decide what to say, and Tonvo can be wrong.",
       },
       {
-        question: "Can Tonvo track customer sentiment over multiple sessions?",
+        question: "Does Tonvo track customer health across accounts?",
         answer:
-          "Yes. Post-session analytics are stored per account, letting CS teams view sentiment trends across renewal cycles and QBRs to identify accounts trending toward churn.",
+          "No. Tonvo does not keep account records or aggregate analytics. Each session has its own summary with tone, what went well and follow-up actions, and paid plans keep your full session history so you can read earlier sessions again.",
       },
       {
-        question: "Does Tonvo work for both 1:1 and group customer calls?",
+        question: "Does Tonvo work for calls with several participants?",
         answer:
-          "Absolutely. Tonvo supports multi-participant calls on Zoom, Meet, and Discord, analyzing each speaker's tone independently so you know exactly where dissatisfaction originates.",
+          "It works with the audio it can hear. If you share the browser tab your call runs in, it hears both sides of an online call, including several participants. On paid plans a talk balance shows who is speaking. Tonvo does not join the call or integrate with Zoom, Meet or Discord.",
       },
       {
-        question: "What pricing plan do CS teams typically choose?",
+        question: "Which plan do customer success teams start with?",
         answer:
-          "Individual CSMs can trial the Free plan (3 sessions/mo) first.",
+          "Start on Free: 3 live sessions a month, up to 5 minutes each. Plus is $19 a month for unlimited sessions. Team is $49 per user a month and adds screen analysis of chats and emails you share on screen. Paid plans have a 7-day money-back guarantee.",
       },
     ],
     industryName: "Customer Success",
     painPoints: [
-      "Subtle frustration signals go unnoticed until the customer files a cancellation",
-      "QBRs lack objective data on how customers truly feel about the product",
-      "CS managers cannot monitor every call across a growing book of business",
-      "Post-call notes are subjective and miss critical sentiment context",
+      "A frustrated customer asks a pointed question and the right words do not come",
+      "Taking notes during a renewal or escalation call pulls attention away from the customer",
+      "Customers jump between topics, and the question behind a comment is easy to miss",
+      "Follow-up actions are hard to recall accurately after back-to-back calls",
     ],
     howTonvoHelps: {
       label: "How It Works",
-      heading: "Turn Every Customer Call into a Retention Signal",
-      body: "When sentiment dips below a configurable threshold, your CS rep receives a discreet coaching nudge with de-escalation strategies. After the session, the sentiment timeline feeds into account health dashboards so leadership can prioritize at-risk accounts with confidence.",
+      heading: "Keep Up with the Conversation, Calmly",
+      body: "Run Tonvo in the browser next to your customer call. It listens through your microphone or a shared tab, shows the question the customer just asked and three replies you can use, including for tense moments. Choose support mode for escalations. Afterward, the session summary lists the tone, what went well and follow-up actions.",
     },
     features: [
       {
-        icon: "heart",
-        title: "Sentiment Health Score",
-        description:
-          "Each call generates a composite sentiment score that rolls up into an account health timeline visible to CS leadership.",
-      },
-      {
         icon: "message",
-        title: "De-escalation Prompts",
+        title: "Replies for Tense Moments",
         description:
-          "Real-time suggestions help CS reps acknowledge frustration and steer the conversation toward resolution.",
+          "Three ready-to-say replies help you acknowledge frustration and steer the conversation toward a next step.",
       },
       {
         icon: "eye",
-        title: "Multi-Speaker Analysis",
+        title: "Signals on Plus and Team",
         description:
-          "Independently tracks tone for every participant, isolating who is dissatisfied and why.",
+          "Question, objection, hesitation and agreement signals help you notice what the customer is really saying.",
       },
       {
-        icon: "bar-chart",
-        title: "Renewal Risk Reports",
+        icon: "headphones",
+        title: "Support Mode",
         description:
-          "Aggregate sentiment data across calls to flag accounts approaching renewal with declining satisfaction.",
+          "Pick support mode for escalations and troubleshooting calls, or general mode for check-ins and renewals.",
+      },
+      {
+        icon: "check",
+        title: "Follow-Up Actions",
+        description:
+          "Each session summary lists suggested follow-up actions, so the next steps are on the page when the call ends.",
       },
     ],
     stats: [],
@@ -185,83 +185,83 @@ export const industries: IndustryEntry[] = [
   {
     type: "industries",
     slug: "recruitment-agencies",
-    title: "Tonvo for Recruitment Agencies | AI Interview Copilot",
+    title: "Tonvo for Recruiters | Copilot for Candidate Interviews",
     metaDescription:
-      "Tonvo gives recruiters real-time candidate sentiment analysis and structured post-interview insights to make faster, more confident hiring decisions.",
-    h1: "Screen Candidates Faster with AI-Powered Interview Intelligence",
+      "Tonvo follows candidate screens and interviews live, shows the question just asked and suggests three replies. Recruitment mode, from mic or shared tab.",
+    h1: "Stay Focused on the Candidate During Every Interview",
     subtitle:
-      "Tonvo analyzes candidate tone, confidence, and engagement during live interviews, giving recruiters objective data to complement their gut instinct.",
-    lastModified: "2026-04-09",
+      "Tonvo follows screening calls and interviews as they happen, so you can answer candidate questions clearly and keep your attention on the person, not your notes.",
+    lastModified: "2026-10-21",
     relatedSlugs: [
       { type: "use-cases", slug: "ai-coaching-for-job-interviews", label: "AI Coaching for Job Interviews" },
       { type: "use-cases", slug: "user-research-interview-insights", label: "Interview Insights" },
       { type: "industries", slug: "consulting-firms", label: "Consulting Firms" },
     ],
     targetKeywords: [
-      "ai interview analysis",
-      "recruitment call analytics",
-      "candidate sentiment detection",
-      "interview copilot recruiters",
-      "hiring screening ai tool",
+      "recruiter call assistant",
+      "ai copilot for recruiters",
+      "candidate screening call help",
+      "answer candidate questions live",
+      "interview call copilot",
     ],
     faq: [
       {
         question: "How does Tonvo help recruiters during candidate screens?",
         answer:
-          "Tonvo listens to your interview on Zoom, Meet, or Discord and provides real-time indicators of candidate confidence, enthusiasm, and hesitation. After the call, a structured report highlights engagement peaks and sentiment dips tied to specific questions.",
+          "Tonvo follows the conversation live and shows the question the candidate just asked, with three replies you can use and a short read on the moment. Pick recruitment mode to tune it to interviews and screening calls. You decide what to say.",
       },
       {
-        question: "Is Tonvo appropriate for use in hiring processes?",
+        question: "Does Tonvo score or rank candidates?",
         answer:
-          "Tonvo analyzes vocal tone and conversational dynamics, not content biases. It provides supplementary data that helps interviewers ask better follow-up questions, and it should be used alongside your existing evaluation frameworks.",
+          "No. Tonvo helps you follow the conversation and find your words. It does not rate or rank candidates, and it does not analyze voice pitch, pace or filler words. Your own judgment and evaluation process decide.",
       },
       {
-        question: "Can multiple interviewers in a panel use Tonvo simultaneously?",
+        question: "Do I need to tell candidates I use Tonvo?",
         answer:
-          "Yes. Tonvo tracks each speaker independently, so in a panel setting every interviewer and the candidate are analyzed separately, giving you a holistic view of the dynamic.",
+          "You are responsible for informing the people you talk to and for following the rules that apply, including consent and your workplace policies. Tonvo's guidance is to tell them. It does not join the call, it listens through your microphone or a shared browser tab.",
       },
       {
-        question: "What plan works best for recruitment agencies?",
+        question: "What plan works best for recruiters?",
         answer:
-          "Solo recruiters can start with Plus ($19/mo) for unlimited sessions.",
+          "Start on Free with 3 live sessions a month, up to 5 minutes each. Plus ($19 a month) gives unlimited sessions, live translation and full history, which helps if you run many calls or interview in another language.",
       },
     ],
     industryName: "Recruitment & Staffing",
     painPoints: [
-      "Interviewers rely on subjective impressions that introduce unconscious bias",
-      "High-volume screening leaves little time for detailed post-interview analysis",
-      "Candidate engagement and enthusiasm are hard to quantify consistently",
-      "Debrief notes between panel members often conflict without shared data",
+      "Candidates ask about pay, process or the client, and the answer you need is not at hand",
+      "Taking notes during a screening call splits your attention between typing and listening",
+      "Back-to-back calls blur together, making it hard to remember what each candidate said",
+      "Calls in another language add effort to every question and answer",
     ],
     howTonvoHelps: {
       label: "How It Works",
-      heading: "Objective Interview Data in Real Time",
-      body: "Discreet prompts help interviewers probe deeper when hesitation is detected. Post-session, a structured scorecard with engagement metrics lets your hiring panel align quickly on candidate fit.",
+      heading: "Keep Your Attention on the Candidate",
+      body: "Open Tonvo in your browser and let it listen through your microphone, or share the tab your video call runs in. It shows the question just asked, three replies you can use and a short read on the moment. After the call, the session summary gives you the tone, what went well and follow-up actions to read back.",
     },
     features: [
       {
-        icon: "search",
-        title: "Candidate Confidence Tracker",
-        description:
-          "Monitors vocal steadiness and pacing to surface objective confidence indicators throughout the interview.",
-      },
-      {
-        icon: "brain",
-        title: "Follow-Up Question Prompts",
-        description:
-          "When hesitation or uncertainty is detected, Tonvo suggests targeted follow-up questions to dig deeper.",
-      },
-      {
         icon: "users",
-        title: "Panel Alignment Reports",
+        title: "Recruitment Mode",
         description:
-          "Generates a shared scorecard after panel interviews so team members evaluate candidates from the same data set.",
+          "Choose recruitment mode for screening calls and interviews, or switch to general mode for any other conversation.",
       },
       {
-        icon: "clock",
-        title: "Time-to-Insight Reduction",
+        icon: "message",
+        title: "Questions and Ready Replies",
         description:
-          "Structured post-interview reports eliminate hours of manual debrief, accelerating your hiring pipeline.",
+          "Shows the question a candidate just asked and three replies you can use, from role details to next steps.",
+      },
+      {
+        icon: "globe",
+        title: "Live Translation on Plus and Team",
+        description:
+          "Follow conversations in another language. Live transcription covers 10 languages, with live translation on paid plans.",
+      },
+      {
+        icon: "check",
+        title: "Session Summary",
+        description:
+          "Read back the tone, what went well, what to improve and suggested follow-up actions after each call.",
       },
     ],
     stats: [],
@@ -276,13 +276,13 @@ export const industries: IndustryEntry[] = [
   {
     type: "industries",
     slug: "consulting-firms",
-    title: "Tonvo for Consulting Firms | Client Session Intelligence",
+    title: "Tonvo for Consultants | Copilot for Client Meetings",
     metaDescription:
-      "Tonvo helps consultants read client sentiment in real time, deliver sharper recommendations, and produce structured session summaries automatically.",
-    h1: "Deliver Higher-Impact Client Sessions with AI Conversation Intelligence",
+      "Tonvo follows client calls and workshops live, shows the question just asked and suggests three replies, with a summary after each session.",
+    h1: "Follow Every Client Meeting and Find the Right Words",
     subtitle:
-      "Tonvo gives consultants a real-time read on client sentiment and engagement, plus automatic post-session summaries that save hours of documentation.",
-    lastModified: "2026-04-09",
+      "From kickoff calls to steering committees, Tonvo follows the discussion live, shows client questions and offers replies when you are put on the spot.",
+    lastModified: "2026-10-21",
     relatedSlugs: [
       { type: "use-cases", slug: "freelancer-client-call-assistant", label: "Client Call Assistant" },
       { type: "features", slug: "post-session-analysis", label: "Post-Session Analysis" },
@@ -290,70 +290,70 @@ export const industries: IndustryEntry[] = [
       { type: "use-cases", slug: "remote-meeting-communication", label: "Remote Meeting Communication" },
     ],
     targetKeywords: [
-      "consulting call analytics",
-      "client session sentiment analysis",
-      "ai copilot for consultants",
-      "consulting meeting intelligence",
-      "real-time client engagement tracking",
+      "ai assistant for consultants",
+      "client meeting copilot",
+      "consultant call assistant",
+      "answer client questions live",
+      "workshop facilitation assistant",
     ],
     faq: [
       {
-        question: "How does Tonvo improve consulting engagements?",
+        question: "How does Tonvo help consultants in client meetings?",
         answer:
-          "Tonvo monitors client tone and engagement in real time during Zoom, Meet, or Discord sessions. If a client shows confusion or disengagement, Tonvo nudges the consultant to clarify or pivot, improving session outcomes and client satisfaction.",
+          "Tonvo follows the discussion live and shows the question a client just asked, three replies you can use and a short read on the moment. It helps when you are put on the spot. You decide what to say, and it can be wrong.",
       },
       {
-        question: "Can Tonvo generate session summaries automatically?",
+        question: "Can Tonvo produce a session summary?",
         answer:
-          "Yes. After every session, Tonvo produces a structured analytics report including sentiment timeline, key discussion moments, and engagement metrics that can serve as the foundation for your client deliverable.",
+          "Yes. After each session you get a summary with the tone, what went well, what to improve and suggested follow-up actions. It is a starting point for your own notes, not a finished client deliverable.",
       },
       {
-        question: "Is Tonvo suitable for both solo consultants and large firms?",
+        question: "Is Tonvo suitable for solo consultants and larger firms?",
         answer:
-          "Solo practitioners can use the Plus plan ($19/mo) for unlimited sessions.",
+          "Each person uses their own account, and there are no shared firm dashboards. Plus ($19 a month) covers unlimited sessions for a solo consultant. Team ($49 per user a month) adds screen analysis of what you share on screen, such as chats and emails.",
       },
       {
-        question: "Does Tonvo store or share client conversation content?",
+        question: "Does Tonvo store client conversations?",
         answer:
-          "Tonvo analyzes tone and sentiment signals, not transcript content. Your client conversations remain private. Review our security documentation for full details on data handling.",
+          "Tonvo does not record or store audio. It transcribes the conversation live and sends that text to AI service providers to process it (see our Privacy Policy). The text of your sessions is kept so you can read it again. Check your client's confidentiality terms before using it.",
       },
     ],
     industryName: "Management Consulting",
     painPoints: [
-      "Consultants miss subtle client dissatisfaction until feedback surveys arrive weeks later",
-      "Session documentation is manual, time-consuming, and inconsistent across the team",
-      "Junior consultants struggle to read the room in high-stakes client meetings",
-      "Engagement quality varies widely between consultants with no objective benchmark",
+      "A client asks a pointed question in a steering meeting and you need an answer worth saying out loud",
+      "Leading a discussion while capturing what was decided splits your attention",
+      "Junior consultants facing senior stakeholders can lose the thread under pressure",
+      "Action items from a long session are hard to reconstruct accurately afterward",
     ],
     howTonvoHelps: {
       label: "How It Works",
-      heading: "Read the Room, Even on a Video Call",
-      body: "Tonvo sits alongside your Zoom, Meet, or Discord session and continuously evaluates client engagement, confusion signals, and satisfaction levels. Real-time coaching prompts help consultants adjust their delivery on the fly. Post-session, a detailed analytics report gives you an objective baseline for session quality and client sentiment trends across an engagement.",
+      heading: "Follow the Discussion While You Lead It",
+      body: "Tonvo does not join your Zoom, Meet or Teams call. It listens through your microphone or a browser tab you share, and shows the question just asked, three replies you can use and a short read on the moment. Afterward, the session summary lists the tone, what went well and follow-up actions, so you can start your own notes from something concrete.",
     },
     features: [
       {
-        icon: "eye",
-        title: "Client Engagement Radar",
+        icon: "message",
+        title: "Questions and Ready Replies",
         description:
-          "Tracks real-time engagement signals so consultants know when to slow down, ask questions, or pivot topics.",
+          "Shows the question a client just asked and three replies you can say as they are or adapt to your own view.",
+      },
+      {
+        icon: "eye",
+        title: "Signals on Plus and Team",
+        description:
+          "Paid plans flag questions, objections, hesitation and key points, and show a talk balance of who is speaking.",
       },
       {
         icon: "layers",
-        title: "Session Summary Reports",
+        title: "Session Summaries",
         description:
-          "Automatically generates structured session summaries with sentiment timelines and key moment highlights.",
+          "After each session, a summary with the tone, what went well, what to improve and follow-up actions.",
       },
       {
-        icon: "trending-up",
-        title: "Engagement Benchmarking",
+        icon: "monitor",
+        title: "Screen Analysis on Team",
         description:
-          "Compares session quality across consultants and engagements to establish objective performance baselines.",
-      },
-      {
-        icon: "message",
-        title: "Clarity Prompts",
-        description:
-          "Detects client confusion signals and prompts the consultant to rephrase or provide additional context.",
+          "The Team plan reads what you share on screen, such as chats, DMs and emails, to help you reply.",
       },
     ],
     stats: [],
@@ -368,84 +368,84 @@ export const industries: IndustryEntry[] = [
   {
     type: "industries",
     slug: "tech-startups",
-    title: "Tonvo for Tech Startups | AI Meeting Copilot for Small Teams",
+    title: "Tonvo for Startup Founders | Copilot for Key Calls",
     metaDescription:
-      "Tonvo gives early-stage startups real-time conversation coaching on investor calls, customer discovery, and team syncs without adding headcount.",
-    h1: "Ship Faster, Communicate Better with AI Conversation Intelligence",
+      "Tonvo follows investor calls, customer discovery and early sales talks live and suggests three replies for the moment. Free to start, from mic or tab.",
+    h1: "Find the Words for Pitches, Customer Calls and Hiring",
     subtitle:
-      "From investor pitches to customer discovery calls, Tonvo gives lean startup teams real-time coaching and post-session insights without another hire.",
-    lastModified: "2026-04-09",
+      "Founders have a lot of high-stakes conversations and no script. Tonvo follows them live and suggests what to say, from investor calls to customer discovery.",
+    lastModified: "2026-10-21",
     relatedSlugs: [
       { type: "use-cases", slug: "ai-copilot-for-sales-calls", label: "AI Copilot for Sales Calls" },
       { type: "use-cases", slug: "user-research-interview-insights", label: "User Research Insights" },
       { type: "industries", slug: "saas-sales-teams", label: "SaaS Sales Teams" },
     ],
     targetKeywords: [
-      "startup meeting copilot",
-      "ai conversation tool for startups",
-      "investor pitch tone analysis",
-      "customer discovery call analytics",
-      "small team meeting intelligence",
+      "ai copilot for founders",
+      "investor call assistant",
+      "customer discovery call help",
+      "what to say on an investor call",
+      "startup conversation copilot",
     ],
     faq: [
       {
-        question: "Why do early-stage startups need Tonvo?",
+        question: "Why would a startup founder use Tonvo?",
         answer:
-          "Startups run on conversations: investor pitches, customer discovery, team stand-ups. Tonvo gives founders objective feedback on how those conversations land, so they iterate on communication as fast as they iterate on product.",
+          "Startups run on conversations: investor calls, customer discovery, early sales, hiring. Tonvo follows them live, shows the question just asked and suggests three replies, so you can find your words without a coach on every call.",
       },
       {
-        question: "Can I use Tonvo on investor pitch calls?",
+        question: "Can I use Tonvo on an investor call?",
         answer:
-          "Yes. Tonvo analyzes your tone, pacing, and the investor's engagement signals in real time during Zoom, Meet, or Discord calls, helping you adjust your delivery on the spot.",
+          "Yes, on any call whose audio it can hear through your microphone or a shared browser tab. It shows the investor's question and three replies you can use. It suggests and you decide, and it does not replace knowing your own business. Tell the people you talk to that you use it.",
       },
       {
         question: "What does Tonvo cost for a small startup?",
         answer:
-          "The Free plan (3 sessions/mo) lets you test on your most important calls. Plus ($19/mo) unlocks unlimited sessions for a single user, ideal for solo founders. The Team plan ($49/user/mo) scales as you hire.",
+          "The Free plan gives 3 live sessions a month, up to 5 minutes each. Plus is $19 a month for unlimited sessions for one person. Team is $49 per user a month and adds screen analysis. Paid plans have a 7-day money-back guarantee.",
       },
       {
-        question: "Does Tonvo work for async or recorded calls?",
+        question: "Does Tonvo work for written conversations too?",
         answer:
-          "Tonvo is optimized for live, real-time analysis on Zoom, Meet, and Discord. The value is in receiving coaching cues during the conversation when you can still act on them.",
+          "Yes. Paste the text of a conversation or upload screenshots, such as an email thread or a DM, and get help replying. This is available on all plans. For spoken conversations, Tonvo works live.",
       },
     ],
     industryName: "Tech Startups",
     painPoints: [
-      "Founders wear many hats and have no dedicated sales or CS coach",
-      "Investor pitch feedback comes too late to refine delivery for the next meeting",
-      "Customer discovery calls lack structure and miss critical emotional signals",
-      "Remote-first teams struggle with meeting engagement and alignment",
-      "Limited budget means no room for expensive enterprise conversation tools",
+      "Investors ask hard questions fast, and there is no time to think",
+      "Customer discovery calls drift, and the follow-up question you wanted to ask slips away",
+      "Founders run sales, hiring and support conversations in the same week",
+      "Early teams have no coach to look back with on how a conversation went",
+      "A tight budget means a tool has to be easy to try before paying",
     ],
     howTonvoHelps: {
       label: "How It Works",
-      heading: "A Communication Coach That Scales with You",
-      body: "Tonvo plugs into the tools startups already use: Zoom, Meet, and Discord. During any call, it monitors tone, pacing, and engagement for every participant. Founders get discreet nudges to slow down, clarify, or ask better questions. After the session, a concise analytics report becomes the objective record that replaces scattered notes and subjective recall.",
+      heading: "One Copilot for the Conversations Founders Have",
+      body: "Tonvo runs in the browser, so there is nothing to install on the call. It listens through your microphone or a shared tab and shows the question just asked, three ready-to-say replies and a short read on the moment. Switch between general, sales, recruitment, support and networking modes, and read a summary after each session.",
     },
     features: [
       {
         icon: "zap",
-        title: "Pitch Delivery Coaching",
+        title: "Questions and Ready Replies",
         description:
-          "Real-time pacing and tone cues help founders deliver investor pitches with confidence and clarity.",
+          "Shows the question you were just asked and three replies, so a hard question on a pitch does not leave you stuck.",
       },
       {
-        icon: "search",
-        title: "Discovery Call Insights",
+        icon: "layers",
+        title: "Five Conversation Modes",
         description:
-          "Identifies emotional signals from prospects during customer discovery so founders validate the right pain points.",
+          "General, sales, recruitment, support and networking modes cover the range of calls a founder takes.",
       },
       {
-        icon: "users",
-        title: "Team Sync Engagement",
+        icon: "message",
+        title: "Help with Written Conversations",
         description:
-          "Tracks participation balance and engagement across stand-ups and retrospectives to keep remote teams aligned.",
+          "Paste text or upload screenshots of emails and messages and get help replying.",
       },
       {
         icon: "target",
         title: "Free Plan to Start",
         description:
-          "Three free sessions per month let budget-conscious startups experience real-time coaching risk-free.",
+          "Three free live sessions a month, up to 5 minutes each, let you test Tonvo on your most important calls.",
       },
     ],
     stats: [],
@@ -460,23 +460,23 @@ export const industries: IndustryEntry[] = [
   {
     type: "industries",
     slug: "financial-services",
-    title: "Tonvo for Financial Services | Client Conversation Copilot",
+    title: "Tonvo for Financial Advisors | Client Conversation Copilot",
     metaDescription:
-      "Tonvo helps financial advisors follow client conversations, catch questions and signs of confusion, and review each session afterwards.",
+      "Tonvo helps advisors follow client meetings live, see the question just asked and find clear words for complex topics. Not a compliance or recording tool.",
     h1: "Clearer Client Conversations, Live",
     subtitle:
-      "Tonvo follows advisor-client calls as they happen, with ready replies and a short read on the moment, so advisors can explain complex topics clearly.",
-    lastModified: "2026-04-09",
+      "Tonvo follows advisor-client calls as they happen, with ready replies and a short read on the moment, so advisors can explain complex topics in plain words.",
+    lastModified: "2026-10-21",
     relatedSlugs: [
       { type: "use-cases", slug: "customer-support-tone-detection", label: "Tone Detection" },
       { type: "industries", slug: "healthcare-communication", label: "Healthcare Communication" },
     ],
     targetKeywords: [
-      "financial advisor call analytics",
       "financial advisor conversation assistant",
-      "ai tone detection financial services",
+      "advisor client meeting copilot",
+      "explain complex topics to clients",
       "advisor client communication tool",
-      "wealth management call coaching",
+      "ai assistant for financial advisors",
     ],
     faq: [
       {
@@ -485,9 +485,9 @@ export const industries: IndustryEntry[] = [
           "No. Tonvo is a conversation assistant for the advisor. It does not replace any recording, supervision or review that your regulator requires.",
       },
       {
-        question: "Can Tonvo detect when a client is confused or hesitant about a recommendation?",
+        question: "Can Tonvo tell when a client is confused or hesitant about a recommendation?",
         answer:
-          "Yes. Tonvo identifies hesitation and confusion signals in real time, prompting the advisor to pause and clarify, which helps ensure clients truly understand the recommendations being made.",
+          "Sometimes it can flag a moment of hesitation, a question or an objection. Signals are available on Plus and Team, they are based on the transcribed text, and they can be wrong. Tonvo suggests, the advisor decides when to pause and clarify.",
       },
       {
         question: "Is Tonvo suitable for regulated financial environments?",
@@ -495,22 +495,22 @@ export const industries: IndustryEntry[] = [
           "Tonvo transcribes the conversation to suggest replies, and sends that text to AI service providers to process it (see our Privacy Policy). Financial firms should evaluate it against their own regulatory, confidentiality and data-processing requirements before use.",
       },
       {
-        question: "What does the post-session report include for financial advisors?",
+        question: "What does the post-session summary include for financial advisors?",
         answer:
-          "After a session, the report includes a summary, tone and engagement scores, what went well, and suggested follow-up actions.",
+          "After a session, the summary includes the tone, what went well, what to improve and suggested follow-up actions.",
       },
     ],
     industryName: "Financial Services",
     painPoints: [
-      "Advisors cannot objectively assess client understanding during complex product discussions",
-      "Advisors have little time to prepare an answer when a client asks an unexpected question",
-      "Client dissatisfaction surfaces only after formal complaints rather than during the conversation",
-      "Junior advisors need coaching but supervisors cannot attend every client call",
+      "A client asks an unexpected question about a product, and the advisor has to answer clearly on the spot",
+      "Explaining complex topics in plain language is hard while also following the client's reactions",
+      "Taking notes during a meeting competes with listening",
+      "Meetings in another language or with several people add effort to every answer",
     ],
     howTonvoHelps: {
       label: "How It Works",
       heading: "Support for the Advisor in the Moment",
-      body: "Tonvo follows advisor-client calls on Zoom, Meet or any call whose audio you can share, and puts ready replies and a short read on the moment next to the call. When the client seems unsure, the advisor gets a prompt to pause and clarify. After the session, the advisor gets a summary and suggested follow-up actions.",
+      body: "Tonvo does not join the call. It listens through your microphone or a shared browser tab, so it works alongside Zoom, Meet or any call whose audio you can share, and puts ready replies and a short read on the moment next to the call. On paid plans, signals such as hesitation can flag a moment worth a pause. After the session, the advisor gets a summary and suggested follow-up actions.",
     },
     features: [
       {
@@ -520,22 +520,22 @@ export const industries: IndustryEntry[] = [
           "Tonvo helps the advisor in the moment. It is not a recording or supervision system.",
       },
       {
-        icon: "eye",
-        title: "Client Understanding Signals",
+        icon: "message",
+        title: "Questions and Ready Replies",
         description:
-          "Detects confusion and hesitation in real time so advisors can ensure clients fully understand recommendations.",
+          "Shows the question the client just asked and three replies you can adapt, to help you explain clearly.",
+      },
+      {
+        icon: "eye",
+        title: "Signals on Plus and Team",
+        description:
+          "Paid plans flag questions, hesitation and key points in the conversation. Signals are suggestions and can be wrong.",
       },
       {
         icon: "bar-chart",
         title: "Session Summaries",
         description:
-          "After each session, a summary with scores and suggested follow-ups.",
-      },
-      {
-        icon: "brain",
-        title: "Advisor Coaching Nudges",
-        description:
-          "Real-time prompts help junior advisors adopt the communication patterns of top performers.",
+          "After each session, a summary with the tone, what went well and suggested follow-ups.",
       },
     ],
     stats: [],
@@ -550,29 +550,29 @@ export const industries: IndustryEntry[] = [
   {
     type: "industries",
     slug: "healthcare-communication",
-    title: "Tonvo for Healthcare | Improve Provider-Patient Communication",
+    title: "Tonvo for Healthcare | Non-Clinical Conversation Copilot",
     metaDescription:
-      "Tonvo helps healthcare providers communicate with empathy and clarity during telehealth calls with real-time tone coaching and patient engagement analytics.",
-    h1: "Better Provider-Patient Communication Through Real-Time AI Coaching",
+      "Tonvo follows non-clinical healthcare conversations live, like admin calls and team meetings, and suggests replies. Not designed for clinical use or PHI.",
+    h1: "Clearer Words for Non-Clinical Healthcare Conversations",
     subtitle:
-      "Tonvo analyzes tone and engagement during telehealth sessions, coaching providers to communicate with the empathy and clarity patients deserve.",
-    lastModified: "2026-04-09",
+      "Tonvo follows live conversations such as scheduling calls, staff meetings and training sessions and suggests what to say. It is not designed for clinical use.",
+    lastModified: "2026-10-21",
     relatedSlugs: [
       { type: "use-cases", slug: "remote-meeting-communication", label: "Remote Meeting Communication" },
       { type: "industries", slug: "financial-services", label: "Financial Services" },
     ],
     targetKeywords: [
-      "telehealth communication tool",
-      "patient sentiment analysis",
-      "healthcare tone detection ai",
-      "provider patient call coaching",
-      "empathetic communication healthcare",
+      "healthcare staff communication tool",
+      "conversation assistant for admin calls",
+      "healthcare team meeting assistant",
+      "live translation for calls",
+      "non-clinical conversation copilot",
     ],
     faq: [
       {
-        question: "How does Tonvo improve telehealth communication?",
+        question: "Can Tonvo be used in clinical conversations?",
         answer:
-          "Tonvo monitors provider tone and patient engagement signals during video calls on Zoom or Meet. When a patient shows signs of confusion, anxiety, or disengagement, the provider receives a discreet coaching cue to adjust their communication approach.",
+          "No. Tonvo is not designed for clinical use and is not a medical, diagnostic or recording tool. It is meant for non-clinical conversations such as administrative calls, staff meetings and training.",
       },
       {
         question: "Does Tonvo comply with healthcare privacy regulations?",
@@ -580,52 +580,52 @@ export const industries: IndustryEntry[] = [
           "Tonvo has not been assessed against healthcare privacy regulations such as HIPAA, and it is not designed for clinical use. It transcribes the conversation and sends the text to AI service providers. Do not use it for conversations that contain protected health information unless your organization has reviewed and approved it.",
       },
       {
-        question: "Can Tonvo help train new healthcare communicators?",
+        question: "What kinds of healthcare conversations does Tonvo fit?",
         answer:
-          "Yes. Post-session analytics provide objective feedback on empathy signals, pacing, and patient engagement that training programs can use to accelerate communication skill development.",
+          "Conversations that do not involve protected health information: scheduling and billing calls, staff meetings, training sessions, job interviews and conversations in another language. It suggests replies, and the person decides what to say.",
       },
       {
-        question: "What platforms does Tonvo support for telehealth?",
+        question: "How does Tonvo hear a call?",
         answer:
-          "Tonvo works with Zoom and Google Meet, which are the most common telehealth video platforms. It also supports Discord for team-internal training and debrief sessions.",
+          "Through your microphone, or through the audio of a browser tab you share. Tonvo does not join calls, does not integrate with Zoom or Meet, and does not record or store audio. You are responsible for informing the people you talk to and following your organization's rules.",
       },
     ],
     industryName: "Healthcare & Telehealth",
     painPoints: [
-      "Providers struggle to gauge patient understanding and emotional state through a screen",
-      "Telehealth visits feel impersonal, reducing patient trust and adherence",
-      "Communication training programs lack objective metrics to measure improvement",
-      "Patient anxiety goes unaddressed when providers focus on clinical information delivery",
+      "Administrative and billing calls bring unexpected questions that need a clear answer",
+      "Staff meetings and training sessions move quickly, and it is hard to follow and contribute at once",
+      "Conversations in another language add effort to every question and answer",
+      "Trainers and managers lead session after session with little time to look back on how each went",
     ],
     howTonvoHelps: {
       label: "How It Works",
-      heading: "Empathetic Communication, Coached in Real Time",
-      body: "When it detects a communication gap, the provider receives a gentle nudge to slow down, express empathy, or check understanding. Post-session analytics help training programs benchmark and improve communication quality across the care team.",
+      heading: "Find the Words in Everyday Conversations",
+      body: "Open Tonvo in your browser and let it listen through your microphone or a shared tab. It shows the question just asked, three replies you can use and a short read on the moment, and a summary after the session. Do not use it for conversations that contain protected health information unless your organization has reviewed and approved it.",
     },
     features: [
       {
-        icon: "heart",
-        title: "Empathy Signal Detection",
+        icon: "message",
+        title: "Questions and Ready Replies",
         description:
-          "Identifies moments where patients exhibit anxiety or distress, prompting providers to acknowledge emotions before continuing.",
+          "Shows the question just asked and three replies you can use, for admin calls, meetings and training.",
       },
       {
-        icon: "mic",
-        title: "Pacing & Clarity Alerts",
+        icon: "globe",
+        title: "Live Translation on Plus and Team",
         description:
-          "Monitors speaking pace and complexity, nudging providers to slow down when patients show signs of information overload.",
+          "Follow conversations in another language. Live transcription covers 10 languages, with live translation on paid plans.",
       },
       {
         icon: "check",
-        title: "Understanding Checkpoints",
+        title: "Session Summary",
         description:
-          "Suggests natural moments to confirm patient comprehension, improving adherence to care instructions.",
+          "After a session, read the tone, what went well, what to improve and suggested follow-up actions.",
       },
       {
-        icon: "bar-chart",
-        title: "Training Analytics Dashboard",
+        icon: "shield",
+        title: "Not for Clinical Use",
         description:
-          "Provides communication quality metrics that training programs use to track provider improvement over time.",
+          "Tonvo is a conversation copilot, not a clinical tool, and it has not been assessed against healthcare privacy regulations.",
       },
     ],
     stats: [],
@@ -640,84 +640,84 @@ export const industries: IndustryEntry[] = [
   {
     type: "industries",
     slug: "education-training",
-    title: "Tonvo for Education & Training | AI Coaching for Instructors",
+    title: "Tonvo for Educators | Copilot for Lessons and Meetings",
     metaDescription:
-      "Tonvo helps educators and corporate trainers improve learner engagement with real-time tone feedback and post-session participation analytics.",
-    h1: "Elevate Teaching and Training with Real-Time Engagement Intelligence",
+      "Tonvo follows online lessons, workshops and parent meetings live, shows the question just asked and suggests replies. Works from your mic or a shared tab.",
+    h1: "Find the Right Words When Learners Ask",
     subtitle:
-      "Tonvo monitors learner engagement and instructor delivery in real time, giving educators and trainers the feedback they need to keep every session impactful.",
-    lastModified: "2026-04-09",
+      "From online lessons to workshops and parent-teacher meetings, Tonvo follows the conversation, shows the question just asked and suggests replies you can use.",
+    lastModified: "2026-10-21",
     relatedSlugs: [
       { type: "use-cases", slug: "team-meeting-engagement-tracking", label: "Meeting Engagement Tracking" },
       { type: "use-cases", slug: "remote-meeting-communication", label: "Remote Communication" },
       { type: "industries", slug: "consulting-firms", label: "Consulting Firms" },
     ],
     targetKeywords: [
-      "teacher engagement analytics",
-      "training session tone analysis",
-      "ai coaching for educators",
-      "corporate training conversation ai",
-      "learner engagement detection",
+      "ai assistant for teachers",
+      "answer student questions live",
+      "online lesson assistant",
+      "parent teacher meeting help",
+      "corporate trainer conversation assistant",
     ],
     faq: [
       {
-        question: "How does Tonvo help educators improve their sessions?",
+        question: "How does Tonvo help educators during a session?",
         answer:
-          "Tonvo monitors learner engagement signals during live Zoom, Meet, or Discord sessions. When participation drops or confusion is detected, the instructor receives a real-time cue to adjust pacing, invite questions, or switch approaches.",
+          "Tonvo follows the conversation live and shows the question a learner just asked, three replies you can use and a short read on the moment. You decide what to say, and it can be wrong, so check anything factual yourself.",
       },
       {
-        question: "Can Tonvo be used for corporate training programs?",
+        question: "Can corporate trainers use Tonvo?",
         answer:
-          "Absolutely. Corporate L&D teams use Tonvo to coach facilitators, measure session engagement objectively, and identify which training modules resonate most with learners.",
+          "Yes, for the conversational parts of a session such as questions and discussion. Tonvo follows a conversation and helps you find your words. It does not measure learner engagement or give participation data.",
       },
       {
         question: "Does Tonvo work for large group sessions?",
         answer:
-          "Tonvo supports multi-participant calls and analyzes engagement across speakers. For large lectures, it tracks overall audience engagement signals and instructor delivery metrics.",
+          "It works with the audio it can hear through your microphone or a shared browser tab. It is built to follow a conversation, not to track every participant in a class. On paid plans, a talk balance shows who is speaking.",
       },
       {
-        question: "What plan is best for a training department?",
+        question: "What plan is best for a teacher or trainer?",
         answer:
-          "Individual trainers can start with Plus ($19/mo) for unlimited personal sessions.",
+          "Start on Free: 3 live sessions a month, up to 5 minutes each. Plus is $19 a month for unlimited sessions and live translation, useful for multilingual groups. Paid plans have a 7-day money-back guarantee.",
       },
     ],
     industryName: "Education & Corporate Training",
     painPoints: [
-      "Instructors cannot see learner faces or body language in large virtual sessions",
-      "Training effectiveness is measured by completion rates, not actual engagement quality",
-      "New facilitators lack real-time feedback to improve their delivery style",
-      "Post-session evaluations are subjective and arrive too late to change outcomes",
-      "Remote learning fatigue causes learners to disengage silently",
+      "A learner asks an unexpected question mid-lesson and the answer needs to be clear on the spot",
+      "In large virtual sessions, questions arrive by voice and by chat while you are mid-explanation",
+      "Parent-teacher and student meetings can be sensitive, and finding the right words matters",
+      "Teaching in a second language or to a multilingual group adds effort",
+      "Trainers run session after session with little time to look back on how each went",
     ],
     howTonvoHelps: {
       label: "How It Works",
-      heading: "Know When Your Audience Is Engaged, Not Just Present",
-      body: "Tonvo integrates with Zoom, Meet, and Discord to track vocal engagement, participation balance, and sentiment across every session participant. When the audience disengages, the instructor receives a discreet prompt to re-energize the room. Post-session analytics show exactly when engagement peaked and dipped, turning each session into a data-driven improvement opportunity.",
+      heading: "Keep Up with Questions, Whatever the Session",
+      body: "Tonvo does not join your Zoom, Meet or Teams session. It listens through your microphone or a browser tab you share, and shows the question just asked, three replies you can use and a short read on the moment. Afterward, the session summary lists the tone, what went well, what to improve and follow-up actions.",
     },
     features: [
       {
+        icon: "message",
+        title: "Questions and Ready Replies",
+        description:
+          "Shows the question a learner just asked and three replies you can adapt, so you can answer clearly.",
+      },
+      {
+        icon: "globe",
+        title: "Live Translation on Plus and Team",
+        description:
+          "Follow a conversation in another language. Live transcription covers 10 languages, with live translation on paid plans.",
+      },
+      {
         icon: "monitor",
-        title: "Engagement Heatmap",
+        title: "Screen Analysis on Team",
         description:
-          "Visualizes participant engagement levels throughout the session, highlighting peaks and drop-off points.",
+          "The Team plan reads what you share on screen, such as chat messages and emails, to help you reply.",
       },
       {
-        icon: "zap",
-        title: "Re-engagement Prompts",
+        icon: "check",
+        title: "Session Summary",
         description:
-          "Alerts instructors when audience engagement dips, suggesting interactive techniques to recapture attention.",
-      },
-      {
-        icon: "users",
-        title: "Participation Balance",
-        description:
-          "Tracks who is contributing and who is silent, helping facilitators draw in quieter participants.",
-      },
-      {
-        icon: "trending-up",
-        title: "Session-over-Session Trends",
-        description:
-          "Compares engagement metrics across sessions so trainers can measure the impact of delivery improvements.",
+          "After each session, read the tone, what went well, what to improve and suggested follow-up actions.",
       },
     ],
     stats: [],

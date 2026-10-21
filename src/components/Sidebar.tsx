@@ -194,7 +194,7 @@ const navItems: Array<{
   { href: "/history", labelKey: "nav.history", icon: IconHistory, anim: "spinFull" },
   { href: "/analyze-text", labelKey: "nav.analyzeText", icon: IconText, anim: "tiltLift" },
   { href: "/analytics", labelKey: "nav.analytics", icon: IconAnalytics, anim: "rise" },
-  { href: "/pricing", labelKey: "nav.pricing", icon: IconPricing, anim: "bounce" },
+  { href: "/plans", labelKey: "nav.pricing", icon: IconPricing, anim: "bounce" },
 ];
 
 interface SidebarProps {

@@ -14,7 +14,8 @@
     "terms": "이용약관",
     "cookies": "쿠키 정책",
     "legal": "법적 고지",
-    "blog": "블로그"
+    "blog": "블로그",
+    "default": "Tonvo: 모든 대화를 위한 코파일럿"
   },
   "nav": {
     "menu": "메뉴",
@@ -25,7 +26,8 @@
     "analytics": "애널리틱스",
     "pricing": "요금제",
     "settings": "설정",
-    "signOut": "로그아웃"
+    "signOut": "로그아웃",
+    "changeLanguage": "언어 변경"
   },
   "common": {
     "loading": "불러오는 중...",
@@ -48,7 +50,9 @@
     "negative": "부정",
     "all": "전체",
     "google": "Google",
-    "emailPassword": "이메일 / 비밀번호"
+    "emailPassword": "이메일 / 비밀번호",
+    "upgrade": "업그레이드",
+    "pro": "Plus"
   },
   "dashboard": {
     "greetingMorning": "좋은 아침입니다",
@@ -64,7 +68,12 @@
     "noSessions": "아직 세션이 없습니다",
     "noSessionsDesc": "첫 라이브 분석을 시작하면 여기에 결과가 표시됩니다.",
     "startSessionBtn": "세션 시작",
-    "latestInsights": "최신 인사이트"
+    "latestInsights": "최신 인사이트",
+    "subtitle": "모든 대화를 한눈에 확인하세요.",
+    "startSession": "라이브 세션 시작",
+    "startSessionDesc": "대화가 이어지는 동안 알맞은 말을 바로 받아 보세요",
+    "analyzeText": "메시지 답장 도움받기",
+    "analyzeTextDesc": "메시지를 붙여넣거나 스크린샷을 올리면 답장을 도와드려요"
   },
   "history": {
     "title": "세션 히스토리",
@@ -150,7 +159,8 @@
     "theme": "테마",
     "themeDesc": "대시보드에 사용할 색상 테마를 선택하세요",
     "dark": "다크",
-    "light": "라이트"
+    "light": "라이트",
+    "dataRetentionFree": "Free 플랜에서는 최근 7일간의 기록이 표시됩니다"
   },
   "profile": {
     "title": "프로필",
@@ -265,7 +275,10 @@
     "copied": "복사됨",
     "proLockedTitle": "실시간 코칭",
     "proLockedText": "코칭 팁, 구매 시그널, 발화 비율을 통화 중 실시간으로 제공합니다.",
-    "proLockedCta": "요금제 보기"
+    "proLockedCta": "요금제 보기",
+    "invisibleInScreenShare": "탭이나 창을 공유할 때는 보이지 않아요",
+    "copilotInvisible": "AI 코파일럿 작동 중. 탭이나 창을 공유할 때는 보이지 않습니다.",
+    "copilotBlocked": "브라우저가 코파일럿 창을 차단했습니다. 팝업을 허용하거나 Chrome에서 Picture-in-Picture 창을 사용해 주세요."
   },
   "auth": {
     "welcomeBack": "다시 오신 것을 환영합니다",
@@ -321,7 +334,8 @@
     "userDisabled": "이 계정은 비활성화되었습니다. 고객지원팀에 문의해 주세요.",
     "genericError": "문제가 발생했습니다. 다시 시도해 주세요.",
     "passwordValidationError": "비밀번호는 영문 1자, 숫자 1자를 포함해 8자 이상이어야 합니다.",
-    "firebaseNotInitialized": "서비스를 일시적으로 사용할 수 없습니다. 잠시 후 다시 시도해 주세요."
+    "firebaseNotInitialized": "서비스를 일시적으로 사용할 수 없습니다. 잠시 후 다시 시도해 주세요.",
+    "signUpSubtitle": "계정을 만드세요. 통화와 일상 대화를 위한 실시간 코파일럿"
   },
   "session": {
     "title": "라이브 세션",
@@ -433,7 +447,29 @@
     "transcriptTab": "실시간 전사",
     "starting": "시작 중...",
     "recordingHint": "Tonvo가 듣고 있습니다. 대화에 집중하세요. 제안은 실시간으로 도착합니다.",
-    "idleHint": "캡처를 설정하고 눌러서 시작하세요."
+    "idleHint": "캡처를 설정하고 눌러서 시작하세요.",
+    "timeLimitReached": "세션 시간 제한에 도달했습니다. Plus로 업그레이드하면 세션을 무제한으로 이용할 수 있습니다.",
+    "copilotInvisible": "탭이나 창을 공유할 때는 보이지 않아요",
+    "copilotRunning": "AI 코파일럿 작동 중. 탭이나 창을 공유할 때는 보이지 않습니다.",
+    "copilotBlocked": "브라우저가 코파일럿 창을 차단했습니다. 이 사이트의 팝업을 허용하거나 Chrome에서 Picture-in-Picture 창을 사용해 주세요.",
+    "sessionLimitReached": "이번 달 무료 세션을 모두 사용했습니다. Plus로 업그레이드하면 세션을 무제한으로 이용할 수 있습니다.",
+    "statusRecording": "녹음 중",
+    "statusReady": "준비됨",
+    "freePlanBanner": "Free 플랜",
+    "timeLeft": "남음",
+    "endingSoon": "곧 종료",
+    "analyzeTextTip": "문자 대화(Instagram, Snap, WhatsApp)를 분석하려면 다음을 이용하세요:",
+    "analyzeTextLink": "메시지 답장 도움받기",
+    "screenConsent": "화면에 표시되는 내용을 분석할 권리가 있는지 확인해 주세요. 세션을 시작하면 다음에 동의한 것으로 간주됩니다:",
+    "termsLink": "이용약관",
+    "audioDisabledLabel": "오디오 꺼짐",
+    "audioDisabledDesc": "트랜스크립션과 대화 분석은 하지 않습니다. 화면 내용만 분석합니다.",
+    "analysisReady": "분석 완료",
+    "segmentsAnalyzed": "{{count}}개 세그먼트를 분석했습니다.",
+    "screenAnalyzed": "화면 분석 완료.",
+    "stillActive": "세션이 아직 진행 중입니다. 준비되면 중지해 주세요.",
+    "upgradeShort": "업그레이드",
+    "fullAnalysisInfo": "풀 모드: 화면 캡처 + 오디오 트랜스크립션 + 라이브 시그널."
   },
   "analyzePage": {
     "title": "대화 분석",
@@ -546,26 +582,103 @@
       "vslFullscreen": "전체 화면",
       "vslExitFullscreen": "전체 화면 종료",
       "vslPause": "일시정지",
-      "vslPlay": "재생"
+      "vslPlay": "재생",
+      "headline1": "당신의 코파일럿,",
+      "headline2": "모든 대화에서.",
+      "headline2Phrases": [
+        "모든 대화에서",
+        "어려운 대화에서",
+        "면접에서",
+        "외국어 통화에서",
+        "영업 통화에서",
+        "일상 대화에서"
+      ],
+      "subtitle": "Tonvo는 진행 중인 대화를 따라가며 바로 쓸 수 있는 답변 세 가지를 화면에 띄워 줍니다. 다음에 무슨 말을 할지 늘 알 수 있어요. 통화, 면접, 회의, 그리고 누구도 대본을 쓸 수 없는 대화까지."
     },
     "desktopDownload": {
       "badge": "이제 데스크톱에서도",
       "title": "데스크톱의 Tonvo",
-      "subtitle": "{{os}}용 네이티브 앱 — 한 번 설치, 독에서 실행.",
-      "subtitleNoOS": "네이티브 앱 — 한 번 설치, 독에서 실행.",
+      "subtitle": "{{os}}용 네이티브 앱, 한 번 설치, 독에서 실행.",
+      "subtitleNoOS": "네이티브 앱, 한 번 설치, 독에서 실행.",
       "cta": "{{os}}용 다운로드",
       "ctaFallback": "Tonvo 다운로드",
       "alsoOn": "다른 OS",
-      "safetyNote": "안전한 앱 — Microsoft 인증 진행 중.",
-      "safetyTooltip": "Tonvo는 Phase 1 베타 기간 중 서명되지 않았습니다. Microsoft가 각 릴리스를 승인 중입니다. SmartScreen이 경고하면 '추가 정보' → '실행'을 클릭하세요 — 바이너리는 GitHub Actions의 오픈 CI에서 빌드됩니다."
+      "safetyNote": "안전한 앱, Microsoft 인증 진행 중.",
+      "safetyTooltip": "Tonvo는 Phase 1 베타 기간 중 서명되지 않았습니다. Microsoft가 각 릴리스를 승인 중입니다. SmartScreen이 경고하면 '추가 정보' → '실행'을 클릭하세요, 바이너리는 GitHub Actions의 오픈 CI에서 빌드됩니다."
     },
-    "problem": {},
-    "solution": {},
-    "features": {},
-    "demo": {},
-    "useCases": {},
-    "cta": {},
-    "faq": {}
+    "problem": {
+      "label": "인생에는 대본이 없습니다",
+      "heading1": "그 순간, 아시죠.",
+      "heading2": "머릿속이 하얘집니다.",
+      "p1": "상대가 가장 중요한 질문을 던집니다. 아니면 외국어로 빠르게 말해서 흐름을 놓치기도 하죠. 몇 초 동안 말문이 막힙니다. Tonvo는 바로 그 몇 초를 위해 있습니다."
+    },
+    "solution": {
+      "label": "Tonvo가 도와주는 방식",
+      "heading1": "내 편이 되어 주는 차분한 목소리.",
+      "heading2": "모든 대화에서.",
+      "desc": "Tonvo는 대화가 이루어지는 동안 곁에서 따라갑니다. 상대가 방금 한 질문, 지금 분위기에 대한 짧은 해석, 그리고 바로 쓸 수 있는 답변 세 가지를 보여 드립니다. 무슨 말을 할지는 직접 정하세요. Tonvo는 할 말이 떨어지지 않도록 도와드립니다.",
+      "step1Title": "세션 시작",
+      "step1Desc": "클릭 한 번이면 됩니다. 마이크를 고르고, Tonvo가 양쪽 목소리를 모두 듣게 하려면 통화 오디오도 공유하세요.",
+      "step2Title": "알맞은 말 받기",
+      "step2Desc": "대화가 흘러가는 동안 답변 세 가지와 지금 상황에 대한 간단한 해석을 보여 드립니다. 유료 플랜에서는 실시간 번역도 제공합니다.",
+      "step3Title": "돌아보고 배우기",
+      "step3Desc": "대화가 끝나면 요약, 잘된 점, 이어서 챙길 다음 단계를 확인하세요."
+    },
+    "features": {
+      "label": "Tonvo가 하는 일",
+      "heading1": "그 순간에 필요한",
+      "heading2": "모든 것을 담았습니다.",
+      "liveTone": "분위기를 읽습니다",
+      "liveToneDesc": "방금 받은 질문과 그 뒤에 담긴 어조와 신호를 짚어 줍니다.",
+      "smartSuggestions": "바로 말할 수 있는 답변",
+      "smartSuggestionsDesc": "방금 나온 말에 맞춰 쓴 세 가지 선택지를 대화 언어로 보여 드립니다.",
+      "conversationInsights": "대화 흐름 파악",
+      "conversationInsightsDesc": "어조, 참여도, 누가 더 많이 말하는지를 보여 드립니다. 코칭 팁과 점수는 유료 플랜에서 제공합니다.",
+      "textAnalysis": "나중에 다시 보기",
+      "textAnalysisDesc": "세션이 끝나면 요약과 후속 조치를 받아 보세요. 메시지를 붙여넣거나 스크린샷을 올려 답장 도움을 받을 수도 있습니다."
+    },
+    "demo": {
+      "label": "직접 확인해 보세요",
+      "heading": "필요한 순간, 바로 그 말",
+      "desc": "실제 세션입니다. 왼쪽에는 오간 대화, 오른쪽에는 답변 세 가지가 나타납니다."
+    },
+    "useCases": {
+      "label": "Tonvo가 도움이 되는 곳",
+      "heading": "당신에게 중요한 대화를 위해.",
+      "salesTitle": "통화와 회의",
+      "salesDesc": "업무 통화를 따라가고, 까다로운 질문에 답하고, 분명한 다음 단계를 챙겨 마무리하세요.",
+      "supportTitle": "면접과 협상",
+      "supportDesc": "중요한 순간에 차분한 상황 해석과 상황에 맞게 고쳐 쓸 수 있는 답변을 받아 보세요.",
+      "interviewsTitle": "다른 언어",
+      "interviewsDesc": "10개 언어로 대화를 따라가고 답할 수 있습니다. 실시간 번역은 유료 플랜에서 이용할 수 있습니다.",
+      "meetingsTitle": "메시지와 일상 대화",
+      "meetingsDesc": "대화를 붙여넣거나 스크린샷을 올리면 어떻게 답할지 도와드립니다."
+    },
+    "cta": {
+      "heading1": "다음에 말문이 막혀도,",
+      "heading2": "이제는 괜찮습니다.",
+      "desc": "세션을 시작하면 대화에 필요한 순간, 알맞은 말이 눈앞에 있습니다.",
+      "button": "Tonvo 무료로 써보기",
+      "note": "매달 무료 세션 3회. 신용카드 필요 없음. 유료 플랜은 7일 환불 보장."
+    },
+    "faq": {
+      "title": "자주 묻는 질문.",
+      "subtitle": "Tonvo로 첫 세션을 시작하기 전에 알아야 할 모든 것.",
+      "q1": "Tonvo는 정확히 무엇인가요?",
+      "a1": "Tonvo는 실시간 대화를 위한 코파일럿입니다. 대화를 듣고 전사하며, 바로 쓸 수 있는 답변 세 가지와 지금 상황에 대한 짧은 해석을 화면에 보여 드립니다. 무슨 말을 할지는 언제나 직접 정합니다.",
+      "q2": "어디에 쓸 수 있나요?",
+      "a2": "통화와 회의, 면접, 협상, 다른 언어로 하는 대화에 쓸 수 있습니다. 메시지를 붙여넣거나 스크린샷을 올려 어떻게 답할지 도움을 받을 수도 있습니다.",
+      "q3": "휴대폰에서도 되나요?",
+      "a3": "Tonvo는 컴퓨터, 휴대폰, 태블릿의 브라우저에서 실행됩니다. 휴대폰에서는 마이크로 소리를 듣기 때문에 통화를 스피커폰으로 켜 두어야 합니다. 전화 통화에서 상대방의 음성을 자체적으로 가져올 수는 없으며, 백그라운드에서 듣지도 않습니다.",
+      "q4": "어떤 언어를 지원하나요?",
+      "a4": "앱과 답변은 10개 언어로 이용할 수 있고, Tonvo가 대화의 언어를 감지할 수 있습니다. 실시간 번역은 유료 플랜에서 제공합니다.",
+      "q5": "상대방이 Tonvo를 볼 수 있나요?",
+      "a5": "Plus와 Team에서는 Tonvo가 별도의 창으로 열리며, 공유한 탭이나 창에는 포함되지 않습니다. Free 플랜에서는 답변이 페이지 안에 표시되므로 그 페이지는 공유 범위에서 제외해 주세요. 전체 화면을 공유하면 상대방이 Tonvo를 볼 수 있습니다. 이런 도구를 사용할 때는 대화 상대에게 항상 알려야 하며, 본인에게 적용되는 규정을 따라야 합니다.",
+      "q6": "제 대화는 어떻게 되나요?",
+      "a6": "오디오는 Tonvo가 저장하지 않으며 화면 캡처도 보관하지 않습니다. 세션의 텍스트와 리포트는 다시 읽어볼 수 있도록 보관합니다. 자세한 내용과 관련 서비스는 개인정보 처리방침을 확인해 주세요.",
+      "q7": "보장이 있나요?",
+      "a7": "신용카드 없이 무료로 시작하세요. 유료 플랜에는 7일 환불 보장이 포함됩니다."
+    }
   },
   "mockup": {
     "menu": "메뉴",
@@ -603,7 +716,10 @@
     "opportunity": "기회",
     "speaking": "발화 중",
     "listening": "청취 중",
-    "muted": "음소거"
+    "muted": "음소거",
+    "closeDeal": "다음 단계로 진행",
+    "closeDealText": "\"월요일에 예산 검토 일정을 확정하고, 최신 수치를 가져가겠습니다.\"",
+    "showEmpathyText": "\"우려하시는 부분 충분히 이해합니다. 모두에게 맞는 속도를 함께 찾아보죠.\""
   },
   "pricing": {
     "monthly": "월간",
@@ -630,13 +746,69 @@
     },
     "cancelError": "구독을 업데이트할 수 없습니다. 다시 시도해 주세요.",
     "portalError": "결제 포털을 열 수 없습니다. 다시 시도해 주세요.",
-    "planFree": {},
-    "planPro": {},
-    "planTeam": {}
+    "planFree": {
+      "name": "Free",
+      "description": "매달 3번의 라이브 세션으로 Tonvo 체험",
+      "cta": "무료로 시작",
+      "features": [
+        "매달 라이브 세션 3회, 회당 최대 5분",
+        "받은 질문을 감지",
+        "바로 말할 수 있는 답변",
+        "세션 기록 (최근 7일)"
+      ]
+    },
+    "planPro": {
+      "name": "Plus",
+      "description": "매주 Tonvo를 사용하는 분을 위한 플랜",
+      "cta": "Plus 시작하기",
+      "features": [
+        "무제한 라이브 세션",
+        "실시간 번역",
+        "코칭 팁과 라이브 인사이트",
+        "발언 비율과 대화 점수",
+        "전체 세션 기록과 리포트",
+        "성장 분석",
+        "우선 지원"
+      ]
+    },
+    "planTeam": {
+      "name": "Team",
+      "description": "Plus의 모든 기능에 화면 분석 추가",
+      "cta": "Team 시작하기",
+      "features": [
+        "Plus의 모든 기능",
+        "채팅, DM, 이메일 화면 분석",
+        "우선 지원"
+      ]
+    },
+    "title": "무료로 시작하세요. 더 필요하면 업그레이드하세요.",
+    "subtitle": "매달 3번의 라이브 세션으로 Tonvo를 체험해 보세요. 대화의 일부가 되었다면 한 단계 더 나아가 보세요.",
+    "guarantee": "유료 플랜에는 7일 환불 보장이 포함됩니다. 언제든 해지할 수 있습니다.",
+    "planEnterprise": {
+      "label": "Enterprise",
+      "name": "특별한 요구가 있는 조직을 위해",
+      "description": "필요한 내용을 알려 주시면 가능한 방법을 안내해 드립니다. 보안 관련 문의와 맞춤 계약 조건도 포함됩니다.",
+      "priceLabel": "맞춤",
+      "priceSubLabel": "팀과 상담하기",
+      "cta": "문의하기",
+      "features": [
+        "활용 사례에 대한 상담",
+        "보안 및 데이터 처리 검토",
+        "맞춤 계약 조건"
+      ]
+    },
+    "periodMonth": "/월",
+    "periodUserMonth": "/사용자/월"
   },
   "upgrade": {
     "cancelTitle": "아직 고민 중이신가요?",
-    "goToDashboard": "대시보드로 이동"
+    "goToDashboard": "대시보드로 이동",
+    "successTitle": "이제 시작이에요.",
+    "successSubtitle": "{{plan}} 플랜이 활성화되었습니다. 이제부터 모든 대화가 한결 쉬워집니다.",
+    "cancelSubtitle": "부담 갖지 마세요. Free 플랜을 계속 이용하다가 무제한 세션이 필요할 때 업그레이드하세요.",
+    "nudgeTitle": "무료 세션에는 한도가 있습니다",
+    "nudgeSubtitle": "현재 Free 플랜: 매달 세션 3회. 무제한 세션, 실시간 번역, 코칭 팁을 이용해 보세요.",
+    "stayFree": "Free 유지"
   },
   "footer": {
     "product": "제품",
@@ -657,7 +829,9 @@
     "termsOfService": "이용약관",
     "cookiePolicy": "쿠키 정책",
     "legalNotice": "법적 고지",
-    "copyright": "2026 Tonvo. All rights reserved."
+    "copyright": "2026 Tonvo. 모든 권리 보유.",
+    "tagline1": "모든 대화를 위한 코파일럿.",
+    "tagline2": "필요한 순간, 알맞은 말을 찾으세요."
   },
   "termsPage": {
     "breadcrumb": "이용약관",
@@ -701,7 +875,10 @@
     "s12Title": "12. 준거법",
     "s12Text": "본 약관은 프랑스 법률에 따라 규율됩니다. 모든 분쟁은 프랑스 Saint-Etienne의 관할 법원에 제소합니다.",
     "s13Title": "13. 문의",
-    "s13Intro": "본 약관에 관한 문의 사항:"
+    "s13Intro": "본 약관에 관한 문의 사항:",
+    "s2Text": "Tonvo는 대화 트랜스크립션, 추천 답변, 라이브 인사이트, 번역, 화면 콘텐츠 분석, 대화 후 요약을 제공하는 실시간 대화 코파일럿입니다. 본 서비스는 \"있는 그대로\" 제공되며 언제든 업데이트되거나 변경될 수 있습니다.",
+    "s6Item1Desc": "월 3회 세션으로 제한됩니다. 기록은 최근 7일간 표시됩니다.",
+    "s6Item2Label": "Plus 플랜:"
   },
   "privacyPage": {
     "analyticsTitle": "방문자 분석",
@@ -793,7 +970,14 @@
     "s11Text": "당사는 본 개인정보 처리방침을 수시로 업데이트할 수 있습니다. 중대한 변경이 있을 경우 본 페이지에 업데이트된 방침을 게시하고 \"최종 업데이트\" 일자를 갱신하여 안내합니다. 변경 후에도 본 서비스를 계속 이용하시는 경우 변경된 방침에 동의하시는 것으로 간주됩니다.",
     "s12Title": "12. 문의",
     "s12Intro": "본 개인정보 처리방침 또는 귀하의 개인 데이터에 관한 문의 사항:",
-    "s12Cnil": "귀하는 또한 관할 데이터 보호 감독 기관(예: 프랑스 CNIL)에 민원을 제기할 권리가 있습니다."
+    "s12Cnil": "귀하는 또한 관할 데이터 보호 감독 기관(예: 프랑스 CNIL)에 민원을 제기할 권리가 있습니다.",
+    "s5Row2Retention": "7일 후 기록에서 숨겨짐",
+    "s5Row3Type": "세션 데이터 (Plus/Team)",
+    "s5Row5Retention": "Tonvo가 저장하지 않음. 세션 중 전사 서비스 제공업체로 스트리밍됨",
+    "s6Anthropic": "Anthropic. AI 기반 대화 분석. 전사된 텍스트와 사용자가 분석하기로 선택한 스크린샷이 처리를 위해 전송됩니다.",
+    "s6AssemblyAI": "AssemblyAI. 음성 텍스트 변환. 세션 오디오가 전사를 위해 실시간으로 전송됩니다.",
+    "s6Upstash": "Upstash. 요청 속도 제한.",
+    "s6Meta": "Meta (Pixel 및 Conversions API). 광고 측정 목적이며, 쿠키 배너에서 동의하신 경우에만 사용됩니다."
   },
   "cookiesPage": {
     "breadcrumb": "쿠키 정책",
@@ -810,11 +994,11 @@
     "cookie2Desc": "언어 선택, UI 설정 등 귀하의 환경설정을 저장합니다.",
     "cookie2Examples": "tonvo-language (localStorage).",
     "cookie3Type": "분석 쿠키",
-    "cookie3Desc": "서비스 개선을 위해 애플리케이션 사용 방식을 파악하는 데 도움을 줍니다. 모든 분석 데이터는 익명화됩니다.",
-    "cookie3Examples": "현재 사용하지 않음. 제3자 분석 서비스를 이용하지 않습니다.",
+    "cookie3Desc": "사이트 이용 방식을 파악하는 데 도움을 줍니다. 당사의 자체 방문 측정은 익명으로 이루어지며, 브라우저의 localStorage에 저장되는 무작위 방문자 식별자를 사용합니다. 개인정보 처리방침 페이지에서 수집을 거부하실 수 있습니다. Meta Pixel을 이용한 광고 측정은 선택 사항입니다.",
+    "cookie3Examples": "자체 측정: tonvo_aid (localStorage). Meta Pixel (_fbp 등의 쿠키): 쿠키 배너에서 동의하신 경우에만 사용됩니다.",
     "cookie4Type": "제3자 쿠키",
     "cookie4Desc": "당사 애플리케이션에 통합된 제3자 서비스에 의해 설정됩니다.",
-    "cookie4Examples": "Stripe (결제 처리), Firebase (인증).",
+    "cookie4Examples": "Stripe (결제 처리), Firebase (인증). Meta (광고 측정): 귀하의 동의가 있는 경우에만 사용됩니다.",
     "required": "필수",
     "optional": "선택",
     "examples": "예시:",
@@ -823,7 +1007,8 @@
     "s4Title": "4. 쿠키 관리",
     "s4Text": "브라우저 설정을 통해 쿠키를 관리할 수 있습니다. 필수 쿠키를 비활성화하면 인증을 포함한 일부 기능을 사용하실 수 없게 됩니다. localStorage 데이터는 브라우저의 개발자 도구를 통해 삭제하실 수 있습니다.",
     "s5Title": "5. 문의",
-    "s5Text": "쿠키 사용에 관한 문의 사항:"
+    "s5Text": "쿠키 사용에 관한 문의 사항:",
+    "managePrefs": "쿠키 선택 변경"
   },
   "legalPage": {
     "breadcrumb": "법적 고지",
@@ -920,7 +1105,8 @@
     "forbidden": "이 페이지는 Tonvo 팀 전용입니다.",
     "error": "수치를 불러오지 못했습니다. 잠시 후 다시 시도해 주세요.",
     "loading": "불러오는 중…",
-    "note": "가입, 첫 세션, 결제는 가입으로 이어진 방문의 유입 경로로 집계됩니다. 측정 시작 전에 만든 계정은 'before tracking'에 표시됩니다."
+    "note": "가입, 첫 세션, 결제는 가입으로 이어진 방문의 유입 경로로 집계됩니다. 측정 시작 전에 만든 계정은 'before tracking'에 표시됩니다.",
+    "byLanguage": "언어별"
   },
   "aboutPage": {
     "breadcrumb": "회사 소개",
@@ -955,5 +1141,117 @@
     "ctaSecondary": "작동 방식 보기",
     "ctaNote": "라이브 세션 매월 3회 무료. 신용카드 필요 없음.",
     "company": "Tonvo는 2026년 프랑스에서 설립된 독립 기업입니다."
+  },
+  "onboarding": {
+    "title": "어떤 도움이 필요하세요?",
+    "subtitle": "시작할 곳을 골라 보세요. 나중에 모두 사용해 볼 수 있어요.",
+    "words": {
+      "title": "알맞은 말 찾기",
+      "desc": "라이브 세션을 시작하고 바로 쓸 수 있는 답변 세 가지를 받아 보세요."
+    },
+    "message": {
+      "title": "메시지 이해하기",
+      "desc": "대화를 붙여넣거나 스크린샷을 올리면 답장을 도와드려요."
+    },
+    "language": {
+      "title": "다른 언어로 대화하기",
+      "desc": "대화 언어를 고르고 실시간으로 따라가 보세요. 실시간 번역은 유료 플랜에서 이용할 수 있어요."
+    },
+    "demo": {
+      "title": "먼저 직접 보기",
+      "desc": "대본이 정해진 짧은 데모를 확인해 보세요. 마이크는 필요 없어요."
+    },
+    "skip": "나중에"
+  },
+  "seo": {
+    "organization": "Tonvo는 실시간 대화를 위한 코파일럿입니다. 실시간 전사, 바로 쓸 수 있는 답변, 지금 상황에 대한 짧은 해석을 통화, 면접, 일상 대화에서 제공합니다.",
+    "home": {
+      "title": "Tonvo: 모든 대화를 위한 코파일럿",
+      "description": "Tonvo는 실시간 대화를 따라가며 바로 쓸 수 있는 답변 3개를 화면에 띄워 줍니다. 통화, 면접, 일상 대화에. 무료로 시작하세요."
+    },
+    "pricing": {
+      "title": "요금제: 무료로 시작, 필요할 때 업그레이드",
+      "description": "월 3회 라이브 세션은 무료. Plus는 월 $19로 무제한 세션, 실시간 번역, 코칭 팁 제공. Team은 화면 분석 추가."
+    },
+    "about": {
+      "title": "Tonvo를 만든 이유",
+      "description": "말문이 막히는 순간과 이를 위해 만든 실시간 AI 코파일럿에 대한 Tonvo 창업자의 이야기. 회의에 봇 없이, 무료로 시작."
+    },
+    "privacy": {
+      "title": "개인정보 처리방침",
+      "description": "Tonvo가 데이터를 수집, 이용, 보호하는 방법과 보관 항목 및 기간, 개인정보 권리 행사 방법을 안내합니다."
+    },
+    "terms": {
+      "title": "이용약관",
+      "description": "대화 AI 코파일럿 Tonvo의 이용 약관과 조건을 안내합니다."
+    },
+    "cookies": {
+      "title": "쿠키 정책",
+      "description": "Tonvo가 쿠키와 유사 기술을 사용하는 방법과 직접 관리하는 방법을 안내합니다."
+    },
+    "legal": {
+      "title": "법적 고지",
+      "description": "대화 AI 코파일럿 Tonvo의 회사 정보와 법적 고지 사항입니다."
+    },
+    "blog": {
+      "title": "Tonvo 블로그",
+      "description": "Tonvo 팀이 전하는 더 나은 대화, 면접, 통화, 커뮤니케이션을 위한 팁과 가이드, 인사이트."
+    }
+  },
+  "pricingPage": {
+    "faqTitle": "요금제 관련 질문",
+    "backHome": "홈으로 돌아가기",
+    "faq": {
+      "q1": "무료로는 무엇을 받을 수 있나요?",
+      "a1": "매달 라이브 세션 3회(회당 최대 5분), 바로 말할 수 있는 답변, 최근 7일간의 세션 기록을 제공합니다. 신용카드는 필요 없습니다.",
+      "q2": "언제든 해지할 수 있나요?",
+      "a2": "네. 계정 설정에서 해지할 수 있으며, 유료 플랜에는 7일 환불 보장이 포함됩니다.",
+      "q3": "어떤 통화로 청구되나요?",
+      "a3": "청구는 미국 달러로 이루어집니다. 다른 통화로 표시된 가격은 참고용입니다."
+    }
+  },
+  "ui": {
+    "systemAudio": "시스템 오디오",
+    "speakerModeRecommended": "스피커 모드 권장",
+    "screenAnalysis": "화면 분석",
+    "analyzedMonitoring": "분석 완료, 변경 사항을 확인하는 중",
+    "analysisSummary": "분석 요약",
+    "attractionScore": "호감도 점수",
+    "conversationTone": "대화 톤",
+    "keyInsights": "핵심 인사이트",
+    "toImprove": "개선할 점",
+    "generatingSummary": "분석 요약 생성 중...",
+    "conversationOverview": "대화 개요",
+    "qualityScore": "품질 점수",
+    "responseSpeed": "응답 속도",
+    "audioLanguageLabel": "오디오 트랜스크립션 언어",
+    "dataRights": "데이터 권리",
+    "requestExport": "내보내기 요청",
+    "requestExportLabel": "데이터 내보내기 요청",
+    "requestDeletion": "삭제 요청",
+    "requestDeletionLabel": "데이터 삭제 요청",
+    "noSummary": "아직 요약이 없습니다.",
+    "openFullSession": "전체 세션 열기",
+    "searchHistory": "히스토리 검색",
+    "clearSearch": "검색어 지우기",
+    "openMenu": "메뉴 열기",
+    "toggleMenu": "메뉴 전환",
+    "dismiss": "닫기",
+    "notifications": "알림",
+    "preparingWorkspace": "워크스페이스를 준비하는 중",
+    "toneDistribution": "톤 분포",
+    "conversationAnalysis": "대화 분석"
+  },
+  "notFound": {
+    "title": "페이지를 찾을 수 없습니다",
+    "body": "이 페이지는 존재하지 않거나 이동되었습니다.",
+    "home": "홈으로 돌아가기"
+  },
+  "consent": {
+    "title": "쿠키 및 광고 측정",
+    "body": "당사는 광고 성과를 측정하기 위해 Meta Pixel을 사용합니다. Meta Pixel은 쿠키를 설정하고 Meta로 데이터를 전송하며, 동의하신 경우에만 작동합니다. 거부하셔도 Tonvo의 이용에는 아무런 변화가 없습니다.",
+    "accept": "동의",
+    "decline": "거부",
+    "policy": "쿠키 정책"
   }
 }

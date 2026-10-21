@@ -539,6 +539,8 @@ html[data-theme="light"] body {
   color: var(--color-text);
   overflow-wrap: break-word;
   word-break: normal;
+  /* Balanced lines: no orphan syllable on a second line (Japanese, Chinese, German compounds). */
+  text-wrap: balance;
   max-width: 100%;
 }
 

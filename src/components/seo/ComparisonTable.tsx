@@ -1,6 +1,8 @@
 import type { ComparisonRow } from "@/data/seo/types";
 
 interface ComparisonTableProps {
+  /** Label of the first column header (translated by the caller). */
+  featureLabel: string;
   tonvoName?: string;
   competitorName: string;
   rows: ComparisonRow[];
@@ -27,6 +29,7 @@ function CellValue({ value }: { value: string | boolean }) {
 }
 
 export default function ComparisonTable({
+  featureLabel,
   tonvoName = "Tonvo",
   competitorName,
   rows,
@@ -46,7 +49,7 @@ export default function ComparisonTable({
               className="text-left px-5 py-4 font-semibold"
               style={{ color: "var(--color-text-muted)", width: "40%" }}
             >
-              Feature
+              {featureLabel}
             </th>
             <th
               className="text-center px-5 py-4 font-semibold"

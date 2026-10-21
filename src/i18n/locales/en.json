@@ -26,7 +26,8 @@
     "analytics": "Analytics",
     "pricing": "Pricing",
     "settings": "Settings",
-    "signOut": "Sign Out"
+    "signOut": "Sign Out",
+    "changeLanguage": "Change language"
   },
   "common": {
     "loading": "Loading...",
@@ -795,7 +796,9 @@
         "Security and data-processing review",
         "Custom commercial terms"
       ]
-    }
+    },
+    "periodMonth": "/month",
+    "periodUserMonth": "/user/month"
   },
   "upgrade": {
     "successTitle": "You're in.",
@@ -974,7 +977,7 @@
     "s12Cnil": "You also have the right to lodge a complaint with your local data protection authority (e.g., CNIL in France).",
     "s6AssemblyAI": "AssemblyAI. Speech-to-text. Session audio is sent live for transcription.",
     "s6Upstash": "Upstash. Rate limiting.",
-    "s6Meta": "Meta (Pixel and Conversions API). Advertising measurement."
+    "s6Meta": "Meta (Pixel and Conversions API). Advertising measurement, only if you accept it in the cookie banner."
   },
   "cookiesPage": {
     "breadcrumb": "Cookie Policy",
@@ -991,11 +994,11 @@
     "cookie2Desc": "Store your preferences such as language selection and UI settings.",
     "cookie2Examples": "tonvo-language (localStorage).",
     "cookie3Type": "Analytics Cookies",
-    "cookie3Desc": "Help us understand how you use the application to improve the service. All analytics data is anonymized.",
-    "cookie3Examples": "None currently. We do not use third-party analytics services.",
+    "cookie3Desc": "Help us understand how the site is used. Our own audience measurement is anonymous: a random visitor identifier stored in your browser's localStorage, and you can opt out on the Privacy page. Advertising measurement with the Meta Pixel is optional.",
+    "cookie3Examples": "Our own measurement: tonvo_aid (localStorage). Meta Pixel (cookies such as _fbp), only after you accept it in the cookie banner.",
     "cookie4Type": "Third-Party Cookies",
     "cookie4Desc": "Set by third-party services integrated into our application.",
-    "cookie4Examples": "Stripe (payment processing), Firebase (authentication).",
+    "cookie4Examples": "Stripe (payment processing), Firebase (authentication). Meta (advertising measurement), only with your consent.",
     "required": "Required",
     "optional": "Optional",
     "examples": "Examples:",
@@ -1004,7 +1007,8 @@
     "s4Title": "4. Managing Cookies",
     "s4Text": "You can manage cookies through your browser settings. Note that disabling essential cookies may prevent you from using certain features of the application, including authentication. You can clear localStorage data through your browser's developer tools.",
     "s5Title": "5. Contact",
-    "s5Text": "For questions about our use of cookies:"
+    "s5Text": "For questions about our use of cookies:",
+    "managePrefs": "Change my cookie choice"
   },
   "legalPage": {
     "breadcrumb": "Legal Notice",
@@ -1101,7 +1105,8 @@
     "forbidden": "This page is reserved for the Tonvo team.",
     "error": "The numbers could not be loaded. Try again in a moment.",
     "loading": "Loading…",
-    "note": "Sign-ups, activation and payments are attributed to the source of the visit that led to the sign-up. Accounts created before tracking started appear under \"before tracking\"."
+    "note": "Sign-ups, activation and payments are attributed to the source of the visit that led to the sign-up. Accounts created before tracking started appear under \"before tracking\".",
+    "byLanguage": "By language"
   },
   "aboutPage": {
     "breadcrumb": "About",
@@ -1157,5 +1162,161 @@
       "desc": "Watch a short scripted demo. No microphone needed."
     },
     "skip": "Not now"
+  },
+  "seo": {
+    "organization": "Tonvo is a copilot for live conversations: live transcription, ready-to-say replies and a short read on the moment, for calls, interviews and everyday talks.",
+    "home": {
+      "title": "Tonvo: your copilot for every conversation",
+      "description": "Tonvo follows a live conversation and puts three ready replies on your screen. For calls, interviews and everyday talks. Start free."
+    },
+    "pricing": {
+      "title": "Tonvo pricing: start free, upgrade when you need more",
+      "description": "Start free with 3 live sessions a month. Plus is $19 a month for unlimited sessions, live translation and coaching tips. Team adds screen analysis."
+    },
+    "about": {
+      "title": "Why I built Tonvo",
+      "description": "The founder of Tonvo on the moment your mind goes blank in a conversation, and the live AI copilot built for it. No bot in your meetings, free to start."
+    },
+    "privacy": {
+      "title": "Privacy policy",
+      "description": "How Tonvo collects, uses and protects your data, what we keep and for how long, and how to exercise your privacy rights."
+    },
+    "terms": {
+      "title": "Terms of service",
+      "description": "The terms and conditions for using Tonvo, the AI copilot for your conversations."
+    },
+    "cookies": {
+      "title": "Cookie policy",
+      "description": "How Tonvo uses cookies and similar technologies, and how you can control them."
+    },
+    "legal": {
+      "title": "Legal notice",
+      "description": "Company information and legal notices for Tonvo, the AI copilot for your conversations."
+    },
+    "blog": {
+      "title": "The Tonvo blog",
+      "description": "Tips, guides and insights on better conversations, interviews, calls and communication, by the Tonvo team."
+    }
+  },
+  "pricingPage": {
+    "faqTitle": "Pricing questions",
+    "backHome": "Back to home",
+    "faq": {
+      "q1": "What do I get for free?",
+      "a1": "Three live sessions a month, up to 5 minutes each, with ready-to-say replies and the last 7 days of session history. No credit card needed.",
+      "q2": "Can I cancel anytime?",
+      "a2": "Yes. You can cancel from your account settings, and paid plans come with a 7-day money-back guarantee.",
+      "q3": "Which currency am I billed in?",
+      "a3": "Billing is in US dollars. Prices shown in another currency are there for reference."
+    }
+  },
+  "seoHub": {
+    "useCases": {
+      "title": "Tonvo use cases: calls, interviews and everyday talks",
+      "description": "See where Tonvo helps: work calls, interviews, meetings, messages and the conversations where you are not sure what to say.",
+      "label": "Use cases",
+      "h1": "Where Tonvo helps in a conversation",
+      "lede": "From work calls to interviews and everyday talks, see how Tonvo helps you find the right words and keep the thread."
+    },
+    "features": {
+      "title": "Tonvo features: replies, live insights and translation",
+      "description": "What Tonvo does in a conversation: ready-to-say replies, a read on tone and signals, live translation, summaries and more.",
+      "label": "Features",
+      "h1": "What Tonvo does",
+      "lede": "Ready-to-say replies, a quick read on the moment, live translation on paid plans and a summary afterwards."
+    },
+    "industries": {
+      "title": "Tonvo by profession: recruiting, consulting and support",
+      "description": "See how people in recruiting, consulting, support, healthcare, finance and education use Tonvo to follow conversations and find the right words.",
+      "label": "Industries",
+      "h1": "Tonvo by profession",
+      "lede": "Different jobs, the same need: knowing what to say when it matters. See how Tonvo fits yours."
+    },
+    "compare": {
+      "title": "Tonvo compared with other AI conversation tools",
+      "description": "How Tonvo, a live conversation copilot, differs from tools like Gong, Fireflies, Otter.ai and Chorus, which focus on notes and call analytics.",
+      "label": "Comparisons",
+      "h1": "Tonvo compared with other tools",
+      "lede": "Some tools take notes or analyze calls afterwards. Tonvo helps while the conversation is happening. Here is how they differ."
+    },
+    "guides": {
+      "title": "Conversation guides: communicate better in calls and talks",
+      "description": "Practical guides on reading the room, tone of voice, remote communication and getting more from your conversations.",
+      "label": "Guides",
+      "h1": "Guides for better conversations",
+      "lede": "Practical advice on reading the room, tone of voice and communicating clearly, whether in a call, a meeting or a chat."
+    }
+  },
+  "seoUi": {
+    "backHome": "Back to home",
+    "relatedResources": "Related resources",
+    "ctaHeading": "Ready to communicate better?",
+    "ctaDescription": "Try Tonvo free. Three live sessions a month, no credit card.",
+    "ctaButton": "Get started for free",
+    "heroCta": "Try Tonvo free",
+    "faqTitle": "Frequently asked questions",
+    "tocTitle": "Table of contents",
+    "typeUseCase": "Use case",
+    "typeFeature": "Feature",
+    "typeIndustry": "Industry",
+    "typeComparison": "Comparison",
+    "typeGuide": "Guide",
+    "keyFeaturesUseCase": "Key features for this use case",
+    "whyChoose": "Why choose Tonvo",
+    "keyBenefits": "Key benefits",
+    "whoUses": "Who uses this feature",
+    "keyTakeaways": "Key takeaways",
+    "challenges": "Challenges you face",
+    "relatedUseCases": "Related use cases",
+    "tonvoVs": "Tonvo vs {{name}}",
+    "readMore": "Read more",
+    "comparisonTitle": "Feature-by-feature comparison",
+    "featureColumn": "Feature",
+    "industryFeatures": "Features that matter for {{name}}",
+    "breadcrumb": "Breadcrumb"
+  },
+  "ui": {
+    "systemAudio": "System audio",
+    "speakerModeRecommended": "Speaker mode recommended",
+    "screenAnalysis": "Screen analysis",
+    "analyzedMonitoring": "Analyzed, monitoring for changes",
+    "analysisSummary": "Analysis summary",
+    "attractionScore": "Attraction score",
+    "conversationTone": "Conversation tone",
+    "keyInsights": "Key insights",
+    "toImprove": "To improve",
+    "generatingSummary": "Generating analysis summary...",
+    "conversationOverview": "Conversation overview",
+    "qualityScore": "Quality score",
+    "responseSpeed": "Response speed",
+    "audioLanguageLabel": "Audio transcription language",
+    "dataRights": "Data rights",
+    "requestExport": "Request export",
+    "requestExportLabel": "Request data export",
+    "requestDeletion": "Request deletion",
+    "requestDeletionLabel": "Request data deletion",
+    "noSummary": "No summary yet.",
+    "openFullSession": "Open full session",
+    "searchHistory": "Search history",
+    "clearSearch": "Clear search",
+    "openMenu": "Open menu",
+    "toggleMenu": "Toggle menu",
+    "dismiss": "Dismiss",
+    "notifications": "Notifications",
+    "preparingWorkspace": "Preparing your workspace",
+    "toneDistribution": "Tone distribution",
+    "conversationAnalysis": "Conversation analysis"
+  },
+  "notFound": {
+    "title": "Page not found",
+    "body": "This page does not exist, or it has moved.",
+    "home": "Back to home"
+  },
+  "consent": {
+    "title": "Cookies and advertising measurement",
+    "body": "We use the Meta Pixel to measure our ads. It sets cookies and sends data to Meta, and it only starts if you accept. Declining changes nothing about how Tonvo works.",
+    "accept": "Accept",
+    "decline": "Decline",
+    "policy": "Cookie policy"
   }
 }

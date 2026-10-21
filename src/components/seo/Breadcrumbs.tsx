@@ -1,15 +1,18 @@
 import Link from "next/link";
 import { TonvoLogoMark } from "@/components/Logo";
+import LanguageSelector from "@/components/LanguageSelector";
 import { buildBreadcrumbJsonLd } from "@/data/seo/json-ld";
+import { SITE_URL, localePath, type Locale } from "@/i18n/locales-config";
+import { getServerT } from "@/i18n/messages";
 
 interface BreadcrumbItem {
   label: string;
+  /** Locale-prefixed path (already built by the caller). */
   href?: string;
 }
 
-const SITE_URL = "https://tonvo.co";
-
-export default function Breadcrumbs({ items }: { items: BreadcrumbItem[] }) {
+export default async function Breadcrumbs({ items, locale }: { items: BreadcrumbItem[]; locale: Locale }) {
+  const t = await getServerT(locale);
   const jsonLd = buildBreadcrumbJsonLd(
     items.map((item) => ({
       name: item.label,
@@ -24,8 +27,9 @@ export default function Breadcrumbs({ items }: { items: BreadcrumbItem[] }) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
       <header className="border-b" style={{ borderColor: "var(--color-border)" }}>
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 h-16 flex items-center gap-3">
-          <Link href="/" className="flex items-center gap-2.5 no-underline">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-3">
+        <nav aria-label={t("seoUi.breadcrumb")} className="flex items-center gap-3 min-w-0">
+          <Link href={localePath("/", locale)} className="flex items-center gap-2.5 no-underline">
             <TonvoLogoMark size="sm" />
             <span className="text-lg font-bold" style={{ color: "var(--color-text)" }}>Tonvo</span>
           </Link>
@@ -43,6 +47,8 @@ export default function Breadcrumbs({ items }: { items: BreadcrumbItem[] }) {
               )}
             </span>
           ))}
+        </nav>
+        <LanguageSelector />
         </div>
       </header>
     </>

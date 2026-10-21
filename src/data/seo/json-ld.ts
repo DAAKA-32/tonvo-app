@@ -32,10 +32,11 @@ export function buildFAQJsonLd(faqs: FAQItem[]) {
   };
 }
 
-export function buildWebPageJsonLd(entry: SEOPageBase, pageUrl: string) {
+export function buildWebPageJsonLd(entry: SEOPageBase, pageUrl: string, inLanguage = "en") {
   return {
     "@context": "https://schema.org",
     "@type": "WebPage",
+    inLanguage,
     name: entry.title,
     description: entry.metaDescription,
     url: pageUrl,
@@ -56,10 +57,11 @@ export function buildWebPageJsonLd(entry: SEOPageBase, pageUrl: string) {
   };
 }
 
-export function buildArticleJsonLd(entry: GuideEntry, pageUrl: string) {
+export function buildArticleJsonLd(entry: GuideEntry, pageUrl: string, inLanguage = "en") {
   return {
     "@context": "https://schema.org",
     "@type": "Article",
+    inLanguage,
     headline: entry.h1,
     description: entry.metaDescription,
     url: pageUrl,

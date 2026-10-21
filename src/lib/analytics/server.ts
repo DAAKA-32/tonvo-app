@@ -1,4 +1,5 @@
 import { after } from "next/server";
+import { isPublicPath, splitLocale } from "@/i18n/locales-config";
 import { supabaseAdmin } from "@/lib/supabase-admin";
 import { deriveSource, type AnalyticsEvent, type Attribution, type ServerEvent } from "@/lib/analytics/events";
 
@@ -116,11 +117,23 @@ export interface FunnelCounts {
 export interface FunnelReport {
   totals: FunnelCounts;
   bySource: Array<FunnelCounts & { source: string }>;
+  /** Same funnel split by the language of the public page the visitor landed on first (en = unprefixed). */
+  byLanguage: Array<FunnelCounts & { language: string }>;
   topPages: Array<{ path: string; visitors: number }>;
   vsl: { sound: number; fullscreen: number };
 }
 
 const UNTRACKED = "before tracking";
+
+/**
+ * Language of a public page path: "/fr/about" is fr, "/about" is en. Null for app pages (/dashboard...), which
+ * say nothing about the language a visitor came for.
+ */
+export function languageOfPath(path: string | null): string | null {
+  const clean = (path || "/").split("?")[0];
+  const { locale, path: rest } = splitLocale(clean);
+  return isPublicPath(rest) ? locale : null;
+}
 
 const emptyCounts = (): FunnelCounts => ({ visitors: 0, clicks: 0, signups: 0, activated: 0, checkoutStarted: 0, paid: 0 });
 
@@ -134,6 +147,8 @@ export function computeFunnel(rows: StoredEvent[]): FunnelReport {
   const sorted = [...rows].sort((a, b) => a.created_at.localeCompare(b.created_at));
 
   const visitorSource = new Map<string, string>();
+  const visitorLanguage = new Map<string, string>();
+  const userLanguage = new Map<string, string>();
   const userSource = new Map<string, string>();
   const visitors = new Set<string>();
   const clicked = new Set<string>();
@@ -150,6 +165,8 @@ export function computeFunnel(rows: StoredEvent[]): FunnelReport {
       case "page_view":
         if (r.anon_id) {
           visitors.add(r.anon_id);
+          const lang = languageOfPath(r.path);
+          if (lang && !visitorLanguage.has(r.anon_id)) visitorLanguage.set(r.anon_id, lang);
           const p = (r.path || "/").split("?")[0];
           if (!pageVisitors.has(p)) pageVisitors.set(p, new Set());
           pageVisitors.get(p)!.add(r.anon_id);
@@ -162,6 +179,8 @@ export function computeFunnel(rows: StoredEvent[]): FunnelReport {
         if (r.user_id) {
           signups.add(r.user_id);
           userSource.set(r.user_id, r.source || "direct");
+          const lang = r.anon_id ? visitorLanguage.get(r.anon_id) : undefined;
+          if (lang) userLanguage.set(r.user_id, lang);
         }
         break;
       case "first_session":
@@ -196,6 +215,18 @@ export function computeFunnel(rows: StoredEvent[]): FunnelReport {
   for (const u of checkout) bucket(userSource.get(u) || UNTRACKED).checkoutStarted++;
   for (const u of paid) bucket(userSource.get(u) || UNTRACKED).paid++;
 
+  const byLanguageMap = new Map<string, FunnelCounts>();
+  const langBucket = (l: string) => {
+    if (!byLanguageMap.has(l)) byLanguageMap.set(l, emptyCounts());
+    return byLanguageMap.get(l)!;
+  };
+  for (const v of visitors) langBucket(visitorLanguage.get(v) || UNTRACKED).visitors++;
+  for (const v of clicked) langBucket(visitorLanguage.get(v) || UNTRACKED).clicks++;
+  for (const u of signups) langBucket(userLanguage.get(u) || UNTRACKED).signups++;
+  for (const u of activated) langBucket(userLanguage.get(u) || UNTRACKED).activated++;
+  for (const u of checkout) langBucket(userLanguage.get(u) || UNTRACKED).checkoutStarted++;
+  for (const u of paid) langBucket(userLanguage.get(u) || UNTRACKED).paid++;
+
   return {
     totals: {
       visitors: visitors.size,
@@ -207,6 +238,9 @@ export function computeFunnel(rows: StoredEvent[]): FunnelReport {
     },
     bySource: [...bySourceMap.entries()]
       .map(([source, c]) => ({ source, ...c }))
+      .sort((a, b) => b.visitors - a.visitors || b.signups - a.signups),
+    byLanguage: [...byLanguageMap.entries()]
+      .map(([language, c]) => ({ language, ...c }))
       .sort((a, b) => b.visitors - a.visitors || b.signups - a.signups),
     topPages: [...pageVisitors.entries()]
       .map(([path, set]) => ({ path, visitors: set.size }))

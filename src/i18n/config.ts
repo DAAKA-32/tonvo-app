@@ -18,6 +18,14 @@ export const SUPPORTED_LANGUAGES = [
 
 const savedLang = typeof window !== "undefined" ? localStorage.getItem("tonvo-language") : null;
 
+/**
+ * On the public pages ([locale] routes) the language is part of the URL and the server already wrote the
+ * right <html lang> and data-tonvo-lang. This module-level instance belongs to the signed-in app: on a
+ * public page it must not touch the document language or switch itself to the saved preference.
+ */
+const isPublicScope =
+  typeof document !== "undefined" && document.documentElement.getAttribute("data-tonvo-scope") === "public";
+
 /** Lazy-load a locale bundle. Only the active language is fetched. */
 const localeLoaders: Record<string, () => Promise<{ default: Record<string, unknown> }>> = {
   es: () => import("./locales/es.json"),
@@ -63,11 +71,13 @@ function syncHtmlLang(lang: string) {
   }
 }
 
-syncHtmlLang(savedLang || "en");
-i18n.on("languageChanged", syncHtmlLang);
+if (!isPublicScope) {
+  syncHtmlLang(savedLang || "en");
+  i18n.on("languageChanged", syncHtmlLang);
+}
 
 // If saved language is not English, eagerly load it
-if (savedLang && savedLang !== "en") {
+if (!isPublicScope && savedLang && savedLang !== "en") {
   loadLanguage(savedLang).then(() => {
     i18n.changeLanguage(savedLang);
   });

@@ -96,6 +96,18 @@ const nextConfig: NextConfig = {
         destination: "/",
         permanent: true,
       },
+      // The feature page was renamed from "invisible" to "separate window" (the product is not invisible,
+      // see docs/specs/conversation-copilot-audit.md). Permanent redirect keeps inbound links and rankings.
+      {
+        source: "/features/invisible-copilot-mode",
+        destination: "/features/separate-window-copilot",
+        permanent: true,
+      },
+      {
+        source: "/fr/features/invisible-copilot-mode",
+        destination: "/fr/features/separate-window-copilot",
+        permanent: true,
+      },
     ];
   },
 };

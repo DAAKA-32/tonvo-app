@@ -1,6 +1,7 @@
 "use client";
 
 import { createContext, useCallback, useContext, useState, useRef, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 
 /* ------------------------------------------------------------------ */
 /*  Types                                                              */
@@ -103,6 +104,7 @@ const colorMap: Record<ToastType, string> = {
 /*  Single toast item                                                  */
 /* ------------------------------------------------------------------ */
 function ToastItem({ toast, onDismiss }: { toast: Toast; onDismiss: (id: string) => void }) {
+  const { t } = useTranslation();
   return (
     <div
       className={`toast-item ${toast.exiting ? "toast-exit" : "toast-enter"}`}
@@ -122,7 +124,7 @@ function ToastItem({ toast, onDismiss }: { toast: Toast; onDismiss: (id: string)
         <button
           className="toast-close"
           onClick={() => onDismiss(toast.id)}
-          aria-label="Dismiss"
+          aria-label={t("ui.dismiss")}
         >
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
             <line x1="18" y1="6" x2="6" y2="18" />
@@ -140,6 +142,7 @@ function ToastItem({ toast, onDismiss }: { toast: Toast; onDismiss: (id: string)
 let idCounter = 0;
 
 export function ToastProvider({ children }: { children: React.ReactNode }) {
+  const { t: translate } = useTranslation(); // "t" is the toast in the map below
   const [toasts, setToasts] = useState<Toast[]>([]);
   const timersRef = useRef<Map<string, ReturnType<typeof setTimeout>>>(new Map());
 
@@ -215,7 +218,7 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
 
       {/* Toast container — fixed top-right, above everything */}
       {toasts.length > 0 && (
-        <div className="toast-container" aria-label="Notifications">
+        <div className="toast-container" aria-label={translate("ui.notifications")}>
           {toasts.map((t) => (
             <ToastItem key={t.id} toast={t} onDismiss={dismiss} />
           ))}

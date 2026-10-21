@@ -4,6 +4,7 @@ import { AuthProvider } from "@/lib/auth-context";
 import { ToastProvider } from "@/components/Toast";
 import I18nProvider from "@/i18n/I18nProvider";
 import DynamicTitle from "@/components/DynamicTitle";
+import ConsentBanner from "@/components/ConsentBanner";
 import { PerformanceProvider } from "@/lib/performance";
 
 export default function Providers({ children }: { children: React.ReactNode }) {
@@ -14,6 +15,7 @@ export default function Providers({ children }: { children: React.ReactNode }) {
         <AuthProvider>
           <ToastProvider>
             {children}
+            <ConsentBanner />
           </ToastProvider>
         </AuthProvider>
       </I18nProvider>

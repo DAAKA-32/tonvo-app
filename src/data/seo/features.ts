@@ -5,81 +5,81 @@ export const features: FeatureEntry[] = [
   {
     type: "features",
     slug: "real-time-tone-detection",
-    title: "Real-Time Tone Detection | Tonvo AI Copilot",
+    title: "Tone Detection in Conversations | Tonvo",
     metaDescription:
-      "Tonvo analyzes speaker tone and sentiment in real time during calls. Detect frustration, excitement, and hesitation instantly to improve conversations.",
-    h1: "Understand Every Conversation with Real-Time Tone and Sentiment Analysis",
+      "Tonvo reads the tone of a conversation from the live transcript and gives you a short read on the moment, so you can choose your words with care.",
+    h1: "See the tone of a conversation as it unfolds",
     subtitle:
-      "Tonvo reads the tone and word choice of a conversation as it happens, to surface sentiment shifts the moment they appear, so you can respond with confidence.",
-    lastModified: "2026-04-09",
+      "Tonvo follows the words of a call, a meeting or a talk and gives you a short read on the moment, such as whether the other person sounds interested, tense or unsure.",
+    lastModified: "2026-10-21",
     relatedSlugs: [
       { type: "features", slug: "conversation-signal-detection", label: "Signal Detection" },
     ],
     targetKeywords: [
-      "real-time tone detection",
-      "sentiment analysis calls",
-      "AI tone analyzer",
-      "call sentiment monitoring",
-      "voice emotion detection",
+      "tone of a conversation",
+      "tone analysis during a call",
+      "how to read the mood of a conversation",
+      "AI conversation tone detector",
+      "sentiment analysis for conversations",
     ],
     faq: [
       {
-        question: "How does Tonvo detect tone in real time?",
+        question: "How does Tonvo read tone?",
         answer:
-          "Tonvo processes the live audio stream using natural language processing models that evaluate word choice, phrasing patterns, and conversational context to classify sentiment as positive, negative, or neutral — updating every few seconds.",
+          "Tonvo transcribes the conversation live and analyzes the text: the words people choose and how they phrase things. It does not measure pitch, pace or other features of the voice. The result is a short read on the moment, not a verdict, and it can be wrong.",
       },
       {
-        question: "Does tone detection work on all supported platforms?",
+        question: "What kinds of conversations does it work for?",
         answer:
-          "Yes. Real-time tone detection works on Discord, Zoom, and Google Meet. Tonvo listens to the conversation audio regardless of the platform and applies the same sentiment analysis engine.",
+          "Any conversation Tonvo can hear: a work call, a meeting, an interview, a negotiation or an everyday talk. It listens through your microphone, and on a computer it can also hear the audio of a browser tab you share, so both sides of an online call come through. On a phone, put the call on speaker.",
       },
       {
-        question: "Can I see a history of tone shifts after the call?",
+        question: "Can I look at the tone after the conversation?",
         answer:
-          "Absolutely. Every tone shift is logged with a timestamp and context snippet. You can review the full sentiment timeline in your post-session analysis dashboard.",
+          "Yes. After a session, your summary describes the tone of the conversation, what went well, what to improve and follow-up actions. The text of your sessions is kept so you can read it again. Free keeps 7 days of history, and paid plans keep the full history.",
       },
       {
-        question: "Is tone detection accurate for non-native English speakers?",
+        question: "Does tone detection work in other languages?",
         answer:
-          "While accuracy is highest in English, the system supports 10 languages and continually improves through updated training data.",
+          "Tonvo transcribes 10 languages: English, French, Spanish, German, Italian, Portuguese, Dutch, Chinese, Japanese and Korean, and it can detect the language automatically. Because tone comes from the transcript, a poor transcript, for example from background noise, can lead to a weaker read.",
       },
     ],
-    featureName: "Real-Time Tone Detection",
+    featureName: "Tone Detection",
     howItWorks: {
       label: "How It Works",
-      heading: "Sentiment Analysis That Keeps Up with the Conversation",
-      body: "Tonvo captures the live audio transcript and runs each utterance through a multi-layer NLP pipeline. The first layer tokenizes speech and evaluates lexical sentiment. The second layer examines phrasing context — sarcasm markers, hedge words, and intensifiers. Results are merged into a composite sentiment score that updates on-screen in near real time, giving you a continuous emotional pulse of the conversation.",
+      heading: "A read on the moment, based on the words",
+      body: "Tonvo transcribes the conversation as it happens, then an AI model reads the text to understand where the moment stands. It looks at wording and phrasing, not at the sound of a voice. What you see is a short read on the moment, next to the question that was just asked and three replies you could use. On Plus and Team, live insights and signals add more detail. You stay in charge of what you say.",
     },
     benefits: [
       {
         icon: "heart",
-        title: "Catch Emotional Shifts Instantly",
+        title: "Notice a shift in the room",
         description:
-          "See when a prospect's enthusiasm drops or a teammate grows frustrated, so you can pivot your approach before the moment passes.",
+          "See when the other person seems to hesitate, agree or tense up, so you can slow down, clarify or change direction.",
       },
       {
-        icon: "trending-up",
-        title: "Improve Close Rates",
+        icon: "message",
+        title: "Find words that fit the moment",
         description:
-          "Sales teams using live sentiment data report stronger objection handling and more personalized pitches that resonate with buyers.",
+          "A short read on the moment, next to three ready-to-say replies, helps you answer in a way that suits how the conversation feels.",
       },
       {
         icon: "shield",
-        title: "Reduce Miscommunication",
+        title: "Understand more in a second language",
         description:
-          "Tone cues help remote teams avoid misunderstandings that text-only communication often creates, building trust across distributed teams.",
+          "When a conversation is in a language you speak less well, a short read on the moment can help you follow what is going on.",
       },
     ],
     useCasesForFeature: [
-      "Sales teams tracking prospect engagement during discovery calls",
-      "Customer success managers detecting frustration before it escalates",
-      "Hiring managers gauging candidate enthusiasm in interviews",
-      "Team leads monitoring morale during all-hands meetings",
+      "Following a tense work call and choosing your next words",
+      "Getting a sense of how an interviewer or a candidate is reacting",
+      "Keeping a negotiation calm when the other side hesitates",
+      "Handling a difficult everyday conversation with more confidence",
     ],
     technicalDetail: {
       label: "Under the Hood",
-      heading: "Multi-Layer NLP Pipeline",
-      body: "Tonvo combines transformer-based sentiment classifiers with rule-based hedge-word detection. Sentiment scores are smoothed with exponential moving averages to prevent flicker, and the final output is a three-tier classification (positive, neutral, negative) with a continuous confidence percentage.",
+      heading: "Text-based, not voice-based",
+      body: "Tone reads come from the transcript. Transcription is handled by AssemblyAI and the analysis is done by an AI model from Anthropic. Because only text is analyzed, Tonvo does not assess pitch, speaking pace or filler words, and it cannot see facial expressions. Treat the read as a suggestion, since it can be wrong.",
     },
   },
 
@@ -87,88 +87,88 @@ export const features: FeatureEntry[] = [
   {
     type: "features",
     slug: "ai-coaching-suggestions",
-    title: "AI Coaching Suggestions | Tonvo Live Call Copilot",
+    title: "Live Reply Suggestions for Any Conversation | Tonvo",
     metaDescription:
-      "Get live AI coaching tips during calls. Tonvo suggests better phrasing, questions, and responses in real time to help you communicate more effectively.",
-    h1: "Live AI Coaching Suggestions That Make Every Conversation Better",
+      "Get three ready-to-say replies live during a call, meeting or interview. Tonvo shows the question just asked, and you choose what to say.",
+    h1: "Know what to say next, in the moment",
     subtitle:
-      "Tonvo whispers smart suggestions as you speak — better questions to ask, objection responses, and phrasing improvements — all without interrupting your flow.",
-    lastModified: "2026-04-09",
+      "Tonvo shows the question the other person just asked and three replies you can use. On Plus and Team, coaching tips add more guidance.",
+    lastModified: "2026-10-21",
     relatedSlugs: [
       { type: "features", slug: "real-time-tone-detection", label: "Tone Detection" },
     ],
     targetKeywords: [
-      "AI coaching suggestions",
-      "live call coaching",
-      "real-time conversation tips",
-      "AI sales coaching",
-      "call copilot suggestions",
+      "live reply suggestions",
+      "what to say in a conversation",
+      "real-time conversation help",
+      "AI conversation copilot",
+      "help answering interview questions",
     ],
     faq: [
       {
-        question: "What kind of suggestions does Tonvo provide?",
+        question: "What does Tonvo suggest?",
         answer:
-          "Tonvo offers contextual suggestions including better ways to phrase statements, follow-up questions to deepen the conversation, objection handling scripts, and reminders to let the other person speak when talk-time is unbalanced.",
+          "Tonvo detects the question the other person just asked and offers three ready-to-say replies. This is available on every plan. On Plus and Team, you also get coaching tips and live insights while the conversation goes on.",
       },
       {
-        question: "Will the other person on the call see the coaching tips?",
+        question: "Will the other person see the suggestions?",
         answer:
-          "No. Suggestions appear only in your Tonvo sidebar or overlay. On Plus and Team, Tonvo runs in its own window, so participants do not see it when you share a tab or a window.",
+          "Only if what you share includes Tonvo. On Plus and Team, Tonvo can show the copilot in a separate window (Picture-in-Picture on desktop Chrome, or a popup), which is not part of a tab or window you share. On Free, and on a phone, the copilot appears in the page itself. If you share your entire screen, others can see everything on it.",
       },
       {
-        question: "Can I customize the type of coaching I receive?",
+        question: "Can I adapt the suggestions to my situation?",
         answer:
-          "Yes. You can configure coaching profiles — for example, a 'Discovery Call' profile emphasizes open-ended questions, while a 'Negotiation' profile focuses on anchoring and concession strategies.",
+          "Yes. A live session has modes: general, sales, recruitment, support and networking. Pick the one closest to your conversation so the suggestions fit it.",
       },
       {
-        question: "Does the AI learn from my past conversations?",
+        question: "Does the AI remember my past conversations?",
         answer:
-          "Tonvo improves suggestions over time by analyzing patterns in your conversation history. The more you use it, the more tailored and relevant the coaching becomes to your communication style.",
+          "No. Tonvo has no notes or memory feature that carries context from one conversation to the next. The text of each session is kept so you can read it again, and the session summary lists what went well and what to improve.",
       },
     ],
-    featureName: "AI Coaching Suggestions",
+    featureName: "Live Reply Suggestions",
     howItWorks: {
       label: "How It Works",
-      heading: "Context-Aware Coaching Delivered in Real Time",
-      body: "As the conversation flows, Tonvo continuously evaluates the transcript against your selected coaching profile. It identifies moments where a better question, a softer reframe, or a strategic pause could improve outcomes. Tips appear in a non-intrusive sidebar with one-click dismissal.",
+      heading: "Suggestions that follow the conversation",
+      body: "As the conversation goes on, Tonvo transcribes it live and an AI model reads the text. When the other person asks something, Tonvo picks out the question and drafts three replies you could say. You can use one as it is, adapt it, or ignore it. On Plus and Team, coaching tips and live insights appear alongside the replies.",
     },
     benefits: [
       {
         icon: "brain",
-        title: "Never Miss the Right Question",
+        title: "Never freeze on a question",
         description:
-          "Tonvo prompts high-impact questions at the right moment, helping you uncover needs and objections that would otherwise go unspoken.",
+          "When a question lands and your mind goes blank, three replies are already on screen to start from.",
       },
       {
         icon: "zap",
-        title: "Respond Faster Under Pressure",
+        title: "Answer with more clarity",
         description:
-          "When a tough objection lands, Tonvo instantly surfaces proven response frameworks so you can reply with clarity instead of scrambling.",
+          "A tough or unexpected question is easier to handle when you can see it written out, with a few ways to answer.",
       },
       {
-        icon: "trending-up",
-        title: "Accelerate Team Ramp-Up",
+        icon: "message",
+        title: "Fits the conversation you are in",
         description:
-          "New hires perform like seasoned reps from day one. Live coaching compresses months of training into real-time, on-the-job guidance.",
+          "Choose general, sales, recruitment, support or networking, so suggestions suit a work call, an interview or a first chat with a new contact.",
       },
       {
-        icon: "target",
-        title: "Stay Aligned with Methodology",
+        icon: "check",
+        title: "You stay in control",
         description:
-          "Whether your team follows MEDDIC, SPIN, or Challenger, Tonvo keeps reps on-script by surfacing methodology-specific prompts.",
+          "Tonvo suggests and you decide. Replies can be wrong, so read them, adjust them and say them in your own words.",
       },
     ],
     useCasesForFeature: [
-      "Sales reps handling objections during live demos",
-      "Account executives running discovery calls with enterprise prospects",
-      "New hires getting real-time mentorship during onboarding calls",
-      "Managers coaching team members by reviewing suggestion acceptance rates",
-      "Customer support agents de-escalating frustrated callers",
+      "Answering a tough question in a work meeting",
+      "Finding the right words during a job interview",
+      "Handling an objection or a price question on a sales call",
+      "Supporting a customer who is upset, as a support agent",
+      "Keeping a conversation going with someone you have just met",
     ],
     technicalDetail: {
       label: "Under the Hood",
-      heading: "Profile-Based Suggestion Engine",
-      body: "Tonvo's coaching engine matches live transcript segments against a vector database of proven conversation patterns, objection-response pairs, and methodology playbooks. A retrieval-augmented generation (RAG) pipeline selects the most relevant pattern, then a language model adapts it to the current conversational context. Suggestions are ranked by relevance and urgency, and only the top suggestion is surfaced to avoid cognitive overload.",
+      heading: "What runs behind the replies",
+      body: "Transcription comes from AssemblyAI. The transcribed text is sent to an AI model from Anthropic, which finds the question and writes the replies. Because the analysis works on text, it follows what is said, not how it sounds. It is a suggestion tool, so it can be wrong, and you are the one speaking.",
     },
   },
 
@@ -176,82 +176,82 @@ export const features: FeatureEntry[] = [
   {
     type: "features",
     slug: "conversation-signal-detection",
-    title: "Conversation Signal Detection | Tonvo AI",
+    title: "Conversation Signals: Objections and Hesitation | Tonvo",
     metaDescription:
-      "Tonvo detects objections, buying signals, hesitation, and opportunities in real time. Never miss a critical conversation moment on your calls again.",
-    h1: "Detect Objections, Opportunities, and Hesitation as They Happen",
+      "On Plus and Team, Tonvo flags questions, objections, opportunities, hesitation, agreement and key points live, so you can notice what matters in a talk.",
+    h1: "Notice what matters while the conversation is happening",
     subtitle:
-      "Tonvo flags critical conversation signals the moment they surface — objections, buying intent, hesitation, and topic shifts — so you always know what matters most.",
-    lastModified: "2026-04-09",
+      "Tonvo marks moments such as a question, an objection or a hesitation as the conversation goes. Live signals are part of Plus and Team.",
+    lastModified: "2026-10-21",
     relatedSlugs: [
       { type: "features", slug: "real-time-tone-detection", label: "Tone Detection" },
     ],
     targetKeywords: [
-      "conversation signal detection",
-      "objection detection AI",
-      "buying signal detection",
-      "call intelligence signals",
+      "conversation signals",
+      "detect objections in a call",
+      "spot hesitation in a conversation",
       "real-time conversation insights",
+      "notice buying signals",
     ],
     faq: [
       {
-        question: "What types of signals does Tonvo detect?",
+        question: "What types of signals does Tonvo show?",
         answer:
-          "Tonvo identifies six core signal types: objections, buying signals, hesitation markers, competitive mentions, budget discussions, and authority indicators. Each signal is tagged with a confidence score and highlighted in the live transcript.",
+          "Tonvo shows six kinds of signals: question, objection, opportunity, hesitation, agreement and key point. Live signals are available on Plus and Team.",
       },
       {
-        question: "How does signal detection differ from tone detection?",
+        question: "How is a signal different from tone?",
         answer:
-          "Tone detection measures overall emotional sentiment (positive, negative, neutral). Signal detection identifies specific conversational events — like a prospect saying 'we're also evaluating competitors' or 'I need to check with my manager.' They work together to give you a complete picture.",
+          "Tone is a read on how the moment feels overall. A signal marks a specific moment, such as someone saying they are not sure about the timing, or agreeing with a proposal. Both are based on the transcribed text.",
       },
       {
-        question: "Can I set alerts for specific signal types?",
+        question: "Can I choose which signals I see or set alerts?",
         answer:
-          "Yes. You can configure which signals trigger visual alerts, and you can set priority levels so that high-value signals like buying intent are more prominent than informational signals.",
+          "No. Tonvo does not have alert settings or thresholds. Signals appear in the live view as the conversation goes, and you decide which ones to act on.",
       },
       {
-        question: "Are detected signals included in the post-call summary?",
+        question: "What do I get after the session?",
         answer:
-          "Every detected signal is included in the post-session analysis with a timestamp, context excerpt, and recommended follow-up action. You can also filter the summary to show only signals of a specific type.",
+          "On every plan, you get a summary with the tone of the conversation, what went well, what to improve and follow-up actions. The text of the session is kept so you can read it again.",
       },
     ],
-    featureName: "Conversation Signal Detection",
+    featureName: "Conversation Signals",
     howItWorks: {
       label: "How It Works",
-      heading: "Pattern-Matched Intelligence from Every Utterance",
-      body: "The model recognizes linguistic patterns associated with objections ('we're not sure about the timing'), buying intent ('what would implementation look like?'), hesitation (long pauses, hedge words), and more. Detected signals are categorized, timestamped, and displayed as color-coded badges alongside the live transcript.",
+      heading: "Moments picked out of the transcript",
+      body: "Tonvo transcribes the conversation live and an AI model reads the text for moments that deserve your attention. Someone doubting the timing, asking how something would work, or saying they agree each count as a different kind of moment. Each one is shown as a signal in the live view, so you can notice it while you can still respond. Signals come from the words, not from voice features.",
     },
     benefits: [
       {
         icon: "target",
-        title: "Act on Signals Before They Fade",
+        title: "Respond while it still matters",
         description:
-          "Real-time signal badges ensure you address objections and capitalize on buying intent the moment they appear, not minutes later when the window has closed.",
+          "A signal helps you notice an objection or a moment of hesitation while you can still address it, instead of realizing it after the conversation is over.",
       },
       {
         icon: "search",
-        title: "Surface Hidden Opportunities",
+        title: "Catch what is easy to miss",
         description:
-          "Many buying signals are subtle — a question about implementation timelines or a mention of budget approval. Tonvo catches what human ears often miss.",
+          "When you are busy speaking, subtle moments slip by: a quick doubt, a hint of interest, a point worth coming back to. Signals help you notice them.",
       },
       {
-        icon: "bar-chart",
-        title: "Track Signal Trends Across Calls",
+        icon: "users",
+        title: "Useful beyond sales",
         description:
-          "Aggregate signal data over time reveals patterns — which objections recur, which competitors appear most, and where deals stall in the pipeline.",
+          "Signals apply to interviews, negotiations, support calls and everyday talks too, because they come from what people say.",
       },
     ],
     useCasesForFeature: [
-      "Sales teams identifying buying signals during pipeline calls",
-      "Revenue leaders tracking common objection patterns across the team",
-      "Negotiators detecting hesitation and concession openings",
-      "Product managers capturing feature requests mentioned in customer calls",
-      "Partnership managers spotting competitive intelligence in conversations",
+      "Spotting hesitation in a negotiation and choosing when to clarify",
+      "Noticing an objection early in a sales call",
+      "Catching a point of agreement during an interview",
+      "Picking out the key point in a long meeting",
+      "Recognizing an opening to move to a next step",
     ],
     technicalDetail: {
       label: "Under the Hood",
-      heading: "Multi-Class Signal Classifier",
-      body: "Training data includes over 50,000 annotated conversation excerpts spanning sales, support, and internal meetings. The model outputs a probability distribution across signal classes, and only signals exceeding a configurable confidence threshold are surfaced. A post-processing layer deduplicates overlapping signals and merges related detections into unified signal events.",
+      heading: "How signals are produced",
+      body: "Signals are produced from the transcribed text by an AI model from Anthropic, while AssemblyAI handles the transcription. Tonvo does not analyze the voice itself, so a signal reflects words, not tone of voice. Signals are suggestions that can be wrong, so use them as a prompt to listen closely, not as a conclusion.",
     },
   },
 
@@ -259,81 +259,81 @@ export const features: FeatureEntry[] = [
   {
     type: "features",
     slug: "post-session-analysis",
-    title: "Post-Session Analysis | Tonvo Call Review",
+    title: "Session Summary: Review a Conversation | Tonvo",
     metaDescription:
-      "Review AI-generated call summaries, key moments, and actionable insights after every conversation. Tonvo turns every call into a learning opportunity.",
-    h1: "Turn Every Call into Actionable Insights with Post-Session Analysis",
+      "After a session, Tonvo gives you a summary: the tone, what went well, what to improve and follow-up actions. Read it again whenever you need.",
+    h1: "Look back on a conversation with a clear summary",
     subtitle:
-      "After each conversation, Tonvo generates a structured breakdown — key moments, sentiment arcs, detected signals, and concrete next steps — so nothing falls through the cracks.",
-    lastModified: "2026-04-09",
+      "When a session ends, Tonvo summarizes how it went and lists follow-up actions, so you remember what was said and what to do next.",
+    lastModified: "2026-10-21",
     relatedSlugs: [
       { type: "features", slug: "speaker-balance-tracking", label: "Speaker Balance" },
     ],
     targetKeywords: [
-      "post-call analysis AI",
-      "call summary generator",
-      "meeting insights review",
-      "conversation analytics dashboard",
-      "AI call breakdown",
+      "conversation summary",
+      "call summary after the call",
+      "how to review a conversation",
+      "AI meeting summary",
+      "follow-up actions from a call",
     ],
     faq: [
       {
-        question: "What does the post-session analysis include?",
+        question: "What does the session summary include?",
         answer:
-          "Each analysis includes an executive summary, a sentiment timeline, all detected signals with timestamps, speaker balance metrics, key moments, topic segments, and AI-generated next-step recommendations.",
+          "The summary covers the tone of the conversation, what went well, what to improve and follow-up actions. It is included on every plan.",
       },
       {
-        question: "How quickly is the analysis available after a call?",
+        question: "Does Tonvo store recordings?",
         answer:
-          "You receive a notification with a direct link to the analysis dashboard as soon as it is ready.",
+          "No. Tonvo does not record or store audio. The text of your sessions is kept so you can read it again.",
       },
       {
-        question: "Can I share the analysis with teammates who were not on the call?",
+        question: "How long is my history kept?",
         answer:
-          "Yes. You can share a read-only link to any post-session report. Recipients can view the summary, listen to key moments, and leave comments without needing a Tonvo account.",
+          "Free keeps 7 days of session history. Plus and Team keep the full history, and also include progress analytics.",
       },
       {
-        question: "Does Tonvo store call recordings?",
+        question: "Can I export or share a summary?",
         answer:
-          "Tonvo processes audio in real time but does not store raw audio recordings by default. Post-session analysis is generated from the processed transcript and signal data. You can enable optional recording in your workspace settings.",
+          "Not at the moment. Tonvo has no PDF or CSV export, no sharing links and no team dashboard. You can open a session again from your history and read the summary there.",
       },
     ],
-    featureName: "Post-Session Analysis",
+    featureName: "Session Summary",
     howItWorks: {
       label: "How It Works",
-      heading: "Structured Intelligence from Unstructured Conversations",
-      body: "When a call ends, Tonvo compiles the full transcript, detected signals, sentiment scores, and speaker metrics into a unified dataset. A summarization model generates an executive summary and extracts key moments — defined as transcript segments where signals clustered or sentiment shifted sharply. The system then cross-references detected topics against your CRM data (when connected) to suggest next steps like follow-up emails, task creation, or deal-stage updates.",
+      heading: "From a live conversation to a summary",
+      body: "While you talk, Tonvo transcribes the conversation. When the session ends, an AI model reads the transcript and writes a summary: the overall tone, what went well, what to improve and follow-up actions. The text of the session is kept so you can open it again from your history. Summaries are generated from text, so they can miss things, especially if the transcript was unclear.",
     },
     benefits: [
       {
         icon: "clock",
-        title: "Save Hours of Manual Note-Taking",
+        title: "Less note-taking during the talk",
         description:
-          "Stop scribbling notes during calls. Tonvo captures everything and organizes it into a structured report you can reference, search, and share.",
+          "Focus on the person in front of you instead of writing, then read the summary afterwards.",
       },
       {
         icon: "layers",
-        title: "Build a Searchable Conversation Library",
+        title: "Keep the thread of past conversations",
         description:
-          "Every analysis is indexed and searchable. Find any past conversation by topic, signal type, participant, or keyword in seconds.",
+          "Your sessions stay in your history, 7 days on Free and the full history on Plus and Team, so you can go back to what was said.",
       },
       {
-        icon: "users",
-        title: "Enable Asynchronous Coaching",
+        icon: "trending-up",
+        title: "See your own progress",
         description:
-          "Managers can review call analyses on their own schedule, leave feedback on specific moments, and track rep improvement over time without shadowing every call.",
+          "Plus and Team include progress analytics, so you can follow how your conversations are going over time.",
       },
     ],
     useCasesForFeature: [
-      "Sales managers reviewing rep performance across weekly calls",
-      "Account executives preparing follow-ups with accurate conversation context",
-      "Customer success teams identifying at-risk accounts from sentiment trends",
-      "Recruiters reviewing candidate interview signals before making decisions",
+      "Writing a follow-up after a work call with the actions in front of you",
+      "Reviewing how a job interview went",
+      "Looking back on a negotiation to see what to improve",
+      "Reading again a conversation held in another language",
     ],
     technicalDetail: {
-      label: "Under the Hood",
-      heading: "Multi-Pass Summarization Pipeline",
-      body: "Post-session analysis runs a three-pass pipeline. Pass one segments the transcript by topic using a topic-boundary detection model. Pass two extracts key moments by scoring each segment on signal density, sentiment variance, and information content. Pass three generates the executive summary and next-step recommendations using a long-context language model conditioned on the extracted data. The final output is structured as JSON and rendered in the Tonvo dashboard.",
+      label: "Good to know",
+      heading: "What is kept and what is not",
+      body: "Tonvo does not record or store audio. It keeps the text of your sessions and the summary so you can read them again. Transcription comes from AssemblyAI and the summary is written by an AI model from Anthropic. The summary is an aid, not a verbatim record, and it can contain mistakes. You remain responsible for informing the people you talk to and for following the rules that apply.",
     },
   },
 
@@ -341,76 +341,76 @@ export const features: FeatureEntry[] = [
   {
     type: "features",
     slug: "screen-analysis",
-    title: "Screen Analysis | Tonvo Visual Context AI",
+    title: "Screen Analysis for Chats, DMs and Emails | Tonvo",
     metaDescription:
-      "Tonvo analyzes on-screen content during calls to provide richer context. Get AI insights from slides, documents, and shared screens in real time.",
-    h1: "Add Visual Intelligence to Every Call with Screen Analysis",
+      "On Team, Tonvo reads the chat, DM or email you share on screen and helps you reply. On any plan, paste text or upload screenshots.",
+    h1: "Get help replying to a chat, DM or email on your screen",
     subtitle:
-      "Tonvo reads slides, documents, and shared screens during your calls, combining visual context with conversation data for deeper, more relevant AI insights.",
-    lastModified: "2026-04-09",
+      "Share a written conversation on your screen and Tonvo reads it, so you can answer with clearer words. Screen analysis is part of the Team plan.",
+    lastModified: "2026-10-21",
     relatedSlugs: [
       { type: "features", slug: "ai-coaching-suggestions", label: "AI Coaching" },
     ],
     targetKeywords: [
+      "AI help replying to messages",
+      "how to reply to a difficult email",
+      "help replying to a DM",
       "screen analysis AI",
-      "visual context call AI",
-      "screen content analysis",
-      "AI slide analysis calls",
-      "presentation intelligence tool",
+      "AI reply to a chat",
     ],
     faq: [
       {
-        question: "What types of screen content can Tonvo analyze?",
+        question: "What can Tonvo read on my screen?",
         answer:
-          "Tonvo can analyze slides, documents, spreadsheets, dashboards, browser content, and application interfaces. The system uses optical character recognition and layout analysis to extract text, data, and structural elements from any visible content.",
+          "Written conversations you share on screen, such as chats, DMs and emails. Screen analysis is part of the Team plan.",
       },
       {
-        question: "Does screen analysis require screen sharing to be active?",
+        question: "Can I get help with a written conversation on another plan?",
         answer:
-          "Screen analysis works by capturing your local screen content. It does not require you to share your screen with other call participants. The analysis happens entirely on your side.",
+          "Yes. On every plan you can paste the text of a conversation or upload screenshots, and Tonvo helps you reply. Screen analysis of what you share on screen is only on Team, at $49 per user a month.",
       },
       {
-        question: "How does visual context improve coaching suggestions?",
+        question: "Does Tonvo write and send messages for me?",
         answer:
-          "When Tonvo can see what is on screen — for example, a pricing slide or a competitor comparison — it tailors coaching suggestions to that specific context, like 'The prospect is viewing the enterprise tier, emphasize volume discounts.'",
+          "No. Tonvo suggests wording and you decide. You read it, edit it and send it yourself. Suggestions can be wrong.",
       },
       {
-        question: "Is screen content stored or shared with anyone?",
+        question: "Should I tell the people in the conversation?",
         answer:
-          "Screen captures are processed in real time and discarded immediately after analysis. No screenshots are stored on Tonvo's servers. Only the extracted textual insights are retained as part of your session data.",
+          "Messages contain other people's words, and rules differ by country and context, for example at work. You are responsible for following the ones that apply to you, and Tonvo recommends telling the people you talk to.",
       },
     ],
     featureName: "Screen Analysis",
     howItWorks: {
       label: "How It Works",
-      heading: "Real-Time Visual Context Extraction",
-      body: "Tonvo periodically captures a frame of the active screen or shared content and processes it through a vision model. The model extracts text via OCR, identifies layout elements (headings, charts, tables), and classifies the content type (presentation, document, dashboard). This extracted context is merged with the live conversation transcript to generate richer coaching suggestions, more accurate signal detection, and context-aware post-session analysis.",
+      heading: "Reading a written conversation on your screen",
+      body: "With screen analysis, you share a screen with Tonvo that shows a written conversation, such as a chat thread, a DM or an email. Tonvo reads what is there and helps you understand the message and find words to reply. You decide what to write and send it yourself. If you are not on the Team plan, you can paste the text or upload screenshots instead to get reply help.",
     },
     benefits: [
       {
         icon: "eye",
-        title: "Context-Aware Suggestions",
+        title: "Replies that fit the message",
         description:
-          "Coaching tips reference what is actually on screen, making them far more specific and actionable than audio-only analysis can provide.",
+          "Tonvo works from the actual text on your screen, so suggestions answer what was written instead of a generic situation.",
       },
       {
-        icon: "monitor",
-        title: "Track Slide-by-Slide Engagement",
+        icon: "message",
+        title: "Help with delicate messages",
         description:
-          "See which slides or content sections correlated with positive sentiment and engagement spikes, so you can refine your presentation over time.",
+          "When you are unsure how to answer a tense email or an awkward DM, you get wording to start from.",
       },
       {
         icon: "zap",
-        title: "Automatic Content Tagging",
+        title: "Less copying and pasting",
         description:
-          "Screen content is automatically tagged (pricing, features, case study, competitive) and linked to conversation moments for enriched post-session analysis.",
+          "On Team, share the screen instead of copying text into the app each time.",
       },
     ],
     useCasesForFeature: [
-      "Sales reps presenting product demos and receiving slide-specific coaching",
-      "Consultants reviewing client dashboards and getting data-aware talking points",
-      "Trainers delivering presentations with real-time audience engagement context",
-      "Support agents troubleshooting with screen-visible error messages analyzed in context",
+      "Replying to a difficult email from a client or a manager",
+      "Answering a DM from a recruiter or a new contact",
+      "Handling a customer chat when you work in support",
+      "Finding the right tone in a message written in another language",
     ],
   },
 
@@ -418,76 +418,76 @@ export const features: FeatureEntry[] = [
   {
     type: "features",
     slug: "speaker-balance-tracking",
-    title: "Speaker Balance Tracking | Tonvo Talk-Time Analytics",
+    title: "Talk Balance: See Who Is Speaking | Tonvo",
     metaDescription:
-      "Monitor who speaks and for how long during calls. Tonvo tracks talk-time ratios in real time to help you maintain balanced, productive conversations.",
-    h1: "Keep Conversations Balanced with Real-Time Speaker Tracking",
+      "On Plus and Team, Tonvo shows who is speaking and how the talking is shared, so you can listen more and leave room for others.",
+    h1: "See how the talking is shared in a conversation",
     subtitle:
-      "Tonvo tracks talk-time ratios for every participant in real time, helping you listen more, dominate less, and create space for the voices that matter.",
-    lastModified: "2026-04-09",
+      "Tonvo shows who is speaking as the conversation goes, so you can notice when you talk too much or when someone has not had a say.",
+    lastModified: "2026-10-21",
     relatedSlugs: [
       { type: "features", slug: "post-session-analysis", label: "Post-Session Analysis" },
     ],
     targetKeywords: [
-      "speaker balance tracking",
-      "talk-time analytics",
-      "call participation metrics",
-      "conversation balance tool",
-      "meeting talk ratio monitor",
+      "talk time in a conversation",
+      "who is speaking in a meeting",
+      "speaker balance tool",
+      "how to listen more in conversations",
+      "meeting talk balance",
     ],
     faq: [
       {
-        question: "How does Tonvo distinguish between speakers?",
+        question: "How does Tonvo tell who is speaking?",
         answer:
-          "Tonvo uses speaker diarization — an AI technique that identifies distinct speakers based on vocal characteristics. Each speaker is assigned a label, and their talk-time is tracked independently throughout the call.",
+          "Tonvo separates the voices it hears and shows who is speaking in the live view. It works best when voices come through clearly, so use a good microphone or share the tab of an online call so both sides are heard. It can be wrong, especially when people talk over each other.",
       },
       {
-        question: "What is the ideal talk-time ratio for sales calls?",
+        question: "Which plans include talk balance?",
         answer:
-          "Research suggests a 40/60 ratio (rep/prospect) is optimal for discovery calls. Tonvo displays the live ratio and gently alerts you when your talk-time exceeds a configurable threshold, helping you stay in the listening zone.",
+          "Talk balance is part of Plus and Team. Free sessions show the detected question, three replies and a session summary.",
       },
       {
-        question: "Does speaker tracking work in group calls?",
+        question: "Does it work in group conversations?",
         answer:
-          "Yes. Tonvo tracks up to 10 simultaneous speakers in a group call, displaying individual talk-time percentages and identifying participants who have not spoken, so you can invite quieter voices into the conversation.",
+          "Tonvo can show who is speaking in a group, but accuracy depends on the audio. When several voices come through one microphone, the labels can be less reliable.",
       },
       {
-        question: "Can I review historical talk-time patterns?",
+        question: "Does Tonvo tell me the ideal balance?",
         answer:
-          "Your post-session analysis includes a talk-time breakdown for every call. Over time, Tonvo aggregates this data into trends so you can see if your listening ratio is improving across weeks or months.",
+          "No. Tonvo shows the balance and leaves the judgment to you. The right balance depends on the conversation: an interview where you listen is different from a presentation you give.",
       },
     ],
-    featureName: "Speaker Balance Tracking",
+    featureName: "Talk Balance",
     howItWorks: {
       label: "How It Works",
-      heading: "Diarization-Powered Talk-Time Monitoring",
-      body: "Tonvo's speaker diarization engine segments the audio stream into speaker turns using a neural embedding model that maps voice characteristics into a vector space. Speakers are clustered automatically, and each turn's duration is accumulated into a live talk-time counter. The ratio is displayed as a simple visual bar that updates every few seconds. When the ratio crosses a user-defined threshold, a gentle nudge appears in the coaching panel.",
+      heading: "Who is speaking, live",
+      body: "While the conversation is transcribed, Tonvo also marks who is speaking. From that, the live view shows how the talking is shared between people. You can glance at it to notice when you have been speaking for a long time, or when someone has stayed quiet. It is information, not a rule, and it is up to you what to do with it.",
     },
     benefits: [
       {
         icon: "users",
-        title: "Create Space for Every Voice",
+        title: "Leave room for others",
         description:
-          "Visual talk-time data helps facilitators notice when someone has been quiet and proactively invite them to contribute, leading to more inclusive meetings.",
+          "Seeing who has spoken helps you notice a quiet person and invite them in, whether you lead a meeting or a family call.",
       },
       {
         icon: "bar-chart",
-        title: "Data-Driven Conversation Coaching",
+        title: "See your own habits",
         description:
-          "Managers use talk-time metrics to coach reps on active listening. Teams that track speaker balance consistently improve discovery-call conversion rates.",
+          "A glance at who has been talking helps you notice whether you tend to take most of the space in a conversation.",
       },
       {
         icon: "mic",
-        title: "Real-Time Self-Awareness",
+        title: "A reminder to listen",
         description:
-          "A simple glance at the talk-time bar reminds you to pause, ask a question, and let the other person elaborate — a habit that compounds into better outcomes.",
+          "Seeing the balance shift can remind you to pause, ask a question and let the other person finish.",
       },
     ],
     useCasesForFeature: [
-      "Sales teams maintaining optimal talk/listen ratios during discovery",
-      "Meeting facilitators ensuring all participants contribute in brainstorms",
-      "Interview panels balancing speaking time across interviewers",
-      "Managers identifying reps who over-talk during customer calls",
+      "Following a discovery call to make sure the other person gets to talk",
+      "Leading a meeting where everyone should contribute",
+      "Checking that an interview leaves enough space for the candidate",
+      "Noticing when you talk too much in a difficult conversation",
     ],
   },
 
@@ -495,83 +495,83 @@ export const features: FeatureEntry[] = [
   {
     type: "features",
     slug: "multi-language-support",
-    title: "Multi-Language Support | Tonvo Global AI Copilot",
+    title: "Live Conversation Help in 10 Languages | Tonvo",
     metaDescription:
-      "Tonvo supports real-time conversation analysis in 10 languages. Get tone detection, coaching, and signal insights in English, Spanish, French, and more.",
-    h1: "AI Conversation Intelligence in 10 Languages",
+      "Tonvo follows live conversations in English, French, Spanish, German, Italian, Portuguese, Dutch, Chinese, Japanese and Korean, with automatic detection.",
+    h1: "Follow a conversation in 10 languages",
     subtitle:
-      "Tonvo delivers the same real-time tone detection, coaching suggestions, and signal analysis across 10 languages — so global teams get equal AI support on every call.",
-    lastModified: "2026-04-09",
+      "Tonvo transcribes live in 10 languages and can detect the language for you, so a call, a meeting or a talk does not have to be in English.",
+    lastModified: "2026-10-21",
     relatedSlugs: [
       { type: "features", slug: "real-time-tone-detection", label: "Tone Detection" },
     ],
     targetKeywords: [
-      "multi-language call AI",
-      "multilingual conversation analysis",
-      "AI copilot multiple languages",
-      "global call intelligence tool",
-      "multilingual sentiment analysis",
+      "multilingual conversation assistant",
+      "live transcription in 10 languages",
+      "AI help for calls in another language",
+      "live translation during a call",
+      "conversation copilot in French",
     ],
     faq: [
       {
         question: "Which languages does Tonvo support?",
         answer:
-          "Tonvo currently supports English, Spanish, French, German, Portuguese, Italian, Dutch, Japanese, Korean, and Mandarin Chinese. Each language includes full tone detection, signal classification, and coaching suggestion capabilities.",
+          "Tonvo transcribes English, French, Spanish, German, Italian, Portuguese, Dutch, Chinese, Japanese and Korean. The language can be detected automatically.",
       },
       {
-        question: "Can Tonvo handle calls where multiple languages are spoken?",
+        question: "Can Tonvo translate a conversation live?",
         answer:
-          "Yes. Tonvo detects language switches within a conversation and adapts its analysis engine accordingly. If a call starts in English and shifts to Spanish, Tonvo transitions seamlessly without any manual configuration.",
+          "Yes, live translation is available on Plus and Team. On the Free plan you get live transcription, the detected question and three replies.",
       },
       {
-        question: "Are coaching suggestions localized or just translated?",
+        question: "What if a conversation mixes languages?",
         answer:
-          "Coaching suggestions are culturally adapted, not just machine-translated. Tonvo accounts for communication norms, politeness frameworks, and common objection patterns specific to each language and region.",
+          "Tonvo can detect the language automatically, but a conversation that switches between languages is harder to transcribe, so the transcript and the suggestions can be less accurate.",
       },
       {
-        question: "How accurate is sentiment detection in non-English languages?",
+        question: "How accurate is it in languages other than English?",
         answer:
-          "Accuracy is comparable to English for the top five languages and continues to improve as Tonvo expands training data in all supported languages.",
+          "Accuracy depends on audio quality, accents and background noise, and it can differ from one language to another. Because the analysis works on the transcript, a clear transcript gives better suggestions. Tonvo can be wrong, so you decide what to say.",
       },
     ],
     featureName: "Multi-Language Support",
     howItWorks: {
       label: "How It Works",
-      heading: "Language-Aware NLP Across Every Feature",
-      body: "Tonvo begins each session with automatic language identification using a lightweight classifier that evaluates the first few seconds of speech. Once the language is detected, the system loads the corresponding NLP models — including tokenizers, sentiment classifiers, signal detectors, and coaching playbooks — optimized for that language. If a language switch is detected mid-call, Tonvo hot-swaps models within seconds to maintain uninterrupted analysis.",
+      heading: "Transcription first, then the analysis",
+      body: "Tonvo listens through your microphone and, on a computer, can also hear a browser tab you share. It transcribes the speech live in one of 10 languages, and the language can be detected automatically. An AI model then works from that text to find the question and suggest replies. On Plus and Team you can also use live translation to follow what is being said.",
     },
     benefits: [
       {
         icon: "globe",
-        title: "Serve Global Markets with Confidence",
+        title: "Use it in your own language",
         description:
-          "Equip every team member with the same AI-powered conversation intelligence regardless of the language they conduct business in.",
+          "Conversations in French, Spanish, Japanese or any of the other 10 languages get the same live transcript and the same kind of help.",
       },
       {
         icon: "users",
-        title: "Unify Cross-Regional Teams",
+        title: "Talk in a language you speak less well",
         description:
-          "Global revenue teams get consistent coaching frameworks and signal detection, making pipeline reviews and forecasting language-agnostic.",
+          "With live translation on Plus and Team, you can follow what is being said while you work on your own answer.",
       },
       {
         icon: "layers",
-        title: "One Tool, Zero Fragmentation",
+        title: "One copilot for many conversations",
         description:
-          "Replace separate tools for different regions with a single platform that handles multilingual analysis, reducing cost and complexity.",
+          "Use the same tool for a call with a client abroad, a meeting in a second language or a chat with a friend.",
       },
     ],
     useCasesForFeature: [
-      "International sales teams closing deals across European and Asian markets",
-      "Global support centers handling customer calls in local languages",
-      "Multinational companies running cross-border internal meetings",
-      "Localization teams reviewing communication quality across language pairs",
+      "Taking a call with a client or a supplier in another country",
+      "Following a meeting held in your second language",
+      "Answering interview questions in a language you are still learning",
+      "Keeping up with a family or friends conversation in a language you are practicing",
     ],
   },
 
   // ── 8. Separate-window copilot (slug kept so existing links and rankings survive) ──
   {
     type: "features",
-    slug: "invisible-copilot-mode",
+    slug: "separate-window-copilot",
     title: "Separate-Window Copilot | Tonvo",
     metaDescription:
       "On Plus and Team, Tonvo opens in its own window, so a shared tab or window shows only your call. See how it works, and what changes on the Free plan.",
@@ -643,8 +643,8 @@ export const features: FeatureEntry[] = [
     ],
     technicalDetail: {
       label: "Good to know",
-      heading: "What is and is not hidden",
-      body: "The copilot window is separate from the surface you share, but it is not an invisibility feature. If you share your entire screen, others can see it. Tonvo also does not change what your video call tool records. On the Free plan the replies appear in the page itself, so keep that page out of what you share.",
+      heading: "What is and is not shared",
+      body: "The copilot window is separate from the surface you share, but it is not a way to hide Tonvo. If you share your entire screen, others can see it. Tonvo also does not change what your video call tool records. On the Free plan the replies appear in the page itself, so keep that page out of what you share.",
     },
   },
 ];

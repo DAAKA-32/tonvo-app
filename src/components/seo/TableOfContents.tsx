@@ -1,6 +1,6 @@
 import type { GuideSection } from "@/data/seo/types";
 
-export default function TableOfContents({ sections }: { sections: GuideSection[] }) {
+export default function TableOfContents({ sections, title }: { sections: GuideSection[]; title: string }) {
   return (
     <nav
       className="rounded-xl border p-5 mb-12"
@@ -13,7 +13,7 @@ export default function TableOfContents({ sections }: { sections: GuideSection[]
         className="text-xs font-semibold uppercase tracking-wider mb-3"
         style={{ color: "var(--color-accent-light)" }}
       >
-        Table of Contents
+        {title}
       </p>
       <ol className="list-none p-0 m-0 space-y-2">
         {sections.map((section, i) => (

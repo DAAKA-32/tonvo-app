@@ -23,7 +23,7 @@ vi.mock("@/lib/security", async () => {
 });
 
 import { POST } from "@/app/api/track/route";
-import { computeFunnel, deviceFromUA, isBot, type StoredEvent } from "@/lib/analytics/server";
+import { computeFunnel, deviceFromUA, isBot, languageOfPath, type StoredEvent } from "@/lib/analytics/server";
 import { deriveSource } from "@/lib/analytics/events";
 
 const BROWSER = "Mozilla/5.0 (Macintosh; Intel Mac OS X 14_5) AppleWebKit/605.1.15 Safari/605.1.15";
@@ -139,5 +139,27 @@ describe("computeFunnel", () => {
     expect(r.bySource.find((b) => b.source === "linkedin")).toMatchObject({ visitors: 1, clicks: 0 });
     expect(r.topPages[0]).toEqual({ path: "/", visitors: 3 });
     expect(r.vsl).toEqual({ sound: 1, fullscreen: 0 });
+  });
+
+  it("splits the funnel by the language of the first public page a visitor saw", () => {
+    const rows: StoredEvent[] = [
+      ev("page_view", { anon_id: "f1", path: "/fr" }, "1"),
+      ev("page_view", { anon_id: "f1", path: "/pricing" }, "1"), // later English page does not change the language
+      ev("cta_click", { anon_id: "f1", path: "/fr" }, "1"),
+      ev("signup", { anon_id: "f1", user_id: "uf" }, "2"),
+      ev("checkout_completed", { user_id: "uf" }, "3"),
+      ev("page_view", { anon_id: "f2", path: "/fr/pricing?utm_source=x" }, "1"),
+      ev("page_view", { anon_id: "e1", path: "/" }, "1"),
+      ev("page_view", { anon_id: "d1", path: "/dashboard" }, "1"), // app page: no language
+      ev("page_view", { anon_id: "d1", path: "/de/about" }, "1"),
+    ];
+    const r = computeFunnel(rows);
+    const lang = (l: string) => r.byLanguage.find((b) => b.language === l);
+    expect(lang("fr")).toMatchObject({ visitors: 2, clicks: 1, signups: 1, paid: 1 });
+    expect(lang("en")).toMatchObject({ visitors: 1, signups: 0 });
+    expect(lang("de")).toMatchObject({ visitors: 1 });
+    expect(languageOfPath("/dashboard")).toBeNull();
+    expect(languageOfPath("/ja/blog/x")).toBe("ja");
+    expect(languageOfPath(null)).toBe("en");
   });
 });

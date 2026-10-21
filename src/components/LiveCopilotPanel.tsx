@@ -344,7 +344,7 @@ export default function LiveCopilotPanel({
           <p className="lcp-text lcp-locked-text">
             {t("copilot.proLockedText", "Coaching tips, buying signals and talk-time balance, live during the call.")}
           </p>
-          <Link href="/pricing" className="lcp-locked-cta">
+          <Link href="/plans" className="lcp-locked-cta">
             {t("copilot.proLockedCta", "See plans")}
           </Link>
         </section>

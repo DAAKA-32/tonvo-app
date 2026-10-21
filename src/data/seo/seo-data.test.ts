@@ -48,10 +48,16 @@ describe("programmatic SEO pages", () => {
       /joins? your|directly inside|fine-tuned|trained on|filler word|vocal pitch|pitch, pace|cadence|manager (?:dashboard|insights)|sentiment dashboard|shared (?:candidate|client) |cross-consultant|Under 2 minutes|within 60 seconds|500,000/i;
     // Old plan names, matched case-sensitively so "a sales team" in plain prose is fine.
     const OLD_PLAN_NAME = /\bPro (?:plan|subscription)\b|\$19\/mo Pro\b|to Pro\b|upgrade to Pro|\bStarter\b|\bSales Team\b/;
+    // A sentence that DENIES a capability ("Tonvo does not join your call", "no manager dashboard") is honest
+    // and wanted. Only affirmative sentences are checked, and comparison row labels are only dimensions.
+    const NEGATION = /\b(no|not|never|without|neither|nor|cannot)\b|n't\b|\u2019t\b/i;
+    const affirmative = (text: string) => text.split(/(?<=[.!?])\s+/).filter((sentence) => !NEGATION.test(sentence));
     const bad: string[] = [];
     for (const p of pages.filter((x) => x.type !== "guides")) {
       for (const [at, text] of strings(p, `${p.type}/${p.slug}`)) {
-        if (PRODUCT_CLAIM.test(text) || OLD_PLAN_NAME.test(text)) bad.push(`${at}: ${text.slice(0, 90)}`);
+        if (/comparisonRows\[\d+\]\.feature$/.test(at)) continue;
+        if (OLD_PLAN_NAME.test(text)) bad.push(`${at}: ${text.slice(0, 90)}`);
+        else if (affirmative(text).some((sentence) => PRODUCT_CLAIM.test(sentence))) bad.push(`${at}: ${text.slice(0, 90)}`);
       }
     }
     expect(bad).toEqual([]);

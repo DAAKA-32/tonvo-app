@@ -14,7 +14,8 @@
     "terms": "Términos del servicio",
     "cookies": "Política de cookies",
     "legal": "Aviso legal",
-    "blog": "Blog"
+    "blog": "Blog",
+    "default": "Tonvo: su copiloto para cada conversación"
   },
   "nav": {
     "menu": "Menú",
@@ -25,7 +26,8 @@
     "analytics": "Analítica",
     "pricing": "Precios",
     "settings": "Ajustes",
-    "signOut": "Cerrar sesión"
+    "signOut": "Cerrar sesión",
+    "changeLanguage": "Cambiar idioma"
   },
   "common": {
     "loading": "Cargando...",
@@ -48,7 +50,9 @@
     "negative": "Negativo",
     "all": "Todo",
     "google": "Google",
-    "emailPassword": "Correo / Contraseña"
+    "emailPassword": "Correo / Contraseña",
+    "upgrade": "Mejorar plan",
+    "pro": "Plus"
   },
   "dashboard": {
     "greetingMorning": "Buenos días",
@@ -64,7 +68,12 @@
     "noSessions": "Aún sin sesiones",
     "noSessionsDesc": "Lance su primer análisis en directo y los resultados aparecerán aquí.",
     "startSessionBtn": "Iniciar sesión",
-    "latestInsights": "Últimas conclusiones"
+    "latestInsights": "Últimas conclusiones",
+    "subtitle": "Todas sus conversaciones, de un vistazo.",
+    "startSession": "Iniciar una sesión en directo",
+    "startSessionDesc": "Encuentre las palabras adecuadas mientras la conversación ocurre",
+    "analyzeText": "Ayuda con un mensaje",
+    "analyzeTextDesc": "Pegue un mensaje o suba capturas de pantalla y reciba ayuda para responder"
   },
   "history": {
     "title": "Historial de sesiones",
@@ -150,7 +159,8 @@
     "theme": "Tema",
     "themeDesc": "Elija el esquema de color del panel",
     "dark": "Oscuro",
-    "light": "Claro"
+    "light": "Claro",
+    "dataRetentionFree": "En el plan Free, su historial muestra los últimos 7 días"
   },
   "profile": {
     "title": "Perfil",
@@ -265,7 +275,10 @@
     "copied": "Copiado",
     "proLockedTitle": "Coaching en directo",
     "proLockedText": "Consejos de coaching, señales de compra y equilibrio del tiempo de palabra, en directo durante la llamada.",
-    "proLockedCta": "Ver planes"
+    "proLockedCta": "Ver planes",
+    "invisibleInScreenShare": "Oculto cuando comparte una pestaña o ventana",
+    "copilotInvisible": "Copiloto de IA activo. Oculto cuando comparte una pestaña o ventana.",
+    "copilotBlocked": "El navegador ha bloqueado la ventana del copiloto. Permita las ventanas emergentes o use Chrome para la ventana Picture-in-Picture."
   },
   "auth": {
     "welcomeBack": "Bienvenido de vuelta",
@@ -321,7 +334,8 @@
     "userDisabled": "Esta cuenta ha sido desactivada. Contacte con soporte.",
     "genericError": "Algo ha fallado. Vuelva a intentarlo.",
     "passwordValidationError": "La contraseña debe tener al menos 8 caracteres, 1 letra y 1 número.",
-    "firebaseNotInitialized": "Servicio temporalmente no disponible. Inténtelo más tarde."
+    "firebaseNotInitialized": "Servicio temporalmente no disponible. Inténtelo más tarde.",
+    "signUpSubtitle": "Cree su cuenta. Un copiloto en directo para sus llamadas y conversaciones del día a día"
   },
   "session": {
     "title": "Sesión en directo",
@@ -433,7 +447,29 @@
     "transcriptTab": "Transcripción en directo",
     "starting": "Iniciando...",
     "recordingHint": "Tonvo está escuchando. Concéntrese en la conversación, las sugerencias llegan en tiempo real.",
-    "idleHint": "Configure la captura y pulse para empezar."
+    "idleHint": "Configure la captura y pulse para empezar.",
+    "timeLimitReached": "Ha alcanzado el límite de tiempo de la sesión. Mejore a Plus para tener sesiones ilimitadas.",
+    "copilotInvisible": "Oculto cuando comparte una pestaña o ventana",
+    "copilotRunning": "Copiloto de IA activo. Oculto cuando comparte una pestaña o ventana.",
+    "copilotBlocked": "El navegador ha bloqueado la ventana del copiloto. Permita las ventanas emergentes para este sitio o use Chrome para la ventana Picture-in-Picture.",
+    "sessionLimitReached": "Ha usado todas sus sesiones gratuitas de este mes. Mejore a Plus para tener sesiones ilimitadas.",
+    "statusRecording": "Grabando",
+    "statusReady": "Listo",
+    "freePlanBanner": "Plan Free",
+    "timeLeft": "restantes",
+    "endingSoon": "termina pronto",
+    "analyzeTextTip": "Para analizar una conversación de texto (Instagram, Snap, WhatsApp), use",
+    "analyzeTextLink": "Ayuda con un mensaje",
+    "screenConsent": "Asegúrese de tener derecho a analizar lo que se ve en pantalla. Al iniciar la sesión, acepta nuestros",
+    "termsLink": "Términos del servicio",
+    "audioDisabledLabel": "Audio desactivado",
+    "audioDisabledDesc": "Sin transcripción ni análisis de la conversación. Solo se analizará el contenido de la pantalla.",
+    "analysisReady": "Análisis listo",
+    "segmentsAnalyzed": "{{count}} segmentos analizados.",
+    "screenAnalyzed": "Pantalla analizada.",
+    "stillActive": "La sesión sigue activa. Deténgala cuando quiera.",
+    "upgradeShort": "Mejorar",
+    "fullAnalysisInfo": "Modo completo: captura de pantalla + transcripción de audio + señales en directo."
   },
   "analyzePage": {
     "title": "Analizar conversación",
@@ -546,26 +582,103 @@
       "vslFullscreen": "Pantalla completa",
       "vslExitFullscreen": "Salir de pantalla completa",
       "vslPause": "Pausa",
-      "vslPlay": "Reproducir"
+      "vslPlay": "Reproducir",
+      "headline1": "Su copiloto para",
+      "headline2": "cada conversación.",
+      "headline2Phrases": [
+        "Cada conversación",
+        "Conversaciones difíciles",
+        "Entrevistas de trabajo",
+        "Llamadas en otro idioma",
+        "Llamadas de ventas",
+        "El día a día"
+      ],
+      "subtitle": "Tonvo sigue una conversación en vivo y pone tres respuestas listas en su pantalla, para que siempre sepa qué decir a continuación. Llamadas, entrevistas, reuniones y esas conversaciones que nadie puede guionizar."
     },
     "desktopDownload": {
       "badge": "Ahora en desktop",
       "title": "Tonvo en tu escritorio",
-      "subtitle": "App nativa para {{os}} — instala una vez, lanza desde tu dock.",
-      "subtitleNoOS": "App nativa — instala una vez, lanza desde tu dock.",
+      "subtitle": "App nativa para {{os}}, instala una vez, lanza desde tu dock.",
+      "subtitleNoOS": "App nativa, instala una vez, lanza desde tu dock.",
       "cta": "Descargar para {{os}}",
       "ctaFallback": "Descargar Tonvo",
       "alsoOn": "También en",
-      "safetyNote": "App segura — verificación de Microsoft en curso.",
-      "safetyTooltip": "Tonvo no está firmado durante la beta de Fase 1. Microsoft está aprobando cada release. Si SmartScreen avisa, haz clic en 'Más información' y luego 'Ejecutar de todos modos' — el binario se compila en CI abierto en GitHub Actions."
+      "safetyNote": "App segura, verificación de Microsoft en curso.",
+      "safetyTooltip": "Tonvo no está firmado durante la beta de Fase 1. Microsoft está aprobando cada release. Si SmartScreen avisa, haz clic en 'Más información' y luego 'Ejecutar de todos modos', el binario se compila en CI abierto en GitHub Actions."
     },
-    "problem": {},
-    "solution": {},
-    "features": {},
-    "demo": {},
-    "useCases": {},
-    "cta": {},
-    "faq": {}
+    "problem": {
+      "label": "La vida no trae guion",
+      "heading1": "Conoce ese momento.",
+      "heading2": "Se queda en blanco.",
+      "p1": "La otra persona hace justo la pregunta que importa. O habla rápido, en un segundo idioma, y usted pierde el hilo. Durante unos segundos se bloquea. Tonvo está ahí para esos segundos."
+    },
+    "solution": {
+      "label": "Cómo le ayuda Tonvo",
+      "heading1": "Una voz tranquila de su lado.",
+      "heading2": "En cada conversación.",
+      "desc": "Tonvo sigue la conversación mientras ocurre. Le muestra lo que la otra persona acaba de preguntar, una lectura breve del momento y tres respuestas que puede usar. Usted decide qué decir. Tonvo se encarga de que nunca se quede sin palabras.",
+      "step1Title": "Inicie una sesión",
+      "step1Desc": "Un clic. Elija su micrófono y comparta el audio de su llamada si quiere que Tonvo escuche a ambas partes.",
+      "step2Title": "Encuentre las palabras adecuadas",
+      "step2Desc": "Tres respuestas y una lectura rápida del momento, mientras la conversación avanza. Traducción en vivo en los planes de pago.",
+      "step3Title": "Repase y aprenda",
+      "step3Desc": "Después de la conversación, reciba un resumen, lo que salió bien y los próximos pasos para el seguimiento."
+    },
+    "features": {
+      "label": "Qué hace Tonvo",
+      "heading1": "Todo lo que necesita",
+      "heading2": "en el momento.",
+      "liveTone": "Entiende el momento",
+      "liveToneDesc": "Capta la pregunta que acaban de hacerle, y el tono y las señales que hay detrás.",
+      "smartSuggestions": "Respuestas listas para decir",
+      "smartSuggestionsDesc": "Tres opciones escritas para lo que se acaba de decir, en el idioma de la conversación.",
+      "conversationInsights": "Una lectura de cómo va",
+      "conversationInsightsDesc": "Tono, participación y quién lleva la palabra. Consejos de coaching y puntuaciones en los planes de pago.",
+      "textAnalysis": "Revise después",
+      "textAnalysisDesc": "Reciba un resumen y los seguimientos tras una sesión, o pegue un mensaje o suba capturas de pantalla para recibir ayuda con una respuesta."
+    },
+    "demo": {
+      "label": "Véalo en directo",
+      "heading": "Las palabras, justo cuando las necesita",
+      "desc": "Una sesión real: lo que se dijo a la izquierda, tres respuestas a la derecha."
+    },
+    "useCases": {
+      "label": "Dónde ayuda Tonvo",
+      "heading": "Para las conversaciones que le importan.",
+      "salesTitle": "Llamadas y reuniones",
+      "salesDesc": "Siga una llamada de trabajo, responda a la pregunta difícil y salga con próximos pasos claros.",
+      "supportTitle": "Entrevistas y negociaciones",
+      "supportDesc": "Obtenga una lectura serena del momento y respuestas que puede adaptar, cuando hay mucho en juego.",
+      "interviewsTitle": "Otro idioma",
+      "interviewsDesc": "Siga la conversación y responda en 10 idiomas. La traducción en vivo está disponible en los planes de pago.",
+      "meetingsTitle": "Mensajes y charlas del día a día",
+      "meetingsDesc": "Pegue una conversación o suba capturas de pantalla y reciba ayuda para saber cómo responder."
+    },
+    "cta": {
+      "heading1": "La próxima vez que se quede en blanco,",
+      "heading2": "ya no le pasará.",
+      "desc": "Inicie una sesión y tenga las palabras adecuadas delante cuando la conversación las necesite.",
+      "button": "Pruebe Tonvo gratis",
+      "note": "3 sesiones gratuitas al mes. Sin tarjeta de crédito. Reembolso de 7 días en los planes de pago."
+    },
+    "faq": {
+      "title": "Las preguntas más habituales.",
+      "subtitle": "Todo lo que necesita saber antes de su primera sesión con Tonvo.",
+      "q1": "¿Qué es exactamente Tonvo?",
+      "a1": "Tonvo es un copiloto para conversaciones en directo. Escucha, transcribe y pone en su pantalla tres respuestas listas y una lectura breve del momento. Usted decide siempre qué decir.",
+      "q2": "¿Para qué puedo usarlo?",
+      "a2": "Llamadas y reuniones, entrevistas, negociaciones y conversaciones en otro idioma. También puede pegar un mensaje o subir capturas de pantalla para recibir ayuda con cómo responder.",
+      "q3": "¿Funciona en el móvil?",
+      "a3": "Tonvo funciona en el navegador, en ordenadores, móviles y tabletas. En el móvil escucha a través del micrófono, así que ponga la llamada en altavoz. No puede capturar por sí solo la otra parte de una llamada telefónica y no escucha en segundo plano.",
+      "q4": "¿Qué idiomas admite?",
+      "a4": "La aplicación y las respuestas funcionan en 10 idiomas, y Tonvo puede detectar el idioma de la conversación. La traducción en vivo está disponible en los planes de pago.",
+      "q5": "¿Puede ver Tonvo la otra persona?",
+      "a5": "En Plus y Team, Tonvo se abre en su propia ventana, que no se incluye al compartir una pestaña o ventana. En el plan Free las respuestas aparecen en la propia página, así que mantenga esa página fuera de lo que comparte. Si comparte toda la pantalla, los demás pueden ver Tonvo. Debe informar siempre a las personas con las que habla cuando use una herramienta como esta, y cumplir las normas que le sean aplicables.",
+      "q6": "¿Qué pasa con mis conversaciones?",
+      "a6": "Tonvo no almacena el audio y no se conservan las capturas de pantalla. Guardamos el texto de sus sesiones y sus informes para que pueda volver a leerlos. Consulte nuestra Política de privacidad para conocer los detalles y los servicios implicados.",
+      "q7": "¿Hay garantía?",
+      "a7": "Empiece gratis, sin tarjeta de crédito. Los planes de pago incluyen una garantía de reembolso de 7 días."
+    }
   },
   "mockup": {
     "menu": "Menú",
@@ -603,7 +716,10 @@
     "opportunity": "Oportunidad",
     "speaking": "Hablando",
     "listening": "Escuchando",
-    "muted": "Silenciado"
+    "muted": "Silenciado",
+    "closeDeal": "Avanzar",
+    "closeDealText": "\"Dejemos cerrada la revisión del presupuesto para el lunes, y llevaré las cifras actualizadas.\"",
+    "showEmpathyText": "\"Entiendo perfectamente la preocupación. Busquemos un ritmo que nos funcione a todos.\""
   },
   "pricing": {
     "monthly": "Mensual",
@@ -623,20 +739,76 @@
       "STRIPE_INIT": "Nuestro sistema de pagos está en mantenimiento. Vuelva a intentarlo en unos minutos.",
       "CUSTOMER_CREATE": "No hemos podido preparar su cuenta para el pago. Vuelva a intentarlo.",
       "STRIPE_CONNECTION": "Nuestro sistema de pagos no es accesible ahora mismo. Vuelva a intentarlo en un momento.",
-      "STRIPE_AUTH": "Nuestro sistema de pagos está en mantenimiento. Estamos en ello — vuelva a intentarlo en breve.",
+      "STRIPE_AUTH": "Nuestro sistema de pagos está en mantenimiento. Estamos en ello, vuelva a intentarlo en breve.",
       "STRIPE_INVALID": "Algo inesperado ha ocurrido. Vuelva a intentarlo o contacte con soporte.",
       "STRIPE_RATE_LIMIT": "Demasiadas peticiones. Espere un momento y vuelva a intentarlo.",
       "UNKNOWN": "Ha ocurrido una incidencia temporal. Vuelva a intentarlo en unos instantes."
     },
     "cancelError": "No hemos podido actualizar su suscripción ahora mismo. Vuelva a intentarlo.",
     "portalError": "No hemos podido abrir el portal de facturación ahora mismo. Vuelva a intentarlo.",
-    "planFree": {},
-    "planPro": {},
-    "planTeam": {}
+    "planFree": {
+      "name": "Free",
+      "description": "Pruebe Tonvo con 3 sesiones en vivo al mes",
+      "cta": "Empezar gratis",
+      "features": [
+        "3 sesiones en vivo al mes, de hasta 5 minutos cada una",
+        "Detecta la pregunta que le han hecho",
+        "Respuestas listas para decir",
+        "Historial de sesiones (últimos 7 días)"
+      ]
+    },
+    "planPro": {
+      "name": "Plus",
+      "description": "Para quienes usan Tonvo cada semana",
+      "cta": "Obtener Plus",
+      "features": [
+        "Sesiones en vivo ilimitadas",
+        "Traducción en vivo",
+        "Consejos de coaching y análisis en directo",
+        "Equilibrio de palabra y puntuaciones de la conversación",
+        "Historial completo de sesiones e informes",
+        "Analíticas de progreso",
+        "Soporte prioritario"
+      ]
+    },
+    "planTeam": {
+      "name": "Team",
+      "description": "Todo lo de Plus, y además análisis de pantalla",
+      "cta": "Obtener Team",
+      "features": [
+        "Todo lo de Plus",
+        "Análisis de pantalla para chats, mensajes directos y correos",
+        "Soporte prioritario"
+      ]
+    },
+    "title": "Empiece gratis. Mejore cuando quiera más.",
+    "subtitle": "Pruebe Tonvo con tres sesiones en vivo al mes. Vaya más lejos cuando forme parte de sus conversaciones.",
+    "guarantee": "Los planes de pago incluyen una garantía de reembolso de 7 días. Cancele cuando quiera.",
+    "planEnterprise": {
+      "label": "Enterprise",
+      "name": "Para organizaciones con necesidades específicas",
+      "description": "Cuéntenos qué necesita y le diremos qué es posible, incluidas las dudas de seguridad y las condiciones a medida.",
+      "priceLabel": "A medida",
+      "priceSubLabel": "Hable con nuestro equipo",
+      "cta": "Contáctenos",
+      "features": [
+        "Una conversación sobre su caso de uso",
+        "Revisión de seguridad y tratamiento de datos",
+        "Condiciones comerciales a medida"
+      ]
+    },
+    "periodMonth": "/mes",
+    "periodUserMonth": "/usuario/mes"
   },
   "upgrade": {
     "cancelTitle": "¿Aún lo está pensando?",
-    "goToDashboard": "Ir al panel"
+    "goToDashboard": "Ir al panel",
+    "successTitle": "Ya está dentro.",
+    "successSubtitle": "Su plan {{plan}} está activo. Desde ahora, cada conversación le resultará más fácil.",
+    "cancelSubtitle": "Sin presión. Siga usando el plan Free y mejore cuando quiera para tener sesiones ilimitadas.",
+    "nudgeTitle": "Sus sesiones gratuitas tienen un límite",
+    "nudgeSubtitle": "Está en Free: 3 sesiones al mes. Desbloquee sesiones ilimitadas, traducción en vivo y consejos de coaching.",
+    "stayFree": "Seguir en Free"
   },
   "footer": {
     "product": "Producto",
@@ -657,7 +829,9 @@
     "termsOfService": "Términos del servicio",
     "cookiePolicy": "Política de cookies",
     "legalNotice": "Aviso legal",
-    "copyright": "2026 Tonvo. Todos los derechos reservados."
+    "copyright": "2026 Tonvo. Todos los derechos reservados.",
+    "tagline1": "Su copiloto para cada conversación.",
+    "tagline2": "Encuentre las palabras adecuadas, cuando las necesite."
   },
   "termsPage": {
     "breadcrumb": "Términos del servicio",
@@ -701,7 +875,10 @@
     "s12Title": "12. Legislación aplicable",
     "s12Text": "Los presentes Términos se rigen por la legislación francesa. Cualquier disputa se someterá a los tribunales competentes de Saint-Etienne, Francia.",
     "s13Title": "13. Contacto",
-    "s13Intro": "Para cualquier consulta sobre estos Términos:"
+    "s13Intro": "Para cualquier consulta sobre estos Términos:",
+    "s2Text": "Tonvo es un copiloto de conversaciones en directo que ofrece transcripción de conversaciones, respuestas sugeridas, análisis en directo, traducción, análisis del contenido de pantalla y resúmenes posteriores a la conversación. El Servicio se presta «tal cual» y puede actualizarse o modificarse en cualquier momento.",
+    "s6Item1Desc": "Limitado a 3 sesiones al mes. El historial muestra los últimos 7 días.",
+    "s6Item2Label": "Plan Plus:"
   },
   "privacyPage": {
     "analyticsTitle": "Medición de audiencia",
@@ -793,7 +970,14 @@
     "s11Text": "Podemos actualizar la presente Política de privacidad de forma periódica. Notificaremos los cambios sustanciales publicando la política actualizada en esta página y actualizando la fecha de «Última actualización». El uso continuado del servicio tras los cambios implica la aceptación de la política actualizada.",
     "s12Title": "12. Contacto",
     "s12Intro": "Para cualquier consulta sobre esta Política de privacidad o sus datos personales:",
-    "s12Cnil": "También tiene derecho a presentar una reclamación ante su autoridad local de protección de datos (por ejemplo, la AEPD en España o la CNIL en Francia)."
+    "s12Cnil": "También tiene derecho a presentar una reclamación ante su autoridad local de protección de datos (por ejemplo, la AEPD en España o la CNIL en Francia).",
+    "s5Row2Retention": "Oculto en su historial tras 7 días",
+    "s5Row3Type": "Datos de sesión (Plus/Team)",
+    "s5Row5Retention": "No los almacena Tonvo. Se transmiten a nuestro proveedor de transcripción durante la sesión",
+    "s6Anthropic": "Anthropic. Análisis de conversaciones con IA. El texto transcrito y las capturas de pantalla que usted decida analizar se envían para su procesamiento.",
+    "s6AssemblyAI": "AssemblyAI. Conversión de voz a texto. El audio de la sesión se envía en directo para su transcripción.",
+    "s6Upstash": "Upstash. Limitación de frecuencia de solicitudes.",
+    "s6Meta": "Meta (Pixel y API de Conversiones). Medición publicitaria, solo si usted la acepta en el banner de cookies."
   },
   "cookiesPage": {
     "breadcrumb": "Política de cookies",
@@ -810,11 +994,11 @@
     "cookie2Desc": "Almacenan sus preferencias, como el idioma seleccionado o los ajustes de la interfaz.",
     "cookie2Examples": "tonvo-language (localStorage).",
     "cookie3Type": "Cookies de analítica",
-    "cookie3Desc": "Nos ayudan a entender cómo usa la aplicación para mejorar el servicio. Toda la analítica está anonimizada.",
-    "cookie3Examples": "Ninguna actualmente. No utilizamos servicios de analítica de terceros.",
+    "cookie3Desc": "Nos ayudan a entender cómo se usa el sitio. Nuestra propia medición de audiencia es anónima: un identificador aleatorio de visitante almacenado en el localStorage de su navegador, y puede desactivarla en la página de Privacidad. La medición publicitaria con el Meta Pixel es opcional.",
+    "cookie3Examples": "Nuestra propia medición: tonvo_aid (localStorage). Meta Pixel (cookies como _fbp), solo después de que usted lo acepte en el banner de cookies.",
     "cookie4Type": "Cookies de terceros",
     "cookie4Desc": "Las depositan servicios de terceros integrados en nuestra aplicación.",
-    "cookie4Examples": "Stripe (procesamiento de pagos), Firebase (autenticación).",
+    "cookie4Examples": "Stripe (procesamiento de pagos), Firebase (autenticación). Meta (medición publicitaria), solo con su consentimiento.",
     "required": "Obligatoria",
     "optional": "Opcional",
     "examples": "Ejemplos:",
@@ -823,7 +1007,8 @@
     "s4Title": "4. Gestión de cookies",
     "s4Text": "Puede gestionar las cookies desde la configuración de su navegador. Tenga en cuenta que desactivar las cookies esenciales puede impedirle utilizar ciertas funciones de la aplicación, incluida la autenticación. Puede borrar los datos del localStorage desde las herramientas de desarrollo de su navegador.",
     "s5Title": "5. Contacto",
-    "s5Text": "Para cualquier consulta sobre el uso de cookies:"
+    "s5Text": "Para cualquier consulta sobre el uso de cookies:",
+    "managePrefs": "Cambiar mi elección de cookies"
   },
   "legalPage": {
     "breadcrumb": "Aviso legal",
@@ -920,7 +1105,8 @@
     "forbidden": "Esta página está reservada al equipo de Tonvo.",
     "error": "No se pudieron cargar las cifras. Inténtelo de nuevo en un momento.",
     "loading": "Cargando…",
-    "note": "Los registros, activaciones y pagos se atribuyen a la fuente de la visita que llevó al registro. Las cuentas creadas antes de la medición aparecen como «before tracking»."
+    "note": "Los registros, activaciones y pagos se atribuyen a la fuente de la visita que llevó al registro. Las cuentas creadas antes de la medición aparecen como «before tracking».",
+    "byLanguage": "Por idioma"
   },
   "aboutPage": {
     "breadcrumb": "Acerca de",
@@ -955,5 +1141,117 @@
     "ctaSecondary": "Ver cómo funciona",
     "ctaNote": "3 sesiones en vivo al mes. Sin tarjeta de crédito.",
     "company": "Tonvo es una empresa independiente fundada en 2026 en Francia."
+  },
+  "onboarding": {
+    "title": "¿En qué le gustaría recibir ayuda?",
+    "subtitle": "Elija un punto de partida. Podrá hacer todo esto más adelante.",
+    "words": {
+      "title": "Encuentre las palabras adecuadas",
+      "desc": "Inicie una sesión en vivo y reciba tres respuestas que puede usar."
+    },
+    "message": {
+      "title": "Entienda un mensaje",
+      "desc": "Pegue una conversación o suba capturas de pantalla y reciba ayuda para responder."
+    },
+    "language": {
+      "title": "Hable en otro idioma",
+      "desc": "Elija el idioma de la conversación y sígala en directo. La traducción en vivo está en los planes de pago."
+    },
+    "demo": {
+      "title": "Véalo primero en acción",
+      "desc": "Vea una breve demo guionizada. No necesita micrófono."
+    },
+    "skip": "Ahora no"
+  },
+  "seo": {
+    "organization": "Tonvo es un copiloto para conversaciones en directo: transcripción en vivo, respuestas listas para decir y una lectura breve del momento, para llamadas, entrevistas y charlas del día a día.",
+    "home": {
+      "title": "Tonvo: su copiloto para cada conversación",
+      "description": "Tonvo sigue una conversación en vivo y pone tres respuestas listas en su pantalla. Para llamadas, entrevistas y charlas del día a día. Empiece gratis."
+    },
+    "pricing": {
+      "title": "Precios de Tonvo: empiece gratis y mejore después",
+      "description": "Empiece gratis con 3 sesiones en vivo al mes. Plus cuesta $19 al mes: sesiones ilimitadas, traducción en vivo y consejos. Team añade análisis de pantalla."
+    },
+    "about": {
+      "title": "Por qué creé Tonvo",
+      "description": "El fundador de Tonvo habla del momento en que la mente se queda en blanco en una conversación y del copiloto de IA creado para eso. Sin bots en sus reuniones."
+    },
+    "privacy": {
+      "title": "Política de privacidad",
+      "description": "Cómo recoge, usa y protege Tonvo sus datos, qué conservamos y durante cuánto tiempo, y cómo ejercer sus derechos de privacidad."
+    },
+    "terms": {
+      "title": "Términos del servicio",
+      "description": "Los términos y condiciones de uso de Tonvo, el copiloto de IA para sus conversaciones."
+    },
+    "cookies": {
+      "title": "Política de cookies",
+      "description": "Cómo usa Tonvo las cookies y tecnologías similares, y cómo puede controlarlas."
+    },
+    "legal": {
+      "title": "Aviso legal",
+      "description": "Información de la empresa y avisos legales de Tonvo, el copiloto de IA para sus conversaciones."
+    },
+    "blog": {
+      "title": "El blog de Tonvo",
+      "description": "Consejos, guías y reflexiones para mejorar conversaciones, entrevistas, llamadas y comunicación, del equipo de Tonvo."
+    }
+  },
+  "pricingPage": {
+    "faqTitle": "Preguntas sobre precios",
+    "backHome": "Volver al inicio",
+    "faq": {
+      "q1": "¿Qué obtengo gratis?",
+      "a1": "Tres sesiones en vivo al mes, de hasta 5 minutos cada una, con respuestas listas para decir y los últimos 7 días de historial de sesiones. No necesita tarjeta de crédito.",
+      "q2": "¿Puedo cancelar cuando quiera?",
+      "a2": "Sí. Puede cancelar desde los ajustes de su cuenta, y los planes de pago incluyen una garantía de reembolso de 7 días.",
+      "q3": "¿En qué moneda se me factura?",
+      "a3": "La facturación es en dólares estadounidenses. Los precios mostrados en otra moneda son solo orientativos."
+    }
+  },
+  "ui": {
+    "systemAudio": "Audio del sistema",
+    "speakerModeRecommended": "Se recomienda el modo altavoz",
+    "screenAnalysis": "Análisis de pantalla",
+    "analyzedMonitoring": "Analizado, atento a los cambios",
+    "analysisSummary": "Resumen del análisis",
+    "attractionScore": "Puntuación de atracción",
+    "conversationTone": "Tono de la conversación",
+    "keyInsights": "Insights clave",
+    "toImprove": "A mejorar",
+    "generatingSummary": "Generando resumen del análisis...",
+    "conversationOverview": "Visión general de la conversación",
+    "qualityScore": "Puntuación de calidad",
+    "responseSpeed": "Velocidad de respuesta",
+    "audioLanguageLabel": "Idioma de transcripción del audio",
+    "dataRights": "Derechos sobre los datos",
+    "requestExport": "Solicitar exportación",
+    "requestExportLabel": "Solicitar exportación de datos",
+    "requestDeletion": "Solicitar eliminación",
+    "requestDeletionLabel": "Solicitar eliminación de datos",
+    "noSummary": "Aún sin resumen.",
+    "openFullSession": "Abrir sesión completa",
+    "searchHistory": "Buscar en el historial",
+    "clearSearch": "Borrar búsqueda",
+    "openMenu": "Abrir menú",
+    "toggleMenu": "Mostrar u ocultar menú",
+    "dismiss": "Descartar",
+    "notifications": "Notificaciones",
+    "preparingWorkspace": "Preparando su espacio de trabajo",
+    "toneDistribution": "Distribución del tono",
+    "conversationAnalysis": "Análisis de la conversación"
+  },
+  "notFound": {
+    "title": "Página no encontrada",
+    "body": "Esta página no existe o se ha movido.",
+    "home": "Volver al inicio"
+  },
+  "consent": {
+    "title": "Cookies y medición publicitaria",
+    "body": "Usamos el Meta Pixel para medir nuestros anuncios. Instala cookies y envía datos a Meta, y solo se activa si usted acepta. Rechazar no cambia en nada el funcionamiento de Tonvo.",
+    "accept": "Aceptar",
+    "decline": "Rechazar",
+    "policy": "Política de cookies"
   }
 }

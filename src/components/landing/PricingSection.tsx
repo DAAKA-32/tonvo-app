@@ -27,7 +27,7 @@ const PLAN_I18N_KEY = {
   team: "pricing.planTeam",
 } as const;
 
-export default function PricingSection() {
+export default function PricingSection({ headingAs = "h2" }: { headingAs?: "h1" | "h2" } = {}) {
   const { user } = useAuth();
   const { t, i18n } = useTranslation();
   const reduce = useReducedMotion();
@@ -80,7 +80,7 @@ export default function PricingSection() {
             {t("landing.nav.pricing")}
           </motion.span>
 
-          <AnimatedTitle variant="left" className="section-heading text-glow mb-4">
+          <AnimatedTitle as={headingAs} variant="left" className="section-heading text-glow mb-4">
             {t("pricing.title")}
           </AnimatedTitle>
 
@@ -540,7 +540,7 @@ function PricingCard({
           </span>
           {plan.period && (
             <span className="text-sm" style={{ color: "var(--color-text-muted)" }}>
-              {plan.period}
+              {t(plan.period === "/user/month" ? "pricing.periodUserMonth" : "pricing.periodMonth")}
             </span>
           )}
         </div>
