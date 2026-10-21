@@ -5,6 +5,7 @@ import MetaPixel from "@/components/MetaPixel";
 import AnalyticsTracker from "@/components/AnalyticsTracker";
 import { inlineDetectScript } from "@/lib/performance/detect";
 import { HOME_DESCRIPTION, HOME_TITLE, OG_IMAGE, SITE_NAME, SITE_URL } from "@/lib/seo";
+import en from "@/i18n/locales/en.json";
 import "./globals.css";
 
 const inter = Inter({
@@ -34,24 +35,17 @@ export const metadata: Metadata = {
   },
   description: HOME_DESCRIPTION,
   keywords: [
-    "AI sales copilot",
-    "real-time AI",
+    "AI conversation copilot",
     "AI conversation assistant",
-    "AI sales assistant",
-    "sales call copilot",
-    "live call transcription",
-    "AI closing assistant",
-    "AI for sales calls",
-    "conversation intelligence",
-    "AI meeting assistant",
-    "AI sales coach",
-    "real-time sales insights",
-    "sales conversation AI",
-    "live transcription AI",
-    "AI negotiation assistant",
+    "what to say in a conversation",
+    "real-time conversation help",
+    "live transcription",
+    "AI reply suggestions",
+    "live translation",
+    "interview help",
     "AI call assistant",
-    "AI for closers",
-    "sales AI copilot",
+    "AI meeting assistant",
+    "communication assistant",
     "Tonvo",
   ],
   authors: [{ name: "Tonvo", url: SITE_URL }],
@@ -119,34 +113,34 @@ const organizationJsonLd = {
   url: SITE_URL,
   logo: `${SITE_URL}/logo-tonvo.png`,
   description:
-    "Tonvo is the real-time AI copilot for sales conversations — live transcription, instant insights, and closing suggestions during every call that matters.",
+    "Tonvo is a copilot for live conversations: live transcription, ready-to-say replies and a short read on the moment, for calls, interviews and everyday talks.",
   contactPoint: {
     "@type": "ContactPoint",
     email: "outreach@tonvo.co",
-    contactType: "sales",
+    contactType: "customer support",
   },
 };
 
 const softwareJsonLd = {
   "@context": "https://schema.org",
   "@type": "SoftwareApplication",
-  name: "Tonvo — AI Copilot for Sales Conversations",
+  name: "Tonvo: AI Copilot for Conversations",
   applicationCategory: "BusinessApplication",
-  applicationSubCategory: "SalesAssistant",
+  applicationSubCategory: "ConversationAssistant",
   operatingSystem: "Web, Windows, macOS, Linux",
   url: SITE_URL,
   description:
-    "Tonvo is a real-time AI copilot for sales calls. Live transcription, instant suggestions, objection counters, and closing prompts — surfaced the moment a buying signal hits.",
+    "Tonvo follows a live conversation and puts three ready replies and a short read on the moment on your screen. For calls, interviews, meetings and everyday talks.",
   featureList: [
-    "Real-time call transcription",
-    "Live buying-signal detection",
-    "AI closing suggestions, surfaced the moment they matter",
-    "Objection counters and price anchors",
-    "Speaker separation (you vs prospect)",
-    "Post-call review with searchable transcript",
-    "Close-rate and objection win-rate tracking",
-    "10-language coverage for international calls",
-    "Invisible during screen share",
+    "Live transcription",
+    "Three ready-to-say replies",
+    "Detects the question you were just asked",
+    "Tone and engagement insights (paid plans)",
+    "Live translation (paid plans)",
+    "Session summaries with follow-up actions",
+    "Help with pasted messages and screenshots",
+    "Works in 10 languages",
+    "Separate copilot window on paid plans, hidden when you share a tab or window",
     "Native desktop apps (Windows, macOS, Linux)",
   ],
   screenshot: `${SITE_URL}${OG_IMAGE.url}`,
@@ -155,15 +149,15 @@ const softwareJsonLd = {
       "@type": "Offer",
       price: "0",
       priceCurrency: "USD",
-      name: "Starter",
-      description: "3 live closing sessions per month with buying-signal detection",
+      name: "Free",
+      description: "3 live sessions per month, up to 5 minutes each, with ready-to-say replies",
     },
     {
       "@type": "Offer",
       price: "19",
       priceCurrency: "USD",
-      name: "Closer — Monthly",
-      description: "Unlimited closing sessions, full objection library, close-rate tracking",
+      name: "Plus (monthly)",
+      description: "Unlimited live sessions, live translation, coaching tips and full history",
       priceSpecification: {
         "@type": "UnitPriceSpecification",
         price: "19",
@@ -175,8 +169,8 @@ const softwareJsonLd = {
       "@type": "Offer",
       price: "156",
       priceCurrency: "USD",
-      name: "Closer — Yearly",
-      description: "Unlimited closing, billed yearly (30% off — pays back in one closed deal)",
+      name: "Plus (yearly)",
+      description: "Unlimited live sessions, billed yearly at 30% off",
       priceSpecification: {
         "@type": "UnitPriceSpecification",
         price: "156",
@@ -187,100 +181,43 @@ const softwareJsonLd = {
   ],
 };
 
+// Same questions and answers as the visible FAQ on the home page (en.json is the single source).
 const faqJsonLd = {
   "@context": "https://schema.org",
   "@type": "FAQPage",
-  mainEntity: [
-    {
-      "@type": "Question",
-      name: "What is Tonvo?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: "Tonvo is a real-time AI copilot for sales conversations. During every call that matters, it transcribes what's said, surfaces buying signals, and suggests the next line — instantly. Available as a web app and as native desktop apps for Windows, macOS, and Linux.",
-      },
+  mainEntity: [1, 2, 3, 4, 5, 6, 7].map((n) => ({
+    "@type": "Question",
+    name: (en.landing.faq as Record<string, string>)[`q${n}`],
+    acceptedAnswer: {
+      "@type": "Answer",
+      text: (en.landing.faq as Record<string, string>)[`a${n}`],
     },
-    {
-      "@type": "Question",
-      name: "How does it work during a live call?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: "Tonvo listens to the conversation in real time, runs live transcription, and surfaces AI suggestions the moment a buying signal, objection, or pricing question appears. You see the next best move without breaking eye contact or fumbling for a script.",
-      },
-    },
-    {
-      "@type": "Question",
-      name: "What languages does Tonvo support?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: "Tonvo handles 10 languages out of the box: English, French, Spanish, German, Italian, Portuguese, Dutch, Japanese, Korean, and Chinese. International calls are transcribed and analyzed in real time.",
-      },
-    },
-    {
-      "@type": "Question",
-      name: "Do I need to change my sales process to use Tonvo?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: "No. Tonvo layers on top of your existing workflow — your pitch, your deck, your offer stay unchanged. It runs alongside the call you'd already be making and adds an AI layer of guidance only you can see.",
-      },
-    },
-    {
-      "@type": "Question",
-      name: "Can my prospect see anything during a call?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: "No. Tonvo runs in a separate window, invisible to the other side — even during screen share. The intelligence stays on your side of the call.",
-      },
-    },
-    {
-      "@type": "Question",
-      name: "Who is Tonvo built for?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: "Anyone whose work depends on high-stakes conversations: sales closers, consultants, negotiation coaches, account executives, customer success managers, and founders running discovery and renewal calls.",
-      },
-    },
-    {
-      "@type": "Question",
-      name: "Is there a free version?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: "Yes. The Starter plan is free and includes 3 live sessions per month with full transcription and AI suggestions. The Closer plan unlocks unlimited sessions and starts at $19/month.",
-      },
-    },
-    {
-      "@type": "Question",
-      name: "Do I need to install anything?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: "Use the web app at tonvo.co — no install required. Or install the native desktop app for Windows, macOS, or Linux for a faster, dock-launchable experience.",
-      },
-    },
-  ],
+  })),
 };
 
 const howToJsonLd = {
   "@context": "https://schema.org",
   "@type": "HowTo",
-  name: "How to use Tonvo during a sales call",
-  description: "Add a real-time AI copilot to your next call in 3 steps.",
+  name: "How to use Tonvo in a conversation",
+  description: "Get ready-to-say replies during your next call or meeting in 3 steps.",
   step: [
     {
       "@type": "HowToStep",
       position: 1,
-      name: "Open Tonvo before the call",
-      text: "Launch the desktop app or open tonvo.co in a browser tab. Tonvo runs in its own window, invisible to your prospect on screen share.",
+      name: "Start a session",
+      text: "Open tonvo.co, pick your microphone, and share your call's audio if you want Tonvo to hear both sides.",
     },
     {
       "@type": "HowToStep",
       position: 2,
-      name: "Get live guidance during the call",
-      text: "Tonvo transcribes the conversation in real time and surfaces AI suggestions the moment a buying signal, objection, or pricing question lands. You see the next best move instantly.",
+      name: "Get the right words",
+      text: "Tonvo transcribes the conversation as it happens and shows the question you were just asked, a short read on the moment and three replies you can use.",
     },
     {
       "@type": "HowToStep",
       position: 3,
-      name: "Review after the call",
-      text: "Open the transcript and the conversation analysis. See what landed, what didn't, and the patterns that repeat across your calls.",
+      name: "Look back and learn",
+      text: "After the session, open the summary to see what went well and the next steps to follow up on.",
     },
   ],
 };
@@ -290,7 +227,7 @@ const webSiteJsonLd = {
   "@type": "WebSite",
   name: SITE_NAME,
   url: SITE_URL,
-  description: "The real-time AI copilot for sales conversations. Live transcription, instant insights, and closing suggestions — the moment they matter.",
+  description: "Your copilot for every conversation. Live transcription, ready-to-say replies and a short read on the moment.",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

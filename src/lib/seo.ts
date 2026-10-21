@@ -15,16 +15,17 @@ import type { Metadata } from "next";
 export const SITE_URL = "https://tonvo.co";
 export const SITE_NAME = "Tonvo";
 
-export const HOME_TITLE = "Tonvo: the AI copilot for live calls";
+export const HOME_TITLE = "Tonvo: your copilot for every conversation";
 export const HOME_DESCRIPTION =
-  "Tonvo listens to your sales and everyday calls, catches the question you were just asked and puts three ready answers on your screen in seconds. Start free.";
+  "Tonvo follows a live conversation and puts three ready replies on your screen. For calls, interviews and everyday talks. Start free.";
 
+// v2 (2026-10-21): new file name so platforms that cache by URL fetch the new card.
 export const OG_IMAGE = {
-  url: "/og/tonvo-og.png",
+  url: "/og/tonvo-og-v2.png",
   width: 1200,
   height: 630,
   type: "image/png",
-  alt: 'Tonvo logo with the headline "Never freeze on a call again." and the line "The AI copilot for your live calls."',
+  alt: 'Tonvo logo with the headline "Never freeze when it matters." and the line "Your copilot for every conversation."',
 } as const;
 
 /** One line, single spaces, no padding. */

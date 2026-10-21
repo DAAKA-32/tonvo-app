@@ -12,7 +12,7 @@ interface UpgradePromptProps {
  * Displays a lock + upgrade CTA when a feature is not available on the current plan.
  * Use inline=true for small inline badges, false for full-width banners.
  */
-export default function UpgradePrompt({ feature, plan = "Pro", inline = false }: UpgradePromptProps) {
+export default function UpgradePrompt({ feature, plan = "Plus", inline = false }: UpgradePromptProps) {
   if (inline) {
     return (
       <Link

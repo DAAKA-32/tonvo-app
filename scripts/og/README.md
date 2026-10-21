@@ -5,7 +5,7 @@
 - `src/lib/seo.ts` is the single source of truth: home title and description, the social image, and
   `pageMetadata()`, which every public page uses for title, description, canonical, `og:*` and `twitter:*`.
   Do not hand-write `openGraph` objects in pages: Next.js replaces the parent object, so the image would be lost.
-- `public/og/tonvo-og.png` is the social image (1200 x 630, opaque PNG, about 110 KB).
+- `public/og/tonvo-og-v2.png` is the social image (1200 x 630, opaque PNG, about 110 KB). The older `tonvo-og.png` is kept so links already cached by platforms still resolve.
 - `scripts/og/og-card.html` is the image design. `scripts/og/render-og.mjs` renders it.
 
 ## Regenerate the image

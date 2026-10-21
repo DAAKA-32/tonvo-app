@@ -31,7 +31,7 @@ const ARTICLES = [
   {
     slug: "invisible-copilot-screen-sharing",
     title: "How to Use an AI Copilot Without Others Seeing It",
-    excerpt: "A practical guide to using Tonvo's copilot during screen sharing calls. Learn the window-sharing technique that keeps your AI assistant invisible.",
+    excerpt: "A practical guide to using Tonvo's copilot during screen sharing calls. Learn how to share a tab or window so the copilot stays out of the shared view.",
     date: "March 8, 2026",
     tag: "Tips",
     tagColor: "#fbbf24",

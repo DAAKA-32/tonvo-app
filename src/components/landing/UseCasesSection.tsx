@@ -35,10 +35,12 @@ function IconShield({ className }: { className?: string }) {
   );
 }
 
-function IconZap({ className }: { className?: string }) {
+function IconGlobe({ className }: { className?: string }) {
   return (
     <svg className={className} width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z" />
+      <circle cx="12" cy="12" r="10" />
+      <path d="M2 12h20" />
+      <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
     </svg>
   );
 }
@@ -66,7 +68,7 @@ export default function UseCasesSection() {
       accent: "#818cf8",
     },
     {
-      icon: <IconMessageCircle className="w-6 h-6" />,
+      icon: <IconShield className="w-6 h-6" />,
       title: t("landing.useCases.supportTitle"),
       desc: t("landing.useCases.supportDesc"),
       spotlight: "rgba(52, 211, 153, 0.10)",
@@ -74,7 +76,7 @@ export default function UseCasesSection() {
       accent: "#34d399",
     },
     {
-      icon: <IconShield className="w-6 h-6" />,
+      icon: <IconGlobe className="w-6 h-6" />,
       title: t("landing.useCases.interviewsTitle"),
       desc: t("landing.useCases.interviewsDesc"),
       spotlight: "rgba(200, 200, 216, 0.10)",
@@ -82,7 +84,7 @@ export default function UseCasesSection() {
       accent: "#c8c8d8",
     },
     {
-      icon: <IconZap className="w-6 h-6" />,
+      icon: <IconMessageCircle className="w-6 h-6" />,
       title: t("landing.useCases.meetingsTitle"),
       desc: t("landing.useCases.meetingsDesc"),
       spotlight: "rgba(251, 191, 36, 0.10)",

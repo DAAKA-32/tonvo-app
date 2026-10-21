@@ -168,7 +168,7 @@ export default function PlanUpgradeModal() {
       : t("upgrade.nudgeTitle");
 
   const subtitle = isSuccess
-    ? t("upgrade.successSubtitle", { plan: activatedPlan ? activatedPlan.charAt(0).toUpperCase() + activatedPlan.slice(1) : "Pro" })
+    ? t("upgrade.successSubtitle", { plan: PRICING_PLANS.find((p) => p.id === activatedPlan)?.name ?? "Plus" })
     : isCancel
       ? t("upgrade.cancelSubtitle")
       : t("upgrade.nudgeSubtitle");

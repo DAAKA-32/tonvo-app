@@ -80,7 +80,7 @@ Only return valid JSON. No markdown, no explanation.`,
       const cleaned = content.text.replace(/```json\s*/g, "").replace(/```\s*/g, "").trim();
       result = JSON.parse(cleaned);
     } catch {
-      console.error("Failed to parse copilot-prep response:", content.text);
+      console.error("Failed to parse copilot-prep response");
       return NextResponse.json({
         greeting: "Ready when you are.",
         prepTips: [],

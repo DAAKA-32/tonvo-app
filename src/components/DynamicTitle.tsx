@@ -32,20 +32,17 @@ export default function DynamicTitle() {
   const { t, i18n } = useTranslation();
 
   useEffect(() => {
-    // Find matching route (longest prefix match)
-    let titleKey = "pageTitle.default";
+    document.documentElement.lang = i18n.language;
+
+    // Only routes listed above get a client-side title. Every other route (home,
+    // features, use-cases, industries, compare, guides) keeps the title the server
+    // rendered from src/lib/seo.ts, instead of being overwritten after hydration.
     for (const [prefix, key] of Object.entries(ROUTE_TITLE_MAP)) {
       if (pathname === prefix || pathname.startsWith(prefix + "/")) {
-        titleKey = key;
-        break;
+        document.title = `${t(key)} | Tonvo`;
+        return;
       }
     }
-
-    const pageTitle = t(titleKey);
-    const isDefault = titleKey === "pageTitle.default";
-
-    document.title = isDefault ? pageTitle : `${pageTitle} | Tonvo`;
-    document.documentElement.lang = i18n.language;
   }, [pathname, t, i18n.language]);
 
   return null;

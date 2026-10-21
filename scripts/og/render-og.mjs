@@ -1,6 +1,6 @@
 // Renders scripts/og/og-card.html to the social preview image (1200 x 630, opaque PNG).
 //   node scripts/og/render-og.mjs
-// Writes public/og/tonvo-og.png (referenced by src/lib/seo.ts) and refreshes the legacy public/og-image.png.
+// Writes public/og/tonvo-og-v2.png (referenced by src/lib/seo.ts) and refreshes the legacy public/og-image.png.
 // Needs network access for the Inter web font (Google Fonts).
 import { chromium } from "playwright";
 import { fileURLToPath, pathToFileURL } from "node:url";
@@ -9,7 +9,7 @@ import fs from "node:fs";
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(here, "..", "..");
-const out = path.join(root, "public", "og", "tonvo-og.png");
+const out = path.join(root, "public", "og", "tonvo-og-v2.png");
 
 const browser = await chromium.launch();
 const page = await browser.newPage({ viewport: { width: 1200, height: 630 }, deviceScaleFactor: 1 });

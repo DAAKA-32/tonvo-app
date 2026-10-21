@@ -457,7 +457,7 @@ export default function AnalyticsPage() {
     return (
       <AppShell>
         <div style={{ maxWidth: 600, paddingTop: 40 }}>
-          <UpgradePrompt feature="Analytics Dashboard" plan="Pro" />
+          <UpgradePrompt feature="Analytics Dashboard" plan="Plus" />
         </div>
       </AppShell>
     );

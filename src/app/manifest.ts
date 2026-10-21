@@ -2,10 +2,10 @@ import type { MetadataRoute } from "next";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "Tonvo — AI Copilot for High-Stakes Conversations",
+    name: "Tonvo: your copilot for every conversation",
     short_name: "Tonvo",
     description:
-      "The real-time AI copilot for sales conversations. Live transcription, instant insights, and closing suggestions — the moment they matter.",
+      "Follows a live conversation and puts three ready replies on your screen. For calls, interviews and everyday talks.",
     start_url: "/",
     display: "standalone",
     background_color: "#09090b",
@@ -52,7 +52,7 @@ export default function manifest(): MetadataRoute.Manifest {
         ],
       },
     },
-    categories: ["business", "sales", "productivity"],
+    categories: ["productivity", "business", "communication"],
     lang: "en",
     dir: "ltr",
   };

@@ -12,12 +12,7 @@ export const comparisons: ComparisonEntry[] = [
     subtitle:
       "Gong is the industry standard for post-call revenue intelligence. Tonvo takes a different approach: real-time coaching and tone analysis while the conversation is still happening.",
     lastModified: "2026-04-09",
-    relatedSlugs: [
-      { type: "use-cases", slug: "sales-calls", label: "AI for Sales Calls" },
-      { type: "features", slug: "real-time-sentiment", label: "Real-Time Sentiment Analysis" },
-      { type: "industries", slug: "saas-sales", label: "SaaS Sales Teams" },
-      { type: "guides", slug: "choosing-conversation-ai", label: "How to Choose a Conversation AI Tool" },
-    ],
+    relatedSlugs: [],
     targetKeywords: [
       "tonvo vs gong",
       "gong alternative",
@@ -34,7 +29,7 @@ export const comparisons: ComparisonEntry[] = [
       {
         question: "Can I use Tonvo if I'm an individual, not a sales team?",
         answer:
-          "Yes. Unlike Gong, which is designed for enterprise sales teams with multi-seat contracts, Tonvo offers a free tier and a $19/mo Pro plan that works great for freelancers, founders, and individual professionals.",
+          "Yes. Unlike Gong, which is designed for enterprise sales teams with multi-seat contracts, Tonvo offers a free tier and a $19/mo Plus plan that works great for freelancers, founders, and individual professionals.",
       },
       {
         question: "Does Gong offer real-time coaching like Tonvo?",
@@ -56,12 +51,12 @@ export const comparisons: ComparisonEntry[] = [
       { feature: "Tone & sentiment detection", tonvo: "Real-time", competitor: "Post-call transcript analysis" },
       { feature: "Audio storage", tonvo: "Never stored", competitor: "Full recordings stored" },
       { feature: "Free tier available", tonvo: true, competitor: false },
-      { feature: "Individual plan", tonvo: "$19/mo Pro", competitor: "Enterprise pricing only" },
+      { feature: "Individual plan", tonvo: "$19/mo Plus", competitor: "Enterprise pricing only" },
       { feature: "Multi-platform support", tonvo: "Discord, Zoom, Meet, Teams", competitor: "Zoom, Meet, Teams" },
       { feature: "Deal & pipeline analytics", tonvo: false, competitor: true },
       { feature: "Language support", tonvo: "10 languages", competitor: "70+ languages" },
-      { feature: "Invisible copilot mode", tonvo: true, competitor: false },
-      { feature: "Setup time", tonvo: "Under 2 minutes", competitor: "Requires CRM integration" },
+      { feature: "Separate-window copilot", tonvo: true, competitor: false },
+      { feature: "Setup time", tonvo: "Open in the browser, no install", competitor: "Requires CRM integration" },
     ],
     tonvoAdvantages: [
       {
@@ -74,13 +69,13 @@ export const comparisons: ComparisonEntry[] = [
         icon: "shield",
         title: "Privacy-First Architecture",
         description:
-          "Audio is analyzed in real time and never stored. There are no recordings to manage, leak, or worry about from a compliance perspective.",
+          "Tonvo does not store audio. Analysis happens live, and the text of your sessions is kept so you can review it.",
       },
       {
         icon: "users",
         title: "Built for Everyone, Not Just Enterprise",
         description:
-          "Start for free with 3 sessions per month, or upgrade to Pro for $19/mo. No enterprise sales cycle, no multi-seat minimums.",
+          "Start for free with 3 sessions per month, or upgrade to Plus for $19/mo. No enterprise sales cycle, no multi-seat minimums.",
       },
     ],
     summary: {
@@ -101,10 +96,7 @@ export const comparisons: ComparisonEntry[] = [
       "Fireflies is a popular meeting transcription tool. Tonvo goes beyond transcription to deliver live coaching, tone detection, and conversation signals during your calls.",
     lastModified: "2026-04-09",
     relatedSlugs: [
-      { type: "features", slug: "conversation-signals", label: "Conversation Signal Detection" },
-      { type: "use-cases", slug: "remote-meetings", label: "Better Remote Meetings" },
       { type: "compare", slug: "tonvo-vs-otter", label: "Tonvo vs Otter.ai" },
-      { type: "industries", slug: "consulting", label: "AI for Consultants" },
     ],
     targetKeywords: [
       "tonvo vs fireflies",
@@ -148,7 +140,7 @@ export const comparisons: ComparisonEntry[] = [
       { feature: "CRM integrations", tonvo: false, competitor: true },
       { feature: "Free tier", tonvo: "3 sessions/month", competitor: "Limited minutes" },
       { feature: "Platform support", tonvo: "Discord, Zoom, Meet, Teams", competitor: "Zoom, Meet, Teams, Webex" },
-      { feature: "Invisible copilot mode", tonvo: true, competitor: false },
+      { feature: "Separate-window copilot", tonvo: true, competitor: false },
     ],
     tonvoAdvantages: [
       {
@@ -165,15 +157,15 @@ export const comparisons: ComparisonEntry[] = [
       },
       {
         icon: "shield",
-        title: "Zero Audio Retention",
+        title: "No Audio Stored",
         description:
-          "Tonvo never stores your audio. Analysis happens live and audio data is discarded, eliminating storage and compliance concerns.",
+          "Tonvo does not store your audio. Analysis happens live, and the text of your sessions is kept so you can review it.",
       },
       {
         icon: "headphones",
-        title: "Invisible Copilot Mode",
+        title: "Separate-Window Copilot",
         description:
-          "Tonvo runs silently in the background without other participants knowing, preserving natural conversation dynamics.",
+          "On Plus and Team, Tonvo runs in its own window, so a shared tab or window shows only your call.",
       },
     ],
     summary: {
@@ -194,10 +186,7 @@ export const comparisons: ComparisonEntry[] = [
       "Otter.ai excels at turning spoken words into searchable notes. Tonvo focuses on making you a better communicator in real time with live coaching and sentiment analysis.",
     lastModified: "2026-04-09",
     relatedSlugs: [
-      { type: "use-cases", slug: "job-interviews", label: "AI for Job Interviews" },
-      { type: "features", slug: "tone-detection", label: "Tone Detection" },
       { type: "compare", slug: "tonvo-vs-fireflies", label: "Tonvo vs Fireflies" },
-      { type: "guides", slug: "real-time-vs-post-call", label: "Real-Time vs Post-Call AI" },
     ],
     targetKeywords: [
       "tonvo vs otter",
@@ -220,12 +209,12 @@ export const comparisons: ComparisonEntry[] = [
       {
         question: "Can I use both Tonvo and Otter.ai together?",
         answer:
-          "Absolutely. Many users run Otter for transcription and notes while using Tonvo for real-time coaching. Tonvo's invisible copilot mode means it won't interfere with other tools running on the same call.",
+          "Absolutely. Many users run Otter for transcription and notes while using Tonvo for real-time coaching. On Plus and Team, Tonvo runs in its own window, so it does not interfere with other tools running on the same call.",
       },
       {
         question: "Which tool is more affordable?",
         answer:
-          "Both offer free tiers. Tonvo's free plan includes 3 sessions per month, while Otter's free plan offers limited transcription minutes. Tonvo Pro is $19/mo and Otter Pro is $16.99/mo, making them comparably priced.",
+          "Both offer free tiers. Tonvo's free plan includes 3 sessions per month, while Otter's free plan offers limited transcription minutes. Tonvo Plus is $19/mo and Otter Pro is $16.99/mo, making them comparably priced.",
       },
     ],
     competitorName: "Otter.ai",
@@ -240,7 +229,7 @@ export const comparisons: ComparisonEntry[] = [
       { feature: "Audio storage", tonvo: "Never stored", competitor: "Stored with transcript" },
       { feature: "Post-session analysis", tonvo: true, competitor: true },
       { feature: "Language support", tonvo: "10 languages", competitor: "English-focused" },
-      { feature: "Invisible copilot mode", tonvo: true, competitor: false },
+      { feature: "Separate-window copilot", tonvo: true, competitor: false },
       { feature: "Free tier", tonvo: "3 sessions/month", competitor: "300 min/month" },
       { feature: "Platform support", tonvo: "Discord, Zoom, Meet, Teams", competitor: "Zoom, Meet, Teams" },
     ],
@@ -282,8 +271,6 @@ export const comparisons: ComparisonEntry[] = [
       "Chorus is an enterprise conversation intelligence platform owned by ZoomInfo. Tonvo offers real-time coaching that's accessible to individuals and teams of any size.",
     lastModified: "2026-04-09",
     relatedSlugs: [
-      { type: "use-cases", slug: "sales-calls", label: "AI for Sales Calls" },
-      { type: "industries", slug: "startups", label: "AI for Startups" },
       { type: "features", slug: "post-session-analysis", label: "Post-Session Analysis" },
       { type: "compare", slug: "tonvo-vs-gong", label: "Tonvo vs Gong" },
     ],
@@ -308,7 +295,7 @@ export const comparisons: ComparisonEntry[] = [
       {
         question: "Can a small team use Chorus?",
         answer:
-          "Chorus is designed for mid-market and enterprise sales organizations and its pricing reflects that. Tonvo's Team plan at $49/user/month is built for teams of any size, with a free tier and $19/mo Pro plan for individuals.",
+          "Chorus is designed for mid-market and enterprise sales organizations and its pricing reflects that. Tonvo's Team plan at $49/user/month is built for teams of any size, with a free tier and $19/mo Plus plan for individuals.",
       },
       {
         question: "Which tool provides better real-time assistance?",
@@ -326,10 +313,10 @@ export const comparisons: ComparisonEntry[] = [
       { feature: "Target audience", tonvo: "Individuals & teams", competitor: "Enterprise sales teams" },
       { feature: "Pricing transparency", tonvo: "Public pricing from $0/mo", competitor: "Custom enterprise quotes" },
       { feature: "Audio storage", tonvo: "Never stored", competitor: "Full recordings stored" },
-      { feature: "Setup complexity", tonvo: "Under 2 minutes, no integrations required", competitor: "CRM & tech stack integration needed" },
+      { feature: "Setup complexity", tonvo: "No install, no integrations required", competitor: "CRM & tech stack integration needed" },
       { feature: "Deal intelligence & forecasting", tonvo: false, competitor: true },
       { feature: "Multi-platform support", tonvo: "Discord, Zoom, Meet, Teams", competitor: "Zoom, Meet, Teams" },
-      { feature: "Invisible copilot mode", tonvo: true, competitor: false },
+      { feature: "Separate-window copilot", tonvo: true, competitor: false },
       { feature: "Free tier available", tonvo: true, competitor: false },
       { feature: "Language support", tonvo: "10 languages", competitor: "Multiple languages" },
     ],
@@ -338,7 +325,7 @@ export const comparisons: ComparisonEntry[] = [
         icon: "target",
         title: "Accessible to Everyone",
         description:
-          "No enterprise contract or CRM integration required. Sign up and start using Tonvo in minutes with a free plan or affordable Pro subscription.",
+          "No enterprise contract or CRM integration required. Sign up and start using Tonvo in minutes with a free plan or affordable Plus subscription.",
       },
       {
         icon: "clock",
@@ -376,12 +363,7 @@ export const comparisons: ComparisonEntry[] = [
     subtitle:
       "Taking notes during calls splits your attention and misses emotional context. Tonvo runs invisibly in the background, coaching you in real time while you stay fully present.",
     lastModified: "2026-04-09",
-    relatedSlugs: [
-      { type: "use-cases", slug: "remote-meetings", label: "Better Remote Meetings" },
-      { type: "features", slug: "invisible-copilot", label: "Invisible Copilot Mode" },
-      { type: "guides", slug: "active-listening", label: "Guide to Active Listening" },
-      { type: "industries", slug: "coaching", label: "AI for Coaches & Therapists" },
-    ],
+    relatedSlugs: [],
     targetKeywords: [
       "ai note taking during calls",
       "alternative to manual notes meetings",
@@ -398,12 +380,12 @@ export const comparisons: ComparisonEntry[] = [
       {
         question: "How does manual note-taking affect call quality?",
         answer:
-          "Research shows that splitting attention between note-taking and active listening reduces comprehension and engagement. You miss social cues, respond more slowly, and participants may feel you're distracted. Tonvo lets you stay fully present.",
+          "You miss social cues, respond more slowly, and participants may feel you're distracted. Tonvo lets you stay fully present.",
       },
       {
-        question: "Does Tonvo work without anyone else knowing?",
+        question: "Can the other person see Tonvo?",
         answer:
-          "Yes. Tonvo's invisible copilot mode runs silently in the background. Other participants won't see or hear anything, so the conversation feels natural and unmonitored.",
+          "On Plus and Team, not when you share a tab or a window, because Tonvo runs in its own window. On the Free plan the replies appear in the page itself, so keep that page out of what you share. If you share your entire screen, they can see it. You should tell the people you talk to when you use a tool like this.",
       },
       {
         question: "What if I prefer taking my own notes?",
@@ -421,7 +403,7 @@ export const comparisons: ComparisonEntry[] = [
       { feature: "Conversation signal detection", tonvo: true, competitor: false },
       { feature: "Post-session summary", tonvo: "Automatic with key moments", competitor: "Only what you wrote down" },
       { feature: "Active listening", tonvo: "Fully present", competitor: "Compromised" },
-      { feature: "Cost", tonvo: "Free tier available, Pro at $19/mo", competitor: "Free" },
+      { feature: "Cost", tonvo: "Free tier available, Plus at $19/mo", competitor: "Free" },
       { feature: "Setup required", tonvo: "2-minute setup", competitor: "None" },
       { feature: "Works across languages", tonvo: "10 languages", competitor: "Limited to your own fluency" },
       { feature: "Captures emotional context", tonvo: true, competitor: false },

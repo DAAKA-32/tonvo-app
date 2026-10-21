@@ -127,7 +127,7 @@ Return valid JSON only. No markdown.`,
       const cleaned = content.text.replace(/```json\s*/g, "").replace(/```\s*/g, "").trim();
       summary = JSON.parse(cleaned);
     } catch {
-      console.error("Failed to parse summary response:", content.text);
+      console.error("Failed to parse summary response");
       return NextResponse.json({ error: "Failed to parse AI summary" }, { status: 500 });
     }
 

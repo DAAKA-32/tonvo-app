@@ -103,6 +103,6 @@ export function hasFeature(plan: string | undefined | null, feature: keyof PlanF
 /** Human-readable plan labels */
 export const PLAN_LABELS: Record<PlanId, string> = {
   free: "Free",
-  pro: "Pro",
+  pro: "Plus",
   team: "Team",
 };
