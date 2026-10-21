@@ -18,6 +18,11 @@ import { verifyAuth } from "@/lib/auth-server";
  *  - transcript: (for type=audio) the transcribed text
  *  - images: (for type=images) one or more image files
  */
+const LANGUAGE_NAMES: Record<string, string> = {
+  en: "English", fr: "French", es: "Spanish", de: "German", it: "Italian", pt: "Portuguese",
+  nl: "Dutch", zh: "Chinese", ja: "Japanese", ko: "Korean",
+};
+
 export async function POST(req: NextRequest) {
   const authUser = await verifyAuth(req);
   if (!authUser) {
@@ -39,7 +44,12 @@ export async function POST(req: NextRequest) {
   try {
     const formData = await req.formData();
     const type = formData.get("type") as string;
-    const language = (formData.get("language") as string) || "en";
+    // The value ends up inside the system prompt, so only a known language name is ever used.
+    // "fr-FR" and "fr" both mean French.
+    const languageCode = String(formData.get("language") ?? "en").slice(0, 2).toLowerCase();
+    const language = Object.prototype.hasOwnProperty.call(LANGUAGE_NAMES, languageCode)
+      ? LANGUAGE_NAMES[languageCode]
+      : "English";
     const context = (formData.get("context") as string) || "";
     const mode = (formData.get("mode") as string) || "general";
 
@@ -160,7 +170,7 @@ Only return valid JSON. No markdown, no explanation, no wrapping.`,
         .trim();
       analysis = JSON.parse(cleaned);
     } catch {
-      console.error("Failed to parse conversation analysis:", content.text);
+      console.error("Failed to parse conversation analysis");
       return NextResponse.json({ error: "Failed to parse analysis" }, { status: 500 });
     }
 

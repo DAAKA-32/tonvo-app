@@ -171,7 +171,10 @@ export default function PrivacyPage() {
             <ul className="text-sm leading-relaxed space-y-2 pl-5 m-0" style={{ listStyleType: "disc" }}>
               <li><strong>{t("privacyPage.s6Firebase")}</strong> <em>{t("privacyPage.s6FirebaseRegion")}</em></li>
               <li><strong>{t("privacyPage.s6Supabase")}</strong> <em>{t("privacyPage.s6SupabaseRegion")}</em></li>
+              <li>{t("privacyPage.s6AssemblyAI")}</li>
               <li>{t("privacyPage.s6Anthropic")}</li>
+              <li>{t("privacyPage.s6Upstash")}</li>
+              <li>{t("privacyPage.s6Meta")}</li>
               <li>{t("privacyPage.s6Stripe")}</li>
               <li><strong>{t("privacyPage.s6Vercel")}</strong> <em>{t("privacyPage.s6VercelRegion")}</em></li>
             </ul>

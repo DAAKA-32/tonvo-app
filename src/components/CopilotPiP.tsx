@@ -206,7 +206,7 @@ function buildBodyContent(props: CopilotPiPProps): string {
     listening: labels?.listening || "Listening... suggestions will appear here",
     stopSession: labels?.stopSession || "Stop Session",
     respondNow: labels?.respondNow || "Respond now",
-    invisibleBadge: labels?.invisibleBadge || "Invisible during screen share",
+    invisibleBadge: labels?.invisibleBadge || "Hidden when you share a tab or window",
     participantCount: labels?.participantCount || "{{count}} participant",
     participantCountPlural: labels?.participantCountPlural || "{{count}} participants",
     paused: labels?.paused || "Paused",

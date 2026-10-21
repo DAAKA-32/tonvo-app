@@ -105,7 +105,7 @@ export default function ProfilePage() {
     }
   }
 
-  const planLabel = subscription?.plan === "pro" ? "Pro" : subscription?.plan === "team" ? "Team" : "Free";
+  const planLabel = subscription?.plan === "pro" ? "Plus" : subscription?.plan === "team" ? "Team" : "Free";
   const planColor = subscription?.plan === "free"
     ? "var(--color-text-muted)"
     : "var(--color-positive)";

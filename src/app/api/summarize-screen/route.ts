@@ -92,7 +92,7 @@ Only return valid JSON. No markdown, no explanation.`,
       const cleaned = content.text.replace(/```json\s*/g, "").replace(/```\s*/g, "").trim();
       raw = JSON.parse(cleaned);
     } catch {
-      console.error("Failed to parse screen summary response:", content.text);
+      console.error("Failed to parse screen summary response");
       return NextResponse.json({ error: "Failed to parse AI screen summary" }, { status: 500 });
     }
 

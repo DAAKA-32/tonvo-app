@@ -151,7 +151,7 @@ Only return valid JSON. No markdown, no explanation.
       const cleaned = content.text.replace(/```json\s*/g, "").replace(/```\s*/g, "").trim();
       raw = JSON.parse(cleaned);
     } catch {
-      console.error("Failed to parse screen analysis:", content.text);
+      console.error("Failed to parse screen analysis");
       return NextResponse.json({
         context: "",
         mood: "neutral",

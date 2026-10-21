@@ -8,7 +8,16 @@ import { z } from "zod";
  */
 
 /** Events the browser may send to /api/track. */
-export const CLIENT_EVENTS = ["page_view", "cta_click", "signup", "upgrade_click", "vsl_sound", "vsl_fullscreen"] as const;
+export const CLIENT_EVENTS = [
+  "page_view",
+  "cta_click",
+  "signup",
+  "upgrade_click",
+  "vsl_sound",
+  "vsl_fullscreen",
+  // First-run chooser on the dashboard; props: { choice: "words" | "message" | "language" | "demo" | "skip" }.
+  "onboarding_choice",
+] as const;
 /** Events only the server records (session and Stripe routes). */
 export const SERVER_EVENTS = ["session_started", "first_session", "checkout_started", "checkout_completed"] as const;
 

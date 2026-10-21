@@ -1,5 +1,6 @@
 "use client";
 
+import { Fragment } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import { useTranslation } from "react-i18next";
 import {
@@ -91,22 +92,24 @@ function ParagraphReveal({
   return (
     <p className={`body-muted max-w-2xl mx-auto ${className}`}>
       {sentences.map((sentence, i) => (
-        <motion.span
-          key={i}
-          className="inline"
-          initial={{ opacity: 0, y: 10 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={VIEWPORT}
-          transition={{
-            duration: 0.55,
-            delay: delay + i * 0.13,
-            ease: easeOutSoft,
-          }}
-          style={{ display: "inline-block", whiteSpace: "normal" }}
-        >
-          {sentence}
+        <Fragment key={i}>
+          <motion.span
+            className="inline"
+            initial={{ opacity: 0, y: 10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={VIEWPORT}
+            transition={{
+              duration: 0.55,
+              delay: delay + i * 0.13,
+              ease: easeOutSoft,
+            }}
+            style={{ display: "inline-block", whiteSpace: "normal" }}
+          >
+            {sentence}
+          </motion.span>
+          {/* The space sits outside the inline-block: inside it, it collapses and sentences touch. */}
           {i < sentences.length - 1 ? " " : ""}
-        </motion.span>
+        </Fragment>
       ))}
     </p>
   );

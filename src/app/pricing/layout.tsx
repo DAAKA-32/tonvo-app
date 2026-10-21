@@ -4,7 +4,7 @@ import { pageMetadata } from "@/lib/seo";
 export const metadata: Metadata = pageMetadata({
   title: "Pricing",
   description:
-    "Start free with 3 live sessions a month. Closer is $19 a month for unlimited sessions and the full objection library, and Sales Team covers your whole team.",
+    "Start free with 3 live sessions a month. Plus is $19 a month for unlimited sessions, live translation and coaching tips. Team adds screen analysis.",
   path: "/pricing",
 });
 

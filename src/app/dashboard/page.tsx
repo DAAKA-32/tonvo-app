@@ -8,6 +8,7 @@ import { useAuth } from "@/lib/auth-context";
 import { listConversations } from "@/lib/conversations-client";
 import AppShell from "@/components/AppShell";
 import PlanUpgradeModal from "@/components/PlanUpgradeModal";
+import OnboardingChooser from "@/components/OnboardingChooser";
 import CountUp from "@/components/motion/CountUp";
 import type { Conversation } from "@/types/database";
 
@@ -639,6 +640,8 @@ export default function DashboardPage() {
     toneCounts: { positive: 0, neutral: 0, negative: 0, hesitant: 0 },
   });
   const [loadingData, setLoadingData] = useState(true);
+  // True only when the session list loaded: a failed fetch must not look like "no sessions yet".
+  const [sessionsLoaded, setSessionsLoaded] = useState(false);
 
   useEffect(() => {
     if (!user) return;
@@ -666,6 +669,7 @@ export default function DashboardPage() {
             : 0,
           toneCounts,
         });
+        setSessionsLoaded(true);
       } catch (err) {
         console.error("Dashboard fetch failed:", err);
       } finally {
@@ -829,6 +833,9 @@ export default function DashboardPage() {
             />
           </motion.div>
         </section>
+
+        {/* ── FIRST RUN: before the first session, once per browser (dismissal is kept in localStorage) ── */}
+        {user && sessionsLoaded && stats.totalSessions === 0 && <OnboardingChooser uid={user.uid} />}
 
         {/* ── VITALS ──────────────────────────────────────────── */}
         <section style={{ position: "relative", zIndex: 1, marginBottom: 56 }}>
